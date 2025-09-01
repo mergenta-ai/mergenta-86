@@ -65,7 +65,7 @@ const BrainstormHoverCard: React.FC<BrainstormHoverCardProps> = ({ children }) =
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
-            className="absolute left-full top-0 ml-2 w-80 pointer-events-auto"
+            className="absolute left-[720px] top-[140px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
