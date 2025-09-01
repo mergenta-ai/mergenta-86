@@ -70,7 +70,7 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children }) => {
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
-            className="absolute left-[1050px] top-[150px] w-80 pointer-events-auto"
+            className="absolute left-[1050px] top-[275px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
@@ -96,7 +96,7 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children }) => {
                     id="mentorship-domain"
                     value={mentorshipDomain}
                     onChange={(e) => setMentorshipDomain(e.target.value)}
-                    placeholder="Career, study, entrepreneurship, leadership, personal growth…"
+                    placeholder="Career, entrepreneurship, leadership, personal growth…"
                     className="text-sm bg-white"
                   />
                 </div>
@@ -110,7 +110,7 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children }) => {
                     id="current-stage"
                     value={currentStage}
                     onChange={(e) => setCurrentStage(e.target.value)}
-                    placeholder="Beginner, intermediate, advanced, transitioning…"
+                    placeholder="Beginner, intermediate, advanced…"
                     className="text-sm bg-white"
                   />
                 </div>
@@ -124,7 +124,7 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children }) => {
                     id="challenges"
                     value={challenges}
                     onChange={(e) => setChallenges(e.target.value)}
-                    placeholder="Confidence, skills, direction, resources…"
+                    placeholder="Confidence, skills, direction…"
                     className="text-sm bg-white"
                   />
                 </div>
@@ -138,7 +138,7 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children }) => {
                     id="desired-outcome"
                     value={desiredOutcome}
                     onChange={(e) => setDesiredOutcome(e.target.value)}
-                    placeholder="Decision-making, clarity, confidence, resilience…"
+                    placeholder="Decision-making, clarity, confidence…"
                     className="text-sm bg-white"
                   />
                 </div>
@@ -152,7 +152,7 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children }) => {
                     id="preferred-style"
                     value={preferredStyle}
                     onChange={(e) => setPreferredStyle(e.target.value)}
-                    placeholder="Encouraging, tough-love, structured, flexible…"
+                    placeholder="Encouraging, tough-love, structured…"
                     className="text-sm bg-white"
                   />
                 </div>
