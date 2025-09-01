@@ -78,7 +78,7 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children }) => {
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-script-card
-            className="absolute left-[620px] top-[140px] w-80 pointer-events-auto"
+            className="absolute left-[620px] top-[160px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
