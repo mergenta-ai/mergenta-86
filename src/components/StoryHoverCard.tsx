@@ -149,7 +149,7 @@ const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children }) => {
                     id="genre"
                     value={genre}
                     onChange={(e) => setGenre(e.target.value)}
-                    placeholder="Fantasy, Mystery, Romance, Sci-Fi, Drama..."
+                    placeholder="e.g. Fantasy, Mystery, Romance, Sci-Fi, Drama"
                     className="text-sm"
                   />
                 </div>
@@ -194,7 +194,7 @@ const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children }) => {
                     id="tone"
                     value={tone}
                     onChange={(e) => setTone(e.target.value)}
-                    placeholder="Descriptive, Humorous, Passionate, Dramatic..."
+                    placeholder="e.g. Descriptive, Humorous, Passionate, Dramatic"
                     className="text-sm"
                   />
                 </div>
@@ -208,7 +208,7 @@ const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children }) => {
                     id="audience"
                     value={audience}
                     onChange={(e) => setAudience(e.target.value)}
-                    placeholder="Children, Young Adults, General, Mature Readers..."
+                    placeholder="e.g. Children, Young Adults, General, Mature"
                     className="text-sm"
                   />
                 </div>
