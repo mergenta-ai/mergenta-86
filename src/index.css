@@ -45,13 +45,17 @@ All colors MUST be HSL.
     --mergenta-light-violet: 271 100% 98%; /* #F9F5FF */
     --mergenta-soft-pink: 328 100% 97%; /* #FFF0F8 */
 
-    /* Premium Pastel Sidebar Colors */
-    --pastel-magenta: 330 56% 89%; /* #F8C8DC */
-    --pastel-magenta-hover: 330 46% 78%; /* #E6A6C6 */
-    --pastel-violet: 257 45% 83%; /* #D1C4E9 */
-    --pastel-violet-hover: 257 46% 72%; /* #B39DDB */
+    /* Premium Pastel Sidebar Colors - Exact hex match */
+    --pastel-magenta: 330 55% 89%; /* #F8C8DC */
+    --pastel-magenta-hover: 330 45% 78%; /* #E6A6C6 */
+    --pastel-violet: 258 44% 83%; /* #D1C4E9 */
+    --pastel-violet-hover: 258 46% 72%; /* #B39DDB */
     --pastel-lavender: 276 71% 91%; /* #EADCF8 */
     --pastel-lavender-hover: 276 65% 82%; /* #D0B7F0 */
+    
+    /* Sidebar Text Colors */
+    --sidebar-text-dark: 0 0% 27%; /* #444444 */
+    --sidebar-text-violet: 257 71% 38%; /* #6F42C1 */
     
     /* Sidebar Icon Colors */
     --sidebar-icon-default: 276 35% 45%; /* Deep violet for good contrast */

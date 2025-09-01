@@ -85,6 +85,8 @@ export default {
 				"pastel-violet-hover": "hsl(var(--pastel-violet-hover))",
 				"pastel-lavender": "hsl(var(--pastel-lavender))",
 				"pastel-lavender-hover": "hsl(var(--pastel-lavender-hover))",
+				"sidebar-text-dark": "hsl(var(--sidebar-text-dark))",
+				"sidebar-text-violet": "hsl(var(--sidebar-text-violet))",
 				"sidebar-icon-default": "hsl(var(--sidebar-icon-default))",
 				"sidebar-icon-hover": "hsl(var(--sidebar-icon-hover))",
 				'chat-bg': 'hsl(var(--chat-bg))',

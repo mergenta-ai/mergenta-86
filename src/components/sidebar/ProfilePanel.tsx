@@ -41,11 +41,11 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({ isVisible, onClose, navigat
   const getSectionColor = (section: string) => {
     switch (section) {
       case 'account':
-        return 'border-l-4 border-blue-300 bg-blue-50';
+        return 'border-l-4 border-pastel-magenta-hover bg-pastel-magenta';
       case 'preferences':
-        return 'border-l-4 border-green-300 bg-green-50';
+        return 'border-l-4 border-pastel-violet-hover bg-pastel-violet';
       case 'about':
-        return 'border-l-4 border-purple-300 bg-purple-50';
+        return 'border-l-4 border-pastel-lavender-hover bg-pastel-lavender';
       case 'danger':
         return 'border-l-4 border-red-300 bg-red-50';
       default:
@@ -97,7 +97,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({ isVisible, onClose, navigat
                 <Button
                   key={item.id}
                   variant="ghost"
-                  className={`w-full h-auto p-3 mb-1 justify-start text-left text-purple-800 hover:text-purple-800 hover:bg-purple-200/40 transition-colors ${getSectionColor(item.section)}`}
+                  className={`w-full h-auto p-3 mb-1 justify-start text-left text-sidebar-text-dark hover:text-sidebar-text-violet hover:bg-pastel-lavender-hover/50 transition-colors ${getSectionColor(item.section)}`}
                   onClick={item.action}
                 >
                   <div className="flex-1 min-w-0">
@@ -105,7 +105,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({ isVisible, onClose, navigat
                       {item.title}
                     </p>
                   </div>
-                  <ChevronRight className="h-4 w-4 ml-2 flex-shrink-0 text-purple-600" />
+                  <ChevronRight className="h-4 w-4 ml-2 flex-shrink-0 text-sidebar-text-violet" />
                 </Button>
               ))}
             </div>

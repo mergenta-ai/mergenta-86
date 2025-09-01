@@ -38,13 +38,13 @@ const PlansPanel: React.FC<PlansPanelProps> = ({ isVisible, onClose, navigate })
   const getSectionColor = (section: string) => {
     switch (section) {
       case 'current':
-        return 'border-l-4 border-blue-300 bg-blue-50';
+        return 'border-l-4 border-pastel-magenta-hover bg-pastel-magenta';
       case 'available':
-        return 'border-l-4 border-green-300 bg-green-50';
+        return 'border-l-4 border-pastel-violet-hover bg-pastel-violet';
       case 'upgrade':
-        return 'border-l-4 border-orange-300 bg-orange-50';
+        return 'border-l-4 border-pastel-lavender-hover bg-pastel-lavender';
       case 'enterprise':
-        return 'border-l-4 border-purple-300 bg-purple-50';
+        return 'border-l-4 border-pastel-magenta-hover bg-pastel-magenta';
       default:
         return '';
     }
@@ -94,7 +94,7 @@ const PlansPanel: React.FC<PlansPanelProps> = ({ isVisible, onClose, navigate })
                 <Button
                   key={item.id}
                   variant="ghost"
-                  className={`w-full h-auto p-3 mb-1 justify-start text-left text-purple-800 hover:text-purple-800 hover:bg-purple-200/40 transition-colors ${getSectionColor(item.section)}`}
+                  className={`w-full h-auto p-3 mb-1 justify-start text-left text-sidebar-text-dark hover:text-sidebar-text-violet hover:bg-pastel-lavender-hover/50 transition-colors ${getSectionColor(item.section)}`}
                   onClick={item.action}
                 >
                   <div className="flex-1 min-w-0">
@@ -102,7 +102,7 @@ const PlansPanel: React.FC<PlansPanelProps> = ({ isVisible, onClose, navigate })
                       {item.title}
                     </p>
                   </div>
-                  <ChevronRight className="h-4 w-4 ml-2 flex-shrink-0 text-purple-600" />
+                  <ChevronRight className="h-4 w-4 ml-2 flex-shrink-0 text-sidebar-text-violet" />
                 </Button>
               ))}
             </div>

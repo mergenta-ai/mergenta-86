@@ -95,17 +95,17 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose }) => {
             <Button
               key={item.id}
               variant="ghost"
-              className="w-full h-auto p-3 mb-2 justify-start text-left hover:bg-purple-200/40 transition-colors"
+              className="w-full h-auto p-3 mb-2 justify-start text-left hover:bg-pastel-lavender-hover/50 transition-colors"
             >
               <div className="flex-1 min-w-0 text-center">
-                <p className="text-sm text-purple-800 mb-1 break-words leading-relaxed">
+                <p className="text-sm text-sidebar-text-dark mb-1 break-words leading-relaxed">
                   {item.preview}
                 </p>
-                <p className="text-xs text-purple-600">
+                <p className="text-xs text-sidebar-text-violet">
                   {item.timestamp}
                 </p>
               </div>
-              <ChevronRight className="h-4 w-4 text-purple-500 ml-2 flex-shrink-0" />
+              <ChevronRight className="h-4 w-4 text-sidebar-text-violet ml-2 flex-shrink-0" />
             </Button>
           ))}
         </div>
