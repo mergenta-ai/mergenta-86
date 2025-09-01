@@ -35,7 +35,7 @@ const ScriptHoverCard = ({ children }: ScriptHoverCardProps) => {
       <HoverCardContent 
         side="right" 
         align="start"
-        className="w-96 p-6 bg-white border border-gray-200 rounded-lg shadow-lg z-50"
+        className="w-[620px] p-6 bg-[#F8F5FE] border border-[#E5D9F2] rounded-lg shadow-xl z-50"
         onPointerDownOutside={(e) => {
           // Prevent closing when interacting with form elements
           const target = e.target as HTMLElement;
@@ -46,13 +46,13 @@ const ScriptHoverCard = ({ children }: ScriptHoverCardProps) => {
       >
         <div className="hover-card-content space-y-4">
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-1">Script</h3>
-            <p className="text-sm text-gray-600">Dialogue-driven format for plays, films or skits.</p>
+            <h3 className="text-lg font-semibold text-[#6F42C1] mb-1">Script</h3>
+            <p className="text-sm text-[#666]">Dialogue-driven format for plays, films or skits.</p>
           </div>
           
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-[#444] mb-1">
                 Script Title
               </label>
               <input
@@ -65,7 +65,7 @@ const ScriptHoverCard = ({ children }: ScriptHoverCardProps) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-[#444] mb-1">
                 Key Details / Plot Points
               </label>
               <textarea
@@ -78,7 +78,7 @@ const ScriptHoverCard = ({ children }: ScriptHoverCardProps) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-[#444] mb-1">
                 Structure
               </label>
               <input
@@ -91,7 +91,7 @@ const ScriptHoverCard = ({ children }: ScriptHoverCardProps) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-[#444] mb-1">
                 Theme
               </label>
               <input
@@ -104,7 +104,7 @@ const ScriptHoverCard = ({ children }: ScriptHoverCardProps) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-[#444] mb-1">
                 Mood
               </label>
               <input
@@ -117,7 +117,7 @@ const ScriptHoverCard = ({ children }: ScriptHoverCardProps) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-[#444] mb-1">
                 Format
               </label>
               <input
@@ -130,7 +130,7 @@ const ScriptHoverCard = ({ children }: ScriptHoverCardProps) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-[#444] mb-1">
                 Audience
               </label>
               <input
