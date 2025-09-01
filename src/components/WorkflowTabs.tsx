@@ -8,6 +8,7 @@ import ScriptHoverCard from "./ScriptHoverCard";
 import BlogHoverCard from "./BlogHoverCard";
 import PoetryHoverCard from "./PoetryHoverCard";
 import SpeechHoverCard from "./SpeechHoverCard";
+import BrainstormHoverCard from "./BrainstormHoverCard";
 
 const WorkflowTabs = () => {
   const [activeTab, setActiveTab] = useState<string | null>(null);
@@ -348,21 +349,36 @@ const WorkflowTabs = () => {
                     )}
                     {activeTab === "task-assistant" && (
                       <div className="py-2">
-                        {taskAssistantItems.map((item, idx) => (
-                          <Tooltip key={idx}>
-                            <TooltipTrigger asChild>
-                              <button
-                                className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
-                                onClick={() => console.log(`Selected: ${item.text}`)}
-                              >
-                                {item.text}
-                              </button>
-                            </TooltipTrigger>
-                            <TooltipContent side="right" className="max-w-xs">
-                              <p>{item.tooltip}</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        ))}
+                        {taskAssistantItems.map((item, idx) => {
+                          if (item.text === "Brainstorm with me") {
+                            return (
+                              <BrainstormHoverCard key={idx}>
+                                <button
+                                  className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
+                                  onClick={() => console.log(`Selected: ${item.text}`)}
+                                >
+                                  {item.text}
+                                </button>
+                              </BrainstormHoverCard>
+                            );
+                          }
+
+                          return (
+                            <Tooltip key={idx}>
+                              <TooltipTrigger asChild>
+                                <button
+                                  className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
+                                  onClick={() => console.log(`Selected: ${item.text}`)}
+                                >
+                                  {item.text}
+                                </button>
+                              </TooltipTrigger>
+                              <TooltipContent side="right" className="max-w-xs">
+                                <p>{item.tooltip}</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          );
+                        })}
                       </div>
                     )}
                     {activeTab === "power-playbook" && (
