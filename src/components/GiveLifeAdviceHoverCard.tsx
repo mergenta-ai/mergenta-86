@@ -74,7 +74,7 @@ const GiveLifeAdviceHoverCard: React.FC<GiveLifeAdviceHoverCardProps> = ({ child
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
-            className="absolute left-[1052px] top-[300px] w-80 pointer-events-auto"
+            className="absolute left-[1052px] top-[220px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
@@ -114,7 +114,7 @@ const GiveLifeAdviceHoverCard: React.FC<GiveLifeAdviceHoverCardProps> = ({ child
                     id="goals"
                     value={goals}
                     onChange={(e) => setGoals(e.target.value)}
-                    placeholder="Personal growth, better balance, success…"
+                    placeholder="Growth, better balance, success…"
                     className="text-sm bg-white"
                   />
                 </div>
@@ -156,7 +156,7 @@ const GiveLifeAdviceHoverCard: React.FC<GiveLifeAdviceHoverCardProps> = ({ child
                     id="support"
                     value={support}
                     onChange={(e) => setSupport(e.target.value)}
-                    placeholder="Encouragement, Confidence, Accountability, Hope, Guidance"
+                    placeholder="Encouragement, accountability, hope…"
                     className="text-sm bg-white"
                   />
                 </div>
