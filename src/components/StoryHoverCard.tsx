@@ -18,11 +18,7 @@ const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children }) => {
   const [audience, setAudience] = useState('');
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Don't load saved values on mount to ensure placeholders show as watermarks
-  // Users can manually enter data each time they open the card
-
-  // Save to localStorage only when user starts typing (optional functionality)
-  // This preserves data during the current session but allows clean watermarks on new visits
+  // No localStorage - fields always start empty to show watermark placeholders
 
   const handleMouseEnter = () => {
     if (closeTimeoutRef.current) {
@@ -111,7 +107,7 @@ const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children }) => {
                     value={storyTitle}
                     onChange={(e) => setStoryTitle(e.target.value)}
                     placeholder="Enter your story title..."
-                    className="text-sm"
+                    className="text-sm placeholder:text-gray-500"
                   />
                 </div>
 
@@ -124,8 +120,8 @@ const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children }) => {
                     id="genre"
                     value={genre}
                     onChange={(e) => setGenre(e.target.value)}
-                    placeholder="e.g. Fantasy, Mystery, Romance, Sci-Fi, Drama"
-                    className="text-sm"
+                    placeholder="Fantasy, Mystery, Romance, Sci-Fi, Drama"
+                    className="text-sm placeholder:text-gray-500"
                   />
                 </div>
 
@@ -139,7 +135,7 @@ const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children }) => {
                     value={keyDetails}
                     onChange={(e) => setKeyDetails(e.target.value)}
                     placeholder="Main characters, plot points, key events..."
-                    className="text-sm min-h-[70px] resize-none"
+                    className="text-sm min-h-[70px] resize-none placeholder:text-gray-500"
                   />
                 </div>
 
@@ -156,7 +152,7 @@ const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children }) => {
                     placeholder="500–2000"
                     min="500"
                     max="5000"
-                    className="text-sm"
+                    className="text-sm placeholder:text-gray-500"
                   />
                 </div>
 
@@ -169,8 +165,8 @@ const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children }) => {
                     id="tone"
                     value={tone}
                     onChange={(e) => setTone(e.target.value)}
-                    placeholder="e.g. Descriptive, Humorous, Passionate, Dramatic"
-                    className="text-sm"
+                    placeholder="Descriptive, Humorous, Passionate, Dramatic"
+                    className="text-sm placeholder:text-gray-500"
                   />
                 </div>
 
@@ -183,8 +179,8 @@ const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children }) => {
                     id="audience"
                     value={audience}
                     onChange={(e) => setAudience(e.target.value)}
-                    placeholder="e.g. Children, Young Adults, General, Mature"
-                    className="text-sm"
+                    placeholder="Children, Young Adults, General, Mature"
+                    className="text-sm placeholder:text-gray-500"
                   />
                 </div>
 
