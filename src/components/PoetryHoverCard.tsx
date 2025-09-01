@@ -9,6 +9,7 @@ interface PoetryHoverCardProps {
 
 const PoetryHoverCard: React.FC<PoetryHoverCardProps> = ({ children }) => {
   const [showCard, setShowCard] = useState(false);
+  const [title, setTitle] = useState('');
   const [theme, setTheme] = useState('');
   const [form, setForm] = useState('');
   const [mood, setMood] = useState('');
@@ -90,6 +91,20 @@ const PoetryHoverCard: React.FC<PoetryHoverCardProps> = ({ children }) => {
                       Expressive verse that captures emotions, imagery and meaning through rhythm and language.
                     </p>
                   </div>
+                </div>
+
+                {/* Title Input */}
+                <div className="space-y-2">
+                  <Label htmlFor="title" className="text-sm font-medium text-sidebar-text-dark">
+                    Title
+                  </Label>
+                  <Input
+                    id="title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Enter your poem title..."
+                    className="text-sm placeholder:text-gray-500"
+                  />
                 </div>
 
                 {/* Theme Input */}
