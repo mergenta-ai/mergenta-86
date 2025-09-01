@@ -9,6 +9,7 @@ import BlogHoverCard from "./BlogHoverCard";
 import PoetryHoverCard from "./PoetryHoverCard";
 import SpeechHoverCard from "./SpeechHoverCard";
 import BrainstormHoverCard from "./BrainstormHoverCard";
+import ScenarioHoverCard from "./ScenarioHoverCard";
 
 const WorkflowTabs = () => {
   const [activeTab, setActiveTab] = useState<string | null>(null);
@@ -37,6 +38,7 @@ const WorkflowTabs = () => {
 
   const taskAssistantItems = [
     { text: "Brainstorm with me", tooltip: "Generate fresh ideas fast — creative, bold and varied." },
+    { text: "Scenario Planning", tooltip: "Anticipate futures — map risks, opportunities and strategies." },
     { text: "Summarise and compare", tooltip: "Condense text into clear, concise takeaways." },
     { text: "Think like a mentor", tooltip: "Advice with a mentor's voice — guiding, supportive and practical." },
     { text: "Be a devil's advocate", tooltip: "Challenge assumptions — counterpoints and tough questions." },
@@ -360,6 +362,19 @@ const WorkflowTabs = () => {
                                   {item.text}
                                 </button>
                               </BrainstormHoverCard>
+                            );
+                          }
+
+                          if (item.text === "Scenario Planning") {
+                            return (
+                              <ScenarioHoverCard key={idx}>
+                                <button
+                                  className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
+                                  onClick={() => console.log(`Selected: ${item.text}`)}
+                                >
+                                  {item.text}
+                                </button>
+                              </ScenarioHoverCard>
                             );
                           }
 
