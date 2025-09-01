@@ -93,7 +93,7 @@ const BlogHoverCard: React.FC<BlogHoverCardProps> = ({ children }) => {
                   <div>
                     <h3 className="font-semibold text-sidebar-text-violet text-lg">Blog</h3>
                     <p className="text-xs text-sidebar-text-dark italic">
-                      Engaging online articles — clear, SEO-friendly, and reader-focused.
+                      Conversational, engaging style for online readers — clear, SEO-friendly and reader-focused.
                     </p>
                   </div>
                 </div>
