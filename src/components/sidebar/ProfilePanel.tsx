@@ -47,7 +47,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({ isVisible, onClose, navigat
       case 'about':
         return 'border-l-4 border-pastel-lavender-hover bg-pastel-lavender';
       case 'danger':
-        return 'border-l-4 border-red-300 bg-red-50';
+        return 'border-l-4 border-pastel-rose-lilac bg-pastel-rose-lilac';
       default:
         return '';
     }
