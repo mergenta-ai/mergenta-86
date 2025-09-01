@@ -46,17 +46,16 @@ All colors MUST be HSL.
     --mergenta-soft-pink: 328 100% 97%; /* #FFF0F8 */
 
     /* Premium Pastel Sidebar Colors */
-    --pastel-lavender: 260 100% 96%; /* #F2E6FF */
-    --pastel-lavender-hover: 260 100% 91%; /* #E1D1FA */
-    --pastel-lavender-deep: 260 100% 87%; /* #D8C7FA */
-    --pastel-mint: 152 71% 92%; /* #CFF5E4 */
-    --pastel-mint-hover: 152 71% 82%; /* #B8F0D5 */
-    --pastel-peach: 25 100% 89%; /* #FFE1CC */
-    --pastel-peach-hover: 25 100% 79%; /* #FFCCAA */
+    --pastel-magenta: 330 56% 89%; /* #F8C8DC */
+    --pastel-magenta-hover: 330 46% 78%; /* #E6A6C6 */
+    --pastel-violet: 257 45% 83%; /* #D1C4E9 */
+    --pastel-violet-hover: 257 46% 72%; /* #B39DDB */
+    --pastel-lavender: 276 71% 91%; /* #EADCF8 */
+    --pastel-lavender-hover: 276 65% 82%; /* #D0B7F0 */
     
     /* Sidebar Icon Colors */
-    --sidebar-icon-default: 271 64% 59%; /* #7D55C7 */
-    --sidebar-icon-hover: 271 85% 36%; /* #6A0DAD */
+    --sidebar-icon-default: 276 35% 45%; /* Deep violet for good contrast */
+    --sidebar-icon-hover: 276 45% 35%; /* Darker for hover state */
     --sidebar-icon-glow: 0 0 6px rgba(122, 85, 199, 0.3);
 
     /* Gradients */

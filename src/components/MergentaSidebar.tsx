@@ -81,7 +81,7 @@ const MergentaSidebar = () => {
         >
           <Button
             variant="ghost"
-            className="h-16 w-16 rounded-xl hover:bg-pastel-lavender-hover hover:shadow-[0_0_6px_rgba(122,85,199,0.3)] transition-all duration-300 [&_svg]:!size-6"
+            className="h-16 w-16 rounded-xl hover:bg-pastel-magenta hover:shadow-[0_0_8px_rgba(248,200,220,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-magenta-hover"
           >
             <Clock className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
           </Button>
@@ -96,7 +96,7 @@ const MergentaSidebar = () => {
           >
             <Button
               variant="ghost"
-              className="h-16 w-16 rounded-xl hover:bg-pastel-lavender-hover hover:shadow-[0_0_6px_rgba(122,85,199,0.3)] transition-all duration-300 [&_svg]:!size-6"
+              className="h-16 w-16 rounded-xl hover:bg-pastel-violet hover:shadow-[0_0_8px_rgba(209,196,233,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-violet-hover"
             >
               <FileText className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
             </Button>
@@ -109,7 +109,7 @@ const MergentaSidebar = () => {
           >
             <Button
               variant="ghost"
-              className="h-16 w-16 rounded-xl hover:bg-pastel-lavender-hover hover:shadow-[0_0_6px_rgba(122,85,199,0.3)] transition-all duration-300 [&_svg]:!size-6"
+              className="h-16 w-16 rounded-xl hover:bg-pastel-lavender hover:shadow-[0_0_8px_rgba(234,220,248,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-lavender-hover"
             >
               <Crown className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
             </Button>
@@ -122,7 +122,7 @@ const MergentaSidebar = () => {
           >
             <Button
               variant="ghost"
-              className="h-16 w-16 rounded-xl hover:bg-pastel-lavender-hover hover:shadow-[0_0_6px_rgba(122,85,199,0.3)] transition-all duration-300 [&_svg]:!size-6"
+              className="h-16 w-16 rounded-xl hover:bg-pastel-magenta hover:shadow-[0_0_8px_rgba(248,200,220,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-magenta-hover"
             >
               <HelpCircle className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
             </Button>
@@ -139,7 +139,7 @@ const MergentaSidebar = () => {
         >
           <Button
             variant="ghost"
-            className="h-16 w-16 rounded-xl hover:bg-pastel-lavender-hover hover:shadow-[0_0_6px_rgba(122,85,199,0.3)] transition-all duration-300 [&_svg]:!size-6"
+            className="h-16 w-16 rounded-xl hover:bg-pastel-violet hover:shadow-[0_0_8px_rgba(209,196,233,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-violet-hover"
           >
             <User className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
           </Button>
