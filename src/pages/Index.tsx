@@ -75,7 +75,7 @@ const Index = () => {
           <img 
             src="/lovable-uploads/0ef37e7c-4020-4d43-b3cb-e900815b9635.png" 
             alt="Mergenta Logo" 
-            className="h-26 w-auto md:h-34 lg:h-44" 
+            className="h-26 w-auto md:h-34 lg:h-44 invisible" 
           />
         </div>
 
