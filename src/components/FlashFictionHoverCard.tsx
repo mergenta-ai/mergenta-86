@@ -77,7 +77,7 @@ const FlashFictionHoverCard: React.FC<FlashFictionHoverCardProps> = ({ children 
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-flash-fiction-card
-            className="absolute left-[620px] top-[160px] w-80 pointer-events-auto"
+            className="absolute left-[620px] top-[140px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
