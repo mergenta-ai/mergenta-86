@@ -18,36 +18,11 @@ const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children }) => {
   const [audience, setAudience] = useState('');
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Load saved values from localStorage
-  useEffect(() => {
-    const savedData = localStorage.getItem('storyFormData');
-    if (savedData) {
-      try {
-        const parsed = JSON.parse(savedData);
-        setStoryTitle(parsed.storyTitle || '');
-        setGenre(parsed.genre || '');
-        setKeyDetails(parsed.keyDetails || '');
-        setWordCount(parsed.wordCount || '');
-        setTone(parsed.tone || '');
-        setAudience(parsed.audience || '');
-      } catch (error) {
-        console.error('Error loading saved story data:', error);
-      }
-    }
-  }, []);
+  // Don't load saved values on mount to ensure placeholders show as watermarks
+  // Users can manually enter data each time they open the card
 
-  // Save to localStorage whenever inputs change
-  useEffect(() => {
-    const dataToSave = {
-      storyTitle,
-      genre,
-      keyDetails,
-      wordCount,
-      tone,
-      audience,
-    };
-    localStorage.setItem('storyFormData', JSON.stringify(dataToSave));
-  }, [storyTitle, genre, keyDetails, wordCount, tone, audience]);
+  // Save to localStorage only when user starts typing (optional functionality)
+  // This preserves data during the current session but allows clean watermarks on new visits
 
   const handleMouseEnter = () => {
     if (closeTimeoutRef.current) {
