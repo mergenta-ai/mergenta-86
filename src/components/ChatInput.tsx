@@ -1,0 +1,296 @@
+import { useState, useRef, useEffect } from "react";
+import { Send, Loader2, Cpu, Paperclip, Globe, Mic, Share, Download, AudioWaveform } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
+
+interface ChatInputProps {
+  onSendMessage: (message: string) => void;
+  isLoading?: boolean;
+}
+
+const ChatInput = ({ onSendMessage, isLoading = false }: ChatInputProps) => {
+  const [input, setInput] = useState("");
+  const [isRecording, setIsRecording] = useState(false);
+  const [showModelDropdown, setShowModelDropdown] = useState(false);
+  const modelDropdownRef = useRef<HTMLDivElement>(null);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (input.trim() && !isLoading) {
+      onSendMessage(input.trim());
+      setInput("");
+      // Reset textarea height
+      const textarea = e.currentTarget.querySelector('textarea');
+      if (textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = '24px';
+      }
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e);
+    }
+  };
+
+  const handleActionButtonClick = () => {
+    if (isRecording) {
+      // Stop recording
+      setIsRecording(false);
+    } else if (input.trim()) {
+      // Send message
+      onSendMessage(input.trim());
+      setInput("");
+      // Reset textarea height
+      const textarea = document.querySelector('textarea');
+      if (textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = '24px';
+      }
+    } else {
+      // Start recording
+      setIsRecording(true);
+    }
+  };
+
+  const getActionButtonIcon = () => {
+    if (isLoading) return <Loader2 className="h-4 w-4 animate-spin text-white" />;
+    if (isRecording) return <AudioWaveform className="h-4 w-4 text-white" />;
+    if (input.trim()) return <Send className="h-4 w-4 text-white" />;
+    return <AudioWaveform className="h-4 w-4 text-white" />;
+  };
+
+  const getActionButtonTooltip = () => {
+    if (isRecording) return "Stop recording";
+    if (input.trim()) return "Send";
+    return "Voice input";
+  };
+
+  // Close model dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modelDropdownRef.current && !modelDropdownRef.current.contains(event.target as Node)) {
+        setShowModelDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  return (
+    <TooltipProvider>
+      <div className="flex justify-center w-full px-4">
+        <form onSubmit={handleSubmit} className="w-full max-w-3xl">
+          <div className="flex flex-col w-full rounded-xl shadow-sm bg-white px-4 pt-3 pb-3 min-h-[94px]">
+            {/* Input field at top */}
+            <div className="flex-grow">
+              <textarea
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Ask Mergenta..."
+                className="w-full resize-none focus:outline-none text-gray-700 placeholder-gray-400 min-h-[24px] bg-transparent border-none outline-none"
+                disabled={isLoading}
+                rows={1}
+                style={{
+                  height: 'auto',
+                  minHeight: '24px',
+                  maxHeight: '120px'
+                }}
+                onInput={(e) => {
+                  const target = e.target as HTMLTextAreaElement;
+                  target.style.height = 'auto';
+                  target.style.height = Math.min(target.scrollHeight, 120) + 'px';
+                }}
+              />
+            </div>
+
+            {/* Icons row at bottom */}
+            <div className="flex justify-between items-center mt-auto">
+              {/* Left side icons */}
+              <div className="flex gap-2">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      className="p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700"
+                    >
+                      <Share className="h-4 w-4" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>Export</TooltipContent>
+                </Tooltip>
+                
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      className="p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700"
+                    >
+                      <Download className="h-4 w-4" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>Download</TooltipContent>
+                </Tooltip>
+              </div>
+
+              {/* Right side icons */}
+              <div className="flex gap-2">
+              <div className="relative" ref={modelDropdownRef}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      onClick={() => setShowModelDropdown(!showModelDropdown)}
+                      className="p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700"
+                    >
+                      <Cpu className="h-4 w-4" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>Select your model</TooltipContent>
+                </Tooltip>
+
+                {/* Model Selection Dropdown */}
+                {showModelDropdown && (
+                  <div className="absolute bottom-full mb-2 right-0 bg-white rounded-lg shadow-lg border border-gray-100 z-50 min-w-max">
+                    <div className="flex">
+                      {/* Creativity Column */}
+                      <div className="p-4 min-w-[140px]">
+                        <h3 className="font-semibold text-sm text-gray-800 mb-1">Creativity</h3>
+                        <p className="text-xs text-gray-500 mb-3">Inventive & Expressive</p>
+                        <div className="space-y-2">
+                          {[
+                            { name: "GPT-5", badge: "New" },
+                            { name: "GPT-4.1", badge: null },
+                            { name: "Gemini 2.5 Flash", badge: null },
+                            { name: "Grok 3", badge: null },
+                            { name: "Claude Haiku 3.5", badge: null }
+                          ].map((model, idx) => (
+                            <button
+                              key={idx}
+                              className="w-full text-left text-sm text-gray-700 hover:bg-gray-50 py-1 px-2 rounded transition-colors flex items-center justify-between"
+                              onClick={() => {
+                                console.log(`Selected: ${model.name}`);
+                                setShowModelDropdown(false);
+                              }}
+                            >
+                              <span>{model.name}</span>
+                              {model.badge && (
+                                <span className="text-xs bg-green-100 text-green-800 px-1.5 py-0.5 rounded">
+                                  {model.badge}
+                                </span>
+                              )}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Dividing Line */}
+                      <div className="w-px bg-gray-200 my-4"></div>
+
+                      {/* Research Column */}
+                      <div className="p-4 min-w-[140px]">
+                        <h3 className="font-semibold text-sm text-gray-800 mb-1">Research</h3>
+                        <p className="text-xs text-gray-500 mb-3">Reasoning & Thinking</p>
+                        <div className="space-y-2">
+                          {[
+                            { name: "Gemini 2.5 Pro", badge: null },
+                            { name: "Claude Sonet 4", badge: null },
+                            { name: "Grok 4", badge: null },
+                            { name: "o3", badge: null },
+                            { name: "o4-mini", badge: null },
+                            { name: "Claude Opus 4.1", badge: "Ace" },
+                            { name: "o3-pro", badge: "Ace" }
+                          ].map((model, idx) => (
+                            <button
+                              key={idx}
+                              className="w-full text-left text-sm text-gray-700 hover:bg-gray-50 py-1 px-2 rounded transition-colors flex items-center justify-between"
+                              onClick={() => {
+                                console.log(`Selected: ${model.name}`);
+                                setShowModelDropdown(false);
+                              }}
+                            >
+                              <span>{model.name}</span>
+                              {model.badge && (
+                                <div className="flex items-center gap-1 ml-2">
+                                  <span className="text-xs bg-purple-100 text-purple-800 px-1.5 py-0.5 rounded">
+                                    {model.badge}
+                                  </span>
+                                  <span className="text-xs text-gray-500">onwards</span>
+                                </div>
+                              )}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    className="p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700"
+                  >
+                    <Paperclip className="h-4 w-4" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>File upload</TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    className="p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700"
+                  >
+                    <Globe className="h-4 w-4" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>Web references</TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    className="p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700"
+                  >
+                    <Mic className="h-4 w-4" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>Voice input</TooltipContent>
+              </Tooltip>
+
+              {/* Action button */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button 
+                    type="button"
+                    onClick={handleActionButtonClick}
+                    disabled={isLoading}
+                    className="ml-2 w-10 h-10 rounded-full flex items-center justify-center
+                               bg-gradient-to-r from-[#6F42C1] to-[#7D55C7]
+                               hover:scale-105 hover:shadow-[0_0_10px_#6F42C1]/50 transition-all"
+                  >
+                    {getActionButtonIcon()}
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>{getActionButtonTooltip()}</TooltipContent>
+              </Tooltip>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </TooltipProvider>
+  );
+};
+
+export default ChatInput;
