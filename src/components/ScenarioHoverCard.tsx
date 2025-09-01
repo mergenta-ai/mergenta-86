@@ -74,11 +74,11 @@ const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children }) => {
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
-            className="absolute left-[820px] top-[280px] w-80 pointer-events-auto"
+            className="absolute left-[820px] top-[200px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
-            <div className="p-4 border rounded-2xl shadow-xl animate-in fade-in-0 zoom-in-95 duration-200" style={{ backgroundColor: '#E9D7F7', borderColor: '#DCC7EF' }}>
+            <div className="p-4 border rounded-2xl shadow-xl animate-in fade-in-0 zoom-in-95 duration-200 max-h-[calc(100vh-320px)] overflow-y-auto" style={{ backgroundColor: '#E9D7F7', borderColor: '#DCC7EF' }}>
               <div className="space-y-3">
                 {/* Title */}
                 <div className="flex items-center gap-2 pb-2 border-b" style={{ borderColor: '#DCC7EF' }}>
