@@ -121,18 +121,18 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children }) => {
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
-            className="absolute left-[620px] top-[160px] w-80 pointer-events-auto"
+            className="absolute left-[620px] top-[140px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
-            <div className="p-4 bg-[#F8F5FE] border border-[#E5D9F2] rounded-lg shadow-xl animate-in fade-in-0 zoom-in-95 duration-200">
+            <div className="p-4 bg-pastel-lavender border border-pastel-lavender-hover rounded-lg shadow-xl animate-in fade-in-0 zoom-in-95 duration-200">
               <div className="space-y-3">
                 {/* Title */}
-                <div className="flex items-center gap-2 pb-2 border-b border-[#E5D9F2]">
+                <div className="flex items-center gap-2 pb-2 border-b border-pastel-lavender-hover">
                   <span className="text-lg">📄</span>
                   <div>
-                    <h3 className="font-semibold text-[#6F42C1] text-lg">Essay</h3>
-                    <p className="text-xs text-[#666] italic">
+                    <h3 className="font-semibold text-sidebar-text-violet text-lg">Essay</h3>
+                    <p className="text-xs text-sidebar-text-dark italic">
                       Structured, formal writing — balanced arguments and clarity.
                     </p>
                   </div>
@@ -140,7 +140,7 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children }) => {
 
                 {/* Essay Title Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="essay-title" className="text-sm font-medium text-[#444]">
+                  <Label htmlFor="essay-title" className="text-sm font-medium text-sidebar-text-dark">
                     Essay Title
                   </Label>
                   <Input
@@ -154,7 +154,7 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children }) => {
 
                 {/* Key Points Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="key-points" className="text-sm font-medium text-[#444]">
+                  <Label htmlFor="key-points" className="text-sm font-medium text-sidebar-text-dark">
                     Key Points / Topics
                   </Label>
                   <Textarea
@@ -168,7 +168,7 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children }) => {
 
                 {/* Word Count Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="word-count" className="text-sm font-medium text-[#444]">
+                  <Label htmlFor="word-count" className="text-sm font-medium text-sidebar-text-dark">
                     Word Count
                   </Label>
                   <Input
@@ -185,7 +185,7 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children }) => {
 
                 {/* Tone Selection */}
                 <div className="space-y-2">
-                  <Label className="text-sm font-medium text-[#444]">Tone (Choose up to 3)</Label>
+                  <Label className="text-sm font-medium text-sidebar-text-dark">Tone (Choose up to 3)</Label>
                   <Select onValueChange={handleToneChange} value="">
                     <SelectTrigger className="text-sm">
                       <SelectValue
@@ -263,7 +263,7 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children }) => {
 
                 {/* Audience Selection */}
                 <div className="space-y-2">
-                  <Label className="text-sm font-medium text-[#444]">Audience (Choose up to 3)</Label>
+                  <Label className="text-sm font-medium text-sidebar-text-dark">Audience (Choose up to 3)</Label>
                   <Select onValueChange={handleAudienceChange} value="">
                     <SelectTrigger className="text-sm">
                       <SelectValue
