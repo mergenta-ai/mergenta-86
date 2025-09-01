@@ -74,7 +74,7 @@ const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children }) => {
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
-            className="absolute left-[1045px] top-[200px] w-80 pointer-events-auto"
+            className="absolute left-[1050px] top-[215px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
