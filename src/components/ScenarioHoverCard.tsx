@@ -98,7 +98,7 @@ const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children }) => {
                   </Label>
                   <Textarea
                     id="central-challenge"
-                    value={centralChallenge}
+                    value={centralChallenge || undefined}
                     onChange={(e) => setCentralChallenge(e.target.value)}
                     placeholder="Enter the core issue or question…"
                     className="text-sm min-h-[60px] resize-none bg-white"
@@ -112,7 +112,7 @@ const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children }) => {
                   </Label>
                   <Input
                     id="key-variables"
-                    value={keyVariables}
+                    value={keyVariables || undefined}
                     onChange={(e) => setKeyVariables(e.target.value)}
                     placeholder="Political, economic, social, technological etc."
                     className="text-sm bg-white"
@@ -126,7 +126,7 @@ const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children }) => {
                   </Label>
                   <Input
                     id="possible-outcomes"
-                    value={possibleOutcomes}
+                    value={possibleOutcomes || undefined}
                     onChange={(e) => setPossibleOutcomes(e.target.value)}
                     placeholder="Best case, worst case, alternatives..."
                     className="text-sm bg-white"
@@ -140,7 +140,7 @@ const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children }) => {
                   </Label>
                   <Input
                     id="focus"
-                    value={focus}
+                    value={focus || undefined}
                     onChange={(e) => setFocus(e.target.value)}
                     placeholder="Risks, Benefits, Trade-offs, Outcomes.."
                     className="text-sm bg-white"
@@ -154,7 +154,7 @@ const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children }) => {
                   </Label>
                   <Input
                     id="time-horizon"
-                    value={timeHorizon}
+                    value={timeHorizon || undefined}
                     onChange={(e) => setTimeHorizon(e.target.value)}
                     placeholder="Months, years, decades"
                     className="text-sm bg-white"
@@ -168,7 +168,7 @@ const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children }) => {
                   </Label>
                   <Input
                     id="desired-response"
-                    value={desiredResponse}
+                    value={desiredResponse || undefined}
                     onChange={(e) => setDesiredResponse(e.target.value)}
                     placeholder="Strategies, policies, actions to test..."
                     className="text-sm bg-white"

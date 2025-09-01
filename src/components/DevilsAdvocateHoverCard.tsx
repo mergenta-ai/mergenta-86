@@ -92,7 +92,7 @@ const DevilsAdvocateHoverCard: React.FC<DevilsAdvocateHoverCardProps> = ({ child
                   </Label>
                   <Textarea
                     id="idea"
-                    value={idea}
+                    value={idea || undefined}
                     onChange={(e) => setIdea(e.target.value)}
                     placeholder="Enter idea, plan or decision to be tested…"
                     className="text-sm min-h-[70px] resize-none bg-white"
@@ -106,7 +106,7 @@ const DevilsAdvocateHoverCard: React.FC<DevilsAdvocateHoverCardProps> = ({ child
                   </Label>
                   <Input
                     id="key-assumptions"
-                    value={keyAssumptions}
+                    value={keyAssumptions || undefined}
                     onChange={(e) => setKeyAssumptions(e.target.value)}
                     placeholder="Beliefs to challenge…"
                     className="text-sm bg-white"
@@ -120,7 +120,7 @@ const DevilsAdvocateHoverCard: React.FC<DevilsAdvocateHoverCardProps> = ({ child
                   </Label>
                   <Input
                     id="risks-weaknesses"
-                    value={risksWeaknesses}
+                    value={risksWeaknesses || undefined}
                     onChange={(e) => setRisksWeaknesses(e.target.value)}
                     placeholder="Potential flaws, oversights, vulnerabilities…"
                     className="text-sm bg-white"
@@ -134,7 +134,7 @@ const DevilsAdvocateHoverCard: React.FC<DevilsAdvocateHoverCardProps> = ({ child
                   </Label>
                   <Input
                     id="alternative-perspectives"
-                    value={alternativePerspectives}
+                    value={alternativePerspectives || undefined}
                     onChange={(e) => setAlternativePerspectives(e.target.value)}
                     placeholder="Different viewpoints, counter arguments…"
                     className="text-sm bg-white"

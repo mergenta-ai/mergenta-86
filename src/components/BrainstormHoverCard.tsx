@@ -89,7 +89,7 @@ const BrainstormHoverCard: React.FC<BrainstormHoverCardProps> = ({ children }) =
                   </Label>
                   <Textarea
                     id="problem-statement"
-                    value={problemStatement}
+                    value={problemStatement || undefined}
                     onChange={(e) => setProblemStatement(e.target.value)}
                     placeholder="Enter topic, challenge or idea…"
                     className="text-sm min-h-[70px] resize-none bg-white"
@@ -103,7 +103,7 @@ const BrainstormHoverCard: React.FC<BrainstormHoverCardProps> = ({ children }) =
                   </Label>
                   <Input
                     id="constraints"
-                    value={constraints}
+                    value={constraints || undefined}
                     onChange={(e) => setConstraints(e.target.value)}
                     placeholder="Budget, time limit, resources etc."
                     className="text-sm bg-white"
@@ -117,7 +117,7 @@ const BrainstormHoverCard: React.FC<BrainstormHoverCardProps> = ({ children }) =
                   </Label>
                   <Input
                     id="desired-outcome"
-                    value={desiredOutcome}
+                    value={desiredOutcome || undefined}
                     onChange={(e) => setDesiredOutcome(e.target.value)}
                     placeholder="Innovation, efficiency, alternatives etc."
                     className="text-sm bg-white"

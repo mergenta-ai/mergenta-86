@@ -98,7 +98,7 @@ const GiveLifeAdviceHoverCard: React.FC<GiveLifeAdviceHoverCardProps> = ({ child
                   </Label>
                   <Textarea
                     id="situation"
-                    value={situation}
+                    value={situation || undefined}
                     onChange={(e) => setSituation(e.target.value)}
                     placeholder="Relationship, career, health, decisions…"
                     className="text-sm min-h-[60px] resize-none bg-white"
@@ -112,9 +112,9 @@ const GiveLifeAdviceHoverCard: React.FC<GiveLifeAdviceHoverCardProps> = ({ child
                   </Label>
                   <Input
                     id="goals"
-                    value={goals}
+                    value={goals || undefined}
                     onChange={(e) => setGoals(e.target.value)}
-                    placeholder="Growth, better balance, success…"
+                    placeholder="Personal growth, better balance, success…"
                     className="text-sm bg-white"
                   />
                 </div>
@@ -126,7 +126,7 @@ const GiveLifeAdviceHoverCard: React.FC<GiveLifeAdviceHoverCardProps> = ({ child
                   </Label>
                   <Input
                     id="constraints"
-                    value={constraints}
+                    value={constraints || undefined}
                     onChange={(e) => setConstraints(e.target.value)}
                     placeholder="Time, resources, responsibilities…"
                     className="text-sm bg-white"
@@ -140,7 +140,7 @@ const GiveLifeAdviceHoverCard: React.FC<GiveLifeAdviceHoverCardProps> = ({ child
                   </Label>
                   <Input
                     id="barriers"
-                    value={barriers}
+                    value={barriers || undefined}
                     onChange={(e) => setBarriers(e.target.value)}
                     placeholder="Fears, doubts, habits, distractions…"
                     className="text-sm bg-white"
@@ -154,9 +154,9 @@ const GiveLifeAdviceHoverCard: React.FC<GiveLifeAdviceHoverCardProps> = ({ child
                   </Label>
                   <Input
                     id="support"
-                    value={support}
+                    value={support || undefined}
                     onChange={(e) => setSupport(e.target.value)}
-                    placeholder="Encouragement, accountability, hope…"
+                    placeholder="Encouragement, Confidence, Accountability, Hope, Guidance"
                     className="text-sm bg-white"
                   />
                 </div>
@@ -168,7 +168,7 @@ const GiveLifeAdviceHoverCard: React.FC<GiveLifeAdviceHoverCardProps> = ({ child
                   </Label>
                   <Textarea
                     id="additional"
-                    value={additional}
+                    value={additional || undefined}
                     onChange={(e) => setAdditional(e.target.value)}
                     placeholder="Other details, context or thoughts…"
                     className="text-sm min-h-[50px] resize-none bg-white"

@@ -94,7 +94,7 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children }) => {
                   </Label>
                   <Input
                     id="mentorship-domain"
-                    value={mentorshipDomain}
+                    value={mentorshipDomain || undefined}
                     onChange={(e) => setMentorshipDomain(e.target.value)}
                     placeholder="Career, entrepreneurship, leadership, personal growth…"
                     className="text-sm bg-white"
@@ -108,7 +108,7 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children }) => {
                   </Label>
                   <Input
                     id="current-stage"
-                    value={currentStage}
+                    value={currentStage || undefined}
                     onChange={(e) => setCurrentStage(e.target.value)}
                     placeholder="Beginner, intermediate, advanced…"
                     className="text-sm bg-white"
@@ -122,7 +122,7 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children }) => {
                   </Label>
                   <Input
                     id="challenges"
-                    value={challenges}
+                    value={challenges || undefined}
                     onChange={(e) => setChallenges(e.target.value)}
                     placeholder="Confidence, skills, direction…"
                     className="text-sm bg-white"
@@ -136,7 +136,7 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children }) => {
                   </Label>
                   <Input
                     id="desired-outcome"
-                    value={desiredOutcome}
+                    value={desiredOutcome || undefined}
                     onChange={(e) => setDesiredOutcome(e.target.value)}
                     placeholder="Decision-making, clarity, confidence…"
                     className="text-sm bg-white"
@@ -150,7 +150,7 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children }) => {
                   </Label>
                   <Input
                     id="preferred-style"
-                    value={preferredStyle}
+                    value={preferredStyle || undefined}
                     onChange={(e) => setPreferredStyle(e.target.value)}
                     placeholder="Encouraging, tough-love, structured…"
                     className="text-sm bg-white"
