@@ -74,7 +74,7 @@ const GiveLifeAdviceHoverCard: React.FC<GiveLifeAdviceHoverCardProps> = ({ child
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
-            className="absolute left-[1052px] top-[490px] w-80 pointer-events-auto"
+            className="absolute left-[1052px] top-[380px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
