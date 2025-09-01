@@ -87,7 +87,7 @@ const PoetryHoverCard: React.FC<PoetryHoverCardProps> = ({ children }) => {
                   <div>
                     <h3 className="font-semibold text-sidebar-text-violet text-lg">Poetry</h3>
                     <p className="text-xs text-sidebar-text-dark italic">
-                      Expressive verse that captures emotions, imagery, and meaning through rhythm and language.
+                      Expressive verse that captures emotions, imagery and meaning through rhythm and language.
                     </p>
                   </div>
                 </div>
@@ -115,7 +115,7 @@ const PoetryHoverCard: React.FC<PoetryHoverCardProps> = ({ children }) => {
                     id="form"
                     value={form}
                     onChange={(e) => setForm(e.target.value)}
-                    placeholder="Sonnet, Chhand, Haiku, Ghazal, Ode, Ballad"
+                    placeholder="Sonnet, Chhand, Haiku, Ghazal, Ode etc."
                     className="text-sm placeholder:text-gray-500"
                   />
                 </div>
@@ -129,7 +129,7 @@ const PoetryHoverCard: React.FC<PoetryHoverCardProps> = ({ children }) => {
                     id="mood"
                     value={mood}
                     onChange={(e) => setMood(e.target.value)}
-                    placeholder="Serious, Playful, Ironic, Sombre, Philosophical"
+                    placeholder="Serious, Playful, Ironic, Philosophical etc."
                     className="text-sm placeholder:text-gray-500"
                   />
                 </div>
