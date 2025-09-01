@@ -3,6 +3,7 @@ import { ChevronDown, ChevronRight } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 import EssayHoverCard from "./EssayHoverCard";
 import StoryHoverCard from "./StoryHoverCard";
+import FlashFictionHoverCard from "./FlashFictionHoverCard";
 
 const WorkflowTabs = () => {
   const [activeTab, setActiveTab] = useState<string | null>(null);
@@ -22,7 +23,7 @@ const WorkflowTabs = () => {
   const beautifulWritingItems = [
     { text: "Essay", tooltip: "Structured, formal writing — balanced arguments and clarity." },
     { text: "Story", tooltip: "Longer narrative with characters, plot and detail." },
-    { text: "Short story", tooltip: "Compact narrative — punchy, under 500 words." },
+    { text: "Flash Fiction" },
     { text: "Script", tooltip: "Dialogue-driven format for plays, films or skits." },
     { text: "Blog", tooltip: "Conversational, engaging style for online readers." },
     { text: "Poetry", tooltip: "Creative expression with rhythm, imagery and emotion." },
@@ -214,6 +215,19 @@ const WorkflowTabs = () => {
                                   {item.text}
                                 </button>
                               </StoryHoverCard>
+                            );
+                          }
+
+                          if (item.text === "Flash Fiction") {
+                            return (
+                              <FlashFictionHoverCard key={idx}>
+                                <button
+                                  className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
+                                  onClick={() => console.log(`Selected: ${item.text}`)}
+                                >
+                                  {item.text}
+                                </button>
+                              </FlashFictionHoverCard>
                             );
                           }
                           
