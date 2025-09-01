@@ -4,6 +4,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/t
 import EssayHoverCard from "./EssayHoverCard";
 import StoryHoverCard from "./StoryHoverCard";
 import FlashFictionHoverCard from "./FlashFictionHoverCard";
+import ScriptHoverCard from "./ScriptHoverCard";
 
 const WorkflowTabs = () => {
   const [activeTab, setActiveTab] = useState<string | null>(null);
@@ -228,6 +229,19 @@ const WorkflowTabs = () => {
                                   {item.text}
                                 </button>
                               </FlashFictionHoverCard>
+                            );
+                          }
+
+                          if (item.text === "Script") {
+                            return (
+                              <ScriptHoverCard key={idx}>
+                                <button
+                                  className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
+                                  onClick={() => console.log(`Selected: ${item.text}`)}
+                                >
+                                  {item.text}
+                                </button>
+                              </ScriptHoverCard>
                             );
                           }
                           
