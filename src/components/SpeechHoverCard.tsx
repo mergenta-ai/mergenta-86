@@ -117,7 +117,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children }) => {
                     id="tone"
                     value={tone}
                     onChange={(e) => setTone(e.target.value)}
-                    placeholder="Motivational, Persuasive, Humorous, Solemn"
+                    placeholder="Solemn, Motivational, Humorous etc."
                     className="text-sm placeholder:text-gray-500"
                   />
                 </div>
@@ -145,7 +145,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children }) => {
                     id="language-style"
                     value={languageStyle}
                     onChange={(e) => setLanguageStyle(e.target.value)}
-                    placeholder="Simple, Poetic, Technical, Rhetorical"
+                    placeholder="Simple, Poetic, Technical, Rhetorical etc."
                     className="text-sm placeholder:text-gray-500"
                   />
                 </div>
@@ -159,7 +159,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children }) => {
                     id="engagement-techniques"
                     value={engagementTechniques}
                     onChange={(e) => setEngagementTechniques(e.target.value)}
-                    placeholder="Stories, Questions, Humour, Quotes"
+                    placeholder="Stories, Questions, Humour, Quotes etc."
                     className="text-sm placeholder:text-gray-500"
                   />
                 </div>
@@ -187,7 +187,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children }) => {
                     id="impact"
                     value={impact}
                     onChange={(e) => setImpact(e.target.value)}
-                    placeholder="Memorable, Inspirational, Thought-provoking"
+                    placeholder="Memorable, Thought-provoking etc."
                     className="text-sm placeholder:text-gray-500"
                   />
                 </div>
