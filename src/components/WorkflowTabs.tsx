@@ -283,7 +283,7 @@ const WorkflowTabs = () => {
                             </Tooltip>
                             {expandedGroups.has(group.title) && (
                               <div 
-                                className="absolute left-full top-0 ml-1 bg-[#F8F5FE] rounded-lg shadow-md border border-[#E5D9F2] z-50 w-48"
+                                className="absolute left-0 top-0 bg-[#F8F5FE] rounded-lg shadow-md border border-[#E5D9F2] z-50 w-48"
                                 onMouseEnter={() => handleSubmenuEnter(group.title)}
                                 onMouseLeave={handleSubmenuLeave}
                               >
