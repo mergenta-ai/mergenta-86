@@ -117,7 +117,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children }) => {
                     id="tone"
                     value={tone}
                     onChange={(e) => setTone(e.target.value)}
-                    placeholder="Formal, Motivational, Persuasive, Humorous, Solemn"
+                    placeholder="Motivational, Persuasive, Humorous, Solemn"
                     className="text-sm placeholder:text-gray-500"
                   />
                 </div>
@@ -131,7 +131,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children }) => {
                     id="audience"
                     value={audience}
                     onChange={(e) => setAudience(e.target.value)}
-                    placeholder="Students, Professionals, Teachers, Public, Leaders"
+                    placeholder="Students, Public, Leaders, Associations"
                     className="text-sm placeholder:text-gray-500"
                   />
                 </div>
@@ -159,7 +159,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children }) => {
                     id="engagement-techniques"
                     value={engagementTechniques}
                     onChange={(e) => setEngagementTechniques(e.target.value)}
-                    placeholder="Stories, Questions, Humour, Quotes, couplets"
+                    placeholder="Stories, Questions, Humour, Quotes"
                     className="text-sm placeholder:text-gray-500"
                   />
                 </div>
@@ -187,7 +187,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children }) => {
                     id="impact"
                     value={impact}
                     onChange={(e) => setImpact(e.target.value)}
-                    placeholder="Memorable, Inspirational, Actionable, Thought-provoking"
+                    placeholder="Memorable, Inspirational, Thought-provoking"
                     className="text-sm placeholder:text-gray-500"
                   />
                 </div>
