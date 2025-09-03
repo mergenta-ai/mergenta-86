@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
+import { useDynamicPosition } from "../hooks/useDynamicPosition";
 
 interface SalaryCertificateRequestHoverCardProps {
   children: React.ReactNode;
@@ -15,6 +16,7 @@ const SalaryCertificateRequestHoverCard = ({ children }: SalaryCertificateReques
   const [signOff, setSignOff] = useState("");
   const [from, setFrom] = useState("");
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
+  const { triggerRef, getPositionStyles } = useDynamicPosition(showCard, 320, 400);
 
   useEffect(() => {
     const saved = localStorage.getItem('salaryCertificateRequest-form');
@@ -51,6 +53,7 @@ const SalaryCertificateRequestHoverCard = ({ children }: SalaryCertificateReques
 
   return (
     <div 
+      ref={triggerRef}
       className="relative"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -59,7 +62,8 @@ const SalaryCertificateRequestHoverCard = ({ children }: SalaryCertificateReques
       
       {showCard && (
         <div 
-          className="absolute left-full -top-20 w-80 bg-pastel-lavender rounded-2xl shadow-lg border border-[#E5D9F2] z-50 p-6"
+          style={getPositionStyles()}
+          className="w-80 bg-pastel-lavender rounded-2xl shadow-lg border border-[#E5D9F2] p-6"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
