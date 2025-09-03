@@ -9,78 +9,61 @@ interface Position {
 
 export const useDynamicPosition = (isVisible: boolean, cardWidth = 320, cardHeight = 400) => {
   const triggerRef = useRef<HTMLDivElement>(null);
-  const [position, setPosition] = useState<Position>({ left: '100%', top: '-5rem' } as any);
+  const [position, setPosition] = useState<Position>({});
 
   useEffect(() => {
-    if (!isVisible || !triggerRef.current) return;
+    if (!isVisible) return;
 
     const updatePosition = () => {
-      const trigger = triggerRef.current;
-      if (!trigger) return;
-
-      const triggerRect = trigger.getBoundingClientRect();
       const viewport = {
         width: window.innerWidth,
         height: window.innerHeight,
       };
 
+      // Fixed position specifications based on screenshot:
+      // - 24px from right edge of viewport
+      // - 180px from top of viewport
+      // - Ensure card stays within viewport bounds
+      
+      const rightMargin = 24;
+      const topPosition = 180;
+      const minTopMargin = 20;
+      const minBottomMargin = 20;
+
       let newPosition: Position = {};
 
-      // Calculate horizontal position with better edge handling
-      const spaceRight = viewport.width - triggerRect.right;
-      const spaceLeft = triggerRect.left;
-      const minMargin = 20; // Minimum margin from viewport edges
+      // Fixed horizontal position: 24px from right edge
+      newPosition.right = rightMargin;
 
-      if (spaceRight >= cardWidth + minMargin) {
-        // Enough space on right
-        newPosition.left = triggerRect.width;
-      } else if (spaceLeft >= cardWidth + minMargin) {
-        // Not enough space on right, try left
-        newPosition.right = triggerRect.width;
+      // Fixed vertical position: 180px from top, but ensure it fits in viewport
+      const maxTop = viewport.height - cardHeight - minBottomMargin;
+      const idealTop = topPosition;
+      
+      if (idealTop + cardHeight + minBottomMargin <= viewport.height) {
+        // Card fits at ideal position
+        newPosition.top = idealTop;
+      } else if (maxTop >= minTopMargin) {
+        // Position at maximum allowed top to fit in viewport
+        newPosition.top = maxTop;
       } else {
-        // Not enough space on either side, position to stay within viewport
-        const maxLeftOffset = viewport.width - cardWidth - minMargin;
-        const idealLeftOffset = -triggerRect.left + minMargin;
-        newPosition.left = Math.max(idealLeftOffset, Math.min(0, maxLeftOffset - triggerRect.left));
-      }
-
-      // Calculate vertical position with better edge handling
-      const spaceBelow = viewport.height - triggerRect.bottom;
-      const spaceAbove = triggerRect.top;
-
-      if (spaceBelow >= cardHeight + minMargin) {
-        // Enough space below
-        newPosition.top = triggerRect.height + 8;
-      } else if (spaceAbove >= cardHeight + minMargin) {
-        // Not enough space below, position above
-        newPosition.bottom = triggerRect.height + 8;
-      } else {
-        // Not enough space above or below, position to fit in viewport
-        if (spaceBelow > spaceAbove) {
-          // More space below, position at bottom of viewport
-          newPosition.top = viewport.height - triggerRect.bottom - cardHeight - minMargin;
-        } else {
-          // More space above, position at top of viewport
-          newPosition.top = -triggerRect.top + minMargin;
-        }
+        // Viewport too small, position with minimum top margin
+        newPosition.top = minTopMargin;
       }
 
       setPosition(newPosition);
     };
 
     updatePosition();
-    window.addEventListener('scroll', updatePosition);
     window.addEventListener('resize', updatePosition);
 
     return () => {
-      window.removeEventListener('scroll', updatePosition);
       window.removeEventListener('resize', updatePosition);
     };
   }, [isVisible, cardWidth, cardHeight]);
 
   const getPositionStyles = (): React.CSSProperties => {
     const styles: React.CSSProperties = {
-      position: 'absolute',
+      position: 'fixed', // Changed from absolute to fixed for viewport positioning
       zIndex: 50,
     };
 
