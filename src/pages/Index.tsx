@@ -64,7 +64,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F9F5FF] via-[#FFF0F8] to-white flex">
+    <div className="min-h-screen flex">
       {/* Sidebar */}
       <MergentaSidebar />
       

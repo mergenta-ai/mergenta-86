@@ -149,18 +149,17 @@ All colors MUST be HSL.
   html {
     background: linear-gradient(135deg, #F9F5FF, #FFF0F8, #FFFFFF);
     background-attachment: fixed;
+    min-height: 100vh;
   }
 
   body {
     @apply text-foreground;
-    background: linear-gradient(135deg, #F9F5FF, #FFF0F8, #FFFFFF);
-    background-attachment: fixed;
+    background: transparent;
     min-height: 100vh;
   }
 
   #root {
-    background: linear-gradient(135deg, #F9F5FF, #FFF0F8, #FFFFFF);
-    background-attachment: fixed;
+    background: transparent;
     min-height: 100vh;
   }
 }
