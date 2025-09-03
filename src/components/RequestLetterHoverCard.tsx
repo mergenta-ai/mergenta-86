@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
+import { useDynamicPosition } from "../hooks/useDynamicPosition";
 
 interface RequestLetterHoverCardProps {
   children: React.ReactNode;
