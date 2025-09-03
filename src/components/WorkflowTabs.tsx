@@ -329,7 +329,7 @@ const WorkflowTabs = () => {
                         {easyDraftGroups.map((group, groupIdx) => (
                           <div key={groupIdx} className="relative">
                             <button
-                              className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#B79CF6] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
+                              className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-pastel-violet-hover hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
                               onMouseEnter={() => handleGroupHover(group.title)}
                               onMouseLeave={handleGroupLeave}
                             >
@@ -337,7 +337,7 @@ const WorkflowTabs = () => {
                             </button>
                             {expandedGroups.has(group.title) && (
                               <div 
-                                className="absolute left-full top-0 ml-1 bg-[#B79CF6] rounded-lg shadow-md border border-[#E5D9F2] z-50 w-48"
+                                className="absolute left-full top-0 ml-1 bg-pastel-violet rounded-lg shadow-md border border-[#E5D9F2] z-50 w-48"
                                 onMouseEnter={() => handleSubmenuEnter(group.title)}
                                 onMouseLeave={handleSubmenuLeave}
                               >
@@ -393,7 +393,7 @@ const WorkflowTabs = () => {
                             return (
                               <BrainstormHoverCard key={idx}>
                                 <button
-                                         className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#A37BEF] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
+                                         className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-pastel-lavender-hover hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
                                   onClick={() => console.log(`Selected: ${item.text}`)}
                                 >
                                   {item.text}
