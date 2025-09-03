@@ -54,7 +54,7 @@ const ApologyLetterHoverCard = ({ children }: ApologyLetterHoverCardProps) => {
   return (
     <div 
       ref={triggerRef}
-      className="relative"
+      className="absolute left-full top-0 ml-2"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -62,7 +62,6 @@ const ApologyLetterHoverCard = ({ children }: ApologyLetterHoverCardProps) => {
       
       {showCard && (
         <div 
-          style={getPositionStyles()}
           className="w-80 bg-pastel-lavender rounded-2xl shadow-lg border border-[#E5D9F2] p-6"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
