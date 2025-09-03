@@ -59,7 +59,7 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
       
       {showCard && (
         <div 
-          className="absolute left-full -top-10 w-80 bg-pastel-lavender rounded-2xl shadow-lg border border-[#E5D9F2] z-50 p-6"
+          className="absolute left-full -top-20 w-80 bg-pastel-lavender rounded-2xl shadow-lg border border-[#E5D9F2] z-50 p-6"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
@@ -71,6 +71,7 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
             
             <div className="space-y-3">
               <div>
+                <label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label>
                 <Input
                   value={to || undefined}
                   onChange={(e) => setTo(e.target.value)}
@@ -80,6 +81,7 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
               </div>
               
               <div>
+                <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label>
                 <Input
                   value={subject || undefined}
                   onChange={(e) => setSubject(e.target.value)}
@@ -89,6 +91,7 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
               </div>
               
               <div>
+                <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Core Message</label>
                 <Textarea
                   value={coreMessage || undefined}
                   onChange={(e) => setCoreMessage(e.target.value)}
@@ -98,6 +101,7 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
               </div>
               
               <div>
+                <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Final Touch</label>
                 <Textarea
                   value={finalTouch || undefined}
                   onChange={(e) => setFinalTouch(e.target.value)}
@@ -107,6 +111,7 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
               </div>
               
               <div>
+                <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Sign Off</label>
                 <Textarea
                   value={signOff || undefined}
                   onChange={(e) => setSignOff(e.target.value)}
@@ -116,6 +121,7 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
               </div>
               
               <div>
+                <label className="text-sm font-medium text-[#5B34A0] mb-1 block">From</label>
                 <Input
                   value={from || undefined}
                   onChange={(e) => setFrom(e.target.value)}
