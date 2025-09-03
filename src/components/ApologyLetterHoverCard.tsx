@@ -59,7 +59,7 @@ const ApologyLetterHoverCard = ({ children }: ApologyLetterHoverCardProps) => {
       
       {showCard && (
         <div 
-          className="absolute left-full top-0 w-80 bg-[#F5F2FA] rounded-2xl shadow-lg border border-[#E5D9F2] z-50 p-6"
+          className="absolute left-full top-0 w-80 bg-[#A37BEF] rounded-2xl shadow-lg border border-[#E5D9F2] z-50 p-6"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
