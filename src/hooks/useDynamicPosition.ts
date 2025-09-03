@@ -42,13 +42,13 @@ export const useDynamicPosition = (isVisible: boolean, cardWidth = 320, cardHeig
       
       if (triggerTop + cardHeight + minMargin <= viewport.height) {
         // Card fits when aligned with trigger top
-        newPosition.top = -8; // Slight upward adjustment to align properly with trigger
+        newPosition.top = 0; // Relative to trigger
       } else if (maxTop - triggerTop >= -triggerRect.height) {
         // Position to fit within viewport
-        newPosition.top = maxTop - triggerTop - 8;
+        newPosition.top = maxTop - triggerTop;
       } else {
         // Position at top of viewport with minimum margin
-        newPosition.top = -triggerTop + minMargin - 8;
+        newPosition.top = -triggerTop + minMargin;
       }
 
       setPosition(newPosition);
