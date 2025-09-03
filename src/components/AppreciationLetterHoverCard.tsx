@@ -63,7 +63,7 @@ const AppreciationLetterHoverCard = ({ children }: AppreciationLetterHoverCardPr
       {showCard && (
         <div 
           style={getPositionStyles()}
-          className="w-80 bg-[#F5F2FA] rounded-2xl shadow-lg border border-[#E5D9F2] p-6"
+          className="w-80 bg-pastel-lavender rounded-2xl shadow-lg border border-[#E5D9F2] p-6"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
