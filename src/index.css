@@ -147,6 +147,8 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    background: linear-gradient(135deg, #F9F5FF, #FFF0F8, #FFFFFF);
+    min-height: 100vh;
   }
 }
