@@ -75,6 +75,7 @@ const { triggerRef, getPositionStyles } = useDynamicPosition(showCard, 320, 400)
             
             <div className="space-y-3">
               <div>
+               <label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label>
                 <Input
                   value={to || undefined}
                   onChange={(e) => setTo(e.target.value)}
@@ -84,6 +85,7 @@ const { triggerRef, getPositionStyles } = useDynamicPosition(showCard, 320, 400)
               </div>
               
               <div>
+                <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label>
                 <Input
                   value={subject || undefined}
                   onChange={(e) => setSubject(e.target.value)}
@@ -93,6 +95,7 @@ const { triggerRef, getPositionStyles } = useDynamicPosition(showCard, 320, 400)
               </div>
               
               <div>
+                <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Core Message</label>
                 <Textarea
                   value={coreMessage || undefined}
                   onChange={(e) => setCoreMessage(e.target.value)}
@@ -102,6 +105,7 @@ const { triggerRef, getPositionStyles } = useDynamicPosition(showCard, 320, 400)
               </div>
               
               <div>
+                <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Final Touch</label>
                 <Textarea
                   value={finalTouch || undefined}
                   onChange={(e) => setFinalTouch(e.target.value)}
@@ -111,6 +115,7 @@ const { triggerRef, getPositionStyles } = useDynamicPosition(showCard, 320, 400)
               </div>
               
               <div>
+                <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Sign Off</label>
                 <Textarea
                   value={signOff || undefined}
                   onChange={(e) => setSignOff(e.target.value)}
@@ -120,6 +125,7 @@ const { triggerRef, getPositionStyles } = useDynamicPosition(showCard, 320, 400)
               </div>
               
               <div>
+                <label className="text-sm font-medium text-[#5B34A0] mb-1 block">From</label>
                 <Input
                   value={from || undefined}
                   onChange={(e) => setFrom(e.target.value)}
