@@ -34,7 +34,7 @@ export const useDynamicPosition = (isVisible: boolean, cardWidth = 320, cardHeig
       const minMargin = 20; // Minimum margin from viewport edges
 
       // Horizontal positioning: Fixed position relative to submenu (w-48 = 192px)
-      newPosition.left = 192 + horizontalGap;
+      newPosition.left = 192; // Remove gap to make card touch the menu
 
       // Vertical positioning: Align with trigger top, but ensure card fits in viewport  
       const triggerTop = triggerRect.top;
