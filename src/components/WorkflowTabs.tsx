@@ -208,7 +208,7 @@ const WorkflowTabs = () => {
                 {/* Dropdown - only for certain tabs */}
                 {activeTab === tab.id && !["think-hard", "deep-research"].includes(tab.id) && (
                   <div 
-                    className="absolute top-full mt-2 w-[100px] bg-[#F8F5FE] rounded-lg shadow-md border border-[#E5D9F2] z-50"
+                    className="absolute top-full w-[100px] bg-[#F8F5FE] rounded-lg shadow-md border border-[#E5D9F2] z-50"
                     onMouseEnter={handleDropdownEnter}
                     onMouseLeave={handleDropdownLeave}
                   >
@@ -337,7 +337,7 @@ const WorkflowTabs = () => {
                             </button>
                             {expandedGroups.has(group.title) && (
                               <div 
-                                className="absolute left-full top-0 ml-1 bg-pastel-violet rounded-lg shadow-md border border-[#E5D9F2] z-50 w-48"
+                                className="absolute left-full top-0 ml-1 bg-[#F8F5FE] rounded-lg shadow-md border border-[#E5D9F2] z-50 w-48"
                                 onMouseEnter={() => handleSubmenuEnter(group.title)}
                                 onMouseLeave={handleSubmenuLeave}
                               >
