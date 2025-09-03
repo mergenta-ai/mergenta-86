@@ -34,7 +34,10 @@ export const useDynamicPosition = (isVisible: boolean, cardWidth = 320, cardHeig
       const minMargin = 20; // Minimum margin from viewport edges
 
       // Horizontal positioning: Always to the right of the trigger
-      newPosition.left = triggerRect.width + horizontalGap;
+      // Add minimum offset to ensure cards don't overlap with dropdown
+      const calculatedLeft = triggerRect.width + horizontalGap;
+      const minLeftOffset = 200; // Minimum distance from left edge of viewport
+      newPosition.left = Math.max(calculatedLeft, minLeftOffset);
 
       // Vertical positioning: Align with trigger top, but ensure card fits in viewport  
       const triggerTop = triggerRect.top;
