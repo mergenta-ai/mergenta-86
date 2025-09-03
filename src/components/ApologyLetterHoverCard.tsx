@@ -60,7 +60,7 @@ const ApologyLetterHoverCard = ({ children }: ApologyLetterHoverCardProps) => {
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
-            className="absolute left-[850px] top-[155px] w-80 pointer-events-auto"
+            className="absolute left-[875px] top-[155px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
