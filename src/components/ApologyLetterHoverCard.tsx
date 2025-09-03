@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-import { useDynamicPosition } from "../hooks/useDynamicPosition";
 
 interface ApologyLetterHoverCardProps {
   children: React.ReactNode;
@@ -16,7 +15,6 @@ const ApologyLetterHoverCard = ({ children }: ApologyLetterHoverCardProps) => {
   const [signOff, setSignOff] = useState("");
   const [from, setFrom] = useState("");
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
-  const { triggerRef, getPositionStyles } = useDynamicPosition(showCard, 320, 400);
 
   useEffect(() => {
     const saved = localStorage.getItem('apologyLetter-form');
@@ -52,21 +50,21 @@ const ApologyLetterHoverCard = ({ children }: ApologyLetterHoverCardProps) => {
   };
 
   return (
-    <div 
-      ref={triggerRef}
-      className="relative"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      {children}
-      
+    <>
+      {/* Trigger Element */}
+      <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        {children}
+      </div>
+
+      {/* Full Screen Hover Area + Card */}
       {showCard && (
-        <div 
-          style={getPositionStyles()}
-          className="w-80 bg-pastel-lavender rounded-2xl shadow-lg border border-[#E5D9F2] p-6"
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-        >
+        <div className="fixed inset-0 z-[200] pointer-events-none">
+          <div
+            className="absolute left-[384px] top-[155px] w-80 pointer-events-auto"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            <div className="p-6 bg-pastel-lavender rounded-2xl shadow-lg border border-[#E5D9F2] animate-in fade-in-0 zoom-in-95 duration-200">
           <div className="space-y-4">
             <div>
               <h3 className="text-lg font-semibold text-[#5B34A0] mb-1">Apology Letter</h3>
@@ -142,9 +140,11 @@ const ApologyLetterHoverCard = ({ children }: ApologyLetterHoverCardProps) => {
               </button>
             </div>
           </div>
+            </div>
+          </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
