@@ -12,58 +12,61 @@ export const useDynamicPosition = (isVisible: boolean, cardWidth = 320, cardHeig
   const [position, setPosition] = useState<Position>({});
 
   useEffect(() => {
-    if (!isVisible) return;
+    if (!isVisible || !triggerRef.current) return;
 
     const updatePosition = () => {
+      const trigger = triggerRef.current;
+      if (!trigger) return;
+
+      const triggerRect = trigger.getBoundingClientRect();
       const viewport = {
         width: window.innerWidth,
         height: window.innerHeight,
       };
 
-      // Fixed position specifications based on screenshot:
-      // - 24px from right edge of viewport
-      // - 180px from top of viewport
-      // - Ensure card stays within viewport bounds
-      
-      const rightMargin = 24;
-      const topPosition = 180;
-      const minTopMargin = 20;
-      const minBottomMargin = 20;
-
       let newPosition: Position = {};
 
-      // Fixed horizontal position: 24px from right edge
-      newPosition.right = rightMargin;
-
-      // Fixed vertical position: 180px from top, but ensure it fits in viewport
-      const maxTop = viewport.height - cardHeight - minBottomMargin;
-      const idealTop = topPosition;
+      // Position specifications for card next to dropdown menu:
+      // - Horizontally: Right next to the trigger element
+      // - Vertically: Aligned with top of trigger, but ensure full visibility
       
-      if (idealTop + cardHeight + minBottomMargin <= viewport.height) {
-        // Card fits at ideal position
-        newPosition.top = idealTop;
-      } else if (maxTop >= minTopMargin) {
-        // Position at maximum allowed top to fit in viewport
-        newPosition.top = maxTop;
+      const horizontalGap = 8; // Small gap between menu and card
+      const minMargin = 20; // Minimum margin from viewport edges
+
+      // Horizontal positioning: Always to the right of the trigger
+      newPosition.left = triggerRect.width + horizontalGap;
+
+      // Vertical positioning: Align with trigger top, but ensure card fits in viewport  
+      const triggerTop = triggerRect.top;
+      const maxTop = viewport.height - cardHeight - minMargin;
+      
+      if (triggerTop + cardHeight + minMargin <= viewport.height) {
+        // Card fits when aligned with trigger top
+        newPosition.top = 0; // Relative to trigger
+      } else if (maxTop - triggerTop >= -triggerRect.height) {
+        // Position to fit within viewport
+        newPosition.top = maxTop - triggerTop;
       } else {
-        // Viewport too small, position with minimum top margin
-        newPosition.top = minTopMargin;
+        // Position at top of viewport with minimum margin
+        newPosition.top = -triggerTop + minMargin;
       }
 
       setPosition(newPosition);
     };
 
     updatePosition();
+    window.addEventListener('scroll', updatePosition);
     window.addEventListener('resize', updatePosition);
 
     return () => {
+      window.removeEventListener('scroll', updatePosition);
       window.removeEventListener('resize', updatePosition);
     };
   }, [isVisible, cardWidth, cardHeight]);
 
   const getPositionStyles = (): React.CSSProperties => {
     const styles: React.CSSProperties = {
-      position: 'fixed', // Changed from absolute to fixed for viewport positioning
+      position: 'absolute', // Changed back to absolute for trigger-relative positioning
       zIndex: 50,
     };
 
