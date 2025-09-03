@@ -16,7 +16,8 @@ const GeneralLetterHoverCard = ({ children }: GeneralLetterHoverCardProps) => {
   const [signOff, setSignOff] = useState("");
   const [from, setFrom] = useState("");
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
-
+const { triggerRef, getPositionStyles } = useDynamicPosition(showCard, 320, 400);
+  
   useEffect(() => {
     const saved = localStorage.getItem('generalLetter-form');
     if (saved) {
@@ -52,6 +53,7 @@ const GeneralLetterHoverCard = ({ children }: GeneralLetterHoverCardProps) => {
 
   return (
     <div 
+      ref={triggerRef}
       className="relative"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -60,7 +62,8 @@ const GeneralLetterHoverCard = ({ children }: GeneralLetterHoverCardProps) => {
       
       {showCard && (
         <div 
-          className="absolute left-full top-0 w-80 bg-[#F5F2FA] rounded-2xl shadow-lg border border-[#E5D9F2] z-50 p-6"
+          style={getPositionStyles()}
+          className="w-80 bg-pastel-lavender rounded-2xl shadow-lg border border-[#E5D9F2] p-6"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
