@@ -329,7 +329,7 @@ const WorkflowTabs = () => {
                         {easyDraftGroups.map((group, groupIdx) => (
                           <div key={groupIdx} className="relative">
                             <button
-                              className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-pastel-violet-hover hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
+                              className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-pastel-rose-lilac hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
                               onMouseEnter={() => handleGroupHover(group.title)}
                               onMouseLeave={handleGroupLeave}
                             >

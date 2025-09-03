@@ -59,7 +59,7 @@ const RecommendationLetterHoverCard = ({ children }: RecommendationLetterHoverCa
       
       {showCard && (
         <div 
-          className="absolute left-full top-0 w-80 bg-pastel-lavender rounded-2xl shadow-lg border border-[#E5D9F2] z-50 p-6"
+          className="absolute left-full -top-20 w-80 bg-pastel-lavender rounded-2xl shadow-lg border border-[#E5D9F2] z-50 p-6"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
