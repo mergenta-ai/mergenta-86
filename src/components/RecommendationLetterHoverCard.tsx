@@ -60,7 +60,7 @@ const RecommendationLetterHoverCard = ({ children }: RecommendationLetterHoverCa
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
-            className="absolute left-[384px] top-[435px] w-80 pointer-events-auto"
+            className="absolute left-[918px] top-[200px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >

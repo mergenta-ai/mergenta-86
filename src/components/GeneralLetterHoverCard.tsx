@@ -56,7 +56,7 @@ const GeneralLetterHoverCard = ({ children }: GeneralLetterHoverCardProps) => {
       </div>
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
-          <div className="absolute left-[384px] top-[505px] w-80 pointer-events-auto" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+          <div className="absolute left-[918px] top-[200px] w-80 pointer-events-auto" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             <div className="p-6 bg-pastel-lavender rounded-2xl shadow-lg border border-[#E5D9F2] animate-in fade-in-0 zoom-in-95 duration-200">
               <div className="space-y-4">
                 <div>
