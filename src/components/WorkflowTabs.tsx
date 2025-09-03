@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import * as React from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 import EssayHoverCard from "./EssayHoverCard";
@@ -13,6 +14,23 @@ import ScenarioHoverCard from "./ScenarioHoverCard";
 import MentorHoverCard from "./MentorHoverCard";
 import DevilsAdvocateHoverCard from "./DevilsAdvocateHoverCard";
 import GiveLifeAdviceHoverCard from "./GiveLifeAdviceHoverCard";
+import LoveLetterHoverCard from "./LoveLetterHoverCard";
+import ApologyLetterHoverCard from "./ApologyLetterHoverCard";
+import ThankYouLetterHoverCard from "./ThankYouLetterHoverCard";
+import CondolenceLetterHoverCard from "./CondolenceLetterHoverCard";
+import InvitationLetterHoverCard from "./InvitationLetterHoverCard";
+import CongratulatoryLetterHoverCard from "./CongratulatoryLetterHoverCard";
+import WelcomeLetterHoverCard from "./WelcomeLetterHoverCard";
+import FarewellLetterHoverCard from "./FarewellLetterHoverCard";
+import ComplaintLetterHoverCard from "./ComplaintLetterHoverCard";
+import RecommendationLetterHoverCard from "./RecommendationLetterHoverCard";
+import RequestLetterHoverCard from "./RequestLetterHoverCard";
+import GeneralLetterHoverCard from "./GeneralLetterHoverCard";
+import LeaveApplicationHoverCard from "./LeaveApplicationHoverCard";
+import PermissionLetterHoverCard from "./PermissionLetterHoverCard";
+import AppreciationLetterHoverCard from "./AppreciationLetterHoverCard";
+import ExperienceCertificateRequestHoverCard from "./ExperienceCertificateRequestHoverCard";
+import SalaryCertificateRequestHoverCard from "./SalaryCertificateRequestHoverCard";
 
 const WorkflowTabs = () => {
   const [activeTab, setActiveTab] = useState<string | null>(null);
@@ -50,23 +68,19 @@ const WorkflowTabs = () => {
   const easyDraftGroups = [
     {
       title: "Personal Letters",
-      tooltip: "Letters for personal and emotional expressions",
       items: ["Love letter", "Apology letter", "Thank you letter", "Condolence letter"]
     },
     {
       title: "Social Letters", 
-      tooltip: "Letters for social, celebratory and community occasions",
       items: ["Invitation letter", "Congratulatory letter", "Welcome letter", "Farewell letter"]
     },
     {
-      title: "Formal Letters",
-      tooltip: "Letters for professional, general and official purposes", 
-      items: ["Complaint letter", "Recommendation letter", "Request letter", "General letter"]
+      title: "Institutional Letters",
+      items: ["Leave application", "Permission letter", "Appreciation letter", "Experience certificate request", "Salary certificate request"]
     },
     {
-      title: "Institutional Letters",
-      tooltip: "Letters commonly required in workplace and organisational contexts",
-      items: ["Leave application", "Permission letter", "Appreciation letter", "Experience certificate request", "Salary certificate request"]
+      title: "Formal Letters",
+      items: ["Complaint letter", "Recommendation letter", "Request letter", "General letter"]
     }
   ];
 
@@ -314,20 +328,13 @@ const WorkflowTabs = () => {
                       <div className="py-2">
                         {easyDraftGroups.map((group, groupIdx) => (
                           <div key={groupIdx} className="relative">
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <button
-                                  className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
-                                  onMouseEnter={() => handleGroupHover(group.title)}
-                                  onMouseLeave={handleGroupLeave}
-                                >
-                                  <span>{group.title}</span>
-                                </button>
-                              </TooltipTrigger>
-                              <TooltipContent side="left" className="max-w-xs">
-                                <p>{group.tooltip}</p>
-                              </TooltipContent>
-                            </Tooltip>
+                            <button
+                              className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
+                              onMouseEnter={() => handleGroupHover(group.title)}
+                              onMouseLeave={handleGroupLeave}
+                            >
+                              <span>{group.title}</span>
+                            </button>
                             {expandedGroups.has(group.title) && (
                               <div 
                                 className="absolute left-full top-0 ml-1 bg-[#F8F5FE] rounded-lg shadow-md border border-[#E5D9F2] z-50 w-48"
@@ -335,15 +342,43 @@ const WorkflowTabs = () => {
                                 onMouseLeave={handleSubmenuLeave}
                               >
                                 <div className="py-2">
-                                  {group.items.map((item, itemIdx) => (
-                                    <button
-                                      key={itemIdx}
-                                      className="w-full text-left px-4 py-2 text-sm text-[#666] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
-                                      onClick={() => console.log(`Selected: ${item}`)}
-                                    >
-                                      {item}
-                                    </button>
-                                  ))}
+                                  {group.items.map((item, itemIdx) => {
+                                    const getHoverCard = (item: string, content: React.ReactNode) => {
+                                      const hoverCards: { [key: string]: React.ComponentType<any> } = {
+                                        "Love letter": LoveLetterHoverCard,
+                                        "Apology letter": ApologyLetterHoverCard,
+                                        "Thank you letter": ThankYouLetterHoverCard,
+                                        "Condolence letter": CondolenceLetterHoverCard,
+                                        "Invitation letter": InvitationLetterHoverCard,
+                                        "Congratulatory letter": CongratulatoryLetterHoverCard,
+                                        "Welcome letter": WelcomeLetterHoverCard,
+                                        "Farewell letter": FarewellLetterHoverCard,
+                                        "Complaint letter": ComplaintLetterHoverCard,
+                                        "Recommendation letter": RecommendationLetterHoverCard,
+                                        "Request letter": RequestLetterHoverCard,
+                                        "General letter": GeneralLetterHoverCard,
+                                        "Leave application": LeaveApplicationHoverCard,
+                                        "Permission letter": PermissionLetterHoverCard,
+                                        "Appreciation letter": AppreciationLetterHoverCard,
+                                        "Experience certificate request": ExperienceCertificateRequestHoverCard,
+                                        "Salary certificate request": SalaryCertificateRequestHoverCard,
+                                      };
+                                      
+                                      const HoverCard = hoverCards[item];
+                                      return HoverCard ? React.createElement(HoverCard, { children: content }) : content;
+                                    };
+
+                                    return getHoverCard(
+                                      item,
+                                      <button
+                                        key={itemIdx}
+                                        className="w-full text-left px-4 py-2 text-sm text-[#666] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
+                                        onClick={() => console.log(`Selected: ${item}`)}
+                                      >
+                                        {item}
+                                      </button>
+                                    );
+                                  })}
                                 </div>
                               </div>
                             )}
