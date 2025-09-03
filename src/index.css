@@ -146,9 +146,21 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
+  html {
+    background: linear-gradient(135deg, #F9F5FF, #FFF0F8, #FFFFFF);
+    background-attachment: fixed;
+  }
+
   body {
     @apply text-foreground;
     background: linear-gradient(135deg, #F9F5FF, #FFF0F8, #FFFFFF);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+
+  #root {
+    background: linear-gradient(135deg, #F9F5FF, #FFF0F8, #FFFFFF);
+    background-attachment: fixed;
     min-height: 100vh;
   }
 }
