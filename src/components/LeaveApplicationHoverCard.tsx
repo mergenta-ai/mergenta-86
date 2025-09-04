@@ -45,7 +45,7 @@ const LeaveApplicationHoverCard = ({ children }: LeaveApplicationHoverCardProps)
       <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>{children}</div>
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
-          <div className="absolute left-[320px] top-[540px] w-80 pointer-events-auto" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+          <div className="absolute left-[918px] top-[220px] w-80 pointer-events-auto" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             <div className="p-6 bg-pastel-lavender rounded-2xl shadow-lg border border-[#E5D9F2] animate-in fade-in-0 zoom-in-95 duration-200">
               <div className="space-y-4">
                 <div><h3 className="text-lg font-semibold text-[#5B34A0] mb-1">Leave Application</h3><p className="text-sm text-[#6E6E6E] mb-4">Request time off professionally</p></div>
