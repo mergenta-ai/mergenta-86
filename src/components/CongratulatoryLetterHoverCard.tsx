@@ -77,7 +77,7 @@ const CongratulatoryLetterHoverCard = ({ children }: CongratulatoryLetterHoverCa
                     <Input
                       value={to || undefined}
                       onChange={(e) => setTo(e.target.value)}
-                      placeholder="[Name], Friend, Colleague, Team, Family..."
+                      placeholder="Dear [Name], Friend, Colleague, Team, Family..."
                       className="w-full"
                     />
                   </div>
@@ -87,7 +87,7 @@ const CongratulatoryLetterHoverCard = ({ children }: CongratulatoryLetterHoverCa
                     <Input
                       value={subject || undefined}
                       onChange={(e) => setSubject(e.target.value)}
-                      placeholder="Achievement, Success, Promotion, Milestone, Marriage etc..."
+                      placeholder="Mention about Achievement, Success, Promotion, Milestone, Marriage etc..."
                       className="w-full"
                     />
                   </div>
@@ -97,7 +97,7 @@ const CongratulatoryLetterHoverCard = ({ children }: CongratulatoryLetterHoverCa
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
-                      placeholder="Main message, Congratulations, Proud of you, Well done etc..."
+                      placeholder="Use phrases like Congratulations, Proud of you, Good job, Well done, etc. to write your message."
                       className="w-full min-h-[80px] resize-none"
                     />
                   </div>
@@ -107,7 +107,7 @@ const CongratulatoryLetterHoverCard = ({ children }: CongratulatoryLetterHoverCa
                     <Textarea
                       value={finalTouch || undefined}
                       onChange={(e) => setFinalTouch(e.target.value)}
-                      placeholder="Personal pride, Shared joy, Looking ahead, Keep going etc..."
+                      placeholder="Use phrases like Personal pride, Shared joy, Looking ahead, Keep going etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -117,7 +117,7 @@ const CongratulatoryLetterHoverCard = ({ children }: CongratulatoryLetterHoverCa
                     <Textarea
                       value={signOff || undefined}
                       onChange={(e) => setSignOff(e.target.value)}
-                      placeholder="Best wishes, Heartfelt regards, Cheers, Warmly etc..."
+                      placeholder="Consider writing Best wishes, Heartfelt regards, Cheers, Warmly etc. to close the message"
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -127,7 +127,7 @@ const CongratulatoryLetterHoverCard = ({ children }: CongratulatoryLetterHoverCa
                     <Input
                       value={from || undefined}
                       onChange={(e) => setFrom(e.target.value)}
-                      placeholder="Your Name"
+                      placeholder="Proud Friend, Warm Regards, Your Name, "
                       className="w-full"
                     />
                   </div>
