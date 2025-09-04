@@ -97,7 +97,7 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
-                      placeholder="Type your message here about feelings, love, emotions, cherished moments, nostalgia, longing, etc..."
+                      placeholder="Type your message here about feelings, love, emotions, cherished moments, nostalgia, longing etc..."
                       className="w-full min-h-[80px] resize-none"
                     />
                   </div>
