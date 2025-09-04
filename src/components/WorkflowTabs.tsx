@@ -76,7 +76,7 @@ const WorkflowTabs = () => {
     },
     {
       title: "Institutional Letters",
-      items: ["Leave application", "Permission letter", "Appreciation letter", "Appointment request", "Publication request"]
+      items: ["Leave application", "Permission letter", "Appreciation letter", "Appointment request letter", "Publication request letter"]
     },
     {
       title: "Formal Letters",
@@ -344,40 +344,46 @@ const WorkflowTabs = () => {
                                 <div className="py-2">
                                   {group.items.map((item, itemIdx) => {
                                     const getHoverCard = (item: string, content: React.ReactNode) => {
-                                      const hoverCards: { [key: string]: React.ComponentType<any> } = {
-                                        "Love letter": LoveLetterHoverCard,
-                                        "Apology letter": ApologyLetterHoverCard,
-                                        "Thank you letter": ThankYouLetterHoverCard,
-                                        "Condolence letter": CondolenceLetterHoverCard,
-                                        "Invitation letter": InvitationLetterHoverCard,
-                                        "Congratulatory letter": CongratulatoryLetterHoverCard,
-                                        "Welcome letter": WelcomeLetterHoverCard,
-                                        "Farewell letter": FarewellLetterHoverCard,
-                                        "Complaint letter": ComplaintLetterHoverCard,
-                                        "Recommendation letter": RecommendationLetterHoverCard,
-                                        "Request letter": RequestLetterHoverCard,
-                                        "General letter": GeneralLetterHoverCard,
-                                        "Leave application": LeaveApplicationHoverCard,
-                                        "Permission letter": PermissionLetterHoverCard,
-                                        "Appreciation letter": AppreciationLetterHoverCard,
-                                        "Appointment request": AppointmentRequestHoverCard,
-                                        "Publication request": PublicationRequestHoverCard,
-                                      };
+                                       const hoverCards: { [key: string]: React.ComponentType<any> } = {
+                                         "Love letter": LoveLetterHoverCard,
+                                         "Apology letter": ApologyLetterHoverCard,
+                                         "Thank you letter": ThankYouLetterHoverCard,
+                                         "Condolence letter": CondolenceLetterHoverCard,
+                                         "Invitation letter": InvitationLetterHoverCard,
+                                         "Congratulatory letter": CongratulatoryLetterHoverCard,
+                                         "Welcome letter": WelcomeLetterHoverCard,
+                                         "Farewell letter": FarewellLetterHoverCard,
+                                         "Complaint letter": ComplaintLetterHoverCard,
+                                         "Recommendation letter": RecommendationLetterHoverCard,
+                                         "Request letter": RequestLetterHoverCard,
+                                         "General letter": GeneralLetterHoverCard,
+                                         "Leave application": LeaveApplicationHoverCard,
+                                         "Permission letter": PermissionLetterHoverCard,
+                                         "Appreciation letter": AppreciationLetterHoverCard,
+                                         "Appointment request letter": AppointmentRequestHoverCard,
+                                         "Publication request letter": PublicationRequestHoverCard,
+                                       };
                                       
                                       const HoverCard = hoverCards[item];
                                       return HoverCard ? React.createElement(HoverCard, { children: content }) : content;
                                     };
 
-                                    return getHoverCard(
-                                      item,
-                                      <button
-                                        key={itemIdx}
-                                        className="w-full text-left px-4 py-2 text-sm text-[#666] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
-                                        onClick={() => console.log(`Selected: ${item}`)}
-                                      >
-                                        {item}
-                                      </button>
-                                    );
+                                     const displayText = item === "Appointment request letter" 
+                                       ? "Appointment request\nletter"
+                                       : item === "Publication request letter"
+                                       ? "Publication request\nletter" 
+                                       : item;
+
+                                     return getHoverCard(
+                                       item,
+                                       <button
+                                         key={itemIdx}
+                                         className="w-full text-left px-4 py-2 text-sm text-[#666] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-pre-line"
+                                         onClick={() => console.log(`Selected: ${item}`)}
+                                       >
+                                         {displayText}
+                                       </button>
+                                     );
                                   })}
                                 </div>
                               </div>
