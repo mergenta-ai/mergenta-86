@@ -77,7 +77,7 @@ const CondolenceLetterHoverCard = ({ children }: CondolenceLetterHoverCardProps)
                     <Input
                       value={to || undefined}
                       onChange={(e) => setTo(e.target.value)}
-                      placeholder="Friend, Family, Relative, Colleague etc..."
+                      placeholder="Dear [NAME], Friend, Family, Relative, Colleague, etc..."
                       className="w-full"
                     />
                   </div>
@@ -87,7 +87,7 @@ const CondolenceLetterHoverCard = ({ children }: CondolenceLetterHoverCardProps)
                     <Input
                       value={subject || undefined}
                       onChange={(e) => setSubject(e.target.value)}
-                      placeholder="Sympathy, Loss, Comfort, Support etc..."
+                      placeholder="Sympathy, Loss, Comfort, Support, etc..."
                       className="w-full"
                     />
                   </div>
@@ -97,7 +97,7 @@ const CondolenceLetterHoverCard = ({ children }: CondolenceLetterHoverCardProps)
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
-                      placeholder="Deepest sympathies, sharing grief, prayers etc..."
+                      placeholder="Use phrases like Deepest sympathies, sharing grief, prayers, etc..."
                       className="w-full min-h-[80px] resize-none"
                     />
                   </div>
@@ -107,7 +107,7 @@ const CondolenceLetterHoverCard = ({ children }: CondolenceLetterHoverCardProps)
                     <Textarea
                       value={finalTouch || undefined}
                       onChange={(e) => setFinalTouch(e.target.value)}
-                      placeholder="Fond memories, peace, strength, standing with you, comfort etc..."
+                      placeholder="Mention about Fond memories, peace, strength, standing with you, comfort, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -117,7 +117,7 @@ const CondolenceLetterHoverCard = ({ children }: CondolenceLetterHoverCardProps)
                     <Textarea
                       value={signOff || undefined}
                       onChange={(e) => setSignOff(e.target.value)}
-                      placeholder="With sympathy, In remembrance, Respectfully yours, In sorrow, Sincerely etc..."
+                      placeholder="With sympathy, In remembrance, Respectfully yours, In sorrow, Sincerely, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
