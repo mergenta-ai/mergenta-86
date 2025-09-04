@@ -29,8 +29,8 @@ import GeneralLetterHoverCard from "./GeneralLetterHoverCard";
 import LeaveApplicationHoverCard from "./LeaveApplicationHoverCard";
 import PermissionLetterHoverCard from "./PermissionLetterHoverCard";
 import AppreciationLetterHoverCard from "./AppreciationLetterHoverCard";
-import AppointmentRequestHoverCard from "./AppointmentRequestHoverCard";
-import PublicationRequestHoverCard from "./PublicationRequestHoverCard";
+import AppointmentRequestLetterHoverCard from "./AppointmentRequestHoverCard";
+import PublicationRequestLetterHoverCard from "./PublicationRequestHoverCard";
 
 const WorkflowTabs = () => {
   const [activeTab, setActiveTab] = useState<string | null>(null);
