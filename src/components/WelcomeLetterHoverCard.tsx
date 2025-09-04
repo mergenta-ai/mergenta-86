@@ -77,7 +77,7 @@ const WelcomeLetterHoverCard = ({ children }: WelcomeLetterHoverCardProps) => {
                     <Input
                       value={to || undefined}
                       onChange={(e) => setTo(e.target.value)}
-                      placeholder="Recipient: Beloved, HR, Principal, Friend, Manager..."
+                      placeholder="Dear [Name], New Member, Employee, Guest, Friend, etc..."
                       className="w-full"
                     />
                   </div>
@@ -87,7 +87,7 @@ const WelcomeLetterHoverCard = ({ children }: WelcomeLetterHoverCardProps) => {
                     <Input
                       value={subject || undefined}
                       onChange={(e) => setSubject(e.target.value)}
-                      placeholder="Leave request, Proposal, Apology, Congratulations, Condolence..."
+                      placeholder="Use expressions like Greetings, onboarding, new start, arrival, etc...."
                       className="w-full"
                     />
                   </div>
@@ -97,7 +97,7 @@ const WelcomeLetterHoverCard = ({ children }: WelcomeLetterHoverCardProps) => {
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
-                      placeholder="Main message, emotions, context..."
+                      placeholder="Begin your note with lines like “Warm welcome, excited to have you, greetings, etc..."
                       className="w-full min-h-[80px] resize-none"
                     />
                   </div>
@@ -107,7 +107,7 @@ const WelcomeLetterHoverCard = ({ children }: WelcomeLetterHoverCardProps) => {
                     <Textarea
                       value={finalTouch || undefined}
                       onChange={(e) => setFinalTouch(e.target.value)}
-                      placeholder="Tone, length, special instructions..."
+                      placeholder="Use words like Support, Opportunities, Encouragement, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -117,7 +117,7 @@ const WelcomeLetterHoverCard = ({ children }: WelcomeLetterHoverCardProps) => {
                     <Textarea
                       value={signOff || undefined}
                       onChange={(e) => setSignOff(e.target.value)}
-                      placeholder="Other details, closing lines, wrap-up..."
+                      placeholder="Use “Together ahead, With support, Regards, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -127,7 +127,7 @@ const WelcomeLetterHoverCard = ({ children }: WelcomeLetterHoverCardProps) => {
                     <Input
                       value={from || undefined}
                       onChange={(e) => setFrom(e.target.value)}
-                      placeholder="Sender: Your Name..."
+                      placeholder="Your Name, On behalf of team, Sincerely, etc..."
                       className="w-full"
                     />
                   </div>
