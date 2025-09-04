@@ -107,7 +107,7 @@ const ThankYouLetterHoverCard = ({ children }: ThankYouLetterHoverCardProps) => 
                     <Textarea
                       value={finalTouch || undefined}
                       onChange={(e) => setFinalTouch(e.target.value)}
-                      placeholder="How it helped me, lasting impact, warm wishes etc..."
+                      placeholder="How it helped me, lasting impact, warm wishes, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -117,7 +117,7 @@ const ThankYouLetterHoverCard = ({ children }: ThankYouLetterHoverCardProps) => 
                     <Textarea
                       value={signOff || undefined}
                       onChange={(e) => setSignOff(e.target.value)}
-                      placeholder="With gratitude, Best regards, Warm thanks etc..."
+                      placeholder="With gratitude, Best regards, Warm thanks, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
