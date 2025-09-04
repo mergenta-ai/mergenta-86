@@ -77,7 +77,7 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
                     <Input
                       value={to || undefined}
                       onChange={(e) => setTo(e.target.value)}
-                      placeholder="Dear [Name], My Love, Darling, Sweetheart etc..."
+                      placeholder="Dear [Name], My Love, Darling, Sweetheart, Honey, Hubby etc..."
                       className="w-full"
                     />
                   </div>
@@ -87,7 +87,7 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
                     <Input
                       value={subject || undefined}
                       onChange={(e) => setSubject(e.target.value)}
-                      placeholder="Affection, Care, Commitment, Admiration, Deep love etc..."
+                      placeholder="Affection, Care, Commitment, Admiration, Attraction, Deep love etc..."
                       className="w-full"
                     />
                   </div>
