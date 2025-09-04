@@ -77,7 +77,7 @@ const ThankYouLetterHoverCard = ({ children }: ThankYouLetterHoverCardProps) => 
                     <Input
                       value={to || undefined}
                       onChange={(e) => setTo(e.target.value)}
-                      placeholder="Relative, Teacher, Colleague, Friend etc..."
+                      placeholder="Dear [Name], Relative, Teacher, Colleague, Friend, etc..."
                       className="w-full"
                     />
                   </div>
@@ -87,7 +87,7 @@ const ThankYouLetterHoverCard = ({ children }: ThankYouLetterHoverCardProps) => 
                     <Input
                       value={subject || undefined}
                       onChange={(e) => setSubject(e.target.value)}
-                      placeholder="Gratitude, Appreciation, Recognition, Thanks..."
+                      placeholder="Add Gratitude, Appreciation, Recognition, Thankfullness, etc..."
                       className="w-full"
                     />
                   </div>
@@ -97,7 +97,7 @@ const ThankYouLetterHoverCard = ({ children }: ThankYouLetterHoverCardProps) => 
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
-                      placeholder="Sincere thanks, your support, your guidance, your kindness etc..."
+                      placeholder="Express Sincere thanks, Your support, Your guidance, Your kindness, etc. towards the help/support offered."
                       className="w-full min-h-[80px] resize-none"
                     />
                   </div>
