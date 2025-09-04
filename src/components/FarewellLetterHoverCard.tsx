@@ -77,7 +77,7 @@ const FarewellLetterHoverCard = ({ children }: FarewellLetterHoverCardProps) => 
                     <Input
                       value={to || undefined}
                       onChange={(e) => setTo(e.target.value)}
-                      placeholder="Recipient: Beloved, HR, Principal, Friend, Manager..."
+                      placeholder="Dear [Name], Colleague, Coach, Friend, Mentor, Team, etc..."
                       className="w-full"
                     />
                   </div>
@@ -87,7 +87,7 @@ const FarewellLetterHoverCard = ({ children }: FarewellLetterHoverCardProps) => 
                     <Input
                       value={subject || undefined}
                       onChange={(e) => setSubject(e.target.value)}
-                      placeholder="Leave request, Proposal, Apology, Congratulations, Condolence..."
+                      placeholder="Include “Goodbye, best wishes, happy departure, retirement wishes, etc..."
                       className="w-full"
                     />
                   </div>
@@ -97,7 +97,7 @@ const FarewellLetterHoverCard = ({ children }: FarewellLetterHoverCardProps) => 
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
-                      placeholder="Main message, emotions, context..."
+                      placeholder="Add Bidding farewell, Wishing success, Parting words, etc..."
                       className="w-full min-h-[80px] resize-none"
                     />
                   </div>
@@ -107,7 +107,7 @@ const FarewellLetterHoverCard = ({ children }: FarewellLetterHoverCardProps) => 
                     <Textarea
                       value={finalTouch || undefined}
                       onChange={(e) => setFinalTouch(e.target.value)}
-                      placeholder="Tone, length, special instructions..."
+                      placeholder="Mention Memories, Gratitude, Hopes for future, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -117,7 +117,7 @@ const FarewellLetterHoverCard = ({ children }: FarewellLetterHoverCardProps) => 
                     <Textarea
                       value={signOff || undefined}
                       onChange={(e) => setSignOff(e.target.value)}
-                      placeholder="Other details, closing lines, wrap-up..."
+                      placeholder="Say With best wishes, Fondly, Sincerely, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -127,7 +127,7 @@ const FarewellLetterHoverCard = ({ children }: FarewellLetterHoverCardProps) => 
                     <Input
                       value={from || undefined}
                       onChange={(e) => setFrom(e.target.value)}
-                      placeholder="Sender: Your Name..."
+                      placeholder="Your Name, Yours truly, With affection, etc..."
                       className="w-full"
                     />
                   </div>
