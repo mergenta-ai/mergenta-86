@@ -77,7 +77,7 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
                     <Input
                       value={to || undefined}
                       onChange={(e) => setTo(e.target.value)}
-                      placeholder="Recipient: Dear [Name], My Love, Darling etc..."
+                      placeholder="Dear [Name], My Love, Darling, Sweetheart etc..."
                       className="w-full"
                     />
                   </div>
