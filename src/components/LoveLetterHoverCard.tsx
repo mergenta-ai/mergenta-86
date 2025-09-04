@@ -87,7 +87,7 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
                     <Input
                       value={subject || undefined}
                       onChange={(e) => setSubject(e.target.value)}
-                      placeholder="Affection, Care, Commitment, Admiration, Attraction, Deep love etc..."
+                      placeholder="Mention Affection, Care, Commitment, Admiration, Attraction, Deep love, etc..."
                       className="w-full"
                     />
                   </div>
@@ -107,7 +107,7 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
                     <Textarea
                       value={finalTouch || undefined}
                       onChange={(e) => setFinalTouch(e.target.value)}
-                      placeholder="Future dreams, shared memories, promises, yearning etc..."
+                      placeholder="Talk about Future dreams, shared memories, promises, yearning etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
