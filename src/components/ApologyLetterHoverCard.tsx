@@ -77,7 +77,7 @@ const ApologyLetterHoverCard = ({ children }: ApologyLetterHoverCardProps) => {
                 <Input
                   value={to || undefined}
                   onChange={(e) => setTo(e.target.value)}
-                  placeholder="Friend, Colleague, Family, Boss etc..."
+                  placeholder="Dear [Name], Friend, Colleague, Family, Boss, etc..."
                   className="w-full"
                 />
               </div>
@@ -87,7 +87,7 @@ const ApologyLetterHoverCard = ({ children }: ApologyLetterHoverCardProps) => {
                 <Input
                   value={subject || undefined}
                   onChange={(e) => setSubject(e.target.value)}
-                  placeholder="Regret, Forgiveness, Mistake, Misunderstanding etc..."
+                  placeholder="Use words like Regret, Forgiveness, Mistake, Misunderstanding, etc..."
                   className="w-full"
                 />
               </div>
@@ -97,7 +97,7 @@ const ApologyLetterHoverCard = ({ children }: ApologyLetterHoverCardProps) => {
                 <Textarea
                   value={coreMessage || undefined}
                   onChange={(e) => setCoreMessage(e.target.value)}
-                  placeholder="I am sorry, please forgive, I regret my words etc..."
+                  placeholder="Write phrases like I am sorry, please forgive, I regret my words, etc..."
                   className="w-full min-h-[80px] resize-none"
                 />
               </div>
@@ -107,7 +107,7 @@ const ApologyLetterHoverCard = ({ children }: ApologyLetterHoverCardProps) => {
                 <Textarea
                   value={finalTouch || undefined}
                   onChange={(e) => setFinalTouch(e.target.value)}
-                  placeholder="I will improve, lessons learned, reassurance etc..."
+                  placeholder="Commit by saying I will improve, lessons learned, reassurance, etc..."
                   className="w-full min-h-[60px] resize-none"
                 />
               </div>
@@ -117,7 +117,7 @@ const ApologyLetterHoverCard = ({ children }: ApologyLetterHoverCardProps) => {
                 <Textarea
                   value={signOff || undefined}
                   onChange={(e) => setSignOff(e.target.value)}
-                  placeholder="Sincerely sorry, Yours truly, Humbly yours etc..."
+                  placeholder="Write Sincerely sorry, Yours truly, Humbly yours, etc..."
                   className="w-full min-h-[60px] resize-none"
                 />
               </div>
