@@ -60,7 +60,7 @@ const PublicationRequestHoverCard = ({ children }: PublicationRequestHoverCardPr
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
-            className="absolute left-[918px] top-[220px] w-80 pointer-events-auto"
+            className="absolute left-[320px] top-[680px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
