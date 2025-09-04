@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 
-interface ExperienceCertificateRequestHoverCardProps {
+interface AppointmentRequestHoverCardProps {
   children: React.ReactNode;
 }
 
-const ExperienceCertificateRequestHoverCard = ({ children }: ExperienceCertificateRequestHoverCardProps) => {
+const AppointmentRequestHoverCard = ({ children }: AppointmentRequestHoverCardProps) => {
   const [showCard, setShowCard] = useState(false);
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
@@ -17,7 +17,7 @@ const ExperienceCertificateRequestHoverCard = ({ children }: ExperienceCertifica
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem('experienceCertificateRequest-form');
+    const saved = localStorage.getItem('appointmentRequest-form');
     if (saved) {
       const data = JSON.parse(saved);
       setTo(data.to || "");
@@ -31,7 +31,7 @@ const ExperienceCertificateRequestHoverCard = ({ children }: ExperienceCertifica
 
   useEffect(() => {
     const formData = { to, subject, coreMessage, finalTouch, signOff, from };
-    localStorage.setItem('experienceCertificateRequest-form', JSON.stringify(formData));
+    localStorage.setItem('appointmentRequest-form', JSON.stringify(formData));
   }, [to, subject, coreMessage, finalTouch, signOff, from]);
 
   const handleMouseEnter = () => {
@@ -67,8 +67,8 @@ const ExperienceCertificateRequestHoverCard = ({ children }: ExperienceCertifica
             <div className="p-6 bg-pastel-lavender rounded-2xl shadow-lg border border-[#E5D9F2] animate-in fade-in-0 zoom-in-95 duration-200">
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-lg font-semibold text-[#5B34A0] mb-1">Experience Certificate Request</h3>
-                  <p className="text-sm text-[#6E6E6E] mb-4">Request experience certificate from employer</p>
+                  <h3 className="text-lg font-semibold text-[#5B34A0] mb-1">Appointment Request</h3>
+                  <p className="text-sm text-[#6E6E6E] mb-4">Request appointment or meeting</p>
                 </div>
                 
                 <div className="space-y-3">
@@ -87,7 +87,7 @@ const ExperienceCertificateRequestHoverCard = ({ children }: ExperienceCertifica
                     <Input
                       value={subject || undefined}
                       onChange={(e) => setSubject(e.target.value)}
-                      placeholder="Leave request, Proposal, Apology, Congratulations, Condolence..."
+                      placeholder="Meeting request, Consultation, Interview, Business discussion..."
                       className="w-full"
                     />
                   </div>
@@ -97,7 +97,7 @@ const ExperienceCertificateRequestHoverCard = ({ children }: ExperienceCertifica
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
-                      placeholder="Main message, emotions, context..."
+                      placeholder="Purpose of meeting, preferred dates, duration..."
                       className="w-full min-h-[80px] resize-none"
                     />
                   </div>
@@ -134,9 +134,9 @@ const ExperienceCertificateRequestHoverCard = ({ children }: ExperienceCertifica
                   
                   <button
                     className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
-                    onClick={() => console.log("Start Experience Certificate Request")}
+                    onClick={() => console.log("Start Appointment Request")}
                   >
-                    Start Experience Certificate Request
+                    Start Appointment Request
                   </button>
                 </div>
               </div>
@@ -148,4 +148,4 @@ const ExperienceCertificateRequestHoverCard = ({ children }: ExperienceCertifica
   );
 };
 
-export default ExperienceCertificateRequestHoverCard;
+export default AppointmentRequestHoverCard;

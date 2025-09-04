@@ -29,8 +29,8 @@ import GeneralLetterHoverCard from "./GeneralLetterHoverCard";
 import LeaveApplicationHoverCard from "./LeaveApplicationHoverCard";
 import PermissionLetterHoverCard from "./PermissionLetterHoverCard";
 import AppreciationLetterHoverCard from "./AppreciationLetterHoverCard";
-import ExperienceCertificateRequestHoverCard from "./ExperienceCertificateRequestHoverCard";
-import SalaryCertificateRequestHoverCard from "./SalaryCertificateRequestHoverCard";
+import AppointmentRequestHoverCard from "./AppointmentRequestHoverCard";
+import PublicationRequestHoverCard from "./PublicationRequestHoverCard";
 
 const WorkflowTabs = () => {
   const [activeTab, setActiveTab] = useState<string | null>(null);
@@ -76,7 +76,7 @@ const WorkflowTabs = () => {
     },
     {
       title: "Institutional Letters",
-      items: ["Leave application", "Permission letter", "Appreciation letter", "Experience certificate request", "Salary certificate request"]
+      items: ["Leave application", "Permission letter", "Appreciation letter", "Appointment request", "Publication request"]
     },
     {
       title: "Formal Letters",
@@ -360,8 +360,8 @@ const WorkflowTabs = () => {
                                         "Leave application": LeaveApplicationHoverCard,
                                         "Permission letter": PermissionLetterHoverCard,
                                         "Appreciation letter": AppreciationLetterHoverCard,
-                                        "Experience certificate request": ExperienceCertificateRequestHoverCard,
-                                        "Salary certificate request": SalaryCertificateRequestHoverCard,
+                                        "Appointment request": AppointmentRequestHoverCard,
+                                        "Publication request": PublicationRequestHoverCard,
                                       };
                                       
                                       const HoverCard = hoverCards[item];

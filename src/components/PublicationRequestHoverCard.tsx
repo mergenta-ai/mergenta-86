@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 
-interface SalaryCertificateRequestHoverCardProps {
+interface PublicationRequestHoverCardProps {
   children: React.ReactNode;
 }
 
-const SalaryCertificateRequestHoverCard = ({ children }: SalaryCertificateRequestHoverCardProps) => {
+const PublicationRequestHoverCard = ({ children }: PublicationRequestHoverCardProps) => {
   const [showCard, setShowCard] = useState(false);
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
@@ -17,7 +17,7 @@ const SalaryCertificateRequestHoverCard = ({ children }: SalaryCertificateReques
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem('salaryCertificateRequest-form');
+    const saved = localStorage.getItem('publicationRequest-form');
     if (saved) {
       const data = JSON.parse(saved);
       setTo(data.to || "");
@@ -31,7 +31,7 @@ const SalaryCertificateRequestHoverCard = ({ children }: SalaryCertificateReques
 
   useEffect(() => {
     const formData = { to, subject, coreMessage, finalTouch, signOff, from };
-    localStorage.setItem('salaryCertificateRequest-form', JSON.stringify(formData));
+    localStorage.setItem('publicationRequest-form', JSON.stringify(formData));
   }, [to, subject, coreMessage, finalTouch, signOff, from]);
 
   const handleMouseEnter = () => {
@@ -67,8 +67,8 @@ const SalaryCertificateRequestHoverCard = ({ children }: SalaryCertificateReques
             <div className="p-6 bg-pastel-lavender rounded-2xl shadow-lg border border-[#E5D9F2] animate-in fade-in-0 zoom-in-95 duration-200">
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-lg font-semibold text-[#5B34A0] mb-1">Salary Certificate Request</h3>
-                  <p className="text-sm text-[#6E6E6E] mb-4">Request salary certificate from employer</p>
+                  <h3 className="text-lg font-semibold text-[#5B34A0] mb-1">Publication Request</h3>
+                  <p className="text-sm text-[#6E6E6E] mb-4">Request to publish content or article</p>
                 </div>
                 
                 <div className="space-y-3">
@@ -87,7 +87,7 @@ const SalaryCertificateRequestHoverCard = ({ children }: SalaryCertificateReques
                     <Input
                       value={subject || undefined}
                       onChange={(e) => setSubject(e.target.value)}
-                      placeholder="Leave request, Proposal, Apology, Congratulations, Condolence..."
+                      placeholder="Publication submission, Article proposal, Content request..."
                       className="w-full"
                     />
                   </div>
@@ -97,7 +97,7 @@ const SalaryCertificateRequestHoverCard = ({ children }: SalaryCertificateReques
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
-                      placeholder="Main message, emotions, context..."
+                      placeholder="Article summary, publication details, target audience..."
                       className="w-full min-h-[80px] resize-none"
                     />
                   </div>
@@ -134,9 +134,9 @@ const SalaryCertificateRequestHoverCard = ({ children }: SalaryCertificateReques
                   
                   <button
                     className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
-                    onClick={() => console.log("Start Salary Certificate Request")}
+                    onClick={() => console.log("Start Publication Request")}
                   >
-                    Start Salary Certificate Request
+                    Start Publication Request
                   </button>
                 </div>
               </div>
@@ -148,4 +148,4 @@ const SalaryCertificateRequestHoverCard = ({ children }: SalaryCertificateReques
   );
 };
 
-export default SalaryCertificateRequestHoverCard;
+export default PublicationRequestHoverCard;
