@@ -87,7 +87,7 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
                     <Input
                       value={subject || undefined}
                       onChange={(e) => setSubject(e.target.value)}
-                      placeholder="Affection, Care, Commitment, Admiration etc..."
+                      placeholder="Affection, Care, Commitment, Admiration, Deep love etc..."
                       className="w-full"
                     />
                   </div>
@@ -97,7 +97,7 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
-                      placeholder="Type your message here about feeling, love, emotions, cherished moments, nostalgia, longing etc..."
+                      placeholder="Type your message here about feelings, love, emotions, cherished moments, nostalgia, longing, etc..."
                       className="w-full min-h-[80px] resize-none"
                     />
                   </div>
@@ -117,7 +117,7 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
                     <Textarea
                       value={signOff || undefined}
                       onChange={(e) => setSignOff(e.target.value)}
-                      placeholder="Forever yours, With all my love, Yours truly, Love you etc...."
+                      placeholder="Forever yours, with all my love, yours truly, love you etc...."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
