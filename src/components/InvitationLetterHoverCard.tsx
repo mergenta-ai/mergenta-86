@@ -77,7 +77,7 @@ const InvitationLetterHoverCard = ({ children }: InvitationLetterHoverCardProps)
                     <Input
                       value={to || undefined}
                       onChange={(e) => setTo(e.target.value)}
-                      placeholder="Recipient: Beloved, HR, Principal, Friend, Manager..."
+                      placeholder="Dear [Name], Friend, Colleague, Guest, Relative, etc..."
                       className="w-full"
                     />
                   </div>
@@ -87,7 +87,7 @@ const InvitationLetterHoverCard = ({ children }: InvitationLetterHoverCardProps)
                     <Input
                       value={subject || undefined}
                       onChange={(e) => setSubject(e.target.value)}
-                      placeholder="Leave request, Proposal, Apology, Congratulations, Condolence..."
+                      placeholder="Marriage Invitation, Birthday Invitation, Celebration, Gathering, Party, Event, etc..."
                       className="w-full"
                     />
                   </div>
@@ -97,7 +97,7 @@ const InvitationLetterHoverCard = ({ children }: InvitationLetterHoverCardProps)
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
-                      placeholder="Main message, emotions, context..."
+                      placeholder="You are invited, Join us, Please attend, Be our guest, etc. to write message..."
                       className="w-full min-h-[80px] resize-none"
                     />
                   </div>
@@ -107,7 +107,7 @@ const InvitationLetterHoverCard = ({ children }: InvitationLetterHoverCardProps)
                     <Textarea
                       value={finalTouch || undefined}
                       onChange={(e) => setFinalTouch(e.target.value)}
-                      placeholder="Tone, length, special instructions..."
+                      placeholder="Mention Date, time, venue, occasion, RSVP details..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -117,7 +117,7 @@ const InvitationLetterHoverCard = ({ children }: InvitationLetterHoverCardProps)
                     <Textarea
                       value={signOff || undefined}
                       onChange={(e) => setSignOff(e.target.value)}
-                      placeholder="Other details, closing lines, wrap-up..."
+                      placeholder="Use phrases like Looking forward, With regards, Warm wishes, Best wishes, You have to be there, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -127,7 +127,7 @@ const InvitationLetterHoverCard = ({ children }: InvitationLetterHoverCardProps)
                     <Input
                       value={from || undefined}
                       onChange={(e) => setFrom(e.target.value)}
-                      placeholder="Sender: Your Name..."
+                      placeholder="Your Name, Host, Organiser, etc..."
                       className="w-full"
                     />
                   </div>
