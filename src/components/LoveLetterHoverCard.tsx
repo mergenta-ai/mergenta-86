@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
+import { Heart } from "lucide-react";
 
 interface LoveLetterHoverCardProps {
   children: React.ReactNode;
@@ -66,10 +67,13 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
           >
             <div className="p-6 bg-pastel-lavender rounded-2xl shadow-lg border border-[#E5D9F2] animate-in fade-in-0 zoom-in-95 duration-200">
               <div className="space-y-4">
-                <div>
-                  <h3 className="text-lg font-semibold text-[#5B34A0] mb-1">Love Letter</h3>
-                  <p className="text-sm text-[#6E6E6E] mb-4">Express your deepest feelings and emotions</p>
-                </div>
+                 <div>
+                   <div className="flex items-center gap-2 mb-1">
+                     <Heart className="w-5 h-5 text-[#5B34A0]" />
+                     <h3 className="text-lg font-semibold text-[#5B34A0]">Love Letter</h3>
+                   </div>
+                   <p className="text-sm text-[#6E6E6E] mb-4">Express your deepest feelings and emotions</p>
+                 </div>
                 
                 <div className="space-y-3">
                   <div>
