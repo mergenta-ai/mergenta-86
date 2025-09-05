@@ -74,21 +74,21 @@ const ComplaintLetterHoverCard = ({ children }: ComplaintLetterHoverCardProps) =
                 <div className="space-y-3">
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label>
-                    <Input
+                    <Textarea
                       value={to || undefined}
                       onChange={(e) => setTo(e.target.value)}
                       placeholder="Recipient: Beloved, HR, Principal, Friend, Manager..."
-                      className="w-full"
+                      className="w-full min-h-[60px] resize-none"
                     />
                   </div>
                   
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label>
-                    <Input
+                    <Textarea
                       value={subject || undefined}
                       onChange={(e) => setSubject(e.target.value)}
                       placeholder="Leave request, Proposal, Apology, Congratulations, Condolence..."
-                      className="w-full"
+                      className="w-full min-h-[60px] resize-none"
                     />
                   </div>
                   

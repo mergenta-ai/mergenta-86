@@ -74,22 +74,22 @@ const InvitationLetterHoverCard = ({ children }: InvitationLetterHoverCardProps)
                 <div className="space-y-3">
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label>
-                    <Input
-                      value={to || undefined}
-                      onChange={(e) => setTo(e.target.value)}
-                      placeholder="Dear [Name], Friend, Colleague, Guest, Relative, etc..."
-                      className="w-full"
-                    />
+                    <Textarea
+                       value={to || undefined}
+                       onChange={(e) => setTo(e.target.value)}
+                       placeholder="Dear [Name], Friend, Colleague, Guest, Relative, etc..."
+                       className="w-full min-h-[60px] resize-none"
+                     />
                   </div>
                   
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label>
-                    <Input
-                      value={subject || undefined}
-                      onChange={(e) => setSubject(e.target.value)}
-                      placeholder="Marriage Invitation, Birthday Invitation, Celebration, Gathering, Party, Event, etc..."
-                      className="w-full"
-                    />
+                    <Textarea
+                       value={subject || undefined}
+                       onChange={(e) => setSubject(e.target.value)}
+                       placeholder="Marriage Invitation, Birthday Invitation, Celebration, Gathering, Party, Event, etc..."
+                       className="w-full min-h-[60px] resize-none"
+                     />
                   </div>
                   
                   <div>
