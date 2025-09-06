@@ -44,7 +44,7 @@ const WorkflowTabs = () => {
     { text: "Deep\nResearch", id: "deep-research" },
     { text: "Task\nAssistant", id: "task-assistant" },
     { text: "Power\nPlaybook", id: "power-playbook" },
-    { text: "Experience\nHub", id: "experience-hub" }
+    { text: "Experience\nStudio", id: "experience-studio" }
   ];
 
   const beautifulWritingItems = [
@@ -486,7 +486,7 @@ const WorkflowTabs = () => {
                         Coming soon
                       </div>
                     )}
-                    {activeTab === "experience-hub" && (
+                    {activeTab === "experience-studio" && (
                       <div className="py-2">
                         {[
                           "360° Snapshot", "Persona Lab", "Future Snapshot", 
