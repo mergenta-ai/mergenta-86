@@ -4,11 +4,11 @@ import { Textarea } from './ui/textarea';
 import { Label } from './ui/label';
 import { Button } from './ui/button';
 
-interface GiveLifeAdviceHoverCardProps {
+interface AstroLensHoverCardProps {
   children: React.ReactNode;
 }
 
-const GiveLifeAdviceHoverCard: React.FC<GiveLifeAdviceHoverCardProps> = ({ children }) => {
+const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children }) => {
   const [showCard, setShowCard] = useState(false);
   const [situation, setSituation] = useState('');
   const [goals, setGoals] = useState('');
@@ -91,63 +91,91 @@ const GiveLifeAdviceHoverCard: React.FC<GiveLifeAdviceHoverCardProps> = ({ child
                   </div>
                 </div>
 
-                {/* Date Input */}
+                {/* Your Situation Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="date" className="text-sm font-medium text-sidebar-text-dark">
-                    Date of birth
+                  <Label htmlFor="situation" className="text-sm font-medium text-sidebar-text-dark">
+                    Your Situation
                   </Label>
                   <Textarea
-                    id="date"
-                    value={date || undefined}
-                    onChange={(e) => setdateofbirth(e.target.value)}
-                    placeholder="Enter your date of birth"
+                    id="situation"
+                    value={situation || undefined}
+                    onChange={(e) => setSituation(e.target.value)}
+                    placeholder="Relationship, career, health, decisions…"
                     className="text-sm min-h-[60px] resize-none bg-white"
                   />
                 </div>
 
-                {/* Year Input */}
+                {/* Goals Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="year" className="text-sm font-medium text-sidebar-text-dark">
-                    Year of birth
+                  <Label htmlFor="goals" className="text-sm font-medium text-sidebar-text-dark">
+                    What do you want to achieve or resolve...
                   </Label>
                   <Input
-                    id="year"
-                    value={year || undefined}
-                    onChange={(e) => setyearofbirth(e.target.value)}
-                    placeholder="Enter your year of birth"
+                    id="goals"
+                    value={goals || undefined}
+                    onChange={(e) => setGoals(e.target.value)}
+                    placeholder="Personal growth, better balance, success…"
                     className="text-sm bg-white"
                   />
                 </div>
 
-                {/* Place Input */}
+                {/* Constraints Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="place" className="text-sm font-medium text-sidebar-text-dark">
-                    Place of birth
+                  <Label htmlFor="constraints" className="text-sm font-medium text-sidebar-text-dark">
+                    Constraints
                   </Label>
                   <Input
-                    id="place"
-                    value={place || undefined}
+                    id="constraints"
+                    value={constraints || undefined}
                     onChange={(e) => setConstraints(e.target.value)}
-                    placeholder="Enter your place of birth"
+                    placeholder="Time, resources, responsibilities…"
                     className="text-sm bg-white"
                   />
                 </div>
 
-                {/* Specific Input */}
+                {/* Barriers Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="specific" className="text-sm font-medium text-sidebar-text-dark">
-                    Specific information you seek
+                  <Label htmlFor="barriers" className="text-sm font-medium text-sidebar-text-dark">
+                    Barriers
+                  </Label>
+                  <Input
+                    id="barriers"
+                    value={barriers || undefined}
+                    onChange={(e) => setBarriers(e.target.value)}
+                    placeholder="Fears, doubts, habits, distractions…"
+                    className="text-sm bg-white"
+                  />
+                </div>
+
+                {/* Support Needed Input */}
+                <div className="space-y-2">
+                  <Label htmlFor="support" className="text-sm font-medium text-sidebar-text-dark">
+                    Support Needed
+                  </Label>
+                  <Input
+                    id="support"
+                    value={support || undefined}
+                    onChange={(e) => setSupport(e.target.value)}
+                    placeholder="Encouragement, Confidence, Accountability, Hope, Guidance"
+                    className="text-sm bg-white"
+                  />
+                </div>
+
+                {/* Additional Input */}
+                <div className="space-y-2">
+                  <Label htmlFor="additional" className="text-sm font-medium text-sidebar-text-dark">
+                    Anything else you'd like to share?
                   </Label>
                   <Textarea
-                    id="specific"
-                    value={specific || undefined}
-                    onChange={(e) => setSpecific(e.target.value)}
-                    placeholder="Describe what you want to know in particular"
+                    id="additional"
+                    value={additional || undefined}
+                    onChange={(e) => setAdditional(e.target.value)}
+                    placeholder="Other details, context or thoughts…"
                     className="text-sm min-h-[50px] resize-none bg-white"
                   />
                 </div>
 
-                {/* Give Your Prediction */}
+                {/* Be My Life Coach Button */}
                 <Button
                   className="w-full text-white transition-colors duration-200"
                   style={{ backgroundColor: '#6C3EB6' }}
@@ -155,7 +183,7 @@ const GiveLifeAdviceHoverCard: React.FC<GiveLifeAdviceHoverCardProps> = ({ child
                   onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#6C3EB6')}
                   onClick={() => console.log('Be My Life Coach clicked')}
                 >
-                  Give Your Prediction
+                  Be My Life Coach
                 </Button>
               </div>
             </div>
@@ -166,4 +194,4 @@ const GiveLifeAdviceHoverCard: React.FC<GiveLifeAdviceHoverCardProps> = ({ child
   );
 };
 
-export default GiveLifeAdviceHoverCard;
+export default AstroLensHoverCard;
