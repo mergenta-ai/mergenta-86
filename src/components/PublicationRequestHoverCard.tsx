@@ -81,7 +81,7 @@ const PublicationRequestHoverCard = ({ children }: PublicationRequestHoverCardPr
                     <Textarea
                       value={to || undefined}
                       onChange={(e) => setTo(e.target.value)}
-                      placeholder="Recipient: Beloved, HR, Principal, Friend, Manager..."
+                      placeholder="Dear Sir/Madam, Editor, Journal name, Magazine name, Publication name, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -91,7 +91,7 @@ const PublicationRequestHoverCard = ({ children }: PublicationRequestHoverCardPr
                     <Textarea
                       value={subject || undefined}
                       onChange={(e) => setSubject(e.target.value)}
-                      placeholder="Publication submission, Article proposal, Content request..."
+                      placeholder="Publication submission, Article proposal, Content request, Book publication, Story publication, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -101,7 +101,7 @@ const PublicationRequestHoverCard = ({ children }: PublicationRequestHoverCardPr
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
-                      placeholder="Article summary, publication details, target audience..."
+                      placeholder="Article summary, genre, book excerpt, story/novel/book/publication details, research paper summary, story idea, etc..."
                       className="w-full min-h-[80px] resize-none"
                     />
                   </div>
@@ -111,7 +111,7 @@ const PublicationRequestHoverCard = ({ children }: PublicationRequestHoverCardPr
                     <Textarea
                       value={finalTouch || undefined}
                       onChange={(e) => setFinalTouch(e.target.value)}
-                      placeholder="Tone, length, special instructions..."
+                      placeholder="Tone, length, audience specification, special requests, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -131,7 +131,7 @@ const PublicationRequestHoverCard = ({ children }: PublicationRequestHoverCardPr
                     <Input
                       value={from || undefined}
                       onChange={(e) => setFrom(e.target.value)}
-                      placeholder="Sender: Your Name..."
+                      placeholder="Your name, Your instirution/organisation..."
                       className="w-full"
                     />
                   </div>

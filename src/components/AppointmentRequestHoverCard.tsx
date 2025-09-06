@@ -81,7 +81,7 @@ const AppointmentRequestHoverCard = ({ children }: AppointmentRequestHoverCardPr
                     <Textarea
                       value={to || undefined}
                       onChange={(e) => setTo(e.target.value)}
-                      placeholder="Recipient: Beloved, HR, Principal, Friend, Manager..."
+                      placeholder="Dear Sir/Madam, HR Manager / Company Name, CA, Honourable Minister, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -91,7 +91,7 @@ const AppointmentRequestHoverCard = ({ children }: AppointmentRequestHoverCardPr
                     <Textarea
                        value={subject || undefined}
                        onChange={(e) => setSubject(e.target.value)}
-                       placeholder="Meeting request, Consultation, Interview, Business discussion..."
+                       placeholder="Request for Appointment/Interview etc..."
                        className="w-full min-h-[60px] resize-none"
                      />
                   </div>
@@ -101,7 +101,7 @@ const AppointmentRequestHoverCard = ({ children }: AppointmentRequestHoverCardPr
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
-                      placeholder="Purpose of meeting, preferred dates, duration..."
+                      placeholder="Write about job interview, partnership, discussion, intervention, deals, consultation, problems, contract discussion, etc..."
                       className="w-full min-h-[80px] resize-none"
                     />
                   </div>
@@ -111,7 +111,7 @@ const AppointmentRequestHoverCard = ({ children }: AppointmentRequestHoverCardPr
                     <Textarea
                       value={finalTouch || undefined}
                       onChange={(e) => setFinalTouch(e.target.value)}
-                      placeholder="Tone, length, special instructions..."
+                      placeholder="Preferred appointment date and time..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -121,7 +121,7 @@ const AppointmentRequestHoverCard = ({ children }: AppointmentRequestHoverCardPr
                     <Textarea
                       value={signOff || undefined}
                       onChange={(e) => setSignOff(e.target.value)}
-                      placeholder="Other details, closing lines, wrap-up..."
+                      placeholder="Sincerely yours, Respectfully yours, Yours truly, Best regards, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -131,7 +131,7 @@ const AppointmentRequestHoverCard = ({ children }: AppointmentRequestHoverCardPr
                     <Input
                       value={from || undefined}
                       onChange={(e) => setFrom(e.target.value)}
-                      placeholder="Sender: Your Name..."
+                      placeholder="Your Name"
                       className="w-full"
                     />
                   </div>

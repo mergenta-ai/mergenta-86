@@ -81,7 +81,7 @@ const AppreciationLetterHoverCard = ({ children }: AppreciationLetterHoverCardPr
                     <Textarea
                       value={to || undefined}
                       onChange={(e) => setTo(e.target.value)}
-                      placeholder="Recipient: Beloved, HR, Principal, Friend, Manager..."
+                      placeholder="Dear [Name], Employee, Colleague, Student, Team, Relative, Teacher, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -91,7 +91,7 @@ const AppreciationLetterHoverCard = ({ children }: AppreciationLetterHoverCardPr
                     <Textarea
                       value={subject || undefined}
                       onChange={(e) => setSubject(e.target.value)}
-                      placeholder="Leave request, Proposal, Apology, Congratulations, Condolence..."
+                      placeholder="Recognition, Gratitude, Thanks, Appreciation, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -101,7 +101,7 @@ const AppreciationLetterHoverCard = ({ children }: AppreciationLetterHoverCardPr
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
-                      placeholder="Main message, emotions, context..."
+                      placeholder="Efforts, Contributions, Achievements, Great work, Gratitude..."
                       className="w-full min-h-[80px] resize-none"
                     />
                   </div>
@@ -111,7 +111,7 @@ const AppreciationLetterHoverCard = ({ children }: AppreciationLetterHoverCardPr
                     <Textarea
                       value={finalTouch || undefined}
                       onChange={(e) => setFinalTouch(e.target.value)}
-                      placeholder="Tone, length, special instructions..."
+                      placeholder="Sincerity, Specific examples, Inspiration, Positive traits, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -121,7 +121,7 @@ const AppreciationLetterHoverCard = ({ children }: AppreciationLetterHoverCardPr
                     <Textarea
                       value={signOff || undefined}
                       onChange={(e) => setSignOff(e.target.value)}
-                      placeholder="Other details, closing lines, wrap-up..."
+                      placeholder="Keep inspiring, Best wishes, Energy to you, With regards, With thanks, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -131,7 +131,7 @@ const AppreciationLetterHoverCard = ({ children }: AppreciationLetterHoverCardPr
                     <Input
                       value={from || undefined}
                       onChange={(e) => setFrom(e.target.value)}
-                      placeholder="Sender: Your Name..."
+                      placeholder="Your Name"
                       className="w-full"
                     />
                   </div>
