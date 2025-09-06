@@ -44,7 +44,7 @@ const WorkflowTabs = () => {
     { text: "Deep\nResearch", id: "deep-research" },
     { text: "Task\nAssistant", id: "task-assistant" },
     { text: "Power\nPlaybook", id: "power-playbook" },
-    { text: "Experience\nHub", id: "experience-hub" }
+    { text: "Experience\nStudio", id: "experience-studio" }
   ];
 
   const beautifulWritingItems = [
@@ -486,7 +486,7 @@ const WorkflowTabs = () => {
                         Coming soon
                       </div>
                     )}
-                    {activeTab === "experience-hub" && (
+                    {activeTab === "experience-studio" && (
                       <div className="py-2">
                         {[
                           "360° Snapshot", "Persona Lab", "Future Snapshot", 
@@ -494,7 +494,7 @@ const WorkflowTabs = () => {
                         ].map((item, idx) => (
                           <button
                             key={idx}
-                            className="w-full text-left px-4 py-2 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
+                            className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
                             onClick={() => console.log(`Selected: ${item}`)}
                           >
                             {item}
