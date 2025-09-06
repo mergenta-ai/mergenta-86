@@ -3,6 +3,7 @@ import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Label } from './ui/label';
 import { Button } from './ui/button';
+import { Sparkles } from 'lucide-react';
 
 interface AstroLensHoverCardProps {
   children: React.ReactNode;
@@ -76,7 +77,7 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children }) => 
               <div className="space-y-3">
                 {/* Title */}
                 <div className="flex items-center gap-2 pb-2 border-b" style={{ borderColor: '#E5D9F2' }}>
-                  <span className="text-lg">🧭</span>
+                  <Sparkles className="text-lg" style={{ color: '#5B34A0' }} />
                   <div>
                     <h3 className="font-semibold text-lg" style={{ color: '#5B34A0' }}>Astro Lens</h3>
                     <p className="text-xs italic" style={{ color: '#6E6E6E' }}>
@@ -95,7 +96,7 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children }) => 
                     value={date || undefined}
                     onChange={(e) => setDate(e.target.value)}
                     placeholder="Enter your date of birth (DD/MM)"
-                    className="text-sm min-h-[60px] resize-none bg-white"
+                    className="text-sm bg-white"
                   />
                 </div>
 
