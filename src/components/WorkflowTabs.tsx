@@ -13,7 +13,7 @@ import BrainstormHoverCard from "./BrainstormHoverCard";
 import ScenarioHoverCard from "./ScenarioHoverCard";
 import MentorHoverCard from "./MentorHoverCard";
 import DevilsAdvocateHoverCard from "./DevilsAdvocateHoverCard";
-import GiveLifeAdviceHoverCard from "./GiveLifeAdviceHoverCard";
+import AstroLensHoverCard from "./AstroLensHoverCard";
 import LoveLetterHoverCard from "./LoveLetterHoverCard";
 import ApologyLetterHoverCard from "./ApologyLetterHoverCard";
 import ThankYouLetterHoverCard from "./ThankYouLetterHoverCard";
@@ -62,7 +62,7 @@ const WorkflowTabs = () => {
     { text: "Scenario Planning", tooltip: "Anticipate futures — map risks, opportunities and strategies." },
     { text: "Think like a mentor" },
     { text: "Be a devil's advocate" },
-    { text: "Give life advice" }
+    { text: "Astro lens" }
   ];
 
   const easyDraftGroups = [
@@ -447,16 +447,16 @@ const WorkflowTabs = () => {
                             );
                           }
 
-                          if (item.text === "Give life advice") {
+                          if (item.text === "Astro Lens") {
                             return (
-                              <GiveLifeAdviceHoverCard key={idx}>
+                              <AstroLensHoverCard key={idx}>
                                 <button
                                   className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
                                   onClick={() => console.log(`Selected: ${item.text}`)}
                                 >
                                   {item.text}
                                 </button>
-                              </GiveLifeAdviceHoverCard>
+                              </AstroLensHoverCard>
                             );
                           }
 
