@@ -162,4 +162,16 @@ All colors MUST be HSL.
     background: transparent;
     min-height: 100vh;
   }
+
+  /* Placeholder styling */
+  ::placeholder {
+    color: hsl(var(--muted-foreground));
+    opacity: 0.6;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: hsl(var(--muted-foreground));
+    opacity: 0.6;
+  }
 }

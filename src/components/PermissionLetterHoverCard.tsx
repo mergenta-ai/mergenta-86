@@ -46,7 +46,7 @@ const PermissionLetterHoverCard = ({ children }: PermissionLetterHoverCardProps)
   const handleMouseLeave = () => {
     const timeout = setTimeout(() => {
       setShowCard(false);
-    }, 100);
+    }, 300);
     setCloseTimeout(timeout);
   };
 

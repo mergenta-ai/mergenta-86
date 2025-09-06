@@ -55,7 +55,7 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children }) => 
   const handleMouseLeave = () => {
     closeTimeoutRef.current = setTimeout(() => {
       setShowCard(false);
-    }, 250);
+    }, 300);
   };
 
   return (

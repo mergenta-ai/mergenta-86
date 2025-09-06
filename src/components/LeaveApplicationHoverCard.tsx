@@ -37,7 +37,7 @@ const LeaveApplicationHoverCard = ({ children }: LeaveApplicationHoverCardProps)
   };
 
   const handleMouseLeave = () => {
-    const timeout = setTimeout(() => { setShowCard(false); }, 100);
+    const timeout = setTimeout(() => { setShowCard(false); }, 300);
     setCloseTimeout(timeout);
   };
 
