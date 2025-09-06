@@ -91,91 +91,63 @@ const GiveLifeAdviceHoverCard: React.FC<GiveLifeAdviceHoverCardProps> = ({ child
                   </div>
                 </div>
 
-                {/* Your Situation Input */}
+                {/* Date Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="situation" className="text-sm font-medium text-sidebar-text-dark">
-                    Your Situation
+                  <Label htmlFor="date" className="text-sm font-medium text-sidebar-text-dark">
+                    Date of birth
                   </Label>
                   <Textarea
-                    id="situation"
-                    value={situation || undefined}
-                    onChange={(e) => setSituation(e.target.value)}
-                    placeholder="Relationship, career, health, decisions…"
+                    id="date"
+                    value={date || undefined}
+                    onChange={(e) => setdateofbirth(e.target.value)}
+                    placeholder="Enter your date of birth"
                     className="text-sm min-h-[60px] resize-none bg-white"
                   />
                 </div>
 
-                {/* Goals Input */}
+                {/* Year Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="goals" className="text-sm font-medium text-sidebar-text-dark">
-                    What do you want to achieve or resolve...
+                  <Label htmlFor="year" className="text-sm font-medium text-sidebar-text-dark">
+                    Year of birth
                   </Label>
                   <Input
-                    id="goals"
-                    value={goals || undefined}
-                    onChange={(e) => setGoals(e.target.value)}
-                    placeholder="Personal growth, better balance, success…"
+                    id="year"
+                    value={year || undefined}
+                    onChange={(e) => setyearofbirth(e.target.value)}
+                    placeholder="Enter your year of birth"
                     className="text-sm bg-white"
                   />
                 </div>
 
-                {/* Constraints Input */}
+                {/* Place Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="constraints" className="text-sm font-medium text-sidebar-text-dark">
-                    Constraints
+                  <Label htmlFor="place" className="text-sm font-medium text-sidebar-text-dark">
+                    Place of birth
                   </Label>
                   <Input
-                    id="constraints"
-                    value={constraints || undefined}
+                    id="place"
+                    value={place || undefined}
                     onChange={(e) => setConstraints(e.target.value)}
-                    placeholder="Time, resources, responsibilities…"
+                    placeholder="Enter your place of birth"
                     className="text-sm bg-white"
                   />
                 </div>
 
-                {/* Barriers Input */}
+                {/* Specific Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="barriers" className="text-sm font-medium text-sidebar-text-dark">
-                    Barriers
-                  </Label>
-                  <Input
-                    id="barriers"
-                    value={barriers || undefined}
-                    onChange={(e) => setBarriers(e.target.value)}
-                    placeholder="Fears, doubts, habits, distractions…"
-                    className="text-sm bg-white"
-                  />
-                </div>
-
-                {/* Support Needed Input */}
-                <div className="space-y-2">
-                  <Label htmlFor="support" className="text-sm font-medium text-sidebar-text-dark">
-                    Support Needed
-                  </Label>
-                  <Input
-                    id="support"
-                    value={support || undefined}
-                    onChange={(e) => setSupport(e.target.value)}
-                    placeholder="Encouragement, Confidence, Accountability, Hope, Guidance"
-                    className="text-sm bg-white"
-                  />
-                </div>
-
-                {/* Additional Input */}
-                <div className="space-y-2">
-                  <Label htmlFor="additional" className="text-sm font-medium text-sidebar-text-dark">
-                    Anything else you'd like to share?
+                  <Label htmlFor="specific" className="text-sm font-medium text-sidebar-text-dark">
+                    Specific information you seek
                   </Label>
                   <Textarea
-                    id="additional"
-                    value={additional || undefined}
-                    onChange={(e) => setAdditional(e.target.value)}
-                    placeholder="Other details, context or thoughts…"
+                    id="specific"
+                    value={specific || undefined}
+                    onChange={(e) => setSpecific(e.target.value)}
+                    placeholder="Describe what you want to know in particular"
                     className="text-sm min-h-[50px] resize-none bg-white"
                   />
                 </div>
 
-                {/* Be My Life Coach Button */}
+                {/* Give Your Prediction */}
                 <Button
                   className="w-full text-white transition-colors duration-200"
                   style={{ backgroundColor: '#6C3EB6' }}
@@ -183,7 +155,7 @@ const GiveLifeAdviceHoverCard: React.FC<GiveLifeAdviceHoverCardProps> = ({ child
                   onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#6C3EB6')}
                   onClick={() => console.log('Be My Life Coach clicked')}
                 >
-                  Be My Life Coach
+                  Give Your Prediction
                 </Button>
               </div>
             </div>
