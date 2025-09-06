@@ -494,7 +494,7 @@ const WorkflowTabs = () => {
                         ].map((item, idx) => (
                           <button
                             key={idx}
-                            className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
+                            className="w-full text-left px-4 py-2 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
                             onClick={() => console.log(`Selected: ${item}`)}
                           >
                             {item}
