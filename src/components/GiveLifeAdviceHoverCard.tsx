@@ -10,28 +10,24 @@ interface AstroLensHoverCardProps {
 
 const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children }) => {
   const [showCard, setShowCard] = useState(false);
-  const [situation, setSituation] = useState('');
-  const [goals, setGoals] = useState('');
-  const [constraints, setConstraints] = useState('');
-  const [barriers, setBarriers] = useState('');
-  const [support, setSupport] = useState('');
-  const [additional, setAdditional] = useState('');
+  const [date, setDate] = useState('');
+  const [year, setYear] = useState('');
+  const [place, setPlace] = useState('');
+  const [specific, setSpecific] = useState('');
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Load saved values from localStorage
   useEffect(() => {
-    const savedData = localStorage.getItem('lifeAdviceFormData');
+    const savedData = localStorage.getItem('AstroLensFormData');
     if (savedData) {
       try {
         const parsed = JSON.parse(savedData);
-        setSituation(parsed.situation || '');
-        setGoals(parsed.goals || '');
-        setConstraints(parsed.constraints || '');
-        setBarriers(parsed.barriers || '');
-        setSupport(parsed.support || '');
-        setAdditional(parsed.additional || '');
+        setDate(parsed.date || '');
+        setYear(parsed.year || '');
+        setPlace(parsed.place || '');
+        setSpecific(parsed.specific || '');
       } catch (error) {
-        console.error('Error loading saved life advice data:', error);
+        console.error('Error loading saved astro lens:', error);
       }
     }
   }, []);
@@ -39,15 +35,13 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children }) => 
   // Save to localStorage whenever inputs change
   useEffect(() => {
     const dataToSave = {
-      situation,
-      goals,
-      constraints,
-      barriers,
-      support,
-      additional,
+      date,
+      year,
+      place,
+      specific,
     };
-    localStorage.setItem('lifeAdviceFormData', JSON.stringify(dataToSave));
-  }, [situation, goals, constraints, barriers, support, additional]);
+    localStorage.setItem('AstroLensFormData', JSON.stringify(dataToSave));
+  }, [date, year, place, specific]);
 
   const handleMouseEnter = () => {
     if (closeTimeoutRef.current) {
@@ -86,96 +80,68 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children }) => 
                   <div>
                     <h3 className="font-semibold text-lg" style={{ color: '#5B34A0' }}>Give Life Advice</h3>
                     <p className="text-xs italic" style={{ color: '#6E6E6E' }}>
-                      Personal guidance — thoughtful, empathetic and realistic.
+                      Personal insights through planetary patterns.
                     </p>
                   </div>
                 </div>
 
-                {/* Your Situation Input */}
+                {/* Date of birth Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="situation" className="text-sm font-medium text-sidebar-text-dark">
-                    Your Situation
+                  <Label htmlFor="date" className="text-sm font-medium text-sidebar-text-dark">
+                    Date of birth
                   </Label>
                   <Textarea
-                    id="situation"
-                    value={situation || undefined}
-                    onChange={(e) => setSituation(e.target.value)}
-                    placeholder="Relationship, career, health, decisions…"
+                    id="date"
+                    value={date || undefined}
+                    onChange={(e) => setDate(e.target.value)}
+                    placeholder="Enter your date of birth (DD/MM)"
                     className="text-sm min-h-[60px] resize-none bg-white"
                   />
                 </div>
 
-                {/* Goals Input */}
+                {/* Year of Birth Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="goals" className="text-sm font-medium text-sidebar-text-dark">
-                    What do you want to achieve or resolve...
+                  <Label htmlFor="year" className="text-sm font-medium text-sidebar-text-dark">
+                    Year of birth
                   </Label>
                   <Input
-                    id="goals"
-                    value={goals || undefined}
-                    onChange={(e) => setGoals(e.target.value)}
-                    placeholder="Personal growth, better balance, success…"
+                    id="year"
+                    value={year || undefined}
+                    onChange={(e) => setYear(e.target.value)}
+                    placeholder="Enter your year of birth (YYYY)"
                     className="text-sm bg-white"
                   />
                 </div>
 
-                {/* Constraints Input */}
+                {/* Place of birth Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="constraints" className="text-sm font-medium text-sidebar-text-dark">
-                    Constraints
+                  <Label htmlFor="place" className="text-sm font-medium text-sidebar-text-dark">
+                    Place of Birth
                   </Label>
                   <Input
-                    id="constraints"
-                    value={constraints || undefined}
-                    onChange={(e) => setConstraints(e.target.value)}
-                    placeholder="Time, resources, responsibilities…"
+                    id="place"
+                    value={place || undefined}
+                    onChange={(e) => setPlace(e.target.value)}
+                    placeholder="Write city, state and country"
                     className="text-sm bg-white"
                   />
                 </div>
 
-                {/* Barriers Input */}
+                {/* Specific information you seek Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="barriers" className="text-sm font-medium text-sidebar-text-dark">
-                    Barriers
+                  <Label htmlFor="specific" className="text-sm font-medium text-sidebar-text-dark">
+                    Specific information you seek
                   </Label>
                   <Input
-                    id="barriers"
-                    value={barriers || undefined}
-                    onChange={(e) => setBarriers(e.target.value)}
-                    placeholder="Fears, doubts, habits, distractions…"
+                    id="specific"
+                    value={specific || undefined}
+                    onChange={(e) => setSpecific(e.target.value)}
+                    placeholder="Describe what you want to know in particular"
                     className="text-sm bg-white"
                   />
                 </div>
 
-                {/* Support Needed Input */}
-                <div className="space-y-2">
-                  <Label htmlFor="support" className="text-sm font-medium text-sidebar-text-dark">
-                    Support Needed
-                  </Label>
-                  <Input
-                    id="support"
-                    value={support || undefined}
-                    onChange={(e) => setSupport(e.target.value)}
-                    placeholder="Encouragement, Confidence, Accountability, Hope, Guidance"
-                    className="text-sm bg-white"
-                  />
-                </div>
-
-                {/* Additional Input */}
-                <div className="space-y-2">
-                  <Label htmlFor="additional" className="text-sm font-medium text-sidebar-text-dark">
-                    Anything else you'd like to share?
-                  </Label>
-                  <Textarea
-                    id="additional"
-                    value={additional || undefined}
-                    onChange={(e) => setAdditional(e.target.value)}
-                    placeholder="Other details, context or thoughts…"
-                    className="text-sm min-h-[50px] resize-none bg-white"
-                  />
-                </div>
-
-                {/* Be My Life Coach Button */}
+                {/* Give Prediction */}
                 <Button
                   className="w-full text-white transition-colors duration-200"
                   style={{ backgroundColor: '#6C3EB6' }}
@@ -183,7 +149,7 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children }) => 
                   onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#6C3EB6')}
                   onClick={() => console.log('Be My Life Coach clicked')}
                 >
-                  Be My Life Coach
+                  Give Prediction
                 </Button>
               </div>
             </div>
