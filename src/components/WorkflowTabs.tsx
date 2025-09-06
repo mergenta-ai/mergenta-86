@@ -13,7 +13,7 @@ import BrainstormHoverCard from "./BrainstormHoverCard";
 import ScenarioHoverCard from "./ScenarioHoverCard";
 import MentorHoverCard from "./MentorHoverCard";
 import DevilsAdvocateHoverCard from "./DevilsAdvocateHoverCard";
-import AstroLensHoverCard from "./AstroLensHoverCard";
+import AstroLensHoverCard from "./GiveLifeAdviceHoverCard";
 import LoveLetterHoverCard from "./LoveLetterHoverCard";
 import ApologyLetterHoverCard from "./ApologyLetterHoverCard";
 import ThankYouLetterHoverCard from "./ThankYouLetterHoverCard";
