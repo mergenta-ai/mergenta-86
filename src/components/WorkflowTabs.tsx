@@ -489,8 +489,8 @@ const WorkflowTabs = () => {
                     {activeTab === "experience-hub" && (
                       <div className="py-2">
                         {[
-                          "Educator experience", "Startup experience", "Writer experience", 
-                          "Marketing experience", "Astrology experience", "Elder experience", "Traveller experience", "Parenting experience"
+                          "360° Snapshot", "Persona Lab", "Future Snapshot", 
+                          "Roleplay Hub", "Reality Check", "Impact Radar"
                         ].map((item, idx) => (
                           <button
                             key={idx}
