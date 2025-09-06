@@ -70,27 +70,27 @@ const GeneralLetterHoverCard = ({ children }: GeneralLetterHoverCardProps) => {
                 <div className="space-y-3">
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label>
-                    <Textarea value={to || undefined} onChange={(e) => setTo(e.target.value)} placeholder="Recipient: Beloved, HR, Principal, Friend, Manager..." className="w-full min-h-[60px] resize-none" />
+                    <Textarea value={to || undefined} onChange={(e) => setTo(e.target.value)} placeholder="Friend, colleague, organisation, contact, relative, teacher, neighbour, authority, client, well-wisher, group, team, company, etc..." className="w-full min-h-[60px] resize-none" />
                   </div>
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label>
-                    <Textarea value={subject || undefined} onChange={(e) => setSubject(e.target.value)} placeholder="Leave request, Proposal, Apology, Congratulations, Condolence..." className="w-full min-h-[60px] resize-none" />
+                    <Textarea value={subject || undefined} onChange={(e) => setSubject(e.target.value)} placeholder="Update, sharing, greetings, information, invitation, appreciation, announcement, congratulations, introduction, feedback, reminder, acknowledgment, good wishes, enquiry, expression of thanks, seasonal greetings, etc..." className="w-full min-h-[60px] resize-none" />
                   </div>
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Core Message</label>
-                    <Textarea value={coreMessage || undefined} onChange={(e) => setCoreMessage(e.target.value)} placeholder="Main message, emotions, context..." className="w-full min-h-[80px] resize-none" />
+                    <Textarea value={coreMessage || undefined} onChange={(e) => setCoreMessage(e.target.value)} placeholder="Key points, general info, notes, communication, thoughts, reminders, updates, news, observations, suggestions, remarks, experiences, highlights, opinions, acknowledgments, etc..." className="w-full min-h-[80px] resize-none" />
                   </div>
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Final Touch</label>
-                    <Textarea value={finalTouch || undefined} onChange={(e) => setFinalTouch(e.target.value)} placeholder="Tone, length, special instructions..." className="w-full min-h-[60px] resize-none" />
+                    <Textarea value={finalTouch || undefined} onChange={(e) => setFinalTouch(e.target.value)} placeholder="Additional notes, clarification, highlights, explanations, details, observations, key information, etc..." className="w-full min-h-[60px] resize-none" />
                   </div>
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Sign Off</label>
-                    <Textarea value={signOff || undefined} onChange={(e) => setSignOff(e.target.value)} placeholder="Other details, closing lines, wrap-up..." className="w-full min-h-[60px] resize-none" />
+                    <Textarea value={signOff || undefined} onChange={(e) => setSignOff(e.target.value)} placeholder="Looking forward, best regards, warmly, with appreciation, yours truly, kind regards, sincerely, etc..." className="w-full min-h-[60px] resize-none" />
                   </div>
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">From</label>
-                    <Input value={from || undefined} onChange={(e) => setFrom(e.target.value)} placeholder="Sender: Your Name..." className="w-full" />
+                    <Input value={from || undefined} onChange={(e) => setFrom(e.target.value)} placeholder="Your Name, Your Organisation..." className="w-full" />
                   </div>
                   <button className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors" onClick={() => console.log("Start General Letter")}>
                     Start General Letter

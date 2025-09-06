@@ -81,7 +81,7 @@ const RecommendationLetterHoverCard = ({ children }: RecommendationLetterHoverCa
                     <Textarea
                       value={to || undefined}
                       onChange={(e) => setTo(e.target.value)}
-                      placeholder="Recipient: Beloved, HR, Principal, Friend, Manager..."
+                      placeholder="Dear [Name], Employer, University, HR, Departments, Organisation etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -91,7 +91,7 @@ const RecommendationLetterHoverCard = ({ children }: RecommendationLetterHoverCa
                     <Textarea
                       value={subject || undefined}
                       onChange={(e) => setSubject(e.target.value)}
-                      placeholder="Leave request, Proposal, Apology, Congratulations, Condolence..."
+                      placeholder="Mention if this is an endorsement, support statement, referral or recommendation, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -101,7 +101,7 @@ const RecommendationLetterHoverCard = ({ children }: RecommendationLetterHoverCa
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
-                      placeholder="Main message, emotions, context..."
+                      placeholder="Highlight strong skills, merits, abilities, endorsements, good behaviour and team spirit, etc..."
                       className="w-full min-h-[80px] resize-none"
                     />
                   </div>
@@ -111,7 +111,7 @@ const RecommendationLetterHoverCard = ({ children }: RecommendationLetterHoverCa
                     <Textarea
                       value={finalTouch || undefined}
                       onChange={(e) => setFinalTouch(e.target.value)}
-                      placeholder="Tone, length, special instructions..."
+                      placeholder="Mention achievements, strengths, qualities, reliability and dedication, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -121,7 +121,7 @@ const RecommendationLetterHoverCard = ({ children }: RecommendationLetterHoverCa
                     <Textarea
                       value={signOff || undefined}
                       onChange={(e) => setSignOff(e.target.value)}
-                      placeholder="Other details, closing lines, wrap-up..."
+                      placeholder="Strongly recommend, Best wishes, Regards, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -131,7 +131,7 @@ const RecommendationLetterHoverCard = ({ children }: RecommendationLetterHoverCa
                     <Input
                       value={from || undefined}
                       onChange={(e) => setFrom(e.target.value)}
-                      placeholder="Sender: Your Name..."
+                      placeholder="Your Name"
                       className="w-full"
                     />
                   </div>
