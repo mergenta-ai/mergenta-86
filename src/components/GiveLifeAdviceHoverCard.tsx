@@ -68,7 +68,7 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children }) => 
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
-            className="absolute left-[1052px] top-[450px] w-80 pointer-events-auto"
+            className="absolute left-[1052px] top-[400px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
@@ -118,7 +118,7 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children }) => 
                   <Label htmlFor="place" className="text-sm font-medium text-sidebar-text-dark">
                     Place of Birth
                   </Label>
-                  <Input
+                  <Textarea
                     id="place"
                     value={place || undefined}
                     onChange={(e) => setPlace(e.target.value)}
