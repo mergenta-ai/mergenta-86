@@ -104,7 +104,7 @@ const WorkflowTabs = () => {
     timeoutRef.current = setTimeout(() => {
       setActiveTab(null);
       timeoutRef.current = null;
-    }, 200);
+    }, 800);
   };
 
   const handleDropdownEnter = () => {
@@ -138,7 +138,7 @@ const WorkflowTabs = () => {
     timeoutRef.current = setTimeout(() => {
       setExpandedGroups(new Set());
       timeoutRef.current = null;
-    }, 200);
+    }, 800);
   };
 
   const handleSubmenuEnter = (groupTitle: string) => {
