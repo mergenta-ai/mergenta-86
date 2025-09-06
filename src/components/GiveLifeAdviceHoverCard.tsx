@@ -68,7 +68,7 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children }) => 
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
-            className="absolute left-[1052px] top-[490px] w-80 pointer-events-auto"
+            className="absolute left-[1052px] top-[450px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
@@ -78,7 +78,7 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children }) => 
                 <div className="flex items-center gap-2 pb-2 border-b" style={{ borderColor: '#E5D9F2' }}>
                   <span className="text-lg">🧭</span>
                   <div>
-                    <h3 className="font-semibold text-lg" style={{ color: '#5B34A0' }}>Give Life Advice</h3>
+                    <h3 className="font-semibold text-lg" style={{ color: '#5B34A0' }}>Astro Lens</h3>
                     <p className="text-xs italic" style={{ color: '#6E6E6E' }}>
                       Personal insights through planetary patterns.
                     </p>
@@ -90,7 +90,7 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children }) => 
                   <Label htmlFor="date" className="text-sm font-medium text-sidebar-text-dark">
                     Date of birth
                   </Label>
-                  <Textarea
+                  <Input
                     id="date"
                     value={date || undefined}
                     onChange={(e) => setDate(e.target.value)}
@@ -132,7 +132,7 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children }) => 
                   <Label htmlFor="specific" className="text-sm font-medium text-sidebar-text-dark">
                     Specific information you seek
                   </Label>
-                  <Input
+                  <Textarea
                     id="specific"
                     value={specific || undefined}
                     onChange={(e) => setSpecific(e.target.value)}
