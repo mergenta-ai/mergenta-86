@@ -250,7 +250,16 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
         <div className="flex flex-col h-full overflow-y-auto">
           {/* Header Section - First page only */}
           {!showResults && (
-            <div className="flex-shrink-0 text-center pt-16 pb-6 px-8">
+            <div className="flex-shrink-0 text-center pt-16 pb-6 px-8 relative">
+              {/* Forward arrow in top left corner */}
+              {searchValue.trim() && (
+                <button
+                  onClick={goForwardToResults}
+                  className="absolute top-8 left-8 p-2 rounded-full bg-white/80 hover:bg-white transition-colors shadow-soft"
+                >
+                  <ArrowRight className="h-5 w-5 text-mergenta-dark-grey" />
+                </button>
+              )}
               <div className="flex items-center justify-center mb-8">
                 <Eye className="h-12 w-12 text-mergenta-violet" />
               </div>
@@ -266,7 +275,7 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
 
           {/* Header Section - Results page only */}
           {showResults && (
-            <div className="flex-shrink-0 px-8 pt-8 pb-4">
+            <div className="flex-shrink-0 px-8 pt-8 pb-12">
               <div className="flex items-center justify-between">
                 <button
                   onClick={goBackToSearch}
@@ -286,22 +295,12 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
           {!showResults && (
             <div className="flex-shrink-0 px-8 mb-8 mt-16">
               <div className="max-w-3xl mx-auto relative" ref={searchRef}>
-                <div className="flex items-center gap-4">
-                  <div className="flex-1" onClick={handleSearchFocus}>
-                    <ChatInput 
-                      onSendMessage={handleSearchSubmit} 
-                      isLoading={isLoading}
-                      initialValue={searchValue}
-                    />
-                  </div>
-                  {searchValue.trim() && (
-                    <button
-                      onClick={goForwardToResults}
-                      className="p-2 rounded-full bg-white/80 hover:bg-white transition-colors shadow-soft"
-                    >
-                      <ArrowRight className="h-5 w-5 text-mergenta-dark-grey" />
-                    </button>
-                  )}
+                <div onClick={handleSearchFocus} className="cursor-text">
+                  <ChatInput 
+                    onSendMessage={handleSearchSubmit} 
+                    isLoading={isLoading}
+                    initialValue={searchValue}
+                  />
                 </div>
 
                 {/* Dropdown Menu */}
