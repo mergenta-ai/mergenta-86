@@ -169,8 +169,8 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogOverlay className="bg-gradient-to-br from-mergenta-deep-violet/60 via-mergenta-violet/50 to-mergenta-magenta/45 backdrop-blur-md" />
-      <DialogContent className="max-w-[1210px] max-h-[86vh] w-[105vw] h-[100vh] p-0 overflow-hidden bg-gradient-to-br from-pastel-lavender via-mergenta-light-violet to-pastel-magenta border-0">
+      <DialogOverlay className="bg-gradient-to-br from-mergenta-deep-violet/80 via-mergenta-violet/70 to-mergenta-magenta/60 backdrop-blur-lg" />
+      <DialogContent className="max-w-[1210px] max-h-[86vh] w-[105vw] h-[100vh] p-0 overflow-hidden bg-gradient-to-br from-pastel-lavender via-mergenta-light-violet to-pastel-magenta border-0" onOpenAutoFocus={(e) => e.preventDefault()}>
         {/* Close Button */}
         <button
           onClick={() => onOpenChange(false)}
