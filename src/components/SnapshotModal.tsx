@@ -363,7 +363,7 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
               </div>
 
               {/* Search Bar Below Results */}
-              <div className="max-w-3xl mx-auto">
+              <div className="max-w-3xl mx-auto mt-8">
                 <div className="mb-6">
                   <p className="text-center text-mergenta-dark-grey font-medium">
                     Continue the conversation
