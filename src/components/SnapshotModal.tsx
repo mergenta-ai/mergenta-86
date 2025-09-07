@@ -122,11 +122,11 @@ const SnapshotModal = ({ open, onOpenChange, onAddToChat }: SnapshotModalProps) 
   const handleDropdownSelect = (option: string) => {
     setSearchValue(option);
     setShowDropdown(false);
-    // Don't auto-submit, let user press send button
   };
 
   const handleSearchFocus = () => {
-    if (!showResults) {
+    // Only show dropdown if search is empty and no results are showing
+    if (!showResults && !searchValue.trim()) {
       setShowDropdown(true);
     }
   };
@@ -218,7 +218,7 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
 
           {/* Search Section */}
           {!showResults && (
-            <div className="flex-shrink-0 px-8 mb-4">
+            <div className="flex-shrink-0 px-8 mb-8 mt-8">
               <div className="max-w-3xl mx-auto relative" ref={searchRef}>
                 <div onClick={handleSearchFocus} className="cursor-text">
                   <ChatInput 
@@ -249,13 +249,6 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
                   </div>
                 )}
               </div>
-            </div>
-          )}
-
-          {/* Workflow Tabs */}
-          {!showResults && (
-            <div className="flex-shrink-0 px-8 mb-8">
-              <WorkflowTabs onAddToChat={onAddToChat} />
             </div>
           )}
 
@@ -297,12 +290,25 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
                 ))}
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex justify-center gap-4 mb-8">
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    const response = `**360° Snapshot Analysis for: "${searchValue}"**
+              {/* Search Bar Below Results */}
+              <div className="max-w-3xl mx-auto">
+                <div className="mb-4">
+                  <p className="text-center text-mergenta-dark-grey font-medium">
+                    Continue the conversation
+                  </p>
+                </div>
+                <ChatInput 
+                  onSendMessage={handleContinueSearch} 
+                  isLoading={isLoading}
+                  placeholder="Ask a follow-up or start a new snapshot…"
+                />
+
+                {/* Action Buttons Below Search Bar */}
+                <div className="flex justify-center gap-4 mt-6">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      const response = `**360° Snapshot Analysis for: "${searchValue}"**
 
 **Facts & Insights**
 What is true and relevant in the background?
@@ -319,35 +325,22 @@ ${resultTiles[2].results.map(r => `• ${r}`).join('\n')}
 **Next Moves**
 Practical steps to take things forward.
 ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
-                    navigator.clipboard.writeText(response);
-                  }}
-                  className="bg-white/20 border-white/30 text-mergenta-deep-violet hover:bg-white/30"
-                >
-                  Copy All Snapshot
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    resetModal();
-                  }}
-                  className="bg-white/20 border-white/30 text-mergenta-deep-violet hover:bg-white/30"
-                >
-                  Start Again
-                </Button>
-              </div>
-
-              {/* Search Bar Below Results */}
-              <div className="max-w-3xl mx-auto">
-                <div className="mb-4">
-                  <p className="text-center text-mergenta-dark-grey font-medium">
-                    Continue the conversation
-                  </p>
+                      navigator.clipboard.writeText(response);
+                    }}
+                    className="bg-mergenta-deep-violet/80 border-mergenta-deep-violet text-white hover:bg-mergenta-deep-violet"
+                  >
+                    Copy All Snapshot
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      resetModal();
+                    }}
+                    className="bg-mergenta-deep-violet/80 border-mergenta-deep-violet text-white hover:bg-mergenta-deep-violet"
+                  >
+                    Start Again
+                  </Button>
                 </div>
-                <ChatInput 
-                  onSendMessage={handleContinueSearch} 
-                  isLoading={isLoading}
-                  placeholder="Ask a follow-up or start a new snapshot…"
-                />
               </div>
             </div>
           )}
