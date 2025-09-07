@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import { X, Eye, Target, AlertTriangle, TrendingUp, ChevronDown } from "lucide-react";
+import { X, Eye, Target, AlertTriangle, TrendingUp, ChevronDown, Menu, Pencil, MessageSquare, FileText, Heart, Mail } from "lucide-react";
 import { Dialog, DialogContent, DialogOverlay } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import ChatInput from "@/components/ChatInput";
 
 interface SnapshotModalProps {
@@ -119,10 +121,48 @@ const SnapshotModal = ({ open, onOpenChange }: SnapshotModalProps) => {
     };
   }, []);
 
+  const menuItems = [
+    { icon: Pencil, label: "Beautiful Writing", action: () => console.log("Beautiful Writing") },
+    { icon: MessageSquare, label: "Smart Chat", action: () => console.log("Smart Chat") },
+    { icon: FileText, label: "Documents", action: () => console.log("Documents") },
+    { icon: Heart, label: "Love Letters", action: () => console.log("Love Letters") },
+    { icon: Mail, label: "Professional", action: () => console.log("Professional") },
+  ];
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogOverlay className="bg-black/55" />
-      <DialogContent className="max-w-[1100px] max-h-[82vh] w-[95vw] h-[95vh] p-0 overflow-hidden bg-gradient-to-br from-pastel-lavender via-mergenta-light-violet to-pastel-magenta">
+      <DialogOverlay className="bg-gradient-to-br from-mergenta-deep-violet/40 via-mergenta-violet/35 to-mergenta-magenta/30 backdrop-blur-sm" />
+      <DialogContent className="max-w-[1210px] max-h-[86vh] w-[105vw] h-[100vh] p-0 overflow-hidden bg-gradient-to-br from-pastel-lavender via-mergenta-light-violet to-pastel-magenta">
+        {/* Navigation Menu */}
+        <div className="absolute left-6 top-6 z-50">
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="p-2 rounded-full bg-white/80 hover:bg-white transition-colors shadow-soft"
+              >
+                <Menu className="h-5 w-5 text-mergenta-dark-grey" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-56 p-2" align="start">
+              <div className="space-y-1">
+                {menuItems.map((item, idx) => (
+                  <Button
+                    key={idx}
+                    variant="ghost"
+                    className="w-full justify-start h-10 px-3"
+                    onClick={item.action}
+                  >
+                    <item.icon className="h-4 w-4 mr-3" />
+                    {item.label}
+                  </Button>
+                ))}
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
+
         {/* Close Button */}
         <button
           onClick={() => onOpenChange(false)}
@@ -133,16 +173,16 @@ const SnapshotModal = ({ open, onOpenChange }: SnapshotModalProps) => {
 
         <div className="flex flex-col h-full overflow-y-auto">
           {/* Header Section */}
-          <div className="flex-shrink-0 text-center pt-12 pb-8 px-8">
-            <div className="flex items-center justify-center mb-6">
+          <div className="flex-shrink-0 text-center pt-8 pb-6 px-8">
+            <div className="flex items-center justify-center mb-3">
               <div className="p-4 rounded-full bg-white/20 backdrop-blur-sm">
                 <Eye className="h-12 w-12 text-mergenta-violet" />
               </div>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-mergenta-deep-violet mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-mergenta-deep-violet mb-3">
               360° Snapshot
             </h1>
-            <p className="text-lg md:text-xl text-mergenta-dark-grey max-w-4xl mx-auto leading-relaxed">
+            <p className="text-base md:text-lg text-mergenta-dark-grey max-w-4xl mx-auto leading-relaxed">
               360° Snapshot gives you a quick all-round view of your query — facts, opportunities, 
               challenges and next moves. The more you explain, the better is the response.
             </p>
