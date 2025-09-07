@@ -232,8 +232,8 @@ const POVLabModal = ({ open, onOpenChange, onAddToChat }: POVLabModalProps) => {
   };
 
   const handleSearchFocus = () => {
-    // Only show dropdown if search is empty and no results are showing
-    if (!showResults && !searchValue.trim()) {
+    // Show dropdown when focused if no results are showing
+    if (!showResults) {
       setShowDropdown(true);
     }
   };
@@ -360,13 +360,12 @@ ${tile.results.map(r => `• ${r}`).join('\n')}
           {!showResults && (
             <div className="flex-shrink-0 px-8 mb-8 mt-16">
               <div className="max-w-3xl mx-auto relative" ref={searchRef}>
-                <div onClick={handleSearchFocus} className="cursor-text">
-                  <ChatInput 
-                    onSendMessage={handleSearchSubmit} 
-                    isLoading={isLoading}
-                    initialValue={searchValue}
-                  />
-                </div>
+                <ChatInput 
+                  onSendMessage={handleSearchSubmit} 
+                  isLoading={isLoading}
+                  initialValue={searchValue}
+                  onFocus={handleSearchFocus}
+                />
 
                 {/* Dropdown Menu */}
                 {showDropdown && (

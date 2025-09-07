@@ -7,9 +7,10 @@ interface ChatInputProps {
   isLoading?: boolean;
   initialValue?: string;
   placeholder?: string;
+  onFocus?: () => void;
 }
 
-const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeholder = "Ask Mergenta..." }: ChatInputProps) => {
+const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeholder = "Ask Mergenta...", onFocus }: ChatInputProps) => {
   const [input, setInput] = useState(initialValue);
   const [isRecording, setIsRecording] = useState(false);
   const [showModelDropdown, setShowModelDropdown] = useState(false);
@@ -97,6 +98,7 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
+                onFocus={onFocus}
                 placeholder={placeholder}
                 className="w-full resize-none focus:outline-none text-gray-700 placeholder-gray-400 min-h-[24px] bg-transparent border-none outline-none"
                 disabled={isLoading}
