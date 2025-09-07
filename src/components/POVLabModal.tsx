@@ -324,12 +324,13 @@ ${tile.results.map(r => `• ${r}`).join('\n')}
                   <ArrowRight className="h-5 w-5 text-mergenta-dark-grey" />
                 </button>
               )}
-              <div className="flex items-center justify-center mb-8">
+              <div className="flex items-center justify-center mb-8 relative">
                 <Users className="h-12 w-12 text-mergenta-violet" />
+                <Users className="h-10 w-10 text-mergenta-violet/40 absolute -left-2 -top-1" />
+                <Users className="h-10 w-10 text-mergenta-violet/40 absolute -right-2 -top-1" />
               </div>
               <h1 className="text-4xl md:text-5xl font-bold text-mergenta-deep-violet mb-3">
-                <div>POV</div>
-                <div>Lab</div>
+                POV Lab
               </h1>
               <p className="text-base md:text-lg text-mergenta-dark-grey max-w-4xl mx-auto leading-relaxed">
                 See your query through three points of view — each with its own voice.
@@ -402,16 +403,13 @@ ${tile.results.map(r => `• ${r}`).join('\n')}
                     className="bg-white/30 backdrop-blur-sm rounded-2xl p-6 shadow-soft hover:shadow-elegant transition-all duration-300 transform hover:-translate-y-1 animate-in slide-in-from-bottom-4 flex flex-col"
                     style={{ animationDelay: `${idx * 100}ms` }}
                   >
-                    <div className="mb-4 text-left flex items-center">
-                      <tile.icon className="h-6 w-6 text-mergenta-violet mr-3" />
-                      <div>
-                        <h3 className="text-lg font-semibold text-mergenta-deep-violet mb-1">
-                          {tile.title}
-                        </h3>
-                        <p className="text-sm text-mergenta-dark-grey/80">
-                          {tile.subtitle}
-                        </p>
-                      </div>
+                    <div className="mb-4 text-left">
+                      <h3 className="text-lg font-semibold text-mergenta-deep-violet mb-1">
+                        {tile.title}
+                      </h3>
+                      <p className="text-sm text-mergenta-dark-grey/80">
+                        {tile.subtitle}
+                      </p>
                     </div>
                     
                     <ul className="space-y-3 flex-1">
@@ -430,10 +428,10 @@ ${tile.results.map(r => `• ${r}`).join('\n')}
               </div>
 
               {/* Search Bar Below Results */}
-              <div className="max-w-3xl mx-auto mt-20">
+              <div className="max-w-3xl mx-auto mt-12">
                 <div className="mb-6">
                   <p className="text-center text-mergenta-dark-grey font-medium">
-                    Continue the conversation
+                    Continue the analysis
                   </p>
                 </div>
                 <div className="mb-8">
