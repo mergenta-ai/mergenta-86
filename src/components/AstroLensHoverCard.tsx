@@ -55,13 +55,40 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children }) => 
   const handleMouseLeave = () => {
     closeTimeoutRef.current = setTimeout(() => {
       setShowCard(false);
-    }, 300);
+    }, 250);
   };
+
+  const handleCardClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
+  // Close card when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showCard) {
+        const target = event.target as HTMLElement;
+        const card = document.querySelector('[data-astro-card]');
+        if (card && !card.contains(target) && !target.closest('[data-astro-trigger]')) {
+          setShowCard(false);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showCard]);
 
   return (
     <div className="relative">
       {/* Trigger Element */}
-      <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+      <div 
+        data-astro-trigger
+        onMouseEnter={handleMouseEnter} 
+        onMouseLeave={handleMouseLeave}
+        onClick={() => setShowCard(!showCard)}
+      >
         {children}
       </div>
 
@@ -69,9 +96,11 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children }) => 
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
+            data-astro-card
             className="absolute left-[1052px] top-[360px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
+            onClick={handleCardClick}
           >
             <div className="p-4 border rounded-2xl shadow-xl animate-in fade-in-0 zoom-in-95 duration-200" style={{ backgroundColor: '#F3E8FB', borderColor: '#E5D9F2' }}>
               <div className="space-y-3">

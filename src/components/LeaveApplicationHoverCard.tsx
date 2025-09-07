@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Clock } from "lucide-react";
@@ -15,7 +15,7 @@ const LeaveApplicationHoverCard = ({ children }: LeaveApplicationHoverCardProps)
   const [finalTouch, setFinalTouch] = useState("");
   const [signOff, setSignOff] = useState("");
   const [from, setFrom] = useState("");
-  const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
+  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem('leaveApplication-form');
@@ -32,21 +32,62 @@ const LeaveApplicationHoverCard = ({ children }: LeaveApplicationHoverCardProps)
   }, [to, subject, coreMessage, finalTouch, signOff, from]);
 
   const handleMouseEnter = () => {
-    if (closeTimeout) { clearTimeout(closeTimeout); setCloseTimeout(null); }
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
     setShowCard(true);
   };
 
   const handleMouseLeave = () => {
-    const timeout = setTimeout(() => { setShowCard(false); }, 300);
-    setCloseTimeout(timeout);
+    closeTimeoutRef.current = setTimeout(() => {
+      setShowCard(false);
+    }, 250);
   };
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
+  // Close card when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showCard) {
+        const target = event.target as HTMLElement;
+        const card = document.querySelector('[data-leave-card]');
+        if (card && !card.contains(target) && !target.closest('[data-leave-trigger]')) {
+          setShowCard(false);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showCard]);
+
   return (
-    <>
-      <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>{children}</div>
+    <div className="relative">
+      {/* Trigger Element */}
+      <div 
+        data-leave-trigger
+        onMouseEnter={handleMouseEnter} 
+        onMouseLeave={handleMouseLeave}
+        onClick={() => setShowCard(!showCard)}
+      >
+        {children}
+      </div>
+      {/* Full Screen Hover Area + Card */}
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
-          <div className="absolute left-[918px] top-[220px] w-80 pointer-events-auto" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+          <div
+            data-leave-card
+            className="absolute left-[918px] top-[220px] w-80 pointer-events-auto"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onClick={handleCardClick}
+          >
             <div className="p-6 bg-pastel-lavender rounded-2xl shadow-lg border border-[#E5D9F2] animate-in fade-in-0 zoom-in-95 duration-200">
               <div className="space-y-4">
                  <div>
@@ -70,7 +111,7 @@ const LeaveApplicationHoverCard = ({ children }: LeaveApplicationHoverCardProps)
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
