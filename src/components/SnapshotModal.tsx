@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import * as React from "react";
-import { X, Eye, Target, AlertTriangle, TrendingUp, ChevronDown, Menu, Pencil, MessageSquare, FileText, Heart, Mail } from "lucide-react";
+import { X, Eye, Target, AlertTriangle, TrendingUp, ChevronDown, Menu, Pencil, MessageSquare, FileText, Heart, Mail, ArrowLeft, ArrowRight } from "lucide-react";
 import { Dialog, DialogOverlay } from "@/components/ui/dialog";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { cn } from "@/lib/utils";
@@ -46,7 +46,40 @@ const SnapshotModal = ({ open, onOpenChange, onAddToChat }: SnapshotModalProps) 
   const [showDropdown, setShowDropdown] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasPersistedResults, setHasPersistedResults] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
+
+  // Load persisted data on mount
+  useEffect(() => {
+    const persistedData = localStorage.getItem('snapshotModalData');
+    if (persistedData) {
+      try {
+        const { searchValue: persistedSearchValue, timestamp } = JSON.parse(persistedData);
+        const oneHour = 60 * 60 * 1000; // 1 hour in milliseconds
+        
+        if (Date.now() - timestamp < oneHour) {
+          setSearchValue(persistedSearchValue);
+          setShowResults(true);
+          setHasPersistedResults(true);
+        } else {
+          localStorage.removeItem('snapshotModalData');
+        }
+      } catch (error) {
+        localStorage.removeItem('snapshotModalData');
+      }
+    }
+  }, []);
+
+  // Save to localStorage when results are shown
+  useEffect(() => {
+    if (showResults && searchValue) {
+      const dataToSave = {
+        searchValue,
+        timestamp: Date.now()
+      };
+      localStorage.setItem('snapshotModalData', JSON.stringify(dataToSave));
+    }
+  }, [showResults, searchValue]);
 
   const dropdownOptions = [
     "Should I launch a podcast?",
@@ -180,14 +213,27 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
     setShowDropdown(false);
     setShowResults(false);
     setIsLoading(false);
+    setHasPersistedResults(false);
+    localStorage.removeItem('snapshotModalData');
   };
 
-  // Reset modal when it opens/closes
+  const goBackToSearch = () => {
+    setShowResults(false);
+    // Don't reset search value to preserve the query
+  };
+
+  const goForwardToResults = () => {
+    if (searchValue.trim()) {
+      setShowResults(true);
+    }
+  };
+
+  // Reset modal when it opens/closes, but preserve results if they exist
   useEffect(() => {
-    if (!open) {
+    if (!open && !hasPersistedResults) {
       resetModal();
     }
-  }, [open]);
+  }, [open, hasPersistedResults]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -202,30 +248,60 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
         </button>
 
         <div className="flex flex-col h-full overflow-y-auto">
-          {/* Header Section */}
-          <div className="flex-shrink-0 text-center pt-16 pb-6 px-8">
-            <div className="flex items-center justify-center mb-8">
-              <Eye className="h-12 w-12 text-mergenta-violet" />
+          {/* Header Section - First page only */}
+          {!showResults && (
+            <div className="flex-shrink-0 text-center pt-16 pb-6 px-8">
+              <div className="flex items-center justify-center mb-8">
+                <Eye className="h-12 w-12 text-mergenta-violet" />
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold text-mergenta-deep-violet mb-3">
+                360° Snapshot
+              </h1>
+              <p className="text-base md:text-lg text-mergenta-dark-grey max-w-4xl mx-auto leading-relaxed">
+                360° Snapshot gives you a quick all-round view of your query — facts, opportunities, 
+                challenges and next moves. The more you explain, the better is the response.
+              </p>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-mergenta-deep-violet mb-3">
-              360° Snapshot
-            </h1>
-            <p className="text-base md:text-lg text-mergenta-dark-grey max-w-4xl mx-auto leading-relaxed">
-              360° Snapshot gives you a quick all-round view of your query — facts, opportunities, 
-              challenges and next moves. The more you explain, the better is the response.
-            </p>
-          </div>
+          )}
+
+          {/* Header Section - Results page only */}
+          {showResults && (
+            <div className="flex-shrink-0 px-8 pt-8 pb-4">
+              <div className="flex items-center justify-between">
+                <button
+                  onClick={goBackToSearch}
+                  className="p-2 rounded-full bg-white/80 hover:bg-white transition-colors shadow-soft"
+                >
+                  <ArrowLeft className="h-5 w-5 text-mergenta-dark-grey" />
+                </button>
+                <div className="flex items-center justify-center">
+                  <Eye className="h-8 w-8 text-mergenta-violet" />
+                </div>
+                <div className="w-9 h-9"></div> {/* Spacer for alignment */}
+              </div>
+            </div>
+          )}
 
           {/* Search Section */}
           {!showResults && (
             <div className="flex-shrink-0 px-8 mb-8 mt-16">
               <div className="max-w-3xl mx-auto relative" ref={searchRef}>
-                <div onClick={handleSearchFocus} className="cursor-text">
-                  <ChatInput 
-                    onSendMessage={handleSearchSubmit} 
-                    isLoading={isLoading}
-                    initialValue={searchValue}
-                  />
+                <div className="flex items-center gap-4">
+                  <div className="flex-1" onClick={handleSearchFocus}>
+                    <ChatInput 
+                      onSendMessage={handleSearchSubmit} 
+                      isLoading={isLoading}
+                      initialValue={searchValue}
+                    />
+                  </div>
+                  {searchValue.trim() && (
+                    <button
+                      onClick={goForwardToResults}
+                      className="p-2 rounded-full bg-white/80 hover:bg-white transition-colors shadow-soft"
+                    >
+                      <ArrowRight className="h-5 w-5 text-mergenta-dark-grey" />
+                    </button>
+                  )}
                 </div>
 
                 {/* Dropdown Menu */}
@@ -257,22 +333,19 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
             <div className="flex-1 px-8 pb-8">
               {/* Result Tiles */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 max-w-6xl mx-auto">
-                {resultTiles.map((tile, idx) => (
+                 {resultTiles.map((tile, idx) => (
                   <div
                     key={idx}
                     className="bg-white/30 backdrop-blur-sm rounded-2xl p-4 shadow-soft hover:shadow-elegant transition-all duration-300 transform hover:-translate-y-1 animate-in slide-in-from-bottom-4 flex flex-col"
                     style={{ animationDelay: `${idx * 100}ms` }}
                   >
-                    <div className="flex items-center mb-3">
-                      <tile.icon className="h-5 w-5 text-mergenta-violet mr-3" />
-                      <div className="flex-1">
-                        <h3 className="text-lg font-semibold text-mergenta-deep-violet">
-                          {tile.title}
-                        </h3>
-                        <p className="text-sm text-mergenta-dark-grey/80">
-                          {tile.subtitle}
-                        </p>
-                      </div>
+                    <div className="mb-3 text-left">
+                      <h3 className="text-lg font-semibold text-mergenta-deep-violet mb-1">
+                        {tile.title}
+                      </h3>
+                      <p className="text-sm text-mergenta-dark-grey/80">
+                        {tile.subtitle}
+                      </p>
                     </div>
                     
                     <ul className="space-y-2 flex-1">
@@ -304,7 +377,7 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
                 />
 
                 {/* Action Buttons Below Search Bar */}
-                <div className="flex justify-center gap-4 mt-6">
+                <div className="flex justify-center gap-12 mt-6">
                   <Button
                     variant="outline"
                     onClick={() => {
