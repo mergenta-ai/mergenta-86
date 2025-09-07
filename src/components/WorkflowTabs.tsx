@@ -32,11 +32,13 @@ import AppreciationLetterHoverCard from "./AppreciationLetterHoverCard";
 import AppointmentRequestHoverCard from "./AppointmentRequestHoverCard";
 import PublicationRequestHoverCard from "./PublicationRequestHoverCard";
 import { SnapshotModal } from "./SnapshotModal";
+import { POVLabModal } from "./POVLabModal";
 
 const WorkflowTabs = ({ onAddToChat }: { onAddToChat?: (message: string, response: string) => void }) => {
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
   const [snapshotModalOpen, setSnapshotModalOpen] = useState(false);
+  const [povLabModalOpen, setPovLabModalOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const tabs = [
@@ -490,7 +492,7 @@ const WorkflowTabs = ({ onAddToChat }: { onAddToChat?: (message: string, respons
                     {activeTab === "experience-studio" && (
                       <div className="py-2">
                         {[
-                          "360° Snapshot", "Persona Lab", "Future Snapshot", 
+                          "360° Snapshot", "POV Lab", "Future Snapshot", 
                           "Roleplay Hub", "Reality Check", "Impact Radar"
                         ].map((item, idx) => (
                           <button
@@ -499,6 +501,8 @@ const WorkflowTabs = ({ onAddToChat }: { onAddToChat?: (message: string, respons
                             onClick={() => {
                               if (item === "360° Snapshot") {
                                 setSnapshotModalOpen(true);
+                              } else if (item === "POV Lab") {
+                                setPovLabModalOpen(true);
                               } else {
                                 console.log(`Selected: ${item}`);
                               }
@@ -520,6 +524,12 @@ const WorkflowTabs = ({ onAddToChat }: { onAddToChat?: (message: string, respons
       <SnapshotModal 
         open={snapshotModalOpen} 
         onOpenChange={setSnapshotModalOpen}
+        onAddToChat={onAddToChat}
+      />
+      
+      <POVLabModal 
+        open={povLabModalOpen} 
+        onOpenChange={setPovLabModalOpen}
         onAddToChat={onAddToChat}
       />
     </TooltipProvider>
