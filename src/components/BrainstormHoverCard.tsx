@@ -54,10 +54,37 @@ const BrainstormHoverCard: React.FC<BrainstormHoverCardProps> = ({ children }) =
     }, 250);
   };
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
+  // Close card when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showCard) {
+        const target = event.target as HTMLElement;
+        const card = document.querySelector('[data-brainstorm-card]');
+        if (card && !card.contains(target) && !target.closest('[data-brainstorm-trigger]')) {
+          setShowCard(false);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showCard]);
+
   return (
     <div className="relative">
       {/* Trigger Element */}
-      <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+      <div 
+        data-brainstorm-trigger
+        onMouseEnter={handleMouseEnter} 
+        onMouseLeave={handleMouseLeave}
+        onClick={() => setShowCard(!showCard)}
+      >
         {children}
       </div>
 
@@ -65,9 +92,11 @@ const BrainstormHoverCard: React.FC<BrainstormHoverCardProps> = ({ children }) =
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
+            data-brainstorm-card
             className="absolute left-[1052px] top-[490px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
+            onClick={handleCardClick}
           >
             <div className="p-4 border rounded-lg shadow-xl animate-in fade-in-0 zoom-in-95 duration-200" style={{ backgroundColor: '#F1E4FA', borderColor: '#E5D9F2' }}>
               <div className="space-y-3">

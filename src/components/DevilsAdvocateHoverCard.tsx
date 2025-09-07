@@ -57,10 +57,37 @@ const DevilsAdvocateHoverCard: React.FC<DevilsAdvocateHoverCardProps> = ({ child
     }, 250);
   };
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
+  // Close card when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showCard) {
+        const target = event.target as HTMLElement;
+        const card = document.querySelector('[data-devils-advocate-card]');
+        if (card && !card.contains(target) && !target.closest('[data-devils-advocate-trigger]')) {
+          setShowCard(false);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showCard]);
+
   return (
     <div className="relative">
       {/* Trigger Element */}
-      <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+      <div 
+        data-devils-advocate-trigger
+        onMouseEnter={handleMouseEnter} 
+        onMouseLeave={handleMouseLeave}
+        onClick={() => setShowCard(!showCard)}
+      >
         {children}
       </div>
 
@@ -68,9 +95,11 @@ const DevilsAdvocateHoverCard: React.FC<DevilsAdvocateHoverCardProps> = ({ child
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
+            data-devils-advocate-card
             className="absolute left-[1050px] top-[320px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
+            onClick={handleCardClick}
           >
             <div className="p-4 border rounded-2xl shadow-xl animate-in fade-in-0 zoom-in-95 duration-200" style={{ backgroundColor: '#EDE9F7', borderColor: '#DDD1ED' }}>
               <div className="space-y-3">

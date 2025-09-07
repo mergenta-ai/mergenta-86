@@ -46,14 +46,41 @@ const AppreciationLetterHoverCard = ({ children }: AppreciationLetterHoverCardPr
   const handleMouseLeave = () => {
     const timeout = setTimeout(() => {
       setShowCard(false);
-    }, 100);
+    }, 250);
     setCloseTimeout(timeout);
   };
+
+  const handleCardClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
+  // Close card when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showCard) {
+        const target = event.target as HTMLElement;
+        const card = document.querySelector('[data-appreciation-letter-card]');
+        if (card && !card.contains(target) && !target.closest('[data-appreciation-letter-trigger]')) {
+          setShowCard(false);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showCard]);
 
   return (
     <>
       {/* Trigger Element */}
-      <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+      <div 
+        data-appreciation-letter-trigger
+        onMouseEnter={handleMouseEnter} 
+        onMouseLeave={handleMouseLeave}
+        onClick={() => setShowCard(!showCard)}
+      >
         {children}
       </div>
 
@@ -61,9 +88,11 @@ const AppreciationLetterHoverCard = ({ children }: AppreciationLetterHoverCardPr
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
+            data-appreciation-letter-card
             className="absolute left-[918px] top-[220px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
+            onClick={handleCardClick}
           >
             <div className="p-6 bg-pastel-lavender rounded-2xl shadow-lg border border-[#E5D9F2] animate-in fade-in-0 zoom-in-95 duration-200">
               <div className="space-y-4">

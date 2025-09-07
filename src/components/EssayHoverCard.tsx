@@ -110,10 +110,37 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children }) => {
     }, 250);
   };
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
+  // Close card when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showCard) {
+        const target = event.target as HTMLElement;
+        const card = document.querySelector('[data-essay-card]');
+        if (card && !card.contains(target) && !target.closest('[data-essay-trigger]')) {
+          setShowCard(false);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showCard]);
+
   return (
     <div className="relative">
       {/* Trigger Element */}
-      <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+      <div 
+        data-essay-trigger
+        onMouseEnter={handleMouseEnter} 
+        onMouseLeave={handleMouseLeave}
+        onClick={() => setShowCard(!showCard)}
+      >
         {children}
       </div>
 
@@ -121,9 +148,11 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children }) => {
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
+            data-essay-card
             className="absolute left-[620px] top-[140px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
+            onClick={handleCardClick}
           >
             <div className="p-4 bg-pastel-lavender border border-pastel-lavender-hover rounded-lg shadow-xl animate-in fade-in-0 zoom-in-95 duration-200">
               <div className="space-y-3">
