@@ -154,187 +154,204 @@ ${snapshot.nextMoves.map((move: string) => `• ${move}`).join('\n')}`;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-0">
-        {/* Backdrop */}
-        <div className="fixed inset-0 bg-black/55" onClick={() => onOpenChange(false)} />
+      <DialogContent className="fixed inset-0 z-50 bg-transparent border-0 p-0 max-w-none h-full w-full">
+        {/* Full-screen backdrop */}
+        <div 
+          className="fixed inset-0 bg-black/55 z-40"
+          onClick={() => onOpenChange(false)}
+        />
         
-        {/* Modal */}
-        <div className="relative w-full max-w-[1100px] max-h-[82vh] bg-white rounded-[14px] shadow-[0_12px_40px_rgba(0,0,0,0.35)] overflow-hidden">
-          {/* Header */}
-          <div className="sticky top-0 bg-white border-b p-7 pb-5 z-10">
-            <div className="flex items-start justify-between">
-              <div>
-                <h2 className="text-2xl font-bold text-[#6C3EB6] mb-2">360° Snapshot</h2>
-                <p className="text-sm text-[#4B3C72] max-w-2xl leading-relaxed">
-                  360° Snapshot gives you a quick all-round view of your query — facts, opportunities, 
-                  challenges, and next moves. The more you explain, the better is the response.
-                </p>
-              </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 rounded-full"
-                onClick={() => onOpenChange(false)}
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-
-          {/* Scrollable Content */}
-          <div className="overflow-y-auto max-h-[calc(82vh-140px)] p-7 pt-5">
-            {/* Initial Input Section (only show if not generated yet) */}
-            {!hasGenerated && (
-              <div className="mb-8">
-                <div className="relative">
-                  <Textarea
-                    placeholder="Enter your question or situation..."
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    onClick={() => setShowSuggestions(true)}
-                    onFocus={() => setShowSuggestions(true)}
-                    onKeyPress={handleKeyPress}
-                    className="min-h-[120px] text-base border-[#D8C7F9] placeholder:text-[#7E6DAE] focus-visible:ring-[#6C3EB6]"
-                  />
-                  
-                  {showSuggestions && (
-                    <>
-                      <div 
-                        className="fixed inset-0 z-10"
-                        onClick={() => setShowSuggestions(false)}
-                      />
-                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#D8C7F9] rounded-lg shadow-lg z-20 max-h-48 overflow-y-auto">
-                        <div className="p-3 border-b border-[#D8C7F9]">
-                          <h4 className="text-sm font-medium text-[#6C3EB6]">Sample queries:</h4>
-                        </div>
-                        {sampleQueries.map((suggestion, idx) => (
-                          <button
-                            key={idx}
-                            className="w-full text-left px-4 py-3 text-sm text-[#4B3C72] hover:bg-[#F8F6FF] transition-colors border-b border-[#D8C7F9]/50 last:border-0"
-                            onClick={() => handleSuggestionSelect(suggestion)}
-                          >
-                            {suggestion}
-                          </button>
-                        ))}
-                      </div>
-                    </>
-                  )}
+        {/* Centered modal container */}
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div 
+            className="relative w-full max-w-[1100px] max-h-[82vh] bg-white rounded-[14px] mx-auto overflow-hidden"
+            style={{ 
+              boxShadow: '0 12px 40px rgba(0,0,0,0.35)',
+              margin: '0 auto'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="sticky top-0 bg-white border-b border-gray-200 z-10" style={{ padding: '28px 28px 20px 28px' }}>
+              <div className="flex items-start justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold text-[#6C3EB6] mb-2">360° Snapshot</h2>
+                  <p className="text-sm text-[#4B3C72] max-w-2xl leading-relaxed">
+                    360° Snapshot gives you a quick all-round view of your query — facts, opportunities, 
+                    challenges, and next moves. The more you explain, the better is the response.
+                  </p>
                 </div>
-                
                 <Button
-                  onClick={handleGenerateSnapshot}
-                  disabled={query.trim().length < 4 || isGenerating}
-                  className="w-full mt-4 h-12 bg-[#6C3EB6] hover:bg-[#5B34A0] text-white rounded-[10px]"
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 rounded-full"
+                  onClick={() => onOpenChange(false)}
                 >
-                  {isGenerating ? "Generating Snapshot..." : "Generate Snapshot"}
+                  <X className="h-4 w-4" />
                 </Button>
               </div>
-            )}
+            </div>
 
-            {/* Output Section */}
-            {snapshot && (
-              <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  {tileData.map((tile, idx) => (
-                    <div
-                      key={idx}
-                      className={`p-5 rounded-2xl shadow-[0_6px_18px_rgba(0,0,0,0.08)] transition-all duration-[380ms] min-w-[240px] ${tile.bgColor} ${
-                        showTiles 
-                          ? 'opacity-100 translate-y-0' 
-                          : 'opacity-0 translate-y-3'
-                      }`}
-                      style={{
-                        animationDelay: showTiles ? `${tile.index * 180}ms` : '0ms',
-                        transitionTimingFunction: 'cubic-bezier(0.2, 0.9, 0.3, 1)'
-                      }}
-                    >
-                      <h3 className="text-lg font-bold text-[#6C3EB6] mb-2">
-                        {tile.title}
-                      </h3>
-                      <p className="text-[13px] text-[#4B3C72] mb-4 leading-relaxed">
-                        {tile.subtitle}
-                      </p>
-                      <ul className="space-y-2">
-                        {tile.items.map((item: string, itemIdx: number) => (
-                          <li key={itemIdx} className="text-sm text-[#333333] flex items-start leading-relaxed">
-                            <span className="w-2 h-2 bg-[#6C3EB6] rounded-full mt-2 mr-3 flex-shrink-0" />
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Follow-up Input Section (show after generation) */}
-                {hasGenerated && (
-                  <div className="mt-8 pt-6 border-t border-[#D8C7F9]">
-                    <label className="block text-sm font-medium text-[#4B3C72] mb-3">
-                      Ask a follow-up or enter a new query
-                    </label>
-                    <div className="relative">
-                      <Textarea
-                        placeholder="Enter your question or situation..."
-                        value={query}
-                        onChange={(e) => setQuery(e.target.value)}
-                        onClick={() => setShowSuggestions(true)}
-                        onFocus={() => setShowSuggestions(true)}
-                        onKeyPress={handleKeyPress}
-                        className="min-h-[100px] text-base border-[#D8C7F9] placeholder:text-[#7E6DAE] focus-visible:ring-[#6C3EB6]"
-                      />
-                      
-                      {showSuggestions && (
-                        <>
-                          <div 
-                            className="fixed inset-0 z-10"
-                            onClick={() => setShowSuggestions(false)}
-                          />
-                          <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#D8C7F9] rounded-lg shadow-lg z-20 max-h-48 overflow-y-auto">
-                            <div className="p-3 border-b border-[#D8C7F9]">
-                              <h4 className="text-sm font-medium text-[#6C3EB6]">Sample queries:</h4>
-                            </div>
-                            {sampleQueries.map((suggestion, idx) => (
-                              <button
-                                key={idx}
-                                className="w-full text-left px-4 py-3 text-sm text-[#4B3C72] hover:bg-[#F8F6FF] transition-colors border-b border-[#D8C7F9]/50 last:border-0"
-                                onClick={() => handleSuggestionSelect(suggestion)}
-                              >
-                                {suggestion}
-                              </button>
-                            ))}
-                          </div>
-                        </>
-                      )}
-                    </div>
+            {/* Scrollable Content */}
+            <div className="overflow-y-auto" style={{ 
+              maxHeight: 'calc(82vh - 140px)',
+              padding: '20px 28px 28px 28px'
+            }}>
+              {/* Initial Input Section (only show if not generated yet) */}
+              {!hasGenerated && (
+                <div className="mb-8">
+                  <div className="relative">
+                    <Textarea
+                      placeholder="Enter your question or situation..."
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                      onClick={() => setShowSuggestions(true)}
+                      onFocus={() => setShowSuggestions(true)}
+                      onKeyPress={handleKeyPress}
+                      className="min-h-[120px] text-base border-[#D8C7F9] placeholder:text-[#7E6DAE] focus-visible:ring-[#6C3EB6]"
+                    />
                     
+                    {showSuggestions && (
+                      <>
+                        <div 
+                          className="fixed inset-0 z-30"
+                          onClick={() => setShowSuggestions(false)}
+                        />
+                        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#D8C7F9] rounded-lg shadow-lg z-40 max-h-48 overflow-y-auto">
+                          <div className="p-3 border-b border-[#D8C7F9]">
+                            <h4 className="text-sm font-medium text-[#6C3EB6]">Sample queries:</h4>
+                          </div>
+                          {sampleQueries.map((suggestion, idx) => (
+                            <button
+                              key={idx}
+                              className="w-full text-left px-4 py-3 text-sm text-[#4B3C72] hover:bg-[#F8F6FF] transition-colors border-b border-[#D8C7F9]/50 last:border-0"
+                              onClick={() => handleSuggestionSelect(suggestion)}
+                            >
+                              {suggestion}
+                            </button>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  
+                  <Button
+                    onClick={handleGenerateSnapshot}
+                    disabled={query.trim().length < 4 || isGenerating}
+                    className="w-full mt-4 h-12 bg-[#6C3EB6] hover:bg-[#5B34A0] text-white rounded-[10px]"
+                  >
+                    {isGenerating ? "Generating Snapshot..." : "Generate Snapshot"}
+                  </Button>
+                </div>
+              )}
+
+              {/* Output Section */}
+              {snapshot && (
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                    {tileData.map((tile, idx) => (
+                      <div
+                        key={idx}
+                        className={`rounded-2xl min-w-[240px] transition-all duration-[380ms] ${tile.bgColor} ${
+                          showTiles 
+                            ? 'opacity-100 translate-y-0' 
+                            : 'opacity-0 translate-y-3'
+                        }`}
+                        style={{
+                          padding: '20px',
+                          boxShadow: '0 6px 18px rgba(0,0,0,0.08)',
+                          animationDelay: showTiles ? `${tile.index * 180}ms` : '0ms',
+                          transitionTimingFunction: 'cubic-bezier(0.2, 0.9, 0.3, 1)'
+                        }}
+                      >
+                        <h3 className="text-lg font-bold text-[#6C3EB6] mb-2">
+                          {tile.title}
+                        </h3>
+                        <p className="text-[13px] text-[#4B3C72] mb-4 leading-relaxed">
+                          {tile.subtitle}
+                        </p>
+                        <ul className="space-y-2">
+                          {tile.items.map((item: string, itemIdx: number) => (
+                            <li key={itemIdx} className="text-sm text-[#333333] flex items-start leading-relaxed">
+                              <span className="w-2 h-2 bg-[#6C3EB6] rounded-full mt-2 mr-3 flex-shrink-0" />
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Follow-up Input Section (show after generation) */}
+                  {hasGenerated && (
+                    <div className="mt-8 pt-6 border-t border-[#D8C7F9]">
+                      <label className="block text-sm font-medium text-[#4B3C72] mb-3">
+                        Ask a follow-up or enter a new query
+                      </label>
+                      <div className="relative">
+                        <Textarea
+                          placeholder="Enter your question or situation..."
+                          value={query}
+                          onChange={(e) => setQuery(e.target.value)}
+                          onClick={() => setShowSuggestions(true)}
+                          onFocus={() => setShowSuggestions(true)}
+                          onKeyPress={handleKeyPress}
+                          className="min-h-[100px] text-base border-[#D8C7F9] placeholder:text-[#7E6DAE] focus-visible:ring-[#6C3EB6]"
+                        />
+                        
+                        {showSuggestions && (
+                          <>
+                            <div 
+                              className="fixed inset-0 z-30"
+                              onClick={() => setShowSuggestions(false)}
+                            />
+                            <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#D8C7F9] rounded-lg shadow-lg z-40 max-h-48 overflow-y-auto">
+                              <div className="p-3 border-b border-[#D8C7F9]">
+                                <h4 className="text-sm font-medium text-[#6C3EB6]">Sample queries:</h4>
+                              </div>
+                              {sampleQueries.map((suggestion, idx) => (
+                                <button
+                                  key={idx}
+                                  className="w-full text-left px-4 py-3 text-sm text-[#4B3C72] hover:bg-[#F8F6FF] transition-colors border-b border-[#D8C7F9]/50 last:border-0"
+                                  onClick={() => handleSuggestionSelect(suggestion)}
+                                >
+                                  {suggestion}
+                                </button>
+                              ))}
+                            </div>
+                          </>
+                        )}
+                      </div>
+                      
+                      <Button
+                        onClick={handleGenerateSnapshot}
+                        disabled={query.trim().length < 4 || isGenerating}
+                        className="w-full mt-4 h-12 bg-[#6C3EB6] hover:bg-[#5B34A0] text-white rounded-[10px]"
+                      >
+                        {isGenerating ? "Generating Snapshot..." : "Generate Snapshot"}
+                      </Button>
+                    </div>
+                  )}
+
+                  {/* Footer */}
+                  <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t border-[#D8C7F9]">
                     <Button
-                      onClick={handleGenerateSnapshot}
-                      disabled={query.trim().length < 4 || isGenerating}
-                      className="w-full mt-4 h-12 bg-[#6C3EB6] hover:bg-[#5B34A0] text-white rounded-[10px]"
+                      onClick={copyAllSnapshot}
+                      className="bg-[#6C3EB6] hover:bg-[#5B34A0] text-white"
                     >
-                      {isGenerating ? "Generating Snapshot..." : "Generate Snapshot"}
+                      Copy All Snapshot
+                    </Button>
+                    <Button
+                      onClick={startAgain}
+                      variant="outline"
+                      className="border-[#B79CF6] text-[#6C3EB6] hover:bg-[#F8F6FF]"
+                    >
+                      Start Again
                     </Button>
                   </div>
-                )}
-
-                {/* Footer */}
-                <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t border-[#D8C7F9]">
-                  <Button
-                    onClick={copyAllSnapshot}
-                    className="bg-[#6C3EB6] hover:bg-[#5B34A0] text-white"
-                  >
-                    Copy All Snapshot
-                  </Button>
-                  <Button
-                    onClick={startAgain}
-                    variant="outline"
-                    className="border-[#B79CF6] text-[#6C3EB6] hover:bg-[#F8F6FF]"
-                  >
-                    Start Again
-                  </Button>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </DialogContent>
