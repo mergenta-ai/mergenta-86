@@ -31,12 +31,10 @@ import PermissionLetterHoverCard from "./PermissionLetterHoverCard";
 import AppreciationLetterHoverCard from "./AppreciationLetterHoverCard";
 import AppointmentRequestHoverCard from "./AppointmentRequestHoverCard";
 import PublicationRequestHoverCard from "./PublicationRequestHoverCard";
-import { SnapshotModal } from "./SnapshotModal";
 
 const WorkflowTabs = () => {
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
-  const [snapshotModalOpen, setSnapshotModalOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const tabs = [
@@ -496,13 +494,7 @@ const WorkflowTabs = () => {
                           <button
                             key={idx}
                             className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
-                            onClick={() => {
-                              if (item === "360° Snapshot") {
-                                setSnapshotModalOpen(true);
-                              } else {
-                                console.log(`Selected: ${item}`);
-                              }
-                            }}
+                            onClick={() => console.log(`Selected: ${item}`)}
                           >
                             {item}
                           </button>
@@ -516,11 +508,6 @@ const WorkflowTabs = () => {
           </div>
         </div>
       </div>
-      
-      <SnapshotModal 
-        open={snapshotModalOpen} 
-        onOpenChange={setSnapshotModalOpen} 
-      />
     </TooltipProvider>
   );
 };
