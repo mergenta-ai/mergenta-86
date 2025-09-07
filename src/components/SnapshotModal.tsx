@@ -331,7 +331,7 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
           {showResults && (
             <div className="flex-1 px-8 pb-8">
               {/* Result Tiles */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-16 max-w-6xl mx-auto">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 max-w-6xl mx-auto">
                  {resultTiles.map((tile, idx) => (
                   <div
                     key={idx}
@@ -378,7 +378,7 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
                 </div>
 
                 {/* Action Buttons Below Search Bar */}
-                <div className="flex justify-center gap-36 mt-8">
+                <div className="flex justify-center gap-12 mt-8">
                   <Button
                     variant="outline"
                     onClick={() => {
