@@ -205,9 +205,7 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
           {/* Header Section */}
           <div className="flex-shrink-0 text-center pt-8 pb-6 px-8">
             <div className="flex items-center justify-center mb-3">
-              <div className="p-4 rounded-full bg-white/20 backdrop-blur-sm">
-                <Eye className="h-12 w-12 text-mergenta-violet" />
-              </div>
+              <Eye className="h-12 w-12 text-mergenta-violet" />
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-mergenta-deep-violet mb-3">
               360° Snapshot
@@ -269,7 +267,7 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
                 {resultTiles.map((tile, idx) => (
                   <div
                     key={idx}
-                    className="bg-white/30 backdrop-blur-sm rounded-2xl p-4 shadow-soft hover:shadow-elegant transition-all duration-300 transform hover:-translate-y-1 animate-in slide-in-from-bottom-4 flex flex-col h-80"
+                    className="bg-white/30 backdrop-blur-sm rounded-2xl p-4 shadow-soft hover:shadow-elegant transition-all duration-300 transform hover:-translate-y-1 animate-in slide-in-from-bottom-4 flex flex-col"
                     style={{ animationDelay: `${idx * 100}ms` }}
                   >
                     <div className="flex items-center mb-3">
@@ -284,7 +282,7 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
                       </div>
                     </div>
                     
-                    <ul className="space-y-2 flex-1 overflow-y-auto">
+                    <ul className="space-y-2 flex-1">
                       {tile.results.map((result, resultIdx) => (
                         <li
                           key={resultIdx}
@@ -299,6 +297,45 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
                 ))}
               </div>
 
+              {/* Action Buttons */}
+              <div className="flex justify-center gap-4 mb-8">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    const response = `**360° Snapshot Analysis for: "${searchValue}"**
+
+**Facts & Insights**
+What is true and relevant in the background?
+${resultTiles[0].results.map(r => `• ${r}`).join('\n')}
+
+**Opportunities** 
+Where the openings and upsides may be?
+${resultTiles[1].results.map(r => `• ${r}`).join('\n')}
+
+**Challenges**
+What hurdles and risks stand in the way?
+${resultTiles[2].results.map(r => `• ${r}`).join('\n')}
+
+**Next Moves**
+Practical steps to take things forward.
+${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
+                    navigator.clipboard.writeText(response);
+                  }}
+                  className="bg-white/20 border-white/30 text-mergenta-deep-violet hover:bg-white/30"
+                >
+                  Copy All Snapshot
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    resetModal();
+                  }}
+                  className="bg-white/20 border-white/30 text-mergenta-deep-violet hover:bg-white/30"
+                >
+                  Start Again
+                </Button>
+              </div>
+
               {/* Search Bar Below Results */}
               <div className="max-w-3xl mx-auto">
                 <div className="mb-4">
@@ -309,6 +346,7 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
                 <ChatInput 
                   onSendMessage={handleContinueSearch} 
                   isLoading={isLoading}
+                  placeholder="Ask a follow-up or start a new snapshot…"
                 />
               </div>
             </div>
