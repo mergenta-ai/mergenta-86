@@ -203,8 +203,8 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
 
         <div className="flex flex-col h-full overflow-y-auto">
           {/* Header Section */}
-          <div className="flex-shrink-0 text-center pt-8 pb-6 px-8">
-            <div className="flex items-center justify-center mb-3">
+          <div className="flex-shrink-0 text-center pt-16 pb-6 px-8">
+            <div className="flex items-center justify-center mb-8">
               <Eye className="h-12 w-12 text-mergenta-violet" />
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-mergenta-deep-violet mb-3">
@@ -218,7 +218,7 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
 
           {/* Search Section */}
           {!showResults && (
-            <div className="flex-shrink-0 px-8 mb-8 mt-8">
+            <div className="flex-shrink-0 px-8 mb-8 mt-16">
               <div className="max-w-3xl mx-auto relative" ref={searchRef}>
                 <div onClick={handleSearchFocus} className="cursor-text">
                   <ChatInput 
