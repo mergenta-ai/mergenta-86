@@ -324,10 +324,8 @@ ${tile.results.map(r => `• ${r}`).join('\n')}
                   <ArrowRight className="h-5 w-5 text-mergenta-dark-grey" />
                 </button>
               )}
-              <div className="flex items-center justify-center mb-8 relative">
+              <div className="flex items-center justify-center mb-8">
                 <Users className="h-12 w-12 text-mergenta-violet" />
-                <Users className="h-10 w-10 text-mergenta-violet/40 absolute -left-3 -top-0.5" />
-                <Users className="h-10 w-10 text-mergenta-violet/40 absolute -right-3 -top-0.5" />
               </div>
               <h1 className="text-4xl md:text-5xl font-bold text-mergenta-deep-violet mb-3">
                 POV Lab
@@ -406,7 +404,7 @@ ${tile.results.map(r => `• ${r}`).join('\n')}
                       <h3 className="text-lg font-semibold text-mergenta-deep-violet mb-1">
                         {tile.title}
                       </h3>
-                      <p className="text-sm text-mergenta-dark-grey/80">
+                      <p className="text-sm text-mergenta-dark-grey/80 font-semibold">
                         {tile.subtitle}
                       </p>
                     </div>
