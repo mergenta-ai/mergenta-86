@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogOverlay } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import ChatInput from "@/components/ChatInput";
+import WorkflowTabs from "@/components/WorkflowTabs";
 
 interface SnapshotModalProps {
   open: boolean;
@@ -144,6 +145,7 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
 
     // Add to main chat and close modal
     onAddToChat?.(searchValue, response);
+    resetModal();
     onOpenChange(false);
     
     // Handle the new message
@@ -151,9 +153,23 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
     console.log('Continue search:', message);
   };
 
+  const resetModal = () => {
+    setSearchValue("");
+    setShowDropdown(false);
+    setShowResults(false);
+    setIsLoading(false);
+  };
+
+  // Reset modal when it opens/closes
+  useEffect(() => {
+    if (!open) {
+      resetModal();
+    }
+  }, [open]);
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogOverlay className="bg-gradient-to-br from-mergenta-deep-violet/40 via-mergenta-violet/35 to-mergenta-magenta/30 backdrop-blur-sm" />
+      <DialogOverlay className="bg-gradient-to-br from-mergenta-deep-violet/60 via-mergenta-violet/50 to-mergenta-magenta/45 backdrop-blur-md" />
       <DialogContent className="max-w-[1210px] max-h-[86vh] w-[105vw] h-[100vh] p-0 overflow-hidden bg-gradient-to-br from-pastel-lavender via-mergenta-light-violet to-pastel-magenta border-0">
         {/* Close Button */}
         <button
@@ -182,7 +198,7 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
 
           {/* Search Section */}
           {!showResults && (
-            <div className="flex-shrink-0 px-8 mb-8">
+            <div className="flex-shrink-0 px-8 mb-4">
               <div className="max-w-3xl mx-auto relative" ref={searchRef}>
                 <div onClick={handleSearchFocus} className="cursor-text">
                   <ChatInput 
@@ -216,6 +232,13 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
             </div>
           )}
 
+          {/* Workflow Tabs */}
+          {!showResults && (
+            <div className="flex-shrink-0 px-8 mb-8">
+              <WorkflowTabs onAddToChat={onAddToChat} />
+            </div>
+          )}
+
           {/* Results Section */}
           {showResults && (
             <div className="flex-1 px-8 pb-8">
@@ -228,14 +251,12 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
                     style={{ animationDelay: `${idx * 100}ms` }}
                   >
                     <div className="flex items-center mb-3">
-                      <div className="p-2 rounded-xl bg-white/40 mr-3">
-                        <tile.icon className="h-5 w-5 text-mergenta-violet" />
-                      </div>
+                      <tile.icon className="h-5 w-5 text-mergenta-violet mr-3" />
                       <div className="flex-1">
                         <h3 className="text-lg font-semibold text-mergenta-deep-violet">
                           {tile.title}
                         </h3>
-                        <p className="text-xs text-mergenta-dark-grey/80">
+                        <p className="text-sm text-mergenta-dark-grey/80">
                           {tile.subtitle}
                         </p>
                       </div>
@@ -245,7 +266,7 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
                       {tile.results.map((result, resultIdx) => (
                         <li
                           key={resultIdx}
-                          className="flex items-start text-xs text-mergenta-dark-grey"
+                          className="flex items-start text-sm text-mergenta-dark-grey"
                         >
                           <div className="w-1.5 h-1.5 rounded-full bg-mergenta-violet mt-1.5 mr-2 flex-shrink-0" />
                           <span>{result}</span>
