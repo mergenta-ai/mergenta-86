@@ -326,8 +326,8 @@ ${tile.results.map(r => `• ${r}`).join('\n')}
               )}
               <div className="flex items-center justify-center mb-8 relative">
                 <Users className="h-12 w-12 text-mergenta-violet" />
-                <Users className="h-10 w-10 text-mergenta-violet/40 absolute -left-2 -top-1" />
-                <Users className="h-10 w-10 text-mergenta-violet/40 absolute -right-2 -top-1" />
+                <Users className="h-10 w-10 text-mergenta-violet/40 absolute -left-3 -top-0.5" />
+                <Users className="h-10 w-10 text-mergenta-violet/40 absolute -right-3 -top-0.5" />
               </div>
               <h1 className="text-4xl md:text-5xl font-bold text-mergenta-deep-violet mb-3">
                 POV Lab
@@ -340,7 +340,7 @@ ${tile.results.map(r => `• ${r}`).join('\n')}
 
           {/* Header Section - Results page only */}
           {showResults && (
-            <div className="flex-shrink-0 px-8 pt-8 pb-20">
+            <div className="flex-shrink-0 px-8 pt-8 pb-8">
               <div className="flex items-center justify-between">
                 <button
                   onClick={goBackToSearch}
@@ -379,7 +379,7 @@ ${tile.results.map(r => `• ${r}`).join('\n')}
                         <button
                           key={idx}
                           onClick={() => handleDropdownSelect(option)}
-                          className="w-full text-left px-4 py-3 text-sm text-mergenta-dark-grey hover:bg-pastel-lavender hover:text-mergenta-violet transition-colors rounded-lg mx-1 my-1"
+                          className="w-full text-left px-4 py-2 text-sm text-mergenta-dark-grey hover:bg-pastel-lavender hover:text-mergenta-violet transition-colors rounded-lg mx-1"
                         >
                           {option}
                         </button>
