@@ -33,7 +33,7 @@ import AppointmentRequestHoverCard from "./AppointmentRequestHoverCard";
 import PublicationRequestHoverCard from "./PublicationRequestHoverCard";
 import { SnapshotModal } from "./SnapshotModal";
 
-const WorkflowTabs = () => {
+const WorkflowTabs = ({ onAddToChat }: { onAddToChat?: (message: string, response: string) => void }) => {
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
   const [snapshotModalOpen, setSnapshotModalOpen] = useState(false);
@@ -519,7 +519,8 @@ const WorkflowTabs = () => {
       
       <SnapshotModal 
         open={snapshotModalOpen} 
-        onOpenChange={setSnapshotModalOpen} 
+        onOpenChange={setSnapshotModalOpen}
+        onAddToChat={onAddToChat}
       />
     </TooltipProvider>
   );

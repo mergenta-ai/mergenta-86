@@ -8,6 +8,7 @@ import ChatInput from "@/components/ChatInput";
 interface SnapshotModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onAddToChat?: (message: string, response: string) => void;
 }
 
 interface ResultTile {
@@ -17,7 +18,7 @@ interface ResultTile {
   results: string[];
 }
 
-const SnapshotModal = ({ open, onOpenChange }: SnapshotModalProps) => {
+const SnapshotModal = ({ open, onOpenChange, onAddToChat }: SnapshotModalProps) => {
   const [searchValue, setSearchValue] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const [showResults, setShowResults] = useState(false);
@@ -98,7 +99,7 @@ const SnapshotModal = ({ open, onOpenChange }: SnapshotModalProps) => {
   const handleDropdownSelect = (option: string) => {
     setSearchValue(option);
     setShowDropdown(false);
-    handleSearchSubmit(option);
+    // Don't auto-submit, let user press send button
   };
 
   const handleSearchFocus = () => {
@@ -121,48 +122,39 @@ const SnapshotModal = ({ open, onOpenChange }: SnapshotModalProps) => {
     };
   }, []);
 
-  const menuItems = [
-    { icon: Pencil, label: "Beautiful Writing", action: () => console.log("Beautiful Writing") },
-    { icon: MessageSquare, label: "Smart Chat", action: () => console.log("Smart Chat") },
-    { icon: FileText, label: "Documents", action: () => console.log("Documents") },
-    { icon: Heart, label: "Love Letters", action: () => console.log("Love Letters") },
-    { icon: Mail, label: "Professional", action: () => console.log("Professional") },
-  ];
+  const handleContinueSearch = (message: string) => {
+    // Create response string from current results
+    const response = `**360° Snapshot Analysis for: "${searchValue}"**
+
+**Facts & Insights**
+What is true and relevant in the background?
+${resultTiles[0].results.map(r => `• ${r}`).join('\n')}
+
+**Opportunities** 
+Where the openings and upsides may be?
+${resultTiles[1].results.map(r => `• ${r}`).join('\n')}
+
+**Challenges**
+What hurdles and risks stand in the way?
+${resultTiles[2].results.map(r => `• ${r}`).join('\n')}
+
+**Next Moves**
+Practical steps to take things forward.
+${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
+
+    // Add to main chat and close modal
+    onAddToChat?.(searchValue, response);
+    onOpenChange(false);
+    
+    // Handle the new message
+    // This would go to main chat system
+    console.log('Continue search:', message);
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogOverlay className="bg-gradient-to-br from-mergenta-deep-violet/40 via-mergenta-violet/35 to-mergenta-magenta/30 backdrop-blur-sm" />
-      <DialogContent className="max-w-[1210px] max-h-[86vh] w-[105vw] h-[100vh] p-0 overflow-hidden bg-gradient-to-br from-pastel-lavender via-mergenta-light-violet to-pastel-magenta">
-        {/* Navigation Menu */}
-        <div className="absolute left-6 top-6 z-50">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="p-2 rounded-full bg-white/80 hover:bg-white transition-colors shadow-soft"
-              >
-                <Menu className="h-5 w-5 text-mergenta-dark-grey" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-56 p-2" align="start">
-              <div className="space-y-1">
-                {menuItems.map((item, idx) => (
-                  <Button
-                    key={idx}
-                    variant="ghost"
-                    className="w-full justify-start h-10 px-3"
-                    onClick={item.action}
-                  >
-                    <item.icon className="h-4 w-4 mr-3" />
-                    {item.label}
-                  </Button>
-                ))}
-              </div>
-            </PopoverContent>
-          </Popover>
-        </div>
-
+      <DialogContent className="max-w-[1210px] max-h-[86vh] w-[105vw] h-[100vh] p-0 overflow-hidden bg-gradient-to-br from-pastel-lavender via-mergenta-light-violet to-pastel-magenta border-0">
         {/* Close Button */}
         <button
           onClick={() => onOpenChange(false)}
@@ -196,6 +188,7 @@ const SnapshotModal = ({ open, onOpenChange }: SnapshotModalProps) => {
                   <ChatInput 
                     onSendMessage={handleSearchSubmit} 
                     isLoading={isLoading}
+                    initialValue={searchValue}
                   />
                 </div>
 
@@ -227,34 +220,34 @@ const SnapshotModal = ({ open, onOpenChange }: SnapshotModalProps) => {
           {showResults && (
             <div className="flex-1 px-8 pb-8">
               {/* Result Tiles */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 max-w-6xl mx-auto">
                 {resultTiles.map((tile, idx) => (
                   <div
                     key={idx}
-                    className="bg-white/30 backdrop-blur-sm rounded-2xl p-6 shadow-soft hover:shadow-elegant transition-all duration-300 transform hover:-translate-y-1 animate-in slide-in-from-bottom-4"
+                    className="bg-white/30 backdrop-blur-sm rounded-2xl p-4 shadow-soft hover:shadow-elegant transition-all duration-300 transform hover:-translate-y-1 animate-in slide-in-from-bottom-4 flex flex-col h-80"
                     style={{ animationDelay: `${idx * 100}ms` }}
                   >
-                    <div className="flex items-center mb-4">
-                      <div className="p-3 rounded-xl bg-white/40 mr-4">
-                        <tile.icon className="h-6 w-6 text-mergenta-violet" />
+                    <div className="flex items-center mb-3">
+                      <div className="p-2 rounded-xl bg-white/40 mr-3">
+                        <tile.icon className="h-5 w-5 text-mergenta-violet" />
                       </div>
-                      <div>
-                        <h3 className="text-xl font-semibold text-mergenta-deep-violet">
+                      <div className="flex-1">
+                        <h3 className="text-lg font-semibold text-mergenta-deep-violet">
                           {tile.title}
                         </h3>
-                        <p className="text-sm text-mergenta-dark-grey/80">
+                        <p className="text-xs text-mergenta-dark-grey/80">
                           {tile.subtitle}
                         </p>
                       </div>
                     </div>
                     
-                    <ul className="space-y-3">
+                    <ul className="space-y-2 flex-1 overflow-y-auto">
                       {tile.results.map((result, resultIdx) => (
                         <li
                           key={resultIdx}
-                          className="flex items-start text-sm text-mergenta-dark-grey"
+                          className="flex items-start text-xs text-mergenta-dark-grey"
                         >
-                          <div className="w-2 h-2 rounded-full bg-mergenta-violet mt-2 mr-3 flex-shrink-0" />
+                          <div className="w-1.5 h-1.5 rounded-full bg-mergenta-violet mt-1.5 mr-2 flex-shrink-0" />
                           <span>{result}</span>
                         </li>
                       ))}
@@ -271,7 +264,7 @@ const SnapshotModal = ({ open, onOpenChange }: SnapshotModalProps) => {
                   </p>
                 </div>
                 <ChatInput 
-                  onSendMessage={handleSearchSubmit} 
+                  onSendMessage={handleContinueSearch} 
                   isLoading={isLoading}
                 />
               </div>

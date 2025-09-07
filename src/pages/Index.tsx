@@ -29,6 +29,24 @@ const Index = () => {
     return responses[Math.floor(Math.random() * responses.length)];
   };
 
+  const handleAddToChat = (message: string, response: string) => {
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      text: message,
+      isUser: true,
+      timestamp: new Date(),
+    };
+
+    const aiMessage: Message = {
+      id: (Date.now() + 1).toString(),
+      text: response,
+      isUser: false,
+      timestamp: new Date(),
+    };
+
+    setMessages(prev => [...prev, userMessage, aiMessage]);
+  };
+
   const handleSendMessage = async (message: string) => {
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -86,7 +104,7 @@ const Index = () => {
         <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />
 
         {/* Workflow tabs */}
-        <WorkflowTabs />
+        <WorkflowTabs onAddToChat={handleAddToChat} />
 
         {/* Chat messages */}
         <main className="flex-1 flex flex-col">

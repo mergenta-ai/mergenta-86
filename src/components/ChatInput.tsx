@@ -5,10 +5,11 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/t
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
   isLoading?: boolean;
+  initialValue?: string;
 }
 
-const ChatInput = ({ onSendMessage, isLoading = false }: ChatInputProps) => {
-  const [input, setInput] = useState("");
+const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "" }: ChatInputProps) => {
+  const [input, setInput] = useState(initialValue);
   const [isRecording, setIsRecording] = useState(false);
   const [showModelDropdown, setShowModelDropdown] = useState(false);
   const modelDropdownRef = useRef<HTMLDivElement>(null);
@@ -67,7 +68,10 @@ const ChatInput = ({ onSendMessage, isLoading = false }: ChatInputProps) => {
     return "Voice input";
   };
 
-  // Close model dropdown when clicking outside
+  // Update input when initialValue changes
+  useEffect(() => {
+    setInput(initialValue);
+  }, [initialValue]);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (modelDropdownRef.current && !modelDropdownRef.current.contains(event.target as Node)) {
