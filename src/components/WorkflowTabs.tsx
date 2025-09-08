@@ -33,12 +33,14 @@ import AppointmentRequestHoverCard from "./hover-cards/AppointmentRequestHoverCa
 import PublicationRequestHoverCard from "./hover-cards/PublicationRequestHoverCard";
 import { SnapshotModal } from "./modals/SnapshotModal";
 import { POVLabModal } from "./modals/POVLabModal";
+import { PowerPlaybookModal } from "./modals/PowerPlaybookModal";
 
 const WorkflowTabs = ({ onAddToChat }: { onAddToChat?: (message: string, response: string) => void }) => {
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
   const [snapshotModalOpen, setSnapshotModalOpen] = useState(false);
   const [povLabModalOpen, setPovLabModalOpen] = useState(false);
+  const [powerPlaybookModalOpen, setPowerPlaybookModalOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const tabs = [
@@ -485,8 +487,13 @@ const WorkflowTabs = ({ onAddToChat }: { onAddToChat?: (message: string, respons
                       </div>
                     )}
                     {activeTab === "power-playbook" && (
-                      <div className="p-4 text-sm text-[#6F42C1]">
-                        Coming soon
+                      <div className="py-2">
+                        <button
+                          className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
+                          onClick={() => setPowerPlaybookModalOpen(true)}
+                        >
+                          Open Power Playbook
+                        </button>
                       </div>
                     )}
                     {activeTab === "experience-studio" && (
@@ -530,6 +537,12 @@ const WorkflowTabs = ({ onAddToChat }: { onAddToChat?: (message: string, respons
       <POVLabModal 
         open={povLabModalOpen} 
         onOpenChange={setPovLabModalOpen}
+        onAddToChat={onAddToChat}
+      />
+      
+      <PowerPlaybookModal 
+        open={powerPlaybookModalOpen} 
+        onOpenChange={setPowerPlaybookModalOpen}
         onAddToChat={onAddToChat}
       />
     </TooltipProvider>
