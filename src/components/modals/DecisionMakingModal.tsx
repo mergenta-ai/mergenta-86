@@ -134,14 +134,14 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                                 <SelectValue placeholder="Select decision area" />
                               </SelectTrigger>
                             </FormControl>
-                            <SelectContent className="bg-white backdrop-blur-md border border-white/50 shadow-2xl z-[300]" sideOffset={5}>
-                              <SelectItem value="business" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer">Business</SelectItem>
-                              <SelectItem value="career" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer">Career</SelectItem>
-                              <SelectItem value="finance" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer">Finance</SelectItem>
-                              <SelectItem value="personal" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer">Personal</SelectItem>
-                              <SelectItem value="health" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer">Health</SelectItem>
-                              <SelectItem value="family" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer">Family</SelectItem>
-                              <SelectItem value="lifestyle" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer">Lifestyle</SelectItem>
+                            <SelectContent className="bg-white/95 backdrop-blur-md border border-purple-200/50 shadow-2xl z-[300]" sideOffset={5}>
+                              <SelectItem value="business" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Business</SelectItem>
+                              <SelectItem value="career" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Career</SelectItem>
+                              <SelectItem value="finance" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Finance</SelectItem>
+                              <SelectItem value="personal" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Personal</SelectItem>
+                              <SelectItem value="health" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Health</SelectItem>
+                              <SelectItem value="family" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Family</SelectItem>
+                              <SelectItem value="lifestyle" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Lifestyle</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -164,11 +164,11 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                                 <SelectValue placeholder="Select timeframe" />
                               </SelectTrigger>
                             </FormControl>
-                            <SelectContent className="bg-white backdrop-blur-md border border-white/50 shadow-2xl z-[300]" sideOffset={5}>
-                              <SelectItem value="immediate" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer">Immediate</SelectItem>
-                              <SelectItem value="short-term" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer">Short Term</SelectItem>
-                              <SelectItem value="medium-term" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer">Medium Term</SelectItem>
-                              <SelectItem value="long-term" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer">Long Term</SelectItem>
+                            <SelectContent className="bg-white/95 backdrop-blur-md border border-purple-200/50 shadow-2xl z-[300]" sideOffset={5}>
+                              <SelectItem value="immediate" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Immediate</SelectItem>
+                              <SelectItem value="short-term" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Short Term</SelectItem>
+                              <SelectItem value="medium-term" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Medium Term</SelectItem>
+                              <SelectItem value="long-term" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Long Term</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -191,10 +191,10 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                                 <SelectValue placeholder="Select priority level" />
                               </SelectTrigger>
                             </FormControl>
-                            <SelectContent className="bg-white backdrop-blur-md border border-white/50 shadow-2xl z-[300]" sideOffset={5}>
-                              <SelectItem value="high" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer">High</SelectItem>
-                              <SelectItem value="medium" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer">Medium</SelectItem>
-                              <SelectItem value="low" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer">Low</SelectItem>
+                            <SelectContent className="bg-white/95 backdrop-blur-md border border-purple-200/50 shadow-2xl z-[300]" sideOffset={5}>
+                              <SelectItem value="high" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">High</SelectItem>
+                              <SelectItem value="medium" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Medium</SelectItem>
+                              <SelectItem value="low" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Low</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -217,10 +217,10 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                                 <SelectValue placeholder="Select risk sensitivity" />
                               </SelectTrigger>
                             </FormControl>
-                            <SelectContent className="bg-white backdrop-blur-md border border-white/50 shadow-2xl z-[300]" sideOffset={5}>
-                              <SelectItem value="risk-taking" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer">Risk-Taking</SelectItem>
-                              <SelectItem value="balanced" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer">Balanced</SelectItem>
-                              <SelectItem value="risk-averse" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer">Risk-Averse</SelectItem>
+                            <SelectContent className="bg-white/95 backdrop-blur-md border border-purple-200/50 shadow-2xl z-[300]" sideOffset={5}>
+                              <SelectItem value="risk-taking" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Risk-Taking</SelectItem>
+                              <SelectItem value="balanced" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Balanced</SelectItem>
+                              <SelectItem value="risk-averse" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Risk-Averse</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
