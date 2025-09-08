@@ -193,7 +193,8 @@ export const DecisionResultsModal = ({
                     
                     <Button
                       onClick={() => onExpandFurther(card.id)}
-                      className="w-full bg-violet-600 hover:bg-violet-700 text-white font-medium py-2 rounded-lg transition-all duration-300"
+                      variant="outline"
+                      className="w-full bg-mergenta-deep-violet/80 border-mergenta-deep-violet text-white hover:bg-mergenta-deep-violet font-medium py-2 rounded-lg transition-all duration-300"
                     >
                       Expand Further
                     </Button>

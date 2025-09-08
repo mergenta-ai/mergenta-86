@@ -203,7 +203,8 @@ export const DecisionDetailModal = ({
             <div className="flex justify-center pt-6">
               <Button
                 onClick={handleSearch}
-                className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white font-medium py-2 px-6 rounded-xl"
+                variant="outline"
+                className="flex items-center gap-2 bg-mergenta-deep-violet/80 border-mergenta-deep-violet text-white hover:bg-mergenta-deep-violet font-medium py-2 px-6 rounded-xl"
               >
                 <RotateCcw className="h-4 w-4" />
                 Search Again
