@@ -1,6 +1,7 @@
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import * as React from "react";
+import { createPortal } from "react-dom";
 import { cn } from "@/lib/utils";
 import { X, Target, ArrowLeft, ArrowRight, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -56,6 +57,9 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
     riskSensitivity: false
   });
 
+  const [dropdownPositions, setDropdownPositions] = React.useState<{[key: string]: {top: number, left: number, width: number}}>({});
+  const buttonRefs = React.useRef<{[key: string]: HTMLButtonElement | null}>({});
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -96,6 +100,19 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
   };
 
   const toggleDropdown = (field: keyof typeof openDropdowns) => {
+    if (!openDropdowns[field] && buttonRefs.current[field]) {
+      const button = buttonRefs.current[field]!;
+      const rect = button.getBoundingClientRect();
+      setDropdownPositions(prev => ({
+        ...prev,
+        [field]: {
+          top: rect.bottom + window.scrollY + 8,
+          left: rect.left + window.scrollX,
+          width: rect.width
+        }
+      }));
+    }
+    
     setOpenDropdowns(prev => ({
       ...prev,
       [field]: !prev[field]
@@ -117,6 +134,40 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     onRunPlaybook(values);
+  };
+
+  // Portal dropdown component
+  const PortalDropdown = ({ field, isOpen, options }: { field: string, isOpen: boolean, options: {value: string, label: string}[] }) => {
+    if (!isOpen || !dropdownPositions[field]) return null;
+    
+    const position = dropdownPositions[field];
+    
+    return createPortal(
+      <div 
+        className="fixed bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden animate-fade-in"
+        style={{
+          top: position.top,
+          left: position.left,
+          width: position.width,
+          zIndex: 999999,
+          position: 'fixed'
+        }}
+      >
+        <div className="py-1">
+          {options.map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => selectOption(field, option.value)}
+              className="w-full px-4 py-3 text-left hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium transition-colors"
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+      </div>,
+      document.body
+    );
   };
 
   return (
@@ -179,33 +230,20 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                           <div className="relative">
                             <FormControl>
                               <button
+                                ref={(el) => { buttonRefs.current['decisionArea'] = el; }}
                                 type="button"
                                 onClick={() => toggleDropdown('decisionArea')}
-                                className="w-full bg-white/95 backdrop-blur-sm border-white/50 hover:bg-white transition-colors text-gray-900 font-medium rounded-md px-3 py-2 text-left flex items-center justify-between"
+                                className="w-full bg-white/95 border-white/50 hover:bg-white transition-colors text-gray-900 font-medium rounded-md px-3 py-2 text-left flex items-center justify-between"
                               >
                                 <span>{getSelectedLabel('decisionArea', field.value)}</span>
                                 <ChevronDown className={`h-4 w-4 transition-transform ${openDropdowns.decisionArea ? 'rotate-180' : ''}`} />
                               </button>
                             </FormControl>
-                            {openDropdowns.decisionArea && (
-                              <div 
-                                className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden animate-fade-in"
-                                style={{ zIndex: 10000 }}
-                              >
-                                <div className="py-1">
-                                  {dropdownOptions.decisionArea.map((option) => (
-                                    <button
-                                      key={option.value}
-                                      type="button"
-                                      onClick={() => selectOption('decisionArea', option.value)}
-                                      className="w-full px-4 py-3 text-left hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium transition-colors"
-                                    >
-                                      {option.label}
-                                    </button>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
+                            <PortalDropdown 
+                              field="decisionArea" 
+                              isOpen={openDropdowns.decisionArea} 
+                              options={dropdownOptions.decisionArea} 
+                            />
                           </div>
                           <FormMessage />
                         </FormItem>
@@ -224,33 +262,20 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                           <div className="relative">
                             <FormControl>
                               <button
+                                ref={(el) => { buttonRefs.current['timeframe'] = el; }}
                                 type="button"
                                 onClick={() => toggleDropdown('timeframe')}
-                                className="w-full bg-white/95 backdrop-blur-sm border-white/50 hover:bg-white transition-colors text-gray-900 font-medium rounded-md px-3 py-2 text-left flex items-center justify-between"
+                                className="w-full bg-white/95 border-white/50 hover:bg-white transition-colors text-gray-900 font-medium rounded-md px-3 py-2 text-left flex items-center justify-between"
                               >
                                 <span>{getSelectedLabel('timeframe', field.value)}</span>
                                 <ChevronDown className={`h-4 w-4 transition-transform ${openDropdowns.timeframe ? 'rotate-180' : ''}`} />
                               </button>
                             </FormControl>
-                            {openDropdowns.timeframe && (
-                              <div 
-                                className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden animate-fade-in"
-                                style={{ zIndex: 10000 }}
-                              >
-                                <div className="py-1">
-                                  {dropdownOptions.timeframe.map((option) => (
-                                    <button
-                                      key={option.value}
-                                      type="button"
-                                      onClick={() => selectOption('timeframe', option.value)}
-                                      className="w-full px-4 py-3 text-left hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium transition-colors"
-                                    >
-                                      {option.label}
-                                    </button>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
+                            <PortalDropdown 
+                              field="timeframe" 
+                              isOpen={openDropdowns.timeframe} 
+                              options={dropdownOptions.timeframe} 
+                            />
                           </div>
                           <FormMessage />
                         </FormItem>
@@ -269,33 +294,20 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                           <div className="relative">
                             <FormControl>
                               <button
+                                ref={(el) => { buttonRefs.current['priorityLevel'] = el; }}
                                 type="button"
                                 onClick={() => toggleDropdown('priorityLevel')}
-                                className="w-full bg-white/95 backdrop-blur-sm border-white/50 hover:bg-white transition-colors text-gray-900 font-medium rounded-md px-3 py-2 text-left flex items-center justify-between"
+                                className="w-full bg-white/95 border-white/50 hover:bg-white transition-colors text-gray-900 font-medium rounded-md px-3 py-2 text-left flex items-center justify-between"
                               >
                                 <span>{getSelectedLabel('priorityLevel', field.value)}</span>
                                 <ChevronDown className={`h-4 w-4 transition-transform ${openDropdowns.priorityLevel ? 'rotate-180' : ''}`} />
                               </button>
                             </FormControl>
-                            {openDropdowns.priorityLevel && (
-                              <div 
-                                className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden animate-fade-in"
-                                style={{ zIndex: 10000 }}
-                              >
-                                <div className="py-1">
-                                  {dropdownOptions.priorityLevel.map((option) => (
-                                    <button
-                                      key={option.value}
-                                      type="button"
-                                      onClick={() => selectOption('priorityLevel', option.value)}
-                                      className="w-full px-4 py-3 text-left hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium transition-colors"
-                                    >
-                                      {option.label}
-                                    </button>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
+                            <PortalDropdown 
+                              field="priorityLevel" 
+                              isOpen={openDropdowns.priorityLevel} 
+                              options={dropdownOptions.priorityLevel} 
+                            />
                           </div>
                           <FormMessage />
                         </FormItem>
@@ -314,33 +326,20 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                           <div className="relative">
                             <FormControl>
                               <button
+                                ref={(el) => { buttonRefs.current['riskSensitivity'] = el; }}
                                 type="button"
                                 onClick={() => toggleDropdown('riskSensitivity')}
-                                className="w-full bg-white/95 backdrop-blur-sm border-white/50 hover:bg-white transition-colors text-gray-900 font-medium rounded-md px-3 py-2 text-left flex items-center justify-between"
+                                className="w-full bg-white/95 border-white/50 hover:bg-white transition-colors text-gray-900 font-medium rounded-md px-3 py-2 text-left flex items-center justify-between"
                               >
                                 <span>{getSelectedLabel('riskSensitivity', field.value)}</span>
                                 <ChevronDown className={`h-4 w-4 transition-transform ${openDropdowns.riskSensitivity ? 'rotate-180' : ''}`} />
                               </button>
                             </FormControl>
-                            {openDropdowns.riskSensitivity && (
-                              <div 
-                                className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden animate-fade-in"
-                                style={{ zIndex: 10000 }}
-                              >
-                                <div className="py-1">
-                                  {dropdownOptions.riskSensitivity.map((option) => (
-                                    <button
-                                      key={option.value}
-                                      type="button"
-                                      onClick={() => selectOption('riskSensitivity', option.value)}
-                                      className="w-full px-4 py-3 text-left hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium transition-colors"
-                                    >
-                                      {option.label}
-                                    </button>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
+                            <PortalDropdown 
+                              field="riskSensitivity" 
+                              isOpen={openDropdowns.riskSensitivity} 
+                              options={dropdownOptions.riskSensitivity} 
+                            />
                           </div>
                           <FormMessage />
                         </FormItem>
@@ -360,7 +359,7 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                         <FormControl>
                           <Textarea
                             placeholder="Describe the decision you need to make, the options you're considering, and any constraints or concerns you have..."
-                            className="min-h-[120px] bg-white/95 backdrop-blur-sm border-white/50 resize-none hover:bg-white transition-colors text-gray-900 font-medium placeholder:text-gray-500"
+                            className="min-h-[120px] bg-white/95 border-white/50 resize-none hover:bg-white transition-colors text-gray-900 font-medium placeholder:text-gray-500"
                             {...field}
                           />
                         </FormControl>
