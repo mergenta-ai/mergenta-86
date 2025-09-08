@@ -131,8 +131,9 @@ export const DecisionResultsModal = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <CustomDialogContent 
-        className="fixed inset-0 w-screen h-screen max-w-none max-h-none m-0 p-0 rounded-none border-none z-[100] bg-gradient-to-br from-pastel-lavender via-mergenta-light-violet to-pastel-magenta"
+        className="fixed inset-0 w-screen h-screen max-w-none max-h-none m-0 p-0 rounded-none border-none z-[100]"
         style={{ 
+          backgroundColor: '#F3E1F3',
           position: 'fixed', 
           top: 0, 
           left: 0, 
@@ -159,31 +160,32 @@ export const DecisionResultsModal = ({
         </button>
 
         {/* Header */}
-        <div className="flex flex-col items-center pt-8 pb-4">
-          <h1 className="text-4xl font-bold text-mergenta-deep-violet mb-2">Decision Making Playbook</h1>
+        <div className="flex flex-col items-center pt-12 pb-8">
+          <h1 className="text-4xl font-bold text-mergenta-dark-grey mb-4">Decision Making Playbook</h1>
         </div>
 
         {/* Content area */}
-        <div className="flex-1 px-8 pb-6 overflow-hidden">
-          <div className="max-w-6xl mx-auto">
+        <div className="flex-1 px-12 pb-12 overflow-y-auto max-h-[calc(100vh-200px)]">
+          <div className="max-w-7xl mx-auto space-y-8">
             
             {/* Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {decisionCards.map((card, index) => (
                 <div 
                   key={card.id}
-                  className="bg-white/30 backdrop-blur-sm rounded-2xl p-4 shadow-soft hover:shadow-elegant transition-all duration-300 transform hover:-translate-y-1 animate-in slide-in-from-bottom-4 flex flex-col"
+                  className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/25 transition-all duration-300 animate-fade-in"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <div className="space-y-3 flex-1">
+                  <div className="space-y-4">
                     <div>
-                      <h3 className="text-lg font-semibold text-mergenta-deep-violet mb-1">{card.title}</h3>
+                      <h3 className="text-xl font-bold text-mergenta-dark-grey mb-2">{card.title}</h3>
+                      <p className="text-mergenta-dark-grey/70 text-sm">{card.subtitle}</p>
                     </div>
                     
-                    <ul className="space-y-1.5 flex-1">
+                    <ul className="space-y-2">
                       {card.bullets.map((bullet, bulletIndex) => (
-                        <li key={bulletIndex} className="text-sm text-mergenta-dark-grey flex items-start">
-                          <div className="w-1.5 h-1.5 rounded-full bg-mergenta-violet mt-1.5 mr-2 flex-shrink-0" />
+                        <li key={bulletIndex} className="text-sm text-mergenta-dark-grey/80 flex items-start">
+                          <span className="text-purple-600 mr-2 mt-1 flex-shrink-0">•</span>
                           <span>{bullet}</span>
                         </li>
                       ))}
@@ -191,7 +193,7 @@ export const DecisionResultsModal = ({
                     
                     <Button
                       onClick={() => onExpandFurther(card.id)}
-                      className="w-full bg-violet-600 hover:bg-violet-700 text-white font-medium py-2 rounded-lg transition-all duration-300 mt-auto"
+                      className="w-full bg-violet-600 hover:bg-violet-700 text-white font-medium py-2 rounded-lg transition-all duration-300"
                     >
                       Expand Further
                     </Button>
@@ -202,7 +204,7 @@ export const DecisionResultsModal = ({
 
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
               <Button
                 onClick={onCopyAll}
                 variant="outline"
