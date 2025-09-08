@@ -11,7 +11,7 @@ export const PowerPlaybookModal = ({ open, onOpenChange, onAddToChat }: PowerPla
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent 
-        className="fixed inset-0 w-screen h-screen max-w-none max-h-none m-0 p-0 bg-pastel-violet rounded-none border-none z-[100]"
+        className="fixed inset-0 w-screen h-screen max-w-none max-h-none m-0 p-0 bg-pastel-violet rounded-none border-none z-[100] [&>button]:hidden"
         style={{ 
           position: 'fixed', 
           top: 0, 
@@ -26,9 +26,9 @@ export const PowerPlaybookModal = ({ open, onOpenChange, onAddToChat }: PowerPla
         {/* Close button */}
         <button
           onClick={() => onOpenChange(false)}
-          className="absolute top-6 right-6 z-50 p-1 text-mergenta-dark-grey hover:text-mergenta-deep-violet transition-colors"
+          className="absolute top-6 right-6 z-50 w-10 h-10 bg-white rounded-full flex items-center justify-center text-mergenta-dark-grey hover:text-mergenta-deep-violet transition-colors shadow-md"
         >
-          <X className="h-6 w-6" />
+          <X className="h-5 w-5" />
         </button>
 
         {/* Header */}

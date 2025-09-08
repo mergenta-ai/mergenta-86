@@ -193,10 +193,13 @@ const WorkflowTabs = ({ onAddToChat }: { onAddToChat?: (message: string, respons
               <div key={index} className="relative">
                 <button
                   onMouseEnter={() => {
+                    if (tab.id !== "power-playbook") {
+                      handleTabHover(tab.id);
+                    }
+                  }}
+                  onClick={() => {
                     if (tab.id === "power-playbook") {
                       setPowerPlaybookModalOpen(true);
-                    } else {
-                      handleTabHover(tab.id);
                     }
                   }}
                   onMouseLeave={handleTabLeave}
