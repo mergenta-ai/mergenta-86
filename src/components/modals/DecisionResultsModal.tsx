@@ -161,10 +161,7 @@ export const DecisionResultsModal = ({
 
         {/* Header */}
         <div className="flex flex-col items-center pt-12 pb-8">
-          <h1 className="text-4xl font-bold text-mergenta-dark-grey mb-4">Decision Making Toolkit</h1>
-          <p className="text-lg text-mergenta-dark-grey/80 max-w-2xl text-center">
-            Six powerful frameworks to guide your decision-making process
-          </p>
+          <h1 className="text-4xl font-bold text-mergenta-dark-grey mb-4">Decision Making Playbook</h1>
         </div>
 
         {/* Content area */}
@@ -196,7 +193,7 @@ export const DecisionResultsModal = ({
                     
                     <Button
                       onClick={() => onExpandFurther(card.id)}
-                      className="w-full bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white font-medium py-2 rounded-lg transition-all duration-300"
+                      className="w-full bg-violet-600 hover:bg-violet-700 text-white font-medium py-2 rounded-lg transition-all duration-300"
                     >
                       Expand Further
                     </Button>
@@ -205,20 +202,6 @@ export const DecisionResultsModal = ({
               ))}
             </div>
 
-            {/* Search Bar */}
-            <div className="max-w-2xl mx-auto">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-mergenta-dark-grey/60 h-5 w-5" />
-                <Input
-                  type="text"
-                  placeholder="Search for specific decision-making guidance..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  className="pl-10 bg-white/50 backdrop-blur-sm border-white/20 rounded-xl h-12 text-mergenta-dark-grey placeholder:text-mergenta-dark-grey/60"
-                />
-              </div>
-            </div>
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
