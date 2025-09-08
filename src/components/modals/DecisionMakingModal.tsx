@@ -162,14 +162,14 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
         </div>
 
         {/* Content area */}
-        <div className="flex-1 px-12 pb-12 overflow-y-auto max-h-[calc(100vh-200px)]">
-          <div className="max-w-4xl mx-auto">
+        <div className="flex-1 px-12 pb-12 max-h-[calc(100vh-200px)]">
+          <div className="max-w-4xl mx-auto h-full overflow-y-auto">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 {/* Form Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Decision Area */}
-                  <div className="bg-gradient-to-r from-purple-600 to-pink-600 backdrop-blur-md rounded-2xl p-6 border border-purple-300/60 shadow-lg">
+                  <div className="bg-gradient-to-r from-purple-600 to-pink-600 backdrop-blur-md rounded-2xl p-6 border border-purple-300/60 shadow-lg relative overflow-visible">
                     <FormField
                       control={form.control}
                       name="decisionArea"
@@ -188,7 +188,10 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                               </button>
                             </FormControl>
                             {openDropdowns.decisionArea && (
-                              <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200 z-[9999] overflow-hidden">
+                              <div 
+                                className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden animate-fade-in"
+                                style={{ zIndex: 10000 }}
+                              >
                                 <div className="py-1">
                                   {dropdownOptions.decisionArea.map((option) => (
                                     <button
@@ -211,7 +214,7 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                   </div>
 
                   {/* Timeframe */}
-                  <div className="bg-gradient-to-r from-purple-600 to-pink-600 backdrop-blur-md rounded-2xl p-6 border border-purple-300/60 shadow-lg">
+                  <div className="bg-gradient-to-r from-purple-600 to-pink-600 backdrop-blur-md rounded-2xl p-6 border border-purple-300/60 shadow-lg relative overflow-visible">
                     <FormField
                       control={form.control}
                       name="timeframe"
@@ -230,7 +233,10 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                               </button>
                             </FormControl>
                             {openDropdowns.timeframe && (
-                              <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200 z-[9999] overflow-hidden">
+                              <div 
+                                className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden animate-fade-in"
+                                style={{ zIndex: 10000 }}
+                              >
                                 <div className="py-1">
                                   {dropdownOptions.timeframe.map((option) => (
                                     <button
@@ -253,7 +259,7 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                   </div>
 
                   {/* Priority Level */}
-                  <div className="bg-gradient-to-r from-purple-600 to-pink-600 backdrop-blur-md rounded-2xl p-6 border border-purple-300/60 shadow-lg">
+                  <div className="bg-gradient-to-r from-purple-600 to-pink-600 backdrop-blur-md rounded-2xl p-6 border border-purple-300/60 shadow-lg relative overflow-visible">
                     <FormField
                       control={form.control}
                       name="priorityLevel"
@@ -272,7 +278,10 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                               </button>
                             </FormControl>
                             {openDropdowns.priorityLevel && (
-                              <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200 z-[9999] overflow-hidden">
+                              <div 
+                                className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden animate-fade-in"
+                                style={{ zIndex: 10000 }}
+                              >
                                 <div className="py-1">
                                   {dropdownOptions.priorityLevel.map((option) => (
                                     <button
@@ -295,7 +304,7 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                   </div>
 
                   {/* Risk Sensitivity */}
-                  <div className="bg-gradient-to-r from-purple-600 to-pink-600 backdrop-blur-md rounded-2xl p-6 border border-purple-300/60 shadow-lg">
+                  <div className="bg-gradient-to-r from-purple-600 to-pink-600 backdrop-blur-md rounded-2xl p-6 border border-purple-300/60 shadow-lg relative overflow-visible">
                     <FormField
                       control={form.control}
                       name="riskSensitivity"
@@ -314,7 +323,10 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                               </button>
                             </FormControl>
                             {openDropdowns.riskSensitivity && (
-                              <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200 z-[9999] overflow-hidden">
+                              <div 
+                                className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden animate-fade-in"
+                                style={{ zIndex: 10000 }}
+                              >
                                 <div className="py-1">
                                   {dropdownOptions.riskSensitivity.map((option) => (
                                     <button
