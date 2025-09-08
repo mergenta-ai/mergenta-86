@@ -2,17 +2,10 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { X, Target, ArrowLeft, ArrowRight } from "lucide-react";
+import { X, Target, ArrowLeft, ArrowRight, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -56,6 +49,13 @@ interface DecisionMakingModalProps {
 }
 
 export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: DecisionMakingModalProps) => {
+  const [openDropdowns, setOpenDropdowns] = React.useState({
+    decisionArea: false,
+    timeframe: false,
+    priorityLevel: false,
+    riskSensitivity: false
+  });
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -66,6 +66,54 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
       challenge: "",
     },
   });
+
+  const dropdownOptions = {
+    decisionArea: [
+      { value: "business", label: "Business" },
+      { value: "career", label: "Career" },
+      { value: "finance", label: "Finance" },
+      { value: "personal", label: "Personal" },
+      { value: "health", label: "Health" },
+      { value: "family", label: "Family" },
+      { value: "lifestyle", label: "Lifestyle" }
+    ],
+    timeframe: [
+      { value: "immediate", label: "Immediate" },
+      { value: "short-term", label: "Short Term" },
+      { value: "medium-term", label: "Medium Term" },
+      { value: "long-term", label: "Long Term" }
+    ],
+    priorityLevel: [
+      { value: "high", label: "High" },
+      { value: "medium", label: "Medium" },
+      { value: "low", label: "Low" }
+    ],
+    riskSensitivity: [
+      { value: "risk-taking", label: "Risk-Taking" },
+      { value: "balanced", label: "Balanced" },
+      { value: "risk-averse", label: "Risk-Averse" }
+    ]
+  };
+
+  const toggleDropdown = (field: keyof typeof openDropdowns) => {
+    setOpenDropdowns(prev => ({
+      ...prev,
+      [field]: !prev[field]
+    }));
+  };
+
+  const selectOption = (field: string, value: string) => {
+    form.setValue(field as keyof z.infer<typeof formSchema>, value);
+    setOpenDropdowns(prev => ({
+      ...prev,
+      [field]: false
+    }));
+  };
+
+  const getSelectedLabel = (field: keyof typeof dropdownOptions, value: string) => {
+    const option = dropdownOptions[field].find(opt => opt.value === value);
+    return option ? option.label : `Select ${field.replace(/([A-Z])/g, ' $1').toLowerCase()}`;
+  };
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     onRunPlaybook(values);
@@ -128,22 +176,34 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-lg font-semibold text-white drop-shadow-md">Decision Area</FormLabel>
-                          <Select onValueChange={field.onChange} value={field.value}>
+                          <div className="relative">
                             <FormControl>
-                              <SelectTrigger className="bg-white/95 backdrop-blur-sm border-white/50 hover:bg-white transition-colors text-gray-900 font-medium">
-                                <SelectValue placeholder="Select decision area" />
-                              </SelectTrigger>
+                              <button
+                                type="button"
+                                onClick={() => toggleDropdown('decisionArea')}
+                                className="w-full bg-white/95 backdrop-blur-sm border-white/50 hover:bg-white transition-colors text-gray-900 font-medium rounded-md px-3 py-2 text-left flex items-center justify-between"
+                              >
+                                <span>{getSelectedLabel('decisionArea', field.value)}</span>
+                                <ChevronDown className={`h-4 w-4 transition-transform ${openDropdowns.decisionArea ? 'rotate-180' : ''}`} />
+                              </button>
                             </FormControl>
-                            <SelectContent className="bg-white border border-gray-300 shadow-2xl z-[9999] max-h-[200px] overflow-y-auto" sideOffset={5} align="start" position="popper">
-                              <SelectItem value="business" className="hover:bg-purple-100 focus:bg-purple-100 cursor-pointer text-gray-900 font-medium px-3 py-2">Business</SelectItem>
-                              <SelectItem value="career" className="hover:bg-purple-100 focus:bg-purple-100 cursor-pointer text-gray-900 font-medium px-3 py-2">Career</SelectItem>
-                              <SelectItem value="finance" className="hover:bg-purple-100 focus:bg-purple-100 cursor-pointer text-gray-900 font-medium px-3 py-2">Finance</SelectItem>
-                              <SelectItem value="personal" className="hover:bg-purple-100 focus:bg-purple-100 cursor-pointer text-gray-900 font-medium px-3 py-2">Personal</SelectItem>
-                              <SelectItem value="health" className="hover:bg-purple-100 focus:bg-purple-100 cursor-pointer text-gray-900 font-medium px-3 py-2">Health</SelectItem>
-                              <SelectItem value="family" className="hover:bg-purple-100 focus:bg-purple-100 cursor-pointer text-gray-900 font-medium px-3 py-2">Family</SelectItem>
-                              <SelectItem value="lifestyle" className="hover:bg-purple-100 focus:bg-purple-100 cursor-pointer text-gray-900 font-medium px-3 py-2">Lifestyle</SelectItem>
-                            </SelectContent>
-                          </Select>
+                            {openDropdowns.decisionArea && (
+                              <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden">
+                                <div className="py-1">
+                                  {dropdownOptions.decisionArea.map((option) => (
+                                    <button
+                                      key={option.value}
+                                      type="button"
+                                      onClick={() => selectOption('decisionArea', option.value)}
+                                      className="w-full px-4 py-3 text-left hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium transition-colors"
+                                    >
+                                      {option.label}
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -158,19 +218,34 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-lg font-semibold text-white drop-shadow-md">Timeframe</FormLabel>
-                          <Select onValueChange={field.onChange} value={field.value}>
+                          <div className="relative">
                             <FormControl>
-                              <SelectTrigger className="bg-white/95 backdrop-blur-sm border-white/50 hover:bg-white transition-colors text-gray-900 font-medium">
-                                <SelectValue placeholder="Select timeframe" />
-                              </SelectTrigger>
+                              <button
+                                type="button"
+                                onClick={() => toggleDropdown('timeframe')}
+                                className="w-full bg-white/95 backdrop-blur-sm border-white/50 hover:bg-white transition-colors text-gray-900 font-medium rounded-md px-3 py-2 text-left flex items-center justify-between"
+                              >
+                                <span>{getSelectedLabel('timeframe', field.value)}</span>
+                                <ChevronDown className={`h-4 w-4 transition-transform ${openDropdowns.timeframe ? 'rotate-180' : ''}`} />
+                              </button>
                             </FormControl>
-                            <SelectContent className="bg-white border border-gray-300 shadow-2xl z-[9999] max-h-[200px] overflow-y-auto" sideOffset={5} align="start" position="popper">
-                              <SelectItem value="immediate" className="hover:bg-purple-100 focus:bg-purple-100 cursor-pointer text-gray-900 font-medium px-3 py-2">Immediate</SelectItem>
-                              <SelectItem value="short-term" className="hover:bg-purple-100 focus:bg-purple-100 cursor-pointer text-gray-900 font-medium px-3 py-2">Short Term</SelectItem>
-                              <SelectItem value="medium-term" className="hover:bg-purple-100 focus:bg-purple-100 cursor-pointer text-gray-900 font-medium px-3 py-2">Medium Term</SelectItem>
-                              <SelectItem value="long-term" className="hover:bg-purple-100 focus:bg-purple-100 cursor-pointer text-gray-900 font-medium px-3 py-2">Long Term</SelectItem>
-                            </SelectContent>
-                          </Select>
+                            {openDropdowns.timeframe && (
+                              <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden">
+                                <div className="py-1">
+                                  {dropdownOptions.timeframe.map((option) => (
+                                    <button
+                                      key={option.value}
+                                      type="button"
+                                      onClick={() => selectOption('timeframe', option.value)}
+                                      className="w-full px-4 py-3 text-left hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium transition-colors"
+                                    >
+                                      {option.label}
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -185,18 +260,34 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-lg font-semibold text-white drop-shadow-md">Priority Level</FormLabel>
-                          <Select onValueChange={field.onChange} value={field.value}>
+                          <div className="relative">
                             <FormControl>
-                              <SelectTrigger className="bg-white/95 backdrop-blur-sm border-white/50 hover:bg-white transition-colors text-gray-900 font-medium">
-                                <SelectValue placeholder="Select priority level" />
-                              </SelectTrigger>
+                              <button
+                                type="button"
+                                onClick={() => toggleDropdown('priorityLevel')}
+                                className="w-full bg-white/95 backdrop-blur-sm border-white/50 hover:bg-white transition-colors text-gray-900 font-medium rounded-md px-3 py-2 text-left flex items-center justify-between"
+                              >
+                                <span>{getSelectedLabel('priorityLevel', field.value)}</span>
+                                <ChevronDown className={`h-4 w-4 transition-transform ${openDropdowns.priorityLevel ? 'rotate-180' : ''}`} />
+                              </button>
                             </FormControl>
-                            <SelectContent className="bg-white border border-gray-300 shadow-2xl z-[9999] max-h-[200px] overflow-y-auto" sideOffset={5} align="start" position="popper">
-                              <SelectItem value="high" className="hover:bg-purple-100 focus:bg-purple-100 cursor-pointer text-gray-900 font-medium px-3 py-2">High</SelectItem>
-                              <SelectItem value="medium" className="hover:bg-purple-100 focus:bg-purple-100 cursor-pointer text-gray-900 font-medium px-3 py-2">Medium</SelectItem>
-                              <SelectItem value="low" className="hover:bg-purple-100 focus:bg-purple-100 cursor-pointer text-gray-900 font-medium px-3 py-2">Low</SelectItem>
-                            </SelectContent>
-                          </Select>
+                            {openDropdowns.priorityLevel && (
+                              <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden">
+                                <div className="py-1">
+                                  {dropdownOptions.priorityLevel.map((option) => (
+                                    <button
+                                      key={option.value}
+                                      type="button"
+                                      onClick={() => selectOption('priorityLevel', option.value)}
+                                      className="w-full px-4 py-3 text-left hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium transition-colors"
+                                    >
+                                      {option.label}
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -211,18 +302,34 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-lg font-semibold text-white drop-shadow-md">Risk Sensitivity</FormLabel>
-                          <Select onValueChange={field.onChange} value={field.value}>
+                          <div className="relative">
                             <FormControl>
-                              <SelectTrigger className="bg-white/95 backdrop-blur-sm border-white/50 hover:bg-white transition-colors text-gray-900 font-medium">
-                                <SelectValue placeholder="Select risk sensitivity" />
-                              </SelectTrigger>
+                              <button
+                                type="button"
+                                onClick={() => toggleDropdown('riskSensitivity')}
+                                className="w-full bg-white/95 backdrop-blur-sm border-white/50 hover:bg-white transition-colors text-gray-900 font-medium rounded-md px-3 py-2 text-left flex items-center justify-between"
+                              >
+                                <span>{getSelectedLabel('riskSensitivity', field.value)}</span>
+                                <ChevronDown className={`h-4 w-4 transition-transform ${openDropdowns.riskSensitivity ? 'rotate-180' : ''}`} />
+                              </button>
                             </FormControl>
-                            <SelectContent className="bg-white border border-gray-300 shadow-2xl z-[9999] max-h-[200px] overflow-y-auto" sideOffset={5} align="start" position="popper">
-                              <SelectItem value="risk-taking" className="hover:bg-purple-100 focus:bg-purple-100 cursor-pointer text-gray-900 font-medium px-3 py-2">Risk-Taking</SelectItem>
-                              <SelectItem value="balanced" className="hover:bg-purple-100 focus:bg-purple-100 cursor-pointer text-gray-900 font-medium px-3 py-2">Balanced</SelectItem>
-                              <SelectItem value="risk-averse" className="hover:bg-purple-100 focus:bg-purple-100 cursor-pointer text-gray-900 font-medium px-3 py-2">Risk-Averse</SelectItem>
-                            </SelectContent>
-                          </Select>
+                            {openDropdowns.riskSensitivity && (
+                              <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden">
+                                <div className="py-1">
+                                  {dropdownOptions.riskSensitivity.map((option) => (
+                                    <button
+                                      key={option.value}
+                                      type="button"
+                                      onClick={() => selectOption('riskSensitivity', option.value)}
+                                      className="w-full px-4 py-3 text-left hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium transition-colors"
+                                    >
+                                      {option.label}
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
                           <FormMessage />
                         </FormItem>
                       )}
