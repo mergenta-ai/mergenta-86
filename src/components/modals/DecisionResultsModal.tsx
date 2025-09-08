@@ -160,35 +160,30 @@ export const DecisionResultsModal = ({
         </button>
 
         {/* Header */}
-        <div className="flex flex-col items-center pt-12 pb-8">
-          <h1 className="text-4xl font-bold text-mergenta-dark-grey mb-4">Decision Making Toolkit</h1>
-          <p className="text-lg text-mergenta-dark-grey/80 max-w-2xl text-center">
-            Six powerful frameworks to guide your decision-making process
-          </p>
+        <div className="flex flex-col items-center pt-8 pb-4">
+          <h1 className="text-4xl font-bold text-mergenta-dark-grey mb-2">Decision Making Playbook</h1>
         </div>
 
         {/* Content area */}
-        <div className="flex-1 px-12 pb-12 overflow-y-auto max-h-[calc(100vh-200px)]">
-          <div className="max-w-7xl mx-auto space-y-8">
-            
+        <div className="flex-1 px-8 pb-6">
+          <div className="max-w-6xl mx-auto">
             {/* Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
               {decisionCards.map((card, index) => (
                 <div 
                   key={card.id}
-                  className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/25 transition-all duration-300 animate-fade-in"
+                  className="bg-gradient-to-r from-purple-600 to-pink-600 backdrop-blur-md rounded-2xl p-4 border border-purple-300/60 shadow-lg transition-all duration-300 animate-fade-in"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     <div>
-                      <h3 className="text-xl font-bold text-mergenta-dark-grey mb-2">{card.title}</h3>
-                      <p className="text-mergenta-dark-grey/70 text-sm">{card.subtitle}</p>
+                      <h3 className="text-lg font-bold text-white mb-1">{card.title}</h3>
                     </div>
                     
-                    <ul className="space-y-2">
+                    <ul className="space-y-1">
                       {card.bullets.map((bullet, bulletIndex) => (
-                        <li key={bulletIndex} className="text-sm text-mergenta-dark-grey/80 flex items-start">
-                          <span className="text-purple-600 mr-2 mt-1 flex-shrink-0">•</span>
+                        <li key={bulletIndex} className="text-sm text-white/90 flex items-start">
+                          <span className="text-white mr-2 mt-0.5 flex-shrink-0">•</span>
                           <span>{bullet}</span>
                         </li>
                       ))}
@@ -196,7 +191,7 @@ export const DecisionResultsModal = ({
                     
                     <Button
                       onClick={() => onExpandFurther(card.id)}
-                      className="w-full bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white font-medium py-2 rounded-lg transition-all duration-300"
+                      className="w-full bg-white/20 hover:bg-white/30 text-white font-medium py-2 rounded-lg transition-all duration-300 border border-white/20"
                     >
                       Expand Further
                     </Button>
@@ -205,35 +200,18 @@ export const DecisionResultsModal = ({
               ))}
             </div>
 
-            {/* Search Bar */}
-            <div className="max-w-2xl mx-auto">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-mergenta-dark-grey/60 h-5 w-5" />
-                <Input
-                  type="text"
-                  placeholder="Search for specific decision-making guidance..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  className="pl-10 bg-white/50 backdrop-blur-sm border-white/20 rounded-xl h-12 text-mergenta-dark-grey placeholder:text-mergenta-dark-grey/60"
-                />
-              </div>
-            </div>
-
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
               <Button
                 onClick={onCopyAll}
-                variant="outline"
-                className="flex items-center gap-2 bg-white/30 backdrop-blur-sm border-white/20 text-mergenta-dark-grey hover:bg-white/40 rounded-xl"
+                className="flex items-center gap-2 bg-white/30 backdrop-blur-sm border border-white/20 text-mergenta-dark-grey hover:bg-white/40 rounded-xl"
               >
                 <Copy className="h-4 w-4" />
                 Copy All Suggestions
               </Button>
               <Button
                 onClick={onStartAgain}
-                variant="outline"
-                className="flex items-center gap-2 bg-white/30 backdrop-blur-sm border-white/20 text-mergenta-dark-grey hover:bg-white/40 rounded-xl"
+                className="flex items-center gap-2 bg-white/30 backdrop-blur-sm border border-white/20 text-mergenta-dark-grey hover:bg-white/40 rounded-xl"
               >
                 <RotateCcw className="h-4 w-4" />
                 Start Again

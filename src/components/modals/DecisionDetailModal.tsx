@@ -155,24 +155,38 @@ export const DecisionDetailModal = ({
         </button>
 
         {/* Header */}
-        <div className="flex flex-col items-center pt-12 pb-8">
-          <h1 className="text-4xl font-bold text-mergenta-dark-grey mb-4">{content.title}</h1>
-          <p className="text-lg text-mergenta-dark-grey/80 max-w-2xl text-center">
-            {content.subtitle}
-          </p>
+        <div className="flex flex-col items-center pt-8 pb-4">
+          <h1 className="text-3xl font-bold text-mergenta-dark-grey mb-2">{content.title}</h1>
         </div>
 
         {/* Content area */}
-        <div className="flex-1 px-12 pb-12 overflow-y-auto max-h-[calc(100vh-200px)]">
-          <div className="max-w-4xl mx-auto space-y-8">
-            
-            {/* Search Bar */}
-            <div className="max-w-2xl mx-auto">
+        <div className="flex-1 px-8 pb-6">
+          <div className="max-w-5xl mx-auto">
+            {/* Detailed Content */}
+            <div className="space-y-4 mb-6">
+              {content.details.map((detail, index) => (
+                <div 
+                  key={index}
+                  className="bg-gradient-to-r from-purple-600 to-pink-600 backdrop-blur-md rounded-2xl p-4 border border-purple-300/60 shadow-lg animate-fade-in"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <div className="flex items-start space-x-3">
+                    <div className="flex-shrink-0 w-6 h-6 bg-white/20 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                      {index + 1}
+                    </div>
+                    <p className="text-white/90 leading-relaxed text-sm">{detail}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Search Bar Below Results */}
+            <div className="max-w-3xl mx-auto mb-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-mergenta-dark-grey/60 h-5 w-5" />
                 <Input
                   type="text"
-                  placeholder="Search for specific guidance..."
+                  placeholder="Search for specific guidance on this framework..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyPress={handleKeyPress}
@@ -181,29 +195,11 @@ export const DecisionDetailModal = ({
               </div>
             </div>
 
-            {/* Detailed Content */}
-            <div className="space-y-6">
-              {content.details.map((detail, index) => (
-                <div 
-                  key={index}
-                  className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border border-white/10 animate-fade-in"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-purple-600 to-violet-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                      {index + 1}
-                    </div>
-                    <p className="text-mergenta-dark-grey leading-relaxed">{detail}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Search Again Button */}
-            <div className="flex justify-center pt-6">
+            {/* Search Button Below Search Bar */}
+            <div className="flex justify-center">
               <Button
                 onClick={handleSearch}
-                className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white font-medium py-2 px-6 rounded-xl"
+                className="flex items-center gap-2 bg-white/30 backdrop-blur-sm border border-white/20 text-mergenta-dark-grey hover:bg-white/40 rounded-xl font-medium py-2 px-6"
               >
                 <RotateCcw className="h-4 w-4" />
                 Search Again
