@@ -1,7 +1,6 @@
 import React from 'react';
 import { ScrollArea } from '../ui/scroll-area';
 import { Button } from '../ui/button';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 import { MoreHorizontal } from 'lucide-react';
 
 interface HistoryItem {
@@ -117,32 +116,24 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose }) => {
       </div>
       
       <ScrollArea className="h-[calc(100%-140px)] pr-3">
-        <TooltipProvider>
-          <div className="p-3">
-            {historyItems.map((item) => {
-              const shortTitle = item.preview.split(' ').slice(0, 4).join(' ');
-              
-              return (
-                <Tooltip key={item.id}>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      className="w-full h-auto px-3 py-2 mb-1 justify-between text-left hover:bg-pastel-lavender-hover/50 transition-colors group"
-                    >
-                      <span className="text-sm text-sidebar-text-dark text-left flex-1 min-w-0">
-                        {shortTitle}
-                      </span>
-                      <MoreHorizontal className="h-3 w-3 text-sidebar-text-violet ml-2 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="right" className="bg-white border border-gray-200 shadow-lg p-3 max-w-xs">
-                    <p className="text-sm text-gray-900">{item.preview}</p>
-                  </TooltipContent>
-                </Tooltip>
-              );
-            })}
-          </div>
-        </TooltipProvider>
+        <div className="p-3">
+          {historyItems.map((item) => {
+            const shortTitle = item.preview.split(' ').slice(0, 4).join(' ');
+            
+            return (
+              <Button
+                key={item.id}
+                variant="ghost"
+                className="w-full h-auto px-3 py-2 mb-1 justify-between text-left hover:bg-pastel-lavender-hover/50 transition-colors group"
+              >
+                <span className="text-sm text-sidebar-text-dark text-left flex-1 min-w-0 truncate">
+                  {shortTitle}
+                </span>
+                <MoreHorizontal className="h-3 w-3 text-sidebar-text-violet ml-2 flex-shrink-0" />
+              </Button>
+            );
+          })}
+        </div>
       </ScrollArea>
       
       <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-purple-200 bg-gradient-to-b from-purple-50 to-purple-100">
