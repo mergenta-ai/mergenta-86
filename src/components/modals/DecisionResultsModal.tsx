@@ -208,7 +208,7 @@ export const DecisionResultsModal = ({
               <Button
                 onClick={onCopyAll}
                 variant="outline"
-                className="flex items-center gap-2 bg-white/30 backdrop-blur-sm border-white/20 text-mergenta-dark-grey hover:bg-white/40 rounded-xl"
+                className="flex items-center gap-2 bg-mergenta-deep-violet/80 border-mergenta-deep-violet text-white hover:bg-mergenta-deep-violet"
               >
                 <Copy className="h-4 w-4" />
                 Copy All Suggestions
@@ -216,7 +216,7 @@ export const DecisionResultsModal = ({
               <Button
                 onClick={onStartAgain}
                 variant="outline"
-                className="flex items-center gap-2 bg-white/30 backdrop-blur-sm border-white/20 text-mergenta-dark-grey hover:bg-white/40 rounded-xl"
+                className="flex items-center gap-2 bg-mergenta-deep-violet/80 border-mergenta-deep-violet text-white hover:bg-mergenta-deep-violet"
               >
                 <RotateCcw className="h-4 w-4" />
                 Start Again
