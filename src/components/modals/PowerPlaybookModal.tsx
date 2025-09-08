@@ -183,7 +183,7 @@ export const PowerPlaybookModal = ({ open, onOpenChange, onAddToChat }: PowerPla
                   <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <div className="relative z-10 flex flex-col h-full">
                     <div className="flex justify-center mb-6">
-                      <TrendingUp className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                      <Brain className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
                     </div>
                     <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Skills Development Playbook</h3>
                     <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Identify gaps and accelerate skill mastery.</p>
@@ -287,7 +287,7 @@ export const PowerPlaybookModal = ({ open, onOpenChange, onAddToChat }: PowerPla
                   <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <div className="relative z-10 flex flex-col h-full">
                     <div className="flex justify-center mb-6">
-                      <Compass className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                      <MapPin className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
                     </div>
                     <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Life Guidance Playbook</h3>
                     <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Find clarity in everyday challenges and crossroads.</p>
