@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { Star } from "lucide-react";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { HandHeart } from "lucide-react";
 
-interface RecommendationLetterHoverCardProps {
+interface ThankYouLetterHoverCardProps {
   children: React.ReactNode;
 }
 
-const RecommendationLetterHoverCard = ({ children }: RecommendationLetterHoverCardProps) => {
+const ThankYouLetterHoverCard = ({ children }: ThankYouLetterHoverCardProps) => {
   const [showCard, setShowCard] = useState(false);
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
@@ -18,7 +18,7 @@ const RecommendationLetterHoverCard = ({ children }: RecommendationLetterHoverCa
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem('recommendationLetter-form');
+    const saved = localStorage.getItem('thankYouLetter-form');
     if (saved) {
       const data = JSON.parse(saved);
       setTo(data.to || "");
@@ -32,7 +32,7 @@ const RecommendationLetterHoverCard = ({ children }: RecommendationLetterHoverCa
 
   useEffect(() => {
     const formData = { to, subject, coreMessage, finalTouch, signOff, from };
-    localStorage.setItem('recommendationLetter-form', JSON.stringify(formData));
+    localStorage.setItem('thankYouLetter-form', JSON.stringify(formData));
   }, [to, subject, coreMessage, finalTouch, signOff, from]);
 
   const handleMouseEnter = () => {
@@ -59,8 +59,8 @@ const RecommendationLetterHoverCard = ({ children }: RecommendationLetterHoverCa
     const handleClickOutside = (event: MouseEvent) => {
       if (showCard) {
         const target = event.target as HTMLElement;
-        const card = document.querySelector('[data-recommendation-card]');
-        if (card && !card.contains(target) && !target.closest('[data-recommendation-trigger]')) {
+        const card = document.querySelector('[data-thank-you-card]');
+        if (card && !card.contains(target) && !target.closest('[data-thank-you-trigger]')) {
           setShowCard(false);
         }
       }
@@ -76,7 +76,7 @@ const RecommendationLetterHoverCard = ({ children }: RecommendationLetterHoverCa
     <>
       {/* Trigger Element */}
       <div 
-        data-recommendation-trigger
+        data-thank-you-trigger
         onMouseEnter={handleMouseEnter} 
         onMouseLeave={handleMouseLeave}
         onClick={() => setShowCard(!showCard)}
@@ -88,8 +88,8 @@ const RecommendationLetterHoverCard = ({ children }: RecommendationLetterHoverCa
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
-            data-recommendation-card
-            className="absolute left-[918px] top-[220px] w-80 pointer-events-auto"
+            data-thank-you-card
+            className="absolute left-[918px] top-[120px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
@@ -98,31 +98,31 @@ const RecommendationLetterHoverCard = ({ children }: RecommendationLetterHoverCa
               <div className="space-y-4">
                  <div>
                    <div className="flex items-center gap-2 mb-1">
-                     <Star className="w-5 h-5 text-[#5B34A0]" />
-                     <h3 className="text-lg font-semibold text-[#5B34A0]">Recommendation Letter</h3>
+                     <HandHeart className="w-5 h-5 text-[#5B34A0]" />
+                     <h3 className="text-lg font-semibold text-[#5B34A0]">Thank You Letter</h3>
                    </div>
-                   <p className="text-sm text-[#6E6E6E] mb-4">Endorse and recommend someone professionally</p>
+                   <p className="text-sm text-[#6E6E6E] mb-4">Express gratitude and appreciation</p>
                  </div>
                 
                 <div className="space-y-3">
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label>
                     <Textarea
-                      value={to || undefined}
-                      onChange={(e) => setTo(e.target.value)}
-                      placeholder="Dear [Name], Employer, University, HR, Departments, Organisation etc..."
-                      className="w-full min-h-[60px] resize-none"
-                    />
+                       value={to || undefined}
+                       onChange={(e) => setTo(e.target.value)}
+                       placeholder="Dear [Name], Relative, Teacher, Colleague, Friend, etc..."
+                       className="w-full min-h-[60px] resize-none"
+                     />
                   </div>
                   
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label>
                     <Textarea
-                      value={subject || undefined}
-                      onChange={(e) => setSubject(e.target.value)}
-                      placeholder="Mention if this is an endorsement, support statement, referral or recommendation, etc..."
-                      className="w-full min-h-[60px] resize-none"
-                    />
+                       value={subject || undefined}
+                       onChange={(e) => setSubject(e.target.value)}
+                       placeholder="Add Gratitude, Appreciation, Recognition, Thankfullness, etc..."
+                       className="w-full min-h-[60px] resize-none"
+                     />
                   </div>
                   
                   <div>
@@ -130,7 +130,7 @@ const RecommendationLetterHoverCard = ({ children }: RecommendationLetterHoverCa
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
-                      placeholder="Highlight strong skills, merits, abilities, endorsements, good behaviour and team spirit, etc..."
+                      placeholder="Express Sincere thanks, Your support, Your guidance, Your kindness, etc. towards the help/support offered."
                       className="w-full min-h-[80px] resize-none"
                     />
                   </div>
@@ -140,7 +140,7 @@ const RecommendationLetterHoverCard = ({ children }: RecommendationLetterHoverCa
                     <Textarea
                       value={finalTouch || undefined}
                       onChange={(e) => setFinalTouch(e.target.value)}
-                      placeholder="Mention achievements, strengths, qualities, reliability and dedication, etc..."
+                      placeholder="How it helped me, lasting impact, warm wishes, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -150,7 +150,7 @@ const RecommendationLetterHoverCard = ({ children }: RecommendationLetterHoverCa
                     <Textarea
                       value={signOff || undefined}
                       onChange={(e) => setSignOff(e.target.value)}
-                      placeholder="Strongly recommend, Best wishes, Regards, etc..."
+                      placeholder="With gratitude, Best regards, Warm thanks, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -167,9 +167,9 @@ const RecommendationLetterHoverCard = ({ children }: RecommendationLetterHoverCa
                   
                   <button
                     className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
-                    onClick={() => console.log("Start Recommendation Letter")}
+                    onClick={() => console.log("Start Thank You Letter")}
                   >
-                    Start Recommendation Letter
+                    Start Thank You Letter
                   </button>
                 </div>
               </div>
@@ -181,4 +181,4 @@ const RecommendationLetterHoverCard = ({ children }: RecommendationLetterHoverCa
   );
 };
 
-export default RecommendationLetterHoverCard;
+export default ThankYouLetterHoverCard;

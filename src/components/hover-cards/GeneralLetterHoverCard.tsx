@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 import { Mail } from "lucide-react";
 
 interface GeneralLetterHoverCardProps {

@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { Flower } from "lucide-react";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { Calendar } from "lucide-react";
 
-interface CondolenceLetterHoverCardProps {
+interface AppointmentRequestHoverCardProps {
   children: React.ReactNode;
 }
 
-const CondolenceLetterHoverCard = ({ children }: CondolenceLetterHoverCardProps) => {
+const AppointmentRequestHoverCard = ({ children }: AppointmentRequestHoverCardProps) => {
   const [showCard, setShowCard] = useState(false);
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
@@ -18,7 +18,7 @@ const CondolenceLetterHoverCard = ({ children }: CondolenceLetterHoverCardProps)
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem('condolenceLetter-form');
+    const saved = localStorage.getItem('appointmentRequest-form');
     if (saved) {
       const data = JSON.parse(saved);
       setTo(data.to || "");
@@ -32,7 +32,7 @@ const CondolenceLetterHoverCard = ({ children }: CondolenceLetterHoverCardProps)
 
   useEffect(() => {
     const formData = { to, subject, coreMessage, finalTouch, signOff, from };
-    localStorage.setItem('condolenceLetter-form', JSON.stringify(formData));
+    localStorage.setItem('appointmentRequest-form', JSON.stringify(formData));
   }, [to, subject, coreMessage, finalTouch, signOff, from]);
 
   const handleMouseEnter = () => {
@@ -59,8 +59,8 @@ const CondolenceLetterHoverCard = ({ children }: CondolenceLetterHoverCardProps)
     const handleClickOutside = (event: MouseEvent) => {
       if (showCard) {
         const target = event.target as HTMLElement;
-        const card = document.querySelector('[data-condolence-letter-card]');
-        if (card && !card.contains(target) && !target.closest('[data-condolence-letter-trigger]')) {
+        const card = document.querySelector('[data-appointment-request-card]');
+        if (card && !card.contains(target) && !target.closest('[data-appointment-request-trigger]')) {
           setShowCard(false);
         }
       }
@@ -76,7 +76,7 @@ const CondolenceLetterHoverCard = ({ children }: CondolenceLetterHoverCardProps)
     <>
       {/* Trigger Element */}
       <div 
-        data-condolence-letter-trigger
+        data-appointment-request-trigger
         onMouseEnter={handleMouseEnter} 
         onMouseLeave={handleMouseLeave}
         onClick={() => setShowCard(!showCard)}
@@ -88,8 +88,8 @@ const CondolenceLetterHoverCard = ({ children }: CondolenceLetterHoverCardProps)
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
-            data-condolence-letter-card
-            className="absolute left-[918px] top-[120px] w-80 pointer-events-auto"
+            data-appointment-request-card
+            className="absolute left-[918px] top-[220px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
@@ -98,21 +98,21 @@ const CondolenceLetterHoverCard = ({ children }: CondolenceLetterHoverCardProps)
               <div className="space-y-4">
                  <div>
                    <div className="flex items-center gap-2 mb-1">
-                     <Flower className="w-5 h-5 text-[#5B34A0]" />
-                     <h3 className="text-lg font-semibold text-[#5B34A0]">Condolence Letter</h3>
+                     <Calendar className="w-5 h-5 text-[#5B34A0]" />
+                     <h3 className="text-lg font-semibold text-[#5B34A0]">Appointment Request</h3>
                    </div>
-                   <p className="text-sm text-[#6E6E6E] mb-4">Offer comfort and sympathy in times of loss</p>
+                   <p className="text-sm text-[#6E6E6E] mb-4">Request appointment or meeting</p>
                  </div>
                 
                 <div className="space-y-3">
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label>
                     <Textarea
-                       value={to || undefined}
-                       onChange={(e) => setTo(e.target.value)}
-                       placeholder="Dear [NAME], Friend, Family, Relative, Colleague, etc..."
-                       className="w-full min-h-[60px] resize-none"
-                     />
+                      value={to || undefined}
+                      onChange={(e) => setTo(e.target.value)}
+                      placeholder="Dear Sir/Madam, HR Manager / Company Name, CA, Honourable Minister, etc..."
+                      className="w-full min-h-[60px] resize-none"
+                    />
                   </div>
                   
                   <div>
@@ -120,7 +120,7 @@ const CondolenceLetterHoverCard = ({ children }: CondolenceLetterHoverCardProps)
                     <Textarea
                        value={subject || undefined}
                        onChange={(e) => setSubject(e.target.value)}
-                       placeholder="Sympathy, Loss, Comfort, Support, etc..."
+                       placeholder="Request for Appointment/Interview etc..."
                        className="w-full min-h-[60px] resize-none"
                      />
                   </div>
@@ -130,7 +130,7 @@ const CondolenceLetterHoverCard = ({ children }: CondolenceLetterHoverCardProps)
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
-                      placeholder="Use phrases like Deepest sympathies, sharing grief, prayers, etc..."
+                      placeholder="Write about job interview, partnership, discussion, intervention, deals, consultation, problems, contract discussion, etc..."
                       className="w-full min-h-[80px] resize-none"
                     />
                   </div>
@@ -140,7 +140,7 @@ const CondolenceLetterHoverCard = ({ children }: CondolenceLetterHoverCardProps)
                     <Textarea
                       value={finalTouch || undefined}
                       onChange={(e) => setFinalTouch(e.target.value)}
-                      placeholder="Mention about Fond memories, peace, strength, standing with you, comfort, etc..."
+                      placeholder="Preferred appointment date and time..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -150,7 +150,7 @@ const CondolenceLetterHoverCard = ({ children }: CondolenceLetterHoverCardProps)
                     <Textarea
                       value={signOff || undefined}
                       onChange={(e) => setSignOff(e.target.value)}
-                      placeholder="With sympathy, In remembrance, Respectfully yours, In sorrow, Sincerely, etc..."
+                      placeholder="Sincerely yours, Respectfully yours, Yours truly, Best regards, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -167,9 +167,9 @@ const CondolenceLetterHoverCard = ({ children }: CondolenceLetterHoverCardProps)
                   
                   <button
                     className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
-                    onClick={() => console.log("Start Condolence Letter")}
+                    onClick={() => console.log("Start Appointment Request")}
                   >
-                    Start Condolence Letter
+                    Start Appointment Request
                   </button>
                 </div>
               </div>
@@ -181,4 +181,4 @@ const CondolenceLetterHoverCard = ({ children }: CondolenceLetterHoverCardProps)
   );
 };
 
-export default CondolenceLetterHoverCard;
+export default AppointmentRequestHoverCard;

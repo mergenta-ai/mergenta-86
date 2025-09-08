@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { Smile } from "lucide-react";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { Heart } from "lucide-react";
 
-interface WelcomeLetterHoverCardProps {
+interface LoveLetterHoverCardProps {
   children: React.ReactNode;
 }
 
-const WelcomeLetterHoverCard = ({ children }: WelcomeLetterHoverCardProps) => {
+const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
   const [showCard, setShowCard] = useState(false);
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
@@ -18,7 +18,7 @@ const WelcomeLetterHoverCard = ({ children }: WelcomeLetterHoverCardProps) => {
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem('welcomeLetter-form');
+    const saved = localStorage.getItem('loveLetter-form');
     if (saved) {
       const data = JSON.parse(saved);
       setTo(data.to || "");
@@ -32,7 +32,7 @@ const WelcomeLetterHoverCard = ({ children }: WelcomeLetterHoverCardProps) => {
 
   useEffect(() => {
     const formData = { to, subject, coreMessage, finalTouch, signOff, from };
-    localStorage.setItem('welcomeLetter-form', JSON.stringify(formData));
+    localStorage.setItem('loveLetter-form', JSON.stringify(formData));
   }, [to, subject, coreMessage, finalTouch, signOff, from]);
 
   const handleMouseEnter = () => {
@@ -59,8 +59,8 @@ const WelcomeLetterHoverCard = ({ children }: WelcomeLetterHoverCardProps) => {
     const handleClickOutside = (event: MouseEvent) => {
       if (showCard) {
         const target = event.target as HTMLElement;
-        const card = document.querySelector('[data-welcome-card]');
-        if (card && !card.contains(target) && !target.closest('[data-welcome-trigger]')) {
+        const card = document.querySelector('[data-love-letter-card]');
+        if (card && !card.contains(target) && !target.closest('[data-love-letter-trigger]')) {
           setShowCard(false);
         }
       }
@@ -76,7 +76,7 @@ const WelcomeLetterHoverCard = ({ children }: WelcomeLetterHoverCardProps) => {
     <>
       {/* Trigger Element */}
       <div 
-        data-welcome-trigger
+        data-love-letter-trigger
         onMouseEnter={handleMouseEnter} 
         onMouseLeave={handleMouseLeave}
         onClick={() => setShowCard(!showCard)}
@@ -88,8 +88,8 @@ const WelcomeLetterHoverCard = ({ children }: WelcomeLetterHoverCardProps) => {
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
-            data-welcome-card
-            className="absolute left-[918px] top-[160px] w-80 pointer-events-auto"
+            data-love-letter-card
+            className="absolute left-[918px] top-[120px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
@@ -98,31 +98,31 @@ const WelcomeLetterHoverCard = ({ children }: WelcomeLetterHoverCardProps) => {
               <div className="space-y-4">
                  <div>
                    <div className="flex items-center gap-2 mb-1">
-                     <Smile className="w-5 h-5 text-[#5B34A0]" />
-                     <h3 className="text-lg font-semibold text-[#5B34A0]">Welcome Letter</h3>
+                     <Heart className="w-5 h-5 text-[#5B34A0]" />
+                     <h3 className="text-lg font-semibold text-[#5B34A0]">Love Letter</h3>
                    </div>
-                   <p className="text-sm text-[#6E6E6E] mb-4">Welcome newcomers warmly</p>
+                   <p className="text-sm text-[#6E6E6E] mb-4">Express your deepest feelings and emotions</p>
                  </div>
                 
                 <div className="space-y-3">
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label>
                     <Textarea
-                      value={to || undefined}
-                      onChange={(e) => setTo(e.target.value)}
-                      placeholder="Dear [Name], New Member, Employee, Guest, Friend, etc..."
-                      className="w-full min-h-[60px] resize-none"
-                    />
+                       value={to || undefined}
+                       onChange={(e) => setTo(e.target.value)}
+                       placeholder="Dear [Name], My Love, Darling, Sweetheart, Honey, Hubby etc..."
+                       className="w-full min-h-[60px] resize-none"
+                     />
                   </div>
                   
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label>
                     <Textarea
-                      value={subject || undefined}
-                      onChange={(e) => setSubject(e.target.value)}
-                      placeholder="Use expressions like Greetings, onboarding, new start, arrival, etc...."
-                      className="w-full min-h-[60px] resize-none"
-                    />
+                       value={subject || undefined}
+                       onChange={(e) => setSubject(e.target.value)}
+                       placeholder="Mention Affection, Care, Commitment, Admiration, Attraction, Deep love, etc..."
+                       className="w-full min-h-[60px] resize-none"
+                     />
                   </div>
                   
                   <div>
@@ -130,7 +130,7 @@ const WelcomeLetterHoverCard = ({ children }: WelcomeLetterHoverCardProps) => {
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
-                      placeholder="Begin your note with lines like “Warm welcome, excited to have you, greetings, etc..."
+                      placeholder="Type your message here about feelings, love, emotions, cherished moments, nostalgia, longing etc..."
                       className="w-full min-h-[80px] resize-none"
                     />
                   </div>
@@ -140,7 +140,7 @@ const WelcomeLetterHoverCard = ({ children }: WelcomeLetterHoverCardProps) => {
                     <Textarea
                       value={finalTouch || undefined}
                       onChange={(e) => setFinalTouch(e.target.value)}
-                      placeholder="Use words like Support, Opportunities, Encouragement, etc..."
+                      placeholder="Talk about Future dreams, shared memories, promises, yearning etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -150,7 +150,7 @@ const WelcomeLetterHoverCard = ({ children }: WelcomeLetterHoverCardProps) => {
                     <Textarea
                       value={signOff || undefined}
                       onChange={(e) => setSignOff(e.target.value)}
-                      placeholder="Use “Together ahead, With support, Regards, etc..."
+                      placeholder="Forever yours, with all my love, yours truly, love you etc...."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -160,16 +160,16 @@ const WelcomeLetterHoverCard = ({ children }: WelcomeLetterHoverCardProps) => {
                     <Input
                       value={from || undefined}
                       onChange={(e) => setFrom(e.target.value)}
-                      placeholder="Your Name, On behalf of team, Sincerely, etc..."
+                      placeholder="Sender: Your Name"
                       className="w-full"
                     />
                   </div>
                   
                   <button
                     className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
-                    onClick={() => console.log("Start Welcome Letter")}
+                    onClick={() => console.log("Start Love Letter")}
                   >
-                    Start Welcome Letter
+                    Start Love Letter
                   </button>
                 </div>
               </div>
@@ -181,4 +181,4 @@ const WelcomeLetterHoverCard = ({ children }: WelcomeLetterHoverCardProps) => {
   );
 };
 
-export default WelcomeLetterHoverCard;
+export default LoveLetterHoverCard;

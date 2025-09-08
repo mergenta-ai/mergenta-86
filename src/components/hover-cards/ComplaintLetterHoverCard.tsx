@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { BookOpen } from "lucide-react";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { AlertTriangle } from "lucide-react";
 
-interface PublicationRequestHoverCardProps {
+interface ComplaintLetterHoverCardProps {
   children: React.ReactNode;
 }
 
-const PublicationRequestHoverCard = ({ children }: PublicationRequestHoverCardProps) => {
+const ComplaintLetterHoverCard = ({ children }: ComplaintLetterHoverCardProps) => {
   const [showCard, setShowCard] = useState(false);
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
@@ -18,7 +18,7 @@ const PublicationRequestHoverCard = ({ children }: PublicationRequestHoverCardPr
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem('publicationRequest-form');
+    const saved = localStorage.getItem('complaintLetter-form');
     if (saved) {
       const data = JSON.parse(saved);
       setTo(data.to || "");
@@ -32,7 +32,7 @@ const PublicationRequestHoverCard = ({ children }: PublicationRequestHoverCardPr
 
   useEffect(() => {
     const formData = { to, subject, coreMessage, finalTouch, signOff, from };
-    localStorage.setItem('publicationRequest-form', JSON.stringify(formData));
+    localStorage.setItem('complaintLetter-form', JSON.stringify(formData));
   }, [to, subject, coreMessage, finalTouch, signOff, from]);
 
   const handleMouseEnter = () => {
@@ -59,8 +59,8 @@ const PublicationRequestHoverCard = ({ children }: PublicationRequestHoverCardPr
     const handleClickOutside = (event: MouseEvent) => {
       if (showCard) {
         const target = event.target as HTMLElement;
-        const card = document.querySelector('[data-publication-card]');
-        if (card && !card.contains(target) && !target.closest('[data-publication-trigger]')) {
+        const card = document.querySelector('[data-complaint-card]');
+        if (card && !card.contains(target) && !target.closest('[data-complaint-trigger]')) {
           setShowCard(false);
         }
       }
@@ -76,7 +76,7 @@ const PublicationRequestHoverCard = ({ children }: PublicationRequestHoverCardPr
     <>
       {/* Trigger Element */}
       <div 
-        data-publication-trigger
+        data-complaint-trigger
         onMouseEnter={handleMouseEnter} 
         onMouseLeave={handleMouseLeave}
         onClick={() => setShowCard(!showCard)}
@@ -88,7 +88,7 @@ const PublicationRequestHoverCard = ({ children }: PublicationRequestHoverCardPr
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
-            data-publication-card
+            data-complaint-card
             className="absolute left-[918px] top-[220px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
@@ -98,10 +98,10 @@ const PublicationRequestHoverCard = ({ children }: PublicationRequestHoverCardPr
               <div className="space-y-4">
                  <div>
                    <div className="flex items-center gap-2 mb-1">
-                     <BookOpen className="w-5 h-5 text-[#5B34A0]" />
-                     <h3 className="text-lg font-semibold text-[#5B34A0]">Publication Request</h3>
+                     <AlertTriangle className="w-5 h-5 text-[#5B34A0]" />
+                     <h3 className="text-lg font-semibold text-[#5B34A0]">Complaint Letter</h3>
                    </div>
-                   <p className="text-sm text-[#6E6E6E] mb-4">Request to publish content or article</p>
+                   <p className="text-sm text-[#6E6E6E] mb-4">Address issues and seek resolution professionally</p>
                  </div>
                 
                 <div className="space-y-3">
@@ -110,7 +110,7 @@ const PublicationRequestHoverCard = ({ children }: PublicationRequestHoverCardPr
                     <Textarea
                       value={to || undefined}
                       onChange={(e) => setTo(e.target.value)}
-                      placeholder="Dear Sir/Madam, Editor, Journal name, Magazine name, Publication name, etc..."
+                      placeholder="Dear Sir/Madam, Manager, Service Provider, HR, Authority, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -120,7 +120,7 @@ const PublicationRequestHoverCard = ({ children }: PublicationRequestHoverCardPr
                     <Textarea
                       value={subject || undefined}
                       onChange={(e) => setSubject(e.target.value)}
-                      placeholder="Publication submission, Article proposal, Content request, Book publication, Story publication, etc..."
+                      placeholder="Mention about complaint, issue, defect, concern, problem, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -130,7 +130,7 @@ const PublicationRequestHoverCard = ({ children }: PublicationRequestHoverCardPr
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
-                      placeholder="Article summary, genre, book excerpt, story/novel/book/publication details, research paper summary, story idea, etc..."
+                      placeholder="Details about issue, service lapses, saults, problems, fficers not paying attention, indiscipline, etc..."
                       className="w-full min-h-[80px] resize-none"
                     />
                   </div>
@@ -140,7 +140,7 @@ const PublicationRequestHoverCard = ({ children }: PublicationRequestHoverCardPr
                     <Textarea
                       value={finalTouch || undefined}
                       onChange={(e) => setFinalTouch(e.target.value)}
-                      placeholder="Tone, length, audience specification, special requests, etc..."
+                      placeholder="Mention evidence, dates, proof and your expectation of resolution, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -150,7 +150,7 @@ const PublicationRequestHoverCard = ({ children }: PublicationRequestHoverCardPr
                     <Textarea
                       value={signOff || undefined}
                       onChange={(e) => setSignOff(e.target.value)}
-                      placeholder="Other details, closing lines, wrap-up..."
+                      placeholder="Other details, if any. Expect resolution, Await response, Regards, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -160,16 +160,16 @@ const PublicationRequestHoverCard = ({ children }: PublicationRequestHoverCardPr
                     <Input
                       value={from || undefined}
                       onChange={(e) => setFrom(e.target.value)}
-                      placeholder="Your name, Your instirution/organisation..."
+                      placeholder="Your Name, Conerrned User"
                       className="w-full"
                     />
                   </div>
                   
                   <button
                     className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
-                    onClick={() => console.log("Start Publication Request")}
+                    onClick={() => console.log("Start Complaint Letter")}
                   >
-                    Start Publication Request
+                    Start Complaint Letter
                   </button>
                 </div>
               </div>
@@ -181,4 +181,4 @@ const PublicationRequestHoverCard = ({ children }: PublicationRequestHoverCardPr
   );
 };
 
-export default PublicationRequestHoverCard;
+export default ComplaintLetterHoverCard;

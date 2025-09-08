@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 import { Clock } from "lucide-react";
 
 interface LeaveApplicationHoverCardProps {

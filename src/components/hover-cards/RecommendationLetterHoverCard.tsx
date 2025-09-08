@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { Waves } from "lucide-react";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { Star } from "lucide-react";
 
-interface FarewellLetterHoverCardProps {
+interface RecommendationLetterHoverCardProps {
   children: React.ReactNode;
 }
 
-const FarewellLetterHoverCard = ({ children }: FarewellLetterHoverCardProps) => {
+const RecommendationLetterHoverCard = ({ children }: RecommendationLetterHoverCardProps) => {
   const [showCard, setShowCard] = useState(false);
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
@@ -18,7 +18,7 @@ const FarewellLetterHoverCard = ({ children }: FarewellLetterHoverCardProps) => 
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem('farewellLetter-form');
+    const saved = localStorage.getItem('recommendationLetter-form');
     if (saved) {
       const data = JSON.parse(saved);
       setTo(data.to || "");
@@ -32,7 +32,7 @@ const FarewellLetterHoverCard = ({ children }: FarewellLetterHoverCardProps) => 
 
   useEffect(() => {
     const formData = { to, subject, coreMessage, finalTouch, signOff, from };
-    localStorage.setItem('farewellLetter-form', JSON.stringify(formData));
+    localStorage.setItem('recommendationLetter-form', JSON.stringify(formData));
   }, [to, subject, coreMessage, finalTouch, signOff, from]);
 
   const handleMouseEnter = () => {
@@ -59,8 +59,8 @@ const FarewellLetterHoverCard = ({ children }: FarewellLetterHoverCardProps) => 
     const handleClickOutside = (event: MouseEvent) => {
       if (showCard) {
         const target = event.target as HTMLElement;
-        const card = document.querySelector('[data-farewell-letter-card]');
-        if (card && !card.contains(target) && !target.closest('[data-farewell-letter-trigger]')) {
+        const card = document.querySelector('[data-recommendation-card]');
+        if (card && !card.contains(target) && !target.closest('[data-recommendation-trigger]')) {
           setShowCard(false);
         }
       }
@@ -76,7 +76,7 @@ const FarewellLetterHoverCard = ({ children }: FarewellLetterHoverCardProps) => 
     <>
       {/* Trigger Element */}
       <div 
-        data-farewell-letter-trigger
+        data-recommendation-trigger
         onMouseEnter={handleMouseEnter} 
         onMouseLeave={handleMouseLeave}
         onClick={() => setShowCard(!showCard)}
@@ -88,8 +88,8 @@ const FarewellLetterHoverCard = ({ children }: FarewellLetterHoverCardProps) => 
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
-            data-farewell-letter-card
-            className="absolute left-[918px] top-[160px] w-80 pointer-events-auto"
+            data-recommendation-card
+            className="absolute left-[918px] top-[220px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
@@ -98,30 +98,30 @@ const FarewellLetterHoverCard = ({ children }: FarewellLetterHoverCardProps) => 
               <div className="space-y-4">
                  <div>
                    <div className="flex items-center gap-2 mb-1">
-                     <Waves className="w-5 h-5 text-[#5B34A0]" />
-                     <h3 className="text-lg font-semibold text-[#5B34A0]">Farewell Letter</h3>
+                     <Star className="w-5 h-5 text-[#5B34A0]" />
+                     <h3 className="text-lg font-semibold text-[#5B34A0]">Recommendation Letter</h3>
                    </div>
-                   <p className="text-sm text-[#6E6E6E] mb-4">Say goodbye with heartfelt words</p>
+                   <p className="text-sm text-[#6E6E6E] mb-4">Endorse and recommend someone professionally</p>
                  </div>
                 
                 <div className="space-y-3">
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label>
                     <Textarea
-                       value={to || undefined}
-                       onChange={(e) => setTo(e.target.value)}
-                       placeholder="Dear [Name], Colleague, Coach, Friend, Mentor, Team, etc..."
-                       className="w-full min-h-[60px] resize-none"
-                     />
+                      value={to || undefined}
+                      onChange={(e) => setTo(e.target.value)}
+                      placeholder="Dear [Name], Employer, University, HR, Departments, Organisation etc..."
+                      className="w-full min-h-[60px] resize-none"
+                    />
                   </div>
                   
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label>
-                     <Textarea
+                    <Textarea
                       value={subject || undefined}
                       onChange={(e) => setSubject(e.target.value)}
-                      placeholder="Include “Goodbye, best wishes, happy departure, retirement wishes, etc..."
-                       className="w-full min-h-[60px] resize-none"
+                      placeholder="Mention if this is an endorsement, support statement, referral or recommendation, etc..."
+                      className="w-full min-h-[60px] resize-none"
                     />
                   </div>
                   
@@ -130,7 +130,7 @@ const FarewellLetterHoverCard = ({ children }: FarewellLetterHoverCardProps) => 
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
-                      placeholder="Add Bidding farewell, Wishing success, Parting words, etc..."
+                      placeholder="Highlight strong skills, merits, abilities, endorsements, good behaviour and team spirit, etc..."
                       className="w-full min-h-[80px] resize-none"
                     />
                   </div>
@@ -140,7 +140,7 @@ const FarewellLetterHoverCard = ({ children }: FarewellLetterHoverCardProps) => 
                     <Textarea
                       value={finalTouch || undefined}
                       onChange={(e) => setFinalTouch(e.target.value)}
-                      placeholder="Mention Memories, Gratitude, Hopes for future, etc..."
+                      placeholder="Mention achievements, strengths, qualities, reliability and dedication, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -150,7 +150,7 @@ const FarewellLetterHoverCard = ({ children }: FarewellLetterHoverCardProps) => 
                     <Textarea
                       value={signOff || undefined}
                       onChange={(e) => setSignOff(e.target.value)}
-                      placeholder="Say With best wishes, Fondly, Sincerely, etc..."
+                      placeholder="Strongly recommend, Best wishes, Regards, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -160,16 +160,16 @@ const FarewellLetterHoverCard = ({ children }: FarewellLetterHoverCardProps) => 
                     <Input
                       value={from || undefined}
                       onChange={(e) => setFrom(e.target.value)}
-                      placeholder="Your Name, Yours truly, With affection, etc..."
+                      placeholder="Your Name"
                       className="w-full"
                     />
                   </div>
                   
                   <button
                     className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
-                    onClick={() => console.log("Start Farewell Letter")}
+                    onClick={() => console.log("Start Recommendation Letter")}
                   >
-                    Start Farewell Letter
+                    Start Recommendation Letter
                   </button>
                 </div>
               </div>
@@ -181,4 +181,4 @@ const FarewellLetterHoverCard = ({ children }: FarewellLetterHoverCardProps) => 
   );
 };
 
-export default FarewellLetterHoverCard;
+export default RecommendationLetterHoverCard;

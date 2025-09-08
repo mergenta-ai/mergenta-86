@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { Heart } from "lucide-react";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { Flower } from "lucide-react";
 
-interface LoveLetterHoverCardProps {
+interface CondolenceLetterHoverCardProps {
   children: React.ReactNode;
 }
 
-const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
+const CondolenceLetterHoverCard = ({ children }: CondolenceLetterHoverCardProps) => {
   const [showCard, setShowCard] = useState(false);
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
@@ -18,7 +18,7 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem('loveLetter-form');
+    const saved = localStorage.getItem('condolenceLetter-form');
     if (saved) {
       const data = JSON.parse(saved);
       setTo(data.to || "");
@@ -32,7 +32,7 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
 
   useEffect(() => {
     const formData = { to, subject, coreMessage, finalTouch, signOff, from };
-    localStorage.setItem('loveLetter-form', JSON.stringify(formData));
+    localStorage.setItem('condolenceLetter-form', JSON.stringify(formData));
   }, [to, subject, coreMessage, finalTouch, signOff, from]);
 
   const handleMouseEnter = () => {
@@ -59,8 +59,8 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
     const handleClickOutside = (event: MouseEvent) => {
       if (showCard) {
         const target = event.target as HTMLElement;
-        const card = document.querySelector('[data-love-letter-card]');
-        if (card && !card.contains(target) && !target.closest('[data-love-letter-trigger]')) {
+        const card = document.querySelector('[data-condolence-letter-card]');
+        if (card && !card.contains(target) && !target.closest('[data-condolence-letter-trigger]')) {
           setShowCard(false);
         }
       }
@@ -76,7 +76,7 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
     <>
       {/* Trigger Element */}
       <div 
-        data-love-letter-trigger
+        data-condolence-letter-trigger
         onMouseEnter={handleMouseEnter} 
         onMouseLeave={handleMouseLeave}
         onClick={() => setShowCard(!showCard)}
@@ -88,7 +88,7 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
-            data-love-letter-card
+            data-condolence-letter-card
             className="absolute left-[918px] top-[120px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
@@ -98,10 +98,10 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
               <div className="space-y-4">
                  <div>
                    <div className="flex items-center gap-2 mb-1">
-                     <Heart className="w-5 h-5 text-[#5B34A0]" />
-                     <h3 className="text-lg font-semibold text-[#5B34A0]">Love Letter</h3>
+                     <Flower className="w-5 h-5 text-[#5B34A0]" />
+                     <h3 className="text-lg font-semibold text-[#5B34A0]">Condolence Letter</h3>
                    </div>
-                   <p className="text-sm text-[#6E6E6E] mb-4">Express your deepest feelings and emotions</p>
+                   <p className="text-sm text-[#6E6E6E] mb-4">Offer comfort and sympathy in times of loss</p>
                  </div>
                 
                 <div className="space-y-3">
@@ -110,7 +110,7 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
                     <Textarea
                        value={to || undefined}
                        onChange={(e) => setTo(e.target.value)}
-                       placeholder="Dear [Name], My Love, Darling, Sweetheart, Honey, Hubby etc..."
+                       placeholder="Dear [NAME], Friend, Family, Relative, Colleague, etc..."
                        className="w-full min-h-[60px] resize-none"
                      />
                   </div>
@@ -120,7 +120,7 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
                     <Textarea
                        value={subject || undefined}
                        onChange={(e) => setSubject(e.target.value)}
-                       placeholder="Mention Affection, Care, Commitment, Admiration, Attraction, Deep love, etc..."
+                       placeholder="Sympathy, Loss, Comfort, Support, etc..."
                        className="w-full min-h-[60px] resize-none"
                      />
                   </div>
@@ -130,7 +130,7 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
-                      placeholder="Type your message here about feelings, love, emotions, cherished moments, nostalgia, longing etc..."
+                      placeholder="Use phrases like Deepest sympathies, sharing grief, prayers, etc..."
                       className="w-full min-h-[80px] resize-none"
                     />
                   </div>
@@ -140,7 +140,7 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
                     <Textarea
                       value={finalTouch || undefined}
                       onChange={(e) => setFinalTouch(e.target.value)}
-                      placeholder="Talk about Future dreams, shared memories, promises, yearning etc..."
+                      placeholder="Mention about Fond memories, peace, strength, standing with you, comfort, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -150,7 +150,7 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
                     <Textarea
                       value={signOff || undefined}
                       onChange={(e) => setSignOff(e.target.value)}
-                      placeholder="Forever yours, with all my love, yours truly, love you etc...."
+                      placeholder="With sympathy, In remembrance, Respectfully yours, In sorrow, Sincerely, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -160,16 +160,16 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
                     <Input
                       value={from || undefined}
                       onChange={(e) => setFrom(e.target.value)}
-                      placeholder="Sender: Your Name"
+                      placeholder="Your Name"
                       className="w-full"
                     />
                   </div>
                   
                   <button
                     className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
-                    onClick={() => console.log("Start Love Letter")}
+                    onClick={() => console.log("Start Condolence Letter")}
                   >
-                    Start Love Letter
+                    Start Condolence Letter
                   </button>
                 </div>
               </div>
@@ -181,4 +181,4 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
   );
 };
 
-export default LoveLetterHoverCard;
+export default CondolenceLetterHoverCard;

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Input } from './ui/input';
-import { Textarea } from './ui/textarea';
-import { Label } from './ui/label';
-import { Button } from './ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { Input } from '../ui/input';
+import { Textarea } from '../ui/textarea';
+import { Label } from '../ui/label';
+import { Button } from '../ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 
 interface EssayHoverCardProps {
   children: React.ReactNode;

@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { AlertTriangle } from "lucide-react";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { Smile } from "lucide-react";
 
-interface ComplaintLetterHoverCardProps {
+interface WelcomeLetterHoverCardProps {
   children: React.ReactNode;
 }
 
-const ComplaintLetterHoverCard = ({ children }: ComplaintLetterHoverCardProps) => {
+const WelcomeLetterHoverCard = ({ children }: WelcomeLetterHoverCardProps) => {
   const [showCard, setShowCard] = useState(false);
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
@@ -18,7 +18,7 @@ const ComplaintLetterHoverCard = ({ children }: ComplaintLetterHoverCardProps) =
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem('complaintLetter-form');
+    const saved = localStorage.getItem('welcomeLetter-form');
     if (saved) {
       const data = JSON.parse(saved);
       setTo(data.to || "");
@@ -32,7 +32,7 @@ const ComplaintLetterHoverCard = ({ children }: ComplaintLetterHoverCardProps) =
 
   useEffect(() => {
     const formData = { to, subject, coreMessage, finalTouch, signOff, from };
-    localStorage.setItem('complaintLetter-form', JSON.stringify(formData));
+    localStorage.setItem('welcomeLetter-form', JSON.stringify(formData));
   }, [to, subject, coreMessage, finalTouch, signOff, from]);
 
   const handleMouseEnter = () => {
@@ -59,8 +59,8 @@ const ComplaintLetterHoverCard = ({ children }: ComplaintLetterHoverCardProps) =
     const handleClickOutside = (event: MouseEvent) => {
       if (showCard) {
         const target = event.target as HTMLElement;
-        const card = document.querySelector('[data-complaint-card]');
-        if (card && !card.contains(target) && !target.closest('[data-complaint-trigger]')) {
+        const card = document.querySelector('[data-welcome-card]');
+        if (card && !card.contains(target) && !target.closest('[data-welcome-trigger]')) {
           setShowCard(false);
         }
       }
@@ -76,7 +76,7 @@ const ComplaintLetterHoverCard = ({ children }: ComplaintLetterHoverCardProps) =
     <>
       {/* Trigger Element */}
       <div 
-        data-complaint-trigger
+        data-welcome-trigger
         onMouseEnter={handleMouseEnter} 
         onMouseLeave={handleMouseLeave}
         onClick={() => setShowCard(!showCard)}
@@ -88,8 +88,8 @@ const ComplaintLetterHoverCard = ({ children }: ComplaintLetterHoverCardProps) =
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
-            data-complaint-card
-            className="absolute left-[918px] top-[220px] w-80 pointer-events-auto"
+            data-welcome-card
+            className="absolute left-[918px] top-[160px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
@@ -98,10 +98,10 @@ const ComplaintLetterHoverCard = ({ children }: ComplaintLetterHoverCardProps) =
               <div className="space-y-4">
                  <div>
                    <div className="flex items-center gap-2 mb-1">
-                     <AlertTriangle className="w-5 h-5 text-[#5B34A0]" />
-                     <h3 className="text-lg font-semibold text-[#5B34A0]">Complaint Letter</h3>
+                     <Smile className="w-5 h-5 text-[#5B34A0]" />
+                     <h3 className="text-lg font-semibold text-[#5B34A0]">Welcome Letter</h3>
                    </div>
-                   <p className="text-sm text-[#6E6E6E] mb-4">Address issues and seek resolution professionally</p>
+                   <p className="text-sm text-[#6E6E6E] mb-4">Welcome newcomers warmly</p>
                  </div>
                 
                 <div className="space-y-3">
@@ -110,7 +110,7 @@ const ComplaintLetterHoverCard = ({ children }: ComplaintLetterHoverCardProps) =
                     <Textarea
                       value={to || undefined}
                       onChange={(e) => setTo(e.target.value)}
-                      placeholder="Dear Sir/Madam, Manager, Service Provider, HR, Authority, etc..."
+                      placeholder="Dear [Name], New Member, Employee, Guest, Friend, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -120,7 +120,7 @@ const ComplaintLetterHoverCard = ({ children }: ComplaintLetterHoverCardProps) =
                     <Textarea
                       value={subject || undefined}
                       onChange={(e) => setSubject(e.target.value)}
-                      placeholder="Mention about complaint, issue, defect, concern, problem, etc..."
+                      placeholder="Use expressions like Greetings, onboarding, new start, arrival, etc...."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -130,7 +130,7 @@ const ComplaintLetterHoverCard = ({ children }: ComplaintLetterHoverCardProps) =
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
-                      placeholder="Details about issue, service lapses, saults, problems, fficers not paying attention, indiscipline, etc..."
+                      placeholder="Begin your note with lines like “Warm welcome, excited to have you, greetings, etc..."
                       className="w-full min-h-[80px] resize-none"
                     />
                   </div>
@@ -140,7 +140,7 @@ const ComplaintLetterHoverCard = ({ children }: ComplaintLetterHoverCardProps) =
                     <Textarea
                       value={finalTouch || undefined}
                       onChange={(e) => setFinalTouch(e.target.value)}
-                      placeholder="Mention evidence, dates, proof and your expectation of resolution, etc..."
+                      placeholder="Use words like Support, Opportunities, Encouragement, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -150,7 +150,7 @@ const ComplaintLetterHoverCard = ({ children }: ComplaintLetterHoverCardProps) =
                     <Textarea
                       value={signOff || undefined}
                       onChange={(e) => setSignOff(e.target.value)}
-                      placeholder="Other details, if any. Expect resolution, Await response, Regards, etc..."
+                      placeholder="Use “Together ahead, With support, Regards, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -160,16 +160,16 @@ const ComplaintLetterHoverCard = ({ children }: ComplaintLetterHoverCardProps) =
                     <Input
                       value={from || undefined}
                       onChange={(e) => setFrom(e.target.value)}
-                      placeholder="Your Name, Conerrned User"
+                      placeholder="Your Name, On behalf of team, Sincerely, etc..."
                       className="w-full"
                     />
                   </div>
                   
                   <button
                     className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
-                    onClick={() => console.log("Start Complaint Letter")}
+                    onClick={() => console.log("Start Welcome Letter")}
                   >
-                    Start Complaint Letter
+                    Start Welcome Letter
                   </button>
                 </div>
               </div>
@@ -181,4 +181,4 @@ const ComplaintLetterHoverCard = ({ children }: ComplaintLetterHoverCardProps) =
   );
 };
 
-export default ComplaintLetterHoverCard;
+export default WelcomeLetterHoverCard;

@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Input } from './ui/input';
-import { Textarea } from './ui/textarea';
-import { Label } from './ui/label';
-import { Button } from './ui/button';
+import { Input } from '../ui/input';
+import { Textarea } from '../ui/textarea';
+import { Label } from '../ui/label';
+import { Button } from '../ui/button';
 
-interface FlashFictionHoverCardProps {
+interface StoryHoverCardProps {
   children: React.ReactNode;
 }
 
-const FlashFictionHoverCard: React.FC<FlashFictionHoverCardProps> = ({ children }) => {
+const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children }) => {
   const [showCard, setShowCard] = useState(false);
   const [storyTitle, setStoryTitle] = useState('');
   const [genre, setGenre] = useState('');
@@ -17,6 +17,8 @@ const FlashFictionHoverCard: React.FC<FlashFictionHoverCardProps> = ({ children 
   const [tone, setTone] = useState('');
   const [audience, setAudience] = useState('');
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // No localStorage - fields always start empty to show watermark placeholders
 
   const handleMouseEnter = () => {
     if (closeTimeoutRef.current) {
@@ -37,9 +39,9 @@ const FlashFictionHoverCard: React.FC<FlashFictionHoverCardProps> = ({ children 
     e.stopPropagation();
   };
 
-  const handleStartFlashFiction = () => {
-    console.log('Start Flash Fiction clicked');
-    // Future implementation for flash fiction generation
+  const handleStartStory = () => {
+    console.log('Start Story clicked');
+    // Future implementation for story generation
   };
 
   // Close card when clicking outside
@@ -47,8 +49,8 @@ const FlashFictionHoverCard: React.FC<FlashFictionHoverCardProps> = ({ children 
     const handleClickOutside = (event: MouseEvent) => {
       if (showCard) {
         const target = event.target as HTMLElement;
-        const card = document.querySelector('[data-flash-fiction-card]');
-        if (card && !card.contains(target) && !target.closest('[data-flash-fiction-trigger]')) {
+        const card = document.querySelector('[data-story-card]');
+        if (card && !card.contains(target) && !target.closest('[data-story-trigger]')) {
           setShowCard(false);
         }
       }
@@ -64,7 +66,7 @@ const FlashFictionHoverCard: React.FC<FlashFictionHoverCardProps> = ({ children 
     <div className="relative">
       {/* Trigger Element */}
       <div 
-        data-flash-fiction-trigger
+        data-story-trigger
         onMouseEnter={handleMouseEnter} 
         onMouseLeave={handleMouseLeave}
         onClick={() => setShowCard(!showCard)}
@@ -76,8 +78,8 @@ const FlashFictionHoverCard: React.FC<FlashFictionHoverCardProps> = ({ children 
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
-            data-flash-fiction-card
-            className="absolute left-[620px] top-[140px] w-80 pointer-events-auto"
+            data-story-card
+            className="absolute left-[620px] top-[160px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
@@ -86,22 +88,22 @@ const FlashFictionHoverCard: React.FC<FlashFictionHoverCardProps> = ({ children 
               <div className="space-y-3">
                 {/* Title */}
                 <div className="flex items-center gap-2 pb-2 border-b border-pastel-lavender-hover">
-                  <span className="text-lg">⚡</span>
+                  <span className="text-lg">📖</span>
                   <div>
-                    <h3 className="font-semibold text-sidebar-text-violet text-lg">Flash Fiction</h3>
+                    <h3 className="font-semibold text-sidebar-text-violet text-lg">Story</h3>
                     <p className="text-xs text-sidebar-text-dark italic">
-                      Concise storytelling — impact in a few words.
+                      Longer narrative with characters, plot and detail.
                     </p>
                   </div>
                 </div>
 
                 {/* Story Title Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="flash-fiction-title" className="text-sm font-medium text-sidebar-text-dark">
+                  <Label htmlFor="story-title" className="text-sm font-medium text-sidebar-text-dark">
                     Story Title
                   </Label>
                   <Input
-                    id="flash-fiction-title"
+                    id="story-title"
                     value={storyTitle}
                     onChange={(e) => setStoryTitle(e.target.value)}
                     placeholder="Enter your story title..."
@@ -111,83 +113,83 @@ const FlashFictionHoverCard: React.FC<FlashFictionHoverCardProps> = ({ children 
 
                 {/* Genre Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="flash-fiction-genre" className="text-sm font-medium text-sidebar-text-dark">
+                  <Label htmlFor="genre" className="text-sm font-medium text-sidebar-text-dark">
                     Genre
                   </Label>
                   <Input
-                    id="flash-fiction-genre"
+                    id="genre"
                     value={genre}
                     onChange={(e) => setGenre(e.target.value)}
-                    placeholder="Realist, Gothic, Satire, Romance, Surreal"
+                    placeholder="Fantasy, Mystery, Romance, Sci-Fi etc."
                     className="text-sm placeholder:text-gray-500"
                   />
                 </div>
 
                 {/* Key Details / Plot Points Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="flash-fiction-key-details" className="text-sm font-medium text-sidebar-text-dark">
+                  <Label htmlFor="key-details" className="text-sm font-medium text-sidebar-text-dark">
                     Key Details / Plot Points
                   </Label>
                   <Textarea
-                    id="flash-fiction-key-details"
+                    id="key-details"
                     value={keyDetails}
                     onChange={(e) => setKeyDetails(e.target.value)}
-                    placeholder="Main characters, twist, key moments..."
+                    placeholder="Main characters, plot points, key events..."
                     className="text-sm min-h-[70px] resize-none placeholder:text-gray-500"
                   />
                 </div>
 
                 {/* Word Count Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="flash-fiction-word-count" className="text-sm font-medium text-sidebar-text-dark">
+                  <Label htmlFor="word-count" className="text-sm font-medium text-sidebar-text-dark">
                     Word Count
                   </Label>
                   <Input
-                    id="flash-fiction-word-count"
+                    id="word-count"
                     type="number"
                     value={wordCount}
                     onChange={(e) => setWordCount(e.target.value)}
-                    placeholder="100–500"
-                    min="100"
-                    max="500"
+                    placeholder="500–2000"
+                    min="500"
+                    max="5000"
                     className="text-sm placeholder:text-gray-500"
                   />
                 </div>
 
                 {/* Tone Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="flash-fiction-tone" className="text-sm font-medium text-sidebar-text-dark">
+                  <Label htmlFor="tone" className="text-sm font-medium text-sidebar-text-dark">
                     Tone
                   </Label>
                   <Input
-                    id="flash-fiction-tone"
+                    id="tone"
                     value={tone}
                     onChange={(e) => setTone(e.target.value)}
-                    placeholder="Sharp, Witty, Emotional, Reflective"
+                    placeholder="Descriptive, Humorous, Passionate etc."
                     className="text-sm placeholder:text-gray-500"
                   />
                 </div>
 
                 {/* Audience Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="flash-fiction-audience" className="text-sm font-medium text-sidebar-text-dark">
+                  <Label htmlFor="audience" className="text-sm font-medium text-sidebar-text-dark">
                     Audience
                   </Label>
                   <Input
-                    id="flash-fiction-audience"
+                    id="audience"
                     value={audience}
                     onChange={(e) => setAudience(e.target.value)}
-                    placeholder="Commuter, Youth, Scroller, Creator, Fan"
+                    placeholder="Children, Young Adults, Mature etc."
                     className="text-sm placeholder:text-gray-500"
                   />
                 </div>
 
-                {/* Start Flash Fiction Button */}
+                {/* Start Story Button */}
                 <Button
                   className="w-full bg-sidebar-text-violet hover:bg-sidebar-text-violet/90 text-white transition-colors duration-200"
-                  onClick={handleStartFlashFiction}
+                  onClick={handleStartStory}
                 >
-                  Start Flash Fiction
+                  Start Story
                 </Button>
               </div>
             </div>
@@ -198,4 +200,4 @@ const FlashFictionHoverCard: React.FC<FlashFictionHoverCardProps> = ({ children 
   );
 };
 
-export default FlashFictionHoverCard;
+export default StoryHoverCard;

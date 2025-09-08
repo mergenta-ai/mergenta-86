@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { Send } from "lucide-react";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { BookOpen } from "lucide-react";
 
-interface InvitationLetterHoverCardProps {
+interface PublicationRequestHoverCardProps {
   children: React.ReactNode;
 }
 
-const InvitationLetterHoverCard = ({ children }: InvitationLetterHoverCardProps) => {
+const PublicationRequestHoverCard = ({ children }: PublicationRequestHoverCardProps) => {
   const [showCard, setShowCard] = useState(false);
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
@@ -18,7 +18,7 @@ const InvitationLetterHoverCard = ({ children }: InvitationLetterHoverCardProps)
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem('invitationLetter-form');
+    const saved = localStorage.getItem('publicationRequest-form');
     if (saved) {
       const data = JSON.parse(saved);
       setTo(data.to || "");
@@ -32,7 +32,7 @@ const InvitationLetterHoverCard = ({ children }: InvitationLetterHoverCardProps)
 
   useEffect(() => {
     const formData = { to, subject, coreMessage, finalTouch, signOff, from };
-    localStorage.setItem('invitationLetter-form', JSON.stringify(formData));
+    localStorage.setItem('publicationRequest-form', JSON.stringify(formData));
   }, [to, subject, coreMessage, finalTouch, signOff, from]);
 
   const handleMouseEnter = () => {
@@ -59,8 +59,8 @@ const InvitationLetterHoverCard = ({ children }: InvitationLetterHoverCardProps)
     const handleClickOutside = (event: MouseEvent) => {
       if (showCard) {
         const target = event.target as HTMLElement;
-        const card = document.querySelector('[data-invitation-letter-card]');
-        if (card && !card.contains(target) && !target.closest('[data-invitation-letter-trigger]')) {
+        const card = document.querySelector('[data-publication-card]');
+        if (card && !card.contains(target) && !target.closest('[data-publication-trigger]')) {
           setShowCard(false);
         }
       }
@@ -76,7 +76,7 @@ const InvitationLetterHoverCard = ({ children }: InvitationLetterHoverCardProps)
     <>
       {/* Trigger Element */}
       <div 
-        data-invitation-letter-trigger
+        data-publication-trigger
         onMouseEnter={handleMouseEnter} 
         onMouseLeave={handleMouseLeave}
         onClick={() => setShowCard(!showCard)}
@@ -88,8 +88,8 @@ const InvitationLetterHoverCard = ({ children }: InvitationLetterHoverCardProps)
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
-            data-invitation-letter-card
-            className="absolute left-[918px] top-[160px] w-80 pointer-events-auto"
+            data-publication-card
+            className="absolute left-[918px] top-[220px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
@@ -98,31 +98,31 @@ const InvitationLetterHoverCard = ({ children }: InvitationLetterHoverCardProps)
               <div className="space-y-4">
                  <div>
                    <div className="flex items-center gap-2 mb-1">
-                     <Send className="w-5 h-5 text-[#5B34A0]" />
-                     <h3 className="text-lg font-semibold text-[#5B34A0]">Invitation Letter</h3>
+                     <BookOpen className="w-5 h-5 text-[#5B34A0]" />
+                     <h3 className="text-lg font-semibold text-[#5B34A0]">Publication Request</h3>
                    </div>
-                   <p className="text-sm text-[#6E6E6E] mb-4">Invite others to events and occasions</p>
+                   <p className="text-sm text-[#6E6E6E] mb-4">Request to publish content or article</p>
                  </div>
                 
                 <div className="space-y-3">
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label>
                     <Textarea
-                       value={to || undefined}
-                       onChange={(e) => setTo(e.target.value)}
-                       placeholder="Dear [Name], Friend, Colleague, Guest, Relative, etc..."
-                       className="w-full min-h-[60px] resize-none"
-                     />
+                      value={to || undefined}
+                      onChange={(e) => setTo(e.target.value)}
+                      placeholder="Dear Sir/Madam, Editor, Journal name, Magazine name, Publication name, etc..."
+                      className="w-full min-h-[60px] resize-none"
+                    />
                   </div>
                   
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label>
                     <Textarea
-                       value={subject || undefined}
-                       onChange={(e) => setSubject(e.target.value)}
-                       placeholder="Marriage Invitation, Birthday Invitation, Celebration, Gathering, Party, Event, etc..."
-                       className="w-full min-h-[60px] resize-none"
-                     />
+                      value={subject || undefined}
+                      onChange={(e) => setSubject(e.target.value)}
+                      placeholder="Publication submission, Article proposal, Content request, Book publication, Story publication, etc..."
+                      className="w-full min-h-[60px] resize-none"
+                    />
                   </div>
                   
                   <div>
@@ -130,7 +130,7 @@ const InvitationLetterHoverCard = ({ children }: InvitationLetterHoverCardProps)
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
-                      placeholder="You are invited, Join us, Please attend, Be our guest, etc. to write message..."
+                      placeholder="Article summary, genre, book excerpt, story/novel/book/publication details, research paper summary, story idea, etc..."
                       className="w-full min-h-[80px] resize-none"
                     />
                   </div>
@@ -140,7 +140,7 @@ const InvitationLetterHoverCard = ({ children }: InvitationLetterHoverCardProps)
                     <Textarea
                       value={finalTouch || undefined}
                       onChange={(e) => setFinalTouch(e.target.value)}
-                      placeholder="Mention Date, time, venue, occasion, RSVP details..."
+                      placeholder="Tone, length, audience specification, special requests, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -150,7 +150,7 @@ const InvitationLetterHoverCard = ({ children }: InvitationLetterHoverCardProps)
                     <Textarea
                       value={signOff || undefined}
                       onChange={(e) => setSignOff(e.target.value)}
-                      placeholder="Use phrases like Looking forward, With regards, Warm wishes, Best wishes, You have to be there, etc..."
+                      placeholder="Other details, closing lines, wrap-up..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -160,16 +160,16 @@ const InvitationLetterHoverCard = ({ children }: InvitationLetterHoverCardProps)
                     <Input
                       value={from || undefined}
                       onChange={(e) => setFrom(e.target.value)}
-                      placeholder="Your Name, Host, Organiser, etc..."
+                      placeholder="Your name, Your instirution/organisation..."
                       className="w-full"
                     />
                   </div>
                   
                   <button
                     className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
-                    onClick={() => console.log("Start Invitation Letter")}
+                    onClick={() => console.log("Start Publication Request")}
                   >
-                    Start Invitation Letter
+                    Start Publication Request
                   </button>
                 </div>
               </div>
@@ -181,4 +181,4 @@ const InvitationLetterHoverCard = ({ children }: InvitationLetterHoverCardProps)
   );
 };
 
-export default InvitationLetterHoverCard;
+export default PublicationRequestHoverCard;

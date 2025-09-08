@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { HandHeart } from "lucide-react";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { Waves } from "lucide-react";
 
-interface ThankYouLetterHoverCardProps {
+interface FarewellLetterHoverCardProps {
   children: React.ReactNode;
 }
 
-const ThankYouLetterHoverCard = ({ children }: ThankYouLetterHoverCardProps) => {
+const FarewellLetterHoverCard = ({ children }: FarewellLetterHoverCardProps) => {
   const [showCard, setShowCard] = useState(false);
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
@@ -18,7 +18,7 @@ const ThankYouLetterHoverCard = ({ children }: ThankYouLetterHoverCardProps) => 
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem('thankYouLetter-form');
+    const saved = localStorage.getItem('farewellLetter-form');
     if (saved) {
       const data = JSON.parse(saved);
       setTo(data.to || "");
@@ -32,7 +32,7 @@ const ThankYouLetterHoverCard = ({ children }: ThankYouLetterHoverCardProps) => 
 
   useEffect(() => {
     const formData = { to, subject, coreMessage, finalTouch, signOff, from };
-    localStorage.setItem('thankYouLetter-form', JSON.stringify(formData));
+    localStorage.setItem('farewellLetter-form', JSON.stringify(formData));
   }, [to, subject, coreMessage, finalTouch, signOff, from]);
 
   const handleMouseEnter = () => {
@@ -59,8 +59,8 @@ const ThankYouLetterHoverCard = ({ children }: ThankYouLetterHoverCardProps) => 
     const handleClickOutside = (event: MouseEvent) => {
       if (showCard) {
         const target = event.target as HTMLElement;
-        const card = document.querySelector('[data-thank-you-card]');
-        if (card && !card.contains(target) && !target.closest('[data-thank-you-trigger]')) {
+        const card = document.querySelector('[data-farewell-letter-card]');
+        if (card && !card.contains(target) && !target.closest('[data-farewell-letter-trigger]')) {
           setShowCard(false);
         }
       }
@@ -76,7 +76,7 @@ const ThankYouLetterHoverCard = ({ children }: ThankYouLetterHoverCardProps) => 
     <>
       {/* Trigger Element */}
       <div 
-        data-thank-you-trigger
+        data-farewell-letter-trigger
         onMouseEnter={handleMouseEnter} 
         onMouseLeave={handleMouseLeave}
         onClick={() => setShowCard(!showCard)}
@@ -88,8 +88,8 @@ const ThankYouLetterHoverCard = ({ children }: ThankYouLetterHoverCardProps) => 
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
-            data-thank-you-card
-            className="absolute left-[918px] top-[120px] w-80 pointer-events-auto"
+            data-farewell-letter-card
+            className="absolute left-[918px] top-[160px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
@@ -98,10 +98,10 @@ const ThankYouLetterHoverCard = ({ children }: ThankYouLetterHoverCardProps) => 
               <div className="space-y-4">
                  <div>
                    <div className="flex items-center gap-2 mb-1">
-                     <HandHeart className="w-5 h-5 text-[#5B34A0]" />
-                     <h3 className="text-lg font-semibold text-[#5B34A0]">Thank You Letter</h3>
+                     <Waves className="w-5 h-5 text-[#5B34A0]" />
+                     <h3 className="text-lg font-semibold text-[#5B34A0]">Farewell Letter</h3>
                    </div>
-                   <p className="text-sm text-[#6E6E6E] mb-4">Express gratitude and appreciation</p>
+                   <p className="text-sm text-[#6E6E6E] mb-4">Say goodbye with heartfelt words</p>
                  </div>
                 
                 <div className="space-y-3">
@@ -110,19 +110,19 @@ const ThankYouLetterHoverCard = ({ children }: ThankYouLetterHoverCardProps) => 
                     <Textarea
                        value={to || undefined}
                        onChange={(e) => setTo(e.target.value)}
-                       placeholder="Dear [Name], Relative, Teacher, Colleague, Friend, etc..."
+                       placeholder="Dear [Name], Colleague, Coach, Friend, Mentor, Team, etc..."
                        className="w-full min-h-[60px] resize-none"
                      />
                   </div>
                   
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label>
-                    <Textarea
-                       value={subject || undefined}
-                       onChange={(e) => setSubject(e.target.value)}
-                       placeholder="Add Gratitude, Appreciation, Recognition, Thankfullness, etc..."
+                     <Textarea
+                      value={subject || undefined}
+                      onChange={(e) => setSubject(e.target.value)}
+                      placeholder="Include “Goodbye, best wishes, happy departure, retirement wishes, etc..."
                        className="w-full min-h-[60px] resize-none"
-                     />
+                    />
                   </div>
                   
                   <div>
@@ -130,7 +130,7 @@ const ThankYouLetterHoverCard = ({ children }: ThankYouLetterHoverCardProps) => 
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
-                      placeholder="Express Sincere thanks, Your support, Your guidance, Your kindness, etc. towards the help/support offered."
+                      placeholder="Add Bidding farewell, Wishing success, Parting words, etc..."
                       className="w-full min-h-[80px] resize-none"
                     />
                   </div>
@@ -140,7 +140,7 @@ const ThankYouLetterHoverCard = ({ children }: ThankYouLetterHoverCardProps) => 
                     <Textarea
                       value={finalTouch || undefined}
                       onChange={(e) => setFinalTouch(e.target.value)}
-                      placeholder="How it helped me, lasting impact, warm wishes, etc..."
+                      placeholder="Mention Memories, Gratitude, Hopes for future, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -150,7 +150,7 @@ const ThankYouLetterHoverCard = ({ children }: ThankYouLetterHoverCardProps) => 
                     <Textarea
                       value={signOff || undefined}
                       onChange={(e) => setSignOff(e.target.value)}
-                      placeholder="With gratitude, Best regards, Warm thanks, etc..."
+                      placeholder="Say With best wishes, Fondly, Sincerely, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -160,16 +160,16 @@ const ThankYouLetterHoverCard = ({ children }: ThankYouLetterHoverCardProps) => 
                     <Input
                       value={from || undefined}
                       onChange={(e) => setFrom(e.target.value)}
-                      placeholder="Your Name"
+                      placeholder="Your Name, Yours truly, With affection, etc..."
                       className="w-full"
                     />
                   </div>
                   
                   <button
                     className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
-                    onClick={() => console.log("Start Thank You Letter")}
+                    onClick={() => console.log("Start Farewell Letter")}
                   >
-                    Start Thank You Letter
+                    Start Farewell Letter
                   </button>
                 </div>
               </div>
@@ -181,4 +181,4 @@ const ThankYouLetterHoverCard = ({ children }: ThankYouLetterHoverCardProps) => 
   );
 };
 
-export default ThankYouLetterHoverCard;
+export default FarewellLetterHoverCard;

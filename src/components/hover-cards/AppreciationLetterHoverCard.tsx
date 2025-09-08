@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { Trophy } from "lucide-react";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { ThumbsUp } from "lucide-react";
 
-interface CongratulatoryLetterHoverCardProps {
+interface AppreciationLetterHoverCardProps {
   children: React.ReactNode;
 }
 
-const CongratulatoryLetterHoverCard = ({ children }: CongratulatoryLetterHoverCardProps) => {
+const AppreciationLetterHoverCard = ({ children }: AppreciationLetterHoverCardProps) => {
   const [showCard, setShowCard] = useState(false);
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
@@ -18,7 +18,7 @@ const CongratulatoryLetterHoverCard = ({ children }: CongratulatoryLetterHoverCa
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem('congratulatoryLetter-form');
+    const saved = localStorage.getItem('appreciationLetter-form');
     if (saved) {
       const data = JSON.parse(saved);
       setTo(data.to || "");
@@ -32,7 +32,7 @@ const CongratulatoryLetterHoverCard = ({ children }: CongratulatoryLetterHoverCa
 
   useEffect(() => {
     const formData = { to, subject, coreMessage, finalTouch, signOff, from };
-    localStorage.setItem('congratulatoryLetter-form', JSON.stringify(formData));
+    localStorage.setItem('appreciationLetter-form', JSON.stringify(formData));
   }, [to, subject, coreMessage, finalTouch, signOff, from]);
 
   const handleMouseEnter = () => {
@@ -59,8 +59,8 @@ const CongratulatoryLetterHoverCard = ({ children }: CongratulatoryLetterHoverCa
     const handleClickOutside = (event: MouseEvent) => {
       if (showCard) {
         const target = event.target as HTMLElement;
-        const card = document.querySelector('[data-congratulatory-card]');
-        if (card && !card.contains(target) && !target.closest('[data-congratulatory-trigger]')) {
+        const card = document.querySelector('[data-appreciation-letter-card]');
+        if (card && !card.contains(target) && !target.closest('[data-appreciation-letter-trigger]')) {
           setShowCard(false);
         }
       }
@@ -76,7 +76,7 @@ const CongratulatoryLetterHoverCard = ({ children }: CongratulatoryLetterHoverCa
     <>
       {/* Trigger Element */}
       <div 
-        data-congratulatory-trigger
+        data-appreciation-letter-trigger
         onMouseEnter={handleMouseEnter} 
         onMouseLeave={handleMouseLeave}
         onClick={() => setShowCard(!showCard)}
@@ -88,8 +88,8 @@ const CongratulatoryLetterHoverCard = ({ children }: CongratulatoryLetterHoverCa
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
-            data-congratulatory-card
-            className="absolute left-[918px] top-[160px] w-80 pointer-events-auto"
+            data-appreciation-letter-card
+            className="absolute left-[918px] top-[220px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
@@ -98,31 +98,31 @@ const CongratulatoryLetterHoverCard = ({ children }: CongratulatoryLetterHoverCa
               <div className="space-y-4">
                  <div>
                    <div className="flex items-center gap-2 mb-1">
-                     <Trophy className="w-5 h-5 text-[#5B34A0]" />
-                     <h3 className="text-lg font-semibold text-[#5B34A0]">Congratulatory Letter</h3>
+                     <ThumbsUp className="w-5 h-5 text-[#5B34A0]" />
+                     <h3 className="text-lg font-semibold text-[#5B34A0]">Appreciation Letter</h3>
                    </div>
-                   <p className="text-sm text-[#6E6E6E] mb-4">Celebrate achievements and milestones</p>
+                   <p className="text-sm text-[#6E6E6E] mb-4">Express appreciation professionally</p>
                  </div>
                 
                 <div className="space-y-3">
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label>
                     <Textarea
-                       value={to || undefined}
-                       onChange={(e) => setTo(e.target.value)}
-                       placeholder="Dear [Name], Friend, Colleague, Team, Family..."
-                       className="w-full min-h-[60px] resize-none"
-                     />
+                      value={to || undefined}
+                      onChange={(e) => setTo(e.target.value)}
+                      placeholder="Dear [Name], Employee, Colleague, Student, Team, Relative, Teacher, etc..."
+                      className="w-full min-h-[60px] resize-none"
+                    />
                   </div>
                   
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label>
                     <Textarea
-                       value={subject || undefined}
-                       onChange={(e) => setSubject(e.target.value)}
-                       placeholder="Mention about Achievement, Success, Promotion, Milestone, Marriage etc..."
-                       className="w-full min-h-[60px] resize-none"
-                     />
+                      value={subject || undefined}
+                      onChange={(e) => setSubject(e.target.value)}
+                      placeholder="Recognition, Gratitude, Thanks, Appreciation, etc..."
+                      className="w-full min-h-[60px] resize-none"
+                    />
                   </div>
                   
                   <div>
@@ -130,7 +130,7 @@ const CongratulatoryLetterHoverCard = ({ children }: CongratulatoryLetterHoverCa
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
-                      placeholder="Use phrases like Congratulations, Proud of you, Good job, Well done, etc. to write your message."
+                      placeholder="Efforts, Contributions, Achievements, Great work, Gratitude..."
                       className="w-full min-h-[80px] resize-none"
                     />
                   </div>
@@ -140,7 +140,7 @@ const CongratulatoryLetterHoverCard = ({ children }: CongratulatoryLetterHoverCa
                     <Textarea
                       value={finalTouch || undefined}
                       onChange={(e) => setFinalTouch(e.target.value)}
-                      placeholder="Use phrases like Personal pride, Shared joy, Looking ahead, Keep going etc..."
+                      placeholder="Sincerity, Specific examples, Inspiration, Positive traits, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -150,7 +150,7 @@ const CongratulatoryLetterHoverCard = ({ children }: CongratulatoryLetterHoverCa
                     <Textarea
                       value={signOff || undefined}
                       onChange={(e) => setSignOff(e.target.value)}
-                      placeholder="Consider writing Best wishes, Heartfelt regards, Cheers, Warmly etc. to close the message"
+                      placeholder="Keep inspiring, Best wishes, Energy to you, With regards, With thanks, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
                   </div>
@@ -160,16 +160,16 @@ const CongratulatoryLetterHoverCard = ({ children }: CongratulatoryLetterHoverCa
                     <Input
                       value={from || undefined}
                       onChange={(e) => setFrom(e.target.value)}
-                      placeholder="Proud Friend, Warm Regards, Your Name, "
+                      placeholder="Your Name"
                       className="w-full"
                     />
                   </div>
                   
                   <button
                     className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
-                    onClick={() => console.log("Start Congratulatory Letter")}
+                    onClick={() => console.log("Start Appreciation Letter")}
                   >
-                    Start Congratulatory Letter
+                    Start Appreciation Letter
                   </button>
                 </div>
               </div>
@@ -181,4 +181,4 @@ const CongratulatoryLetterHoverCard = ({ children }: CongratulatoryLetterHoverCa
   );
 };
 
-export default CongratulatoryLetterHoverCard;
+export default AppreciationLetterHoverCard;
