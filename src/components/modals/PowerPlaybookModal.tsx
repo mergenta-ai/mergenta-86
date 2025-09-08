@@ -2,6 +2,9 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { DecisionMakingModal } from "./DecisionMakingModal";
+import { DecisionResultsModal } from "./DecisionResultsModal";
+import { DecisionDetailModal } from "./DecisionDetailModal";
 import { 
   X, 
   Briefcase, 
@@ -65,6 +68,59 @@ interface PowerPlaybookModalProps {
 }
 
 export const PowerPlaybookModal = ({ open, onOpenChange, onAddToChat }: PowerPlaybookModalProps) => {
+  const [decisionMakingOpen, setDecisionMakingOpen] = React.useState(false);
+  const [decisionResultsOpen, setDecisionResultsOpen] = React.useState(false);
+  const [decisionDetailOpen, setDecisionDetailOpen] = React.useState(false);
+  const [selectedCardType, setSelectedCardType] = React.useState("");
+  const [formData, setFormData] = React.useState<any>(null);
+
+  const handleDecisionMakingClick = () => {
+    setDecisionMakingOpen(true);
+  };
+
+  const handleRunPlaybook = (data: any) => {
+    setFormData(data);
+    setDecisionMakingOpen(false);
+    setDecisionResultsOpen(true);
+  };
+
+  const handleExpandFurther = (cardType: string) => {
+    setSelectedCardType(cardType);
+    setDecisionResultsOpen(false);
+    setDecisionDetailOpen(true);
+  };
+
+  const handleSearch = (query: string) => {
+    // Close all modals and add to chat history
+    setDecisionMakingOpen(false);
+    setDecisionResultsOpen(false);
+    setDecisionDetailOpen(false);
+    onOpenChange(false);
+    
+    if (onAddToChat) {
+      onAddToChat(`Search: ${query}`, "Searching for guidance on your decision-making query...");
+    }
+  };
+
+  const handleCopyAll = () => {
+    const allSuggestions = `Decision Making Playbook Results:
+
+Options Matrix → Compare choices across key factors
+Trade-off Analysis → See gains versus hidden costs
+Bias Detective → Spot assumptions and blind spots
+Risk Compass → Map risks by impact and chance
+Decision Journal → Record reasoning for future clarity
+Prioritisation Ladder → Rank what matters most first`;
+
+    navigator.clipboard.writeText(allSuggestions);
+  };
+
+  const handleStartAgain = () => {
+    setDecisionResultsOpen(false);
+    setDecisionMakingOpen(true);
+    setFormData(null);
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <CustomDialogContent 
@@ -105,7 +161,11 @@ export const PowerPlaybookModal = ({ open, onOpenChange, onAddToChat }: PowerPla
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-mergenta-dark-grey">Business & Professional</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-500/90 to-purple-700/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-purple-500/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '0ms' }}>
+                <div 
+                  onClick={handleDecisionMakingClick}
+                  className="group cursor-pointer bg-gradient-to-br from-purple-500/90 to-purple-700/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-purple-500/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" 
+                  style={{ animationDelay: '0ms' }}
+                >
                   <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <div className="relative z-10 flex flex-col h-full">
                     <div className="flex justify-center mb-6">
@@ -490,6 +550,29 @@ export const PowerPlaybookModal = ({ open, onOpenChange, onAddToChat }: PowerPla
           </div>
         </div>
       </CustomDialogContent>
+
+      {/* Decision Making Modals */}
+      <DecisionMakingModal
+        open={decisionMakingOpen}
+        onOpenChange={setDecisionMakingOpen}
+        onRunPlaybook={handleRunPlaybook}
+      />
+
+      <DecisionResultsModal
+        open={decisionResultsOpen}
+        onOpenChange={setDecisionResultsOpen}
+        onExpandFurther={handleExpandFurther}
+        onSearch={handleSearch}
+        onCopyAll={handleCopyAll}
+        onStartAgain={handleStartAgain}
+      />
+
+      <DecisionDetailModal
+        open={decisionDetailOpen}
+        onOpenChange={setDecisionDetailOpen}
+        cardType={selectedCardType}
+        onSearch={handleSearch}
+      />
     </Dialog>
   );
 };
