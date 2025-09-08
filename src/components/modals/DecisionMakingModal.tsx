@@ -188,7 +188,7 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                               </button>
                             </FormControl>
                             {openDropdowns.decisionArea && (
-                              <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden">
+                              <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200 z-[9999] overflow-hidden">
                                 <div className="py-1">
                                   {dropdownOptions.decisionArea.map((option) => (
                                     <button
@@ -230,7 +230,7 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                               </button>
                             </FormControl>
                             {openDropdowns.timeframe && (
-                              <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden">
+                              <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200 z-[9999] overflow-hidden">
                                 <div className="py-1">
                                   {dropdownOptions.timeframe.map((option) => (
                                     <button
@@ -272,7 +272,7 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                               </button>
                             </FormControl>
                             {openDropdowns.priorityLevel && (
-                              <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden">
+                              <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200 z-[9999] overflow-hidden">
                                 <div className="py-1">
                                   {dropdownOptions.priorityLevel.map((option) => (
                                     <button
@@ -314,7 +314,7 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                               </button>
                             </FormControl>
                             {openDropdowns.riskSensitivity && (
-                              <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden">
+                              <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200 z-[9999] overflow-hidden">
                                 <div className="py-1">
                                   {dropdownOptions.riskSensitivity.map((option) => (
                                     <button
