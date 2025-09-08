@@ -1,5 +1,24 @@
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
+import * as React from "react";
+import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
+
+// Custom DialogContent without automatic close button - same as SnapshotModal
+const CustomDialogContent = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
+>(({ className, children, ...props }, ref) => (
+  <DialogPrimitive.Portal>
+    <DialogPrimitive.Content
+      ref={ref}
+      className={cn(className)}
+      {...props}
+    >
+      {children}
+    </DialogPrimitive.Content>
+  </DialogPrimitive.Portal>
+));
 
 interface PowerPlaybookModalProps {
   open: boolean;
@@ -10,8 +29,8 @@ interface PowerPlaybookModalProps {
 export const PowerPlaybookModal = ({ open, onOpenChange, onAddToChat }: PowerPlaybookModalProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent 
-        className="fixed inset-0 w-screen h-screen max-w-none max-h-none m-0 p-0 bg-pastel-violet rounded-none border-none z-[100] [&>button]:hidden"
+      <CustomDialogContent 
+        className="fixed inset-0 w-screen h-screen max-w-none max-h-none m-0 p-0 bg-pastel-violet rounded-none border-none z-[100]"
         style={{ 
           position: 'fixed', 
           top: 0, 
@@ -26,9 +45,9 @@ export const PowerPlaybookModal = ({ open, onOpenChange, onAddToChat }: PowerPla
         {/* Close button */}
         <button
           onClick={() => onOpenChange(false)}
-          className="absolute top-6 right-6 z-50 w-10 h-10 bg-white rounded-full flex items-center justify-center text-mergenta-dark-grey hover:text-mergenta-deep-violet transition-colors shadow-md"
+          className="absolute top-6 right-6 z-50 p-2 rounded-full bg-white/80 hover:bg-white transition-colors shadow-soft"
         >
-          <X className="h-5 w-5" />
+          <X className="h-5 w-5 text-mergenta-dark-grey" />
         </button>
 
         {/* Header */}
@@ -48,7 +67,7 @@ export const PowerPlaybookModal = ({ open, onOpenChange, onAddToChat }: PowerPla
             </div>
           </div>
         </div>
-      </DialogContent>
+      </CustomDialogContent>
     </Dialog>
   );
 };
