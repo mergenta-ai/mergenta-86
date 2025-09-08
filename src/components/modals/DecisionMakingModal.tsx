@@ -121,27 +121,27 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                 {/* Form Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Decision Area */}
-                  <div className="bg-gradient-to-br from-purple-200/40 to-pink-200/40 backdrop-blur-md rounded-2xl p-6 border border-white/30 shadow-lg">
+                  <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 backdrop-blur-md rounded-2xl p-6 border border-purple-300/40 shadow-lg">
                     <FormField
                       control={form.control}
                       name="decisionArea"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-lg font-semibold text-mergenta-dark-grey">Decision Area</FormLabel>
+                          <FormLabel className="text-lg font-semibold text-white drop-shadow-md">Decision Area</FormLabel>
                           <Select onValueChange={field.onChange} value={field.value}>
                             <FormControl>
-                              <SelectTrigger className="bg-white/90 backdrop-blur-sm border-white/50 hover:bg-white/95 transition-colors">
+                              <SelectTrigger className="bg-white/95 backdrop-blur-sm border-white/50 hover:bg-white transition-colors text-gray-900 font-medium">
                                 <SelectValue placeholder="Select decision area" />
                               </SelectTrigger>
                             </FormControl>
-                            <SelectContent className="bg-white/95 backdrop-blur-md border border-purple-200/50 shadow-2xl z-[300]" sideOffset={5}>
-                              <SelectItem value="business" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Business</SelectItem>
-                              <SelectItem value="career" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Career</SelectItem>
-                              <SelectItem value="finance" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Finance</SelectItem>
-                              <SelectItem value="personal" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Personal</SelectItem>
-                              <SelectItem value="health" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Health</SelectItem>
-                              <SelectItem value="family" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Family</SelectItem>
-                              <SelectItem value="lifestyle" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Lifestyle</SelectItem>
+                            <SelectContent className="bg-white backdrop-blur-md border border-purple-200/50 shadow-2xl z-[300]" sideOffset={5}>
+                              <SelectItem value="business" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium">Business</SelectItem>
+                              <SelectItem value="career" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium">Career</SelectItem>
+                              <SelectItem value="finance" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium">Finance</SelectItem>
+                              <SelectItem value="personal" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium">Personal</SelectItem>
+                              <SelectItem value="health" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium">Health</SelectItem>
+                              <SelectItem value="family" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium">Family</SelectItem>
+                              <SelectItem value="lifestyle" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium">Lifestyle</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -151,24 +151,24 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                   </div>
 
                   {/* Timeframe */}
-                  <div className="bg-gradient-to-br from-purple-200/40 to-pink-200/40 backdrop-blur-md rounded-2xl p-6 border border-white/30 shadow-lg">
+                  <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 backdrop-blur-md rounded-2xl p-6 border border-purple-300/40 shadow-lg">
                     <FormField
                       control={form.control}
                       name="timeframe"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-lg font-semibold text-mergenta-dark-grey">Timeframe</FormLabel>
+                          <FormLabel className="text-lg font-semibold text-white drop-shadow-md">Timeframe</FormLabel>
                           <Select onValueChange={field.onChange} value={field.value}>
                             <FormControl>
-                              <SelectTrigger className="bg-white/90 backdrop-blur-sm border-white/50 hover:bg-white/95 transition-colors">
+                              <SelectTrigger className="bg-white/95 backdrop-blur-sm border-white/50 hover:bg-white transition-colors text-gray-900 font-medium">
                                 <SelectValue placeholder="Select timeframe" />
                               </SelectTrigger>
                             </FormControl>
-                            <SelectContent className="bg-white/95 backdrop-blur-md border border-purple-200/50 shadow-2xl z-[300]" sideOffset={5}>
-                              <SelectItem value="immediate" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Immediate</SelectItem>
-                              <SelectItem value="short-term" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Short Term</SelectItem>
-                              <SelectItem value="medium-term" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Medium Term</SelectItem>
-                              <SelectItem value="long-term" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Long Term</SelectItem>
+                            <SelectContent className="bg-white backdrop-blur-md border border-purple-200/50 shadow-2xl z-[300]" sideOffset={5}>
+                              <SelectItem value="immediate" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium">Immediate</SelectItem>
+                              <SelectItem value="short-term" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium">Short Term</SelectItem>
+                              <SelectItem value="medium-term" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium">Medium Term</SelectItem>
+                              <SelectItem value="long-term" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium">Long Term</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -178,23 +178,23 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                   </div>
 
                   {/* Priority Level */}
-                  <div className="bg-gradient-to-br from-purple-200/40 to-pink-200/40 backdrop-blur-md rounded-2xl p-6 border border-white/30 shadow-lg">
+                  <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 backdrop-blur-md rounded-2xl p-6 border border-purple-300/40 shadow-lg">
                     <FormField
                       control={form.control}
                       name="priorityLevel"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-lg font-semibold text-mergenta-dark-grey">Priority Level</FormLabel>
+                          <FormLabel className="text-lg font-semibold text-white drop-shadow-md">Priority Level</FormLabel>
                           <Select onValueChange={field.onChange} value={field.value}>
                             <FormControl>
-                              <SelectTrigger className="bg-white/90 backdrop-blur-sm border-white/50 hover:bg-white/95 transition-colors">
+                              <SelectTrigger className="bg-white/95 backdrop-blur-sm border-white/50 hover:bg-white transition-colors text-gray-900 font-medium">
                                 <SelectValue placeholder="Select priority level" />
                               </SelectTrigger>
                             </FormControl>
-                            <SelectContent className="bg-white/95 backdrop-blur-md border border-purple-200/50 shadow-2xl z-[300]" sideOffset={5}>
-                              <SelectItem value="high" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">High</SelectItem>
-                              <SelectItem value="medium" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Medium</SelectItem>
-                              <SelectItem value="low" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Low</SelectItem>
+                            <SelectContent className="bg-white backdrop-blur-md border border-purple-200/50 shadow-2xl z-[300]" sideOffset={5}>
+                              <SelectItem value="high" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium">High</SelectItem>
+                              <SelectItem value="medium" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium">Medium</SelectItem>
+                              <SelectItem value="low" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium">Low</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -204,23 +204,23 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                   </div>
 
                   {/* Risk Sensitivity */}
-                  <div className="bg-gradient-to-br from-purple-200/40 to-pink-200/40 backdrop-blur-md rounded-2xl p-6 border border-white/30 shadow-lg">
+                  <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 backdrop-blur-md rounded-2xl p-6 border border-purple-300/40 shadow-lg">
                     <FormField
                       control={form.control}
                       name="riskSensitivity"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-lg font-semibold text-mergenta-dark-grey">Risk Sensitivity</FormLabel>
+                          <FormLabel className="text-lg font-semibold text-white drop-shadow-md">Risk Sensitivity</FormLabel>
                           <Select onValueChange={field.onChange} value={field.value}>
                             <FormControl>
-                              <SelectTrigger className="bg-white/90 backdrop-blur-sm border-white/50 hover:bg-white/95 transition-colors">
+                              <SelectTrigger className="bg-white/95 backdrop-blur-sm border-white/50 hover:bg-white transition-colors text-gray-900 font-medium">
                                 <SelectValue placeholder="Select risk sensitivity" />
                               </SelectTrigger>
                             </FormControl>
-                            <SelectContent className="bg-white/95 backdrop-blur-md border border-purple-200/50 shadow-2xl z-[300]" sideOffset={5}>
-                              <SelectItem value="risk-taking" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Risk-Taking</SelectItem>
-                              <SelectItem value="balanced" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Balanced</SelectItem>
-                              <SelectItem value="risk-averse" className="hover:bg-purple-100/80 focus:bg-purple-100/80 cursor-pointer text-gray-800">Risk-Averse</SelectItem>
+                            <SelectContent className="bg-white backdrop-blur-md border border-purple-200/50 shadow-2xl z-[300]" sideOffset={5}>
+                              <SelectItem value="risk-taking" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium">Risk-Taking</SelectItem>
+                              <SelectItem value="balanced" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium">Balanced</SelectItem>
+                              <SelectItem value="risk-averse" className="hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium">Risk-Averse</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -231,17 +231,17 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                 </div>
 
                 {/* Challenge Description */}
-                <div className="bg-gradient-to-br from-purple-200/40 to-pink-200/40 backdrop-blur-md rounded-2xl p-6 border border-white/30 shadow-lg">
+                <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 backdrop-blur-md rounded-2xl p-6 border border-purple-300/40 shadow-lg">
                   <FormField
                     control={form.control}
                     name="challenge"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-lg font-semibold text-mergenta-dark-grey">Describe your decision challenge</FormLabel>
+                        <FormLabel className="text-lg font-semibold text-white drop-shadow-md">Describe your decision challenge</FormLabel>
                         <FormControl>
                           <Textarea
                             placeholder="Describe the decision you need to make, the options you're considering, and any constraints or concerns you have..."
-                            className="min-h-[120px] bg-white/90 backdrop-blur-sm border-white/50 resize-none hover:bg-white/95 transition-colors"
+                            className="min-h-[120px] bg-white/95 backdrop-blur-sm border-white/50 resize-none hover:bg-white transition-colors text-gray-900 font-medium placeholder:text-gray-500"
                             {...field}
                           />
                         </FormControl>
