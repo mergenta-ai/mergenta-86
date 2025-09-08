@@ -192,7 +192,13 @@ const WorkflowTabs = ({ onAddToChat }: { onAddToChat?: (message: string, respons
             {tabs.map((tab, index) => (
               <div key={index} className="relative">
                 <button
-                  onMouseEnter={() => handleTabHover(tab.id)}
+                  onMouseEnter={() => {
+                    if (tab.id === "power-playbook") {
+                      setPowerPlaybookModalOpen(true);
+                    } else {
+                      handleTabHover(tab.id);
+                    }
+                  }}
                   onMouseLeave={handleTabLeave}
                   style={{ backgroundColor: activeTab === tab.id ? '#C7A8EA' : '#F3EAFE' }}
                   className={`
@@ -212,7 +218,7 @@ const WorkflowTabs = ({ onAddToChat }: { onAddToChat?: (message: string, respons
                 </button>
                 
                 {/* Dropdown - only for certain tabs */}
-                {activeTab === tab.id && !["think-hard", "deep-research"].includes(tab.id) && (
+                {activeTab === tab.id && !["think-hard", "deep-research", "power-playbook"].includes(tab.id) && (
                   <div 
                     className="absolute top-full w-[100px] bg-[#F8F5FE] rounded-lg shadow-md border border-[#E5D9F2] z-50"
                     onMouseEnter={handleDropdownEnter}
@@ -484,16 +490,6 @@ const WorkflowTabs = ({ onAddToChat }: { onAddToChat?: (message: string, respons
                             </Tooltip>
                           );
                         })}
-                      </div>
-                    )}
-                    {activeTab === "power-playbook" && (
-                      <div className="py-2">
-                        <button
-                          className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
-                          onClick={() => setPowerPlaybookModalOpen(true)}
-                        >
-                          Open Power Playbook
-                        </button>
                       </div>
                     )}
                     {activeTab === "experience-studio" && (

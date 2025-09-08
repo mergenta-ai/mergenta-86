@@ -10,7 +10,19 @@ interface PowerPlaybookModalProps {
 export const PowerPlaybookModal = ({ open, onOpenChange, onAddToChat }: PowerPlaybookModalProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="fixed inset-0 w-full h-full max-w-none max-h-none m-0 p-0 bg-pastel-lavender rounded-none border-none">
+      <DialogContent 
+        className="fixed inset-0 w-screen h-screen max-w-none max-h-none m-0 p-0 bg-pastel-lavender rounded-none border-none z-[100]"
+        style={{ 
+          position: 'fixed', 
+          top: 0, 
+          left: 0, 
+          right: 0, 
+          bottom: 0, 
+          width: '100vw', 
+          height: '100vh',
+          transform: 'none'
+        }}
+      >
         {/* Close button */}
         <button
           onClick={() => onOpenChange(false)}
