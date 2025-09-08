@@ -30,8 +30,9 @@ export const PowerPlaybookModal = ({ open, onOpenChange, onAddToChat }: PowerPla
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <CustomDialogContent 
-        className="fixed inset-0 w-screen h-screen max-w-none max-h-none m-0 p-0 bg-pastel-violet rounded-none border-none z-[100]"
+        className="fixed inset-0 w-screen h-screen max-w-none max-h-none m-0 p-0 rounded-none border-none z-[100]"
         style={{ 
+          backgroundColor: 'hsl(var(--power-playbook-bg))',
           position: 'fixed', 
           top: 0, 
           left: 0, 
