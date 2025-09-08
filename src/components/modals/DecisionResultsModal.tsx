@@ -173,7 +173,7 @@ export const DecisionResultsModal = ({
               {decisionCards.map((card, index) => (
                 <div 
                   key={card.id}
-                  className="bg-gradient-to-br from-mergenta-deep-violet to-mergenta-fuchsia text-white rounded-2xl p-6 shadow-md hover:from-mergenta-deep-violet/90 hover:to-mergenta-fuchsia/90 transition-all duration-300 animate-fade-in"
+                  className="bg-gradient-to-br from-[#B388EB] to-[#D86BA2] text-white rounded-2xl p-6 shadow-md hover:opacity-95 transition-all duration-300 animate-fade-in"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <div className="space-y-4">
