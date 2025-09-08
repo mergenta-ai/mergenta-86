@@ -60,6 +60,30 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
   const [dropdownPositions, setDropdownPositions] = React.useState<{[key: string]: {top: number, left: number, width: number}}>({});
   const buttonRefs = React.useRef<{[key: string]: HTMLButtonElement | null}>({});
 
+  // Close dropdowns when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      
+      // Don't close if clicking on a dropdown button or dropdown content
+      if (target.closest('[data-dropdown-button]') || target.closest('[data-dropdown-content]')) {
+        return;
+      }
+      
+      setOpenDropdowns({
+        decisionArea: false,
+        timeframe: false,
+        priorityLevel: false,
+        riskSensitivity: false
+      });
+    };
+
+    if (open) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [open]);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -120,6 +144,7 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
   };
 
   const selectOption = (field: string, value: string) => {
+    console.log('selectOption called:', field, value);
     form.setValue(field as keyof z.infer<typeof formSchema>, value);
     setOpenDropdowns(prev => ({
       ...prev,
@@ -141,10 +166,12 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
     if (!isOpen || !dropdownPositions[field]) return null;
     
     const position = dropdownPositions[field];
+    console.log('Rendering PortalDropdown for field:', field, 'at position:', position);
     
     return createPortal(
       <div 
         className="fixed bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden animate-fade-in"
+        data-dropdown-content="true"
         style={{
           top: position.top,
           left: position.left,
@@ -152,13 +179,26 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
           zIndex: 999999,
           position: 'fixed'
         }}
+        onClick={(e) => {
+          console.log('Dropdown container clicked');
+          e.stopPropagation();
+        }}
       >
         <div className="py-1">
           {options.map((option) => (
             <button
               key={option.value}
               type="button"
-              onClick={() => selectOption(field, option.value)}
+              onClick={(e) => {
+                console.log('Option clicked:', option.value, 'for field:', field);
+                e.preventDefault();
+                e.stopPropagation();
+                selectOption(field, option.value);
+              }}
+              onMouseDown={(e) => {
+                console.log('Option mousedown:', option.value);
+                e.preventDefault();
+              }}
               className="w-full px-4 py-3 text-left hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium transition-colors"
             >
               {option.label}
@@ -232,6 +272,7 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                               <button
                                 ref={(el) => { buttonRefs.current['decisionArea'] = el; }}
                                 type="button"
+                                data-dropdown-button="true"
                                 onClick={() => toggleDropdown('decisionArea')}
                                 className="w-full bg-white/95 border-white/50 hover:bg-white transition-colors text-gray-900 font-medium rounded-md px-3 py-2 text-left flex items-center justify-between"
                               >
@@ -264,6 +305,7 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                               <button
                                 ref={(el) => { buttonRefs.current['timeframe'] = el; }}
                                 type="button"
+                                data-dropdown-button="true"
                                 onClick={() => toggleDropdown('timeframe')}
                                 className="w-full bg-white/95 border-white/50 hover:bg-white transition-colors text-gray-900 font-medium rounded-md px-3 py-2 text-left flex items-center justify-between"
                               >
@@ -296,6 +338,7 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                               <button
                                 ref={(el) => { buttonRefs.current['priorityLevel'] = el; }}
                                 type="button"
+                                data-dropdown-button="true"
                                 onClick={() => toggleDropdown('priorityLevel')}
                                 className="w-full bg-white/95 border-white/50 hover:bg-white transition-colors text-gray-900 font-medium rounded-md px-3 py-2 text-left flex items-center justify-between"
                               >
@@ -328,6 +371,7 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                               <button
                                 ref={(el) => { buttonRefs.current['riskSensitivity'] = el; }}
                                 type="button"
+                                data-dropdown-button="true"
                                 onClick={() => toggleDropdown('riskSensitivity')}
                                 className="w-full bg-white/95 border-white/50 hover:bg-white transition-colors text-gray-900 font-medium rounded-md px-3 py-2 text-left flex items-center justify-between"
                               >
