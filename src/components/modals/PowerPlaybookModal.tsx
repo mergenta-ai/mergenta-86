@@ -572,6 +572,10 @@ Prioritisation Ladder → Rank what matters most first`;
         onOpenChange={setDecisionDetailOpen}
         cardType={selectedCardType}
         onSearch={handleSearch}
+        onGoBack={() => {
+          setDecisionDetailOpen(false);
+          setDecisionResultsOpen(true);
+        }}
       />
     </Dialog>
   );

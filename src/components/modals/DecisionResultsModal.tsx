@@ -2,7 +2,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { X, Search, Copy, RotateCcw } from "lucide-react";
+import { X, Search, Copy, RotateCcw, ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -144,7 +144,14 @@ export const DecisionResultsModal = ({
           transform: 'none'
         }}
       >
-        {/* Close button */}
+        {/* Navigation and Close buttons */}
+        <button
+          onClick={onStartAgain}
+          className="absolute top-6 left-6 z-50 p-2 rounded-full bg-white hover:bg-white/80 transition-colors shadow-lg"
+        >
+          <ArrowLeft className="h-5 w-5 text-black" />
+        </button>
+        
         <button
           onClick={() => onOpenChange(false)}
           className="absolute top-6 right-6 z-50 p-2 rounded-full bg-white/80 hover:bg-white transition-colors shadow-soft"
