@@ -38,7 +38,8 @@ import {
   Globe,
   Recycle,
   Trophy,
-  Navigation
+  Navigation,
+  Rocket
 } from "lucide-react";
 
 // Custom DialogContent without automatic close button - same as SnapshotModal
@@ -269,7 +270,7 @@ export const PowerPlaybookModal = ({ open, onOpenChange, onAddToChat }: PowerPla
                   <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <div className="relative z-10 flex flex-col h-full">
                     <div className="flex justify-center mb-6">
-                      <Heart className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                      <Rocket className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
                     </div>
                     <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Personal Growth Playbook</h3>
                     <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Discover strengths and unlock personal potential.</p>
