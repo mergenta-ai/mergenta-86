@@ -95,7 +95,7 @@ export const PowerPlaybookModal = ({ open, onOpenChange, onAddToChat }: PowerPla
         </div>
 
         {/* Content area for tiles with scroll */}
-        <div className="flex-1 px-12 pb-12 overflow-y-auto">
+        <div className="flex-1 px-12 pb-12 overflow-y-auto max-h-[calc(100vh-200px)]">
           <div className="max-w-7xl mx-auto space-y-12">
             
             {/* Business & Professional */}
