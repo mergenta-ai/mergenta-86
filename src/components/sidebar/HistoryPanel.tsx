@@ -116,21 +116,22 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose }) => {
       </div>
       
       <ScrollArea className="h-[calc(100%-140px)] pr-3">
-        <div className="p-3">
+        <div className="px-2 py-1">
           {historyItems.map((item) => {
             const shortTitle = item.preview.split(' ').slice(0, 4).join(' ');
             
             return (
-              <Button
+              <div
                 key={item.id}
-                variant="ghost"
-                className="w-full h-auto px-3 py-2 mb-1 justify-between text-left hover:bg-pastel-lavender-hover/50 transition-colors group"
+                className="group relative mx-1 mb-0.5 rounded-lg hover:bg-purple-200/60 transition-colors cursor-pointer"
               >
-                <span className="text-sm text-sidebar-text-dark text-left flex-1 min-w-0 truncate">
-                  {shortTitle}
-                </span>
-                <MoreHorizontal className="h-3 w-3 text-sidebar-text-violet ml-2 flex-shrink-0" />
-              </Button>
+                <div className="flex items-center justify-between px-3 py-2.5">
+                  <span className="text-sm text-sidebar-text-dark flex-1 min-w-0 truncate pr-6">
+                    {shortTitle}
+                  </span>
+                  <MoreHorizontal className="h-3.5 w-3.5 text-sidebar-text-violet flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity absolute right-3" />
+                </div>
+              </div>
             );
           })}
         </div>
