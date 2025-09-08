@@ -121,7 +121,7 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                 {/* Form Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Decision Area */}
-                  <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 backdrop-blur-md rounded-2xl p-6 border border-purple-300/40 shadow-lg">
+                  <div className="bg-gradient-to-r from-purple-600 to-pink-600 backdrop-blur-md rounded-2xl p-6 border border-purple-300/60 shadow-lg">
                     <FormField
                       control={form.control}
                       name="decisionArea"
@@ -151,7 +151,7 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                   </div>
 
                   {/* Timeframe */}
-                  <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 backdrop-blur-md rounded-2xl p-6 border border-purple-300/40 shadow-lg">
+                  <div className="bg-gradient-to-r from-purple-600 to-pink-600 backdrop-blur-md rounded-2xl p-6 border border-purple-300/60 shadow-lg">
                     <FormField
                       control={form.control}
                       name="timeframe"
@@ -178,7 +178,7 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                   </div>
 
                   {/* Priority Level */}
-                  <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 backdrop-blur-md rounded-2xl p-6 border border-purple-300/40 shadow-lg">
+                  <div className="bg-gradient-to-r from-purple-600 to-pink-600 backdrop-blur-md rounded-2xl p-6 border border-purple-300/60 shadow-lg">
                     <FormField
                       control={form.control}
                       name="priorityLevel"
@@ -204,7 +204,7 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                   </div>
 
                   {/* Risk Sensitivity */}
-                  <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 backdrop-blur-md rounded-2xl p-6 border border-purple-300/40 shadow-lg">
+                  <div className="bg-gradient-to-r from-purple-600 to-pink-600 backdrop-blur-md rounded-2xl p-6 border border-purple-300/60 shadow-lg">
                     <FormField
                       control={form.control}
                       name="riskSensitivity"
@@ -231,7 +231,7 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
                 </div>
 
                 {/* Challenge Description */}
-                <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 backdrop-blur-md rounded-2xl p-6 border border-purple-300/40 shadow-lg">
+                <div className="bg-gradient-to-r from-purple-600 to-pink-600 backdrop-blur-md rounded-2xl p-6 border border-purple-300/60 shadow-lg">
                   <FormField
                     control={form.control}
                     name="challenge"
