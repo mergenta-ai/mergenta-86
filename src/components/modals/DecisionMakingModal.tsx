@@ -70,12 +70,15 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
         return;
       }
       
-      setOpenDropdowns({
-        decisionArea: false,
-        timeframe: false,
-        priorityLevel: false,
-        riskSensitivity: false
-      });
+      // Add small delay to allow selection to complete
+      setTimeout(() => {
+        setOpenDropdowns({
+          decisionArea: false,
+          timeframe: false,
+          priorityLevel: false,
+          riskSensitivity: false
+        });
+      }, 10);
     };
 
     if (open) {
@@ -189,15 +192,11 @@ export const DecisionMakingModal = ({ open, onOpenChange, onRunPlaybook }: Decis
             <button
               key={option.value}
               type="button"
-              onClick={(e) => {
-                console.log('Option clicked:', option.value, 'for field:', field);
+              onMouseDown={(e) => {
+                console.log('Option mousedown:', option.value, 'for field:', field);
                 e.preventDefault();
                 e.stopPropagation();
                 selectOption(field, option.value);
-              }}
-              onMouseDown={(e) => {
-                console.log('Option mousedown:', option.value);
-                e.preventDefault();
               }}
               className="w-full px-4 py-3 text-left hover:bg-purple-50 focus:bg-purple-50 cursor-pointer text-gray-900 font-medium transition-colors"
             >
