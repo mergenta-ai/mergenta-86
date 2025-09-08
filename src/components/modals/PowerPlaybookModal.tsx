@@ -102,64 +102,64 @@ export const PowerPlaybookModal = ({ open, onOpenChange, onAddToChat }: PowerPla
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-mergenta-dark-grey">Business & Professional</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Briefcase className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Decision Making Playbook</h3>
-                  </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Compare, weigh, and choose between multiple options.</p>
-                  <div className="flex justify-center">
-                    <Target className="h-12 w-12 text-white/60" />
-                  </div>
-                </div>
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Target className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Strategy Playbook</h3>
-                  </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Shape long-term direction with clarity and focus.</p>
-                  <div className="flex justify-center">
-                    <Compass className="h-12 w-12 text-white/60" />
+                <div className="group cursor-pointer bg-gradient-to-br from-purple-500/90 to-purple-700/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-purple-500/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '0ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <Target className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Decision Making Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Compare, weigh, and choose between multiple options.</p>
                   </div>
                 </div>
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <RefreshCw className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Change Management Playbook</h3>
-                  </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Navigate transitions and overcome resistance smoothly.</p>
-                  <div className="flex justify-center">
-                    <RefreshCw className="h-12 w-12 text-white/60" />
-                  </div>
-                </div>
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Package className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Product Playbook</h3>
-                  </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Turn ideas into market-ready products step by step.</p>
-                  <div className="flex justify-center">
-                    <Package className="h-12 w-12 text-white/60" />
+                <div className="group cursor-pointer bg-gradient-to-br from-purple-600/90 to-purple-800/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:-rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-purple-600/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '100ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <Compass className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Strategy Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Shape long-term direction with clarity and focus.</p>
                   </div>
                 </div>
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Handshake className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Negotiation Playbook</h3>
-                  </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Bargain, persuade, and close with confidence.</p>
-                  <div className="flex justify-center">
-                    <Handshake className="h-12 w-12 text-white/60" />
+                <div className="group cursor-pointer bg-gradient-to-br from-purple-700/90 to-purple-900/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-purple-700/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '200ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <RefreshCw className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Change Management Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Navigate transitions and overcome resistance smoothly.</p>
                   </div>
                 </div>
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Users className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Leadership Playbook</h3>
+                <div className="group cursor-pointer bg-gradient-to-br from-purple-500/90 to-pink-600/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:-rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-pink-500/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '300ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <Package className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Product Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Turn ideas into market-ready products step by step.</p>
                   </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Inspire teams, align stakeholders, and lead with impact.</p>
-                  <div className="flex justify-center">
-                    <Users className="h-12 w-12 text-white/60" />
+                </div>
+                <div className="group cursor-pointer bg-gradient-to-br from-purple-600/90 to-pink-700/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-pink-600/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '400ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <Handshake className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Negotiation Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Bargain, persuade, and close with confidence.</p>
+                  </div>
+                </div>
+                <div className="group cursor-pointer bg-gradient-to-br from-purple-700/90 to-pink-800/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:-rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-pink-700/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '500ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <Users className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Leadership Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Inspire teams, align stakeholders, and lead with impact.</p>
                   </div>
                 </div>
               </div>
@@ -169,44 +169,44 @@ export const PowerPlaybookModal = ({ open, onOpenChange, onAddToChat }: PowerPla
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-mergenta-dark-grey">Learning & Knowledge</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <BookOpen className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Learning & Education Playbook</h3>
-                  </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Build effective study and lifelong learning habits.</p>
-                  <div className="flex justify-center">
-                    <BookOpen className="h-12 w-12 text-white/60" />
-                  </div>
-                </div>
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <TrendingUp className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Skills Development Playbook</h3>
-                  </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Identify gaps and accelerate skill mastery.</p>
-                  <div className="flex justify-center">
-                    <TrendingUp className="h-12 w-12 text-white/60" />
+                <div className="group cursor-pointer bg-gradient-to-br from-pink-500/90 to-purple-600/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-pink-500/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '600ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <BookOpen className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Learning & Education Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Build effective study and lifelong learning habits.</p>
                   </div>
                 </div>
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Search className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Research & Knowledge Playbook</h3>
-                  </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Gather, analyse, and synthesise information better.</p>
-                  <div className="flex justify-center">
-                    <Search className="h-12 w-12 text-white/60" />
+                <div className="group cursor-pointer bg-gradient-to-br from-pink-600/90 to-purple-700/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:-rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-pink-600/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '700ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <TrendingUp className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Skills Development Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Identify gaps and accelerate skill mastery.</p>
                   </div>
                 </div>
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <GraduationCap className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Academic Success Playbook</h3>
+                <div className="group cursor-pointer bg-gradient-to-br from-pink-700/90 to-purple-800/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-pink-700/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '800ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <Search className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Research & Knowledge Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Gather, analyse, and synthesise information better.</p>
                   </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Boost performance with proven academic strategies.</p>
-                  <div className="flex justify-center">
-                    <GraduationCap className="h-12 w-12 text-white/60" />
+                </div>
+                <div className="group cursor-pointer bg-gradient-to-br from-pink-500/90 to-purple-700/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:-rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-pink-500/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '900ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <GraduationCap className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Academic Success Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Boost performance with proven academic strategies.</p>
                   </div>
                 </div>
               </div>
@@ -216,44 +216,44 @@ export const PowerPlaybookModal = ({ open, onOpenChange, onAddToChat }: PowerPla
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-mergenta-dark-grey">Finance & Money</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <DollarSign className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Finance & Money Playbook</h3>
-                  </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Master personal and business financial basics.</p>
-                  <div className="flex justify-center">
-                    <DollarSign className="h-12 w-12 text-white/60" />
-                  </div>
-                </div>
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <TrendingUp className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Investment Playbook</h3>
-                  </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Plan and grow wealth through smart investing.</p>
-                  <div className="flex justify-center">
-                    <TrendingUp className="h-12 w-12 text-white/60" />
+                <div className="group cursor-pointer bg-gradient-to-br from-purple-800/90 to-pink-600/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-purple-800/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '1000ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <DollarSign className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Finance & Money Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Master personal and business financial basics.</p>
                   </div>
                 </div>
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <PiggyBank className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Wealth Building Playbook</h3>
-                  </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Design strategies to increase long-term assets.</p>
-                  <div className="flex justify-center">
-                    <PiggyBank className="h-12 w-12 text-white/60" />
+                <div className="group cursor-pointer bg-gradient-to-br from-purple-600/90 to-pink-700/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:-rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-purple-600/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '1100ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <TrendingUp className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Investment Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Plan and grow wealth through smart investing.</p>
                   </div>
                 </div>
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Shield className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Risk & Insurance Playbook</h3>
+                <div className="group cursor-pointer bg-gradient-to-br from-purple-700/90 to-pink-800/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-purple-700/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '1200ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <PiggyBank className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Wealth Building Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Design strategies to increase long-term assets.</p>
                   </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Protect finances with risk analysis and coverage.</p>
-                  <div className="flex justify-center">
-                    <Shield className="h-12 w-12 text-white/60" />
+                </div>
+                <div className="group cursor-pointer bg-gradient-to-br from-purple-500/90 to-pink-600/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:-rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-pink-500/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '1300ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <Shield className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Risk & Insurance Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Protect finances with risk analysis and coverage.</p>
                   </div>
                 </div>
               </div>
@@ -263,44 +263,44 @@ export const PowerPlaybookModal = ({ open, onOpenChange, onAddToChat }: PowerPla
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-mergenta-dark-grey">Life & Guidance</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Heart className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Personal Growth Playbook</h3>
-                  </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Discover strengths and unlock personal potential.</p>
-                  <div className="flex justify-center">
-                    <Heart className="h-12 w-12 text-white/60" />
-                  </div>
-                </div>
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Home className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Family & Relationships Playbook</h3>
-                  </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Strengthen bonds and resolve conflicts at home.</p>
-                  <div className="flex justify-center">
-                    <Home className="h-12 w-12 text-white/60" />
+                <div className="group cursor-pointer bg-gradient-to-br from-pink-600/90 to-purple-500/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-pink-600/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '1400ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <Heart className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Personal Growth Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Discover strengths and unlock personal potential.</p>
                   </div>
                 </div>
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Compass className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Life Guidance Playbook</h3>
-                  </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Find clarity in everyday challenges and crossroads.</p>
-                  <div className="flex justify-center">
-                    <Compass className="h-12 w-12 text-white/60" />
+                <div className="group cursor-pointer bg-gradient-to-br from-pink-700/90 to-purple-600/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:-rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-pink-700/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '1500ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <Home className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Family & Relationships Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Strengthen bonds and resolve conflicts at home.</p>
                   </div>
                 </div>
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Scale className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Ethics & Values Playbook</h3>
+                <div className="group cursor-pointer bg-gradient-to-br from-pink-800/90 to-purple-700/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-pink-800/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '1600ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <Compass className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Life Guidance Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Find clarity in everyday challenges and crossroads.</p>
                   </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Align decisions with principles that matter most.</p>
-                  <div className="flex justify-center">
-                    <Scale className="h-12 w-12 text-white/60" />
+                </div>
+                <div className="group cursor-pointer bg-gradient-to-br from-pink-500/90 to-purple-600/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:-rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-pink-500/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '1700ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <Scale className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Ethics & Values Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Align decisions with principles that matter most.</p>
                   </div>
                 </div>
               </div>
@@ -310,44 +310,44 @@ export const PowerPlaybookModal = ({ open, onOpenChange, onAddToChat }: PowerPla
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-mergenta-dark-grey">Media & Communication</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Megaphone className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Media & PR Playbook</h3>
-                  </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Manage reputation and craft persuasive stories.</p>
-                  <div className="flex justify-center">
-                    <Megaphone className="h-12 w-12 text-white/60" />
-                  </div>
-                </div>
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Palette className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Branding Playbook</h3>
-                  </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Build memorable and trustworthy brand identities.</p>
-                  <div className="flex justify-center">
-                    <Palette className="h-12 w-12 text-white/60" />
+                <div className="group cursor-pointer bg-gradient-to-br from-purple-500/90 to-pink-700/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-purple-500/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '1800ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <Megaphone className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Media & PR Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Manage reputation and craft persuasive stories.</p>
                   </div>
                 </div>
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <MessageSquare className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Communication Playbook</h3>
-                  </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Express ideas clearly across audiences and formats.</p>
-                  <div className="flex justify-center">
-                    <MessageSquare className="h-12 w-12 text-white/60" />
+                <div className="group cursor-pointer bg-gradient-to-br from-purple-600/90 to-pink-800/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:-rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-purple-600/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '1900ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <Palette className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Branding Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Build memorable and trustworthy brand identities.</p>
                   </div>
                 </div>
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Zap className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Marketing Playbook</h3>
+                <div className="group cursor-pointer bg-gradient-to-br from-purple-700/90 to-pink-600/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-purple-700/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '2000ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <MessageSquare className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Communication Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Express ideas clearly across audiences and formats.</p>
                   </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Design campaigns that connect and convert.</p>
-                  <div className="flex justify-center">
-                    <Zap className="h-12 w-12 text-white/60" />
+                </div>
+                <div className="group cursor-pointer bg-gradient-to-br from-purple-800/90 to-pink-700/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:-rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-purple-800/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '2100ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <Zap className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Marketing Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Design campaigns that connect and convert.</p>
                   </div>
                 </div>
               </div>
@@ -357,44 +357,44 @@ export const PowerPlaybookModal = ({ open, onOpenChange, onAddToChat }: PowerPla
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-mergenta-dark-grey">Productivity & Systems</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <CheckSquare className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Productivity & Workflow Playbook</h3>
-                  </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Organise tasks and optimise daily execution.</p>
-                  <div className="flex justify-center">
-                    <CheckSquare className="h-12 w-12 text-white/60" />
-                  </div>
-                </div>
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Clock className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Time Management Playbook</h3>
-                  </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Prioritise and make the most of each hour.</p>
-                  <div className="flex justify-center">
-                    <Clock className="h-12 w-12 text-white/60" />
+                <div className="group cursor-pointer bg-gradient-to-br from-pink-600/90 to-purple-800/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-pink-600/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '2200ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <CheckSquare className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Productivity & Workflow Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Organise tasks and optimise daily execution.</p>
                   </div>
                 </div>
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Settings className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Systems & Automation Playbook</h3>
-                  </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Automate tasks and design efficient systems.</p>
-                  <div className="flex justify-center">
-                    <Settings className="h-12 w-12 text-white/60" />
+                <div className="group cursor-pointer bg-gradient-to-br from-pink-700/90 to-purple-600/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:-rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-pink-700/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '2300ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <Clock className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Time Management Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Prioritise and make the most of each hour.</p>
                   </div>
                 </div>
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <UserCheck className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Collaboration Playbook</h3>
+                <div className="group cursor-pointer bg-gradient-to-br from-pink-800/90 to-purple-700/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-pink-800/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '2400ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <Settings className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Systems & Automation Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Automate tasks and design efficient systems.</p>
                   </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Enhance teamwork and manage group dynamics.</p>
-                  <div className="flex justify-center">
-                    <UserCheck className="h-12 w-12 text-white/60" />
+                </div>
+                <div className="group cursor-pointer bg-gradient-to-br from-pink-500/90 to-purple-700/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:-rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-pink-500/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '2500ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <UserCheck className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Collaboration Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Enhance teamwork and manage group dynamics.</p>
                   </div>
                 </div>
               </div>
@@ -404,44 +404,44 @@ export const PowerPlaybookModal = ({ open, onOpenChange, onAddToChat }: PowerPla
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-mergenta-dark-grey">Health & Wellbeing</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Activity className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Health & Wellness Playbook</h3>
-                  </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Adopt routines that keep body and mind balanced.</p>
-                  <div className="flex justify-center">
-                    <Activity className="h-12 w-12 text-white/60" />
-                  </div>
-                </div>
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Brain className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Mental Resilience Playbook</h3>
-                  </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Handle stress and bounce back from setbacks.</p>
-                  <div className="flex justify-center">
-                    <Brain className="h-12 w-12 text-white/60" />
+                <div className="group cursor-pointer bg-gradient-to-br from-purple-600/90 to-pink-500/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-purple-600/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '2600ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <Activity className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Health & Wellness Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Adopt routines that keep body and mind balanced.</p>
                   </div>
                 </div>
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Apple className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Healthy Nutrition Playbook</h3>
-                  </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Fuel energy and focus with better eating habits.</p>
-                  <div className="flex justify-center">
-                    <Apple className="h-12 w-12 text-white/60" />
+                <div className="group cursor-pointer bg-gradient-to-br from-purple-700/90 to-pink-600/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:-rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-purple-700/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '2700ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <Brain className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Mental Resilience Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Handle stress and bounce back from setbacks.</p>
                   </div>
                 </div>
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Leaf className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Mindfulness Playbook</h3>
+                <div className="group cursor-pointer bg-gradient-to-br from-purple-800/90 to-pink-700/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-purple-800/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '2800ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <Apple className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Healthy Nutrition Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Fuel energy and focus with better eating habits.</p>
                   </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Stay present and centred in daily life.</p>
-                  <div className="flex justify-center">
-                    <Leaf className="h-12 w-12 text-white/60" />
+                </div>
+                <div className="group cursor-pointer bg-gradient-to-br from-purple-500/90 to-pink-800/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:-rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-pink-500/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '2900ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <Leaf className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Mindfulness Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Stay present and centred in daily life.</p>
                   </div>
                 </div>
               </div>
@@ -451,34 +451,34 @@ export const PowerPlaybookModal = ({ open, onOpenChange, onAddToChat }: PowerPla
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-mergenta-dark-grey">Travel & Lifestyle</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <MapPin className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Travel & Lifestyle Playbook</h3>
-                  </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Plan journeys and enrich everyday living.</p>
-                  <div className="flex justify-center">
-                    <MapPin className="h-12 w-12 text-white/60" />
-                  </div>
-                </div>
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Globe className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Cultural Exploration Playbook</h3>
-                  </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Learn from diverse traditions and perspectives.</p>
-                  <div className="flex justify-center">
-                    <Globe className="h-12 w-12 text-white/60" />
+                <div className="group cursor-pointer bg-gradient-to-br from-pink-600/90 to-purple-500/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-pink-600/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '3000ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <MapPin className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Travel & Lifestyle Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Plan journeys and enrich everyday living.</p>
                   </div>
                 </div>
-                <div className="group cursor-pointer bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-elegant hover:shadow-glow aspect-square flex flex-col p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Recycle className="h-5 w-5 text-white" />
-                    <h3 className="text-lg font-semibold text-white">Sustainable Living Playbook</h3>
+                <div className="group cursor-pointer bg-gradient-to-br from-pink-700/90 to-purple-600/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:-rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-pink-700/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '3100ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <Globe className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Cultural Exploration Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Learn from diverse traditions and perspectives.</p>
                   </div>
-                  <p className="text-white/80 text-sm mb-6 flex-1">Adopt eco-conscious habits in work and life.</p>
-                  <div className="flex justify-center">
-                    <Recycle className="h-12 w-12 text-white/60" />
+                </div>
+                <div className="group cursor-pointer bg-gradient-to-br from-pink-800/90 to-purple-700/90 backdrop-blur-sm rounded-2xl border border-white/10 hover:scale-[1.02] hover:rotate-1 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-pink-800/20 aspect-square flex flex-col p-8 relative overflow-hidden animate-fade-in" style={{ animationDelay: '3200ms' }}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex justify-center mb-6">
+                      <Recycle className="h-16 w-16 text-white/90 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 text-center leading-tight">Sustainable Living Playbook</h3>
+                    <p className="text-white/70 text-sm text-center flex-1 leading-relaxed">Adopt eco-conscious habits in work and life.</p>
                   </div>
                 </div>
               </div>
