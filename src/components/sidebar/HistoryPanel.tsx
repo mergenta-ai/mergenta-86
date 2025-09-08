@@ -119,30 +119,28 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose }) => {
       <ScrollArea className="h-[calc(100%-140px)] pr-3">
         <TooltipProvider>
           <div className="p-3">
-            {historyItems.map((item) => (
-              <Tooltip key={item.id}>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="w-full h-auto p-3 mb-2 justify-start text-left hover:bg-pastel-lavender-hover/50 transition-colors group"
-                  >
-                    <div className="flex-1 min-w-0 text-left">
-                      <p className="text-[15px] text-sidebar-text-dark break-words leading-relaxed truncate">
-                        {item.preview}
-                      </p>
-                    </div>
-                    <MoreHorizontal className="h-4 w-4 text-sidebar-text-violet ml-2 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="right" className="bg-white border border-gray-200 shadow-lg p-3">
-                  <div className="space-y-1 text-sm">
-                    <p className="font-medium text-gray-900">{item.preview}</p>
-                    <p className="text-gray-600">Created on: {item.createdOn}</p>
-                    <p className="text-gray-600">Last modified: {item.lastModified}</p>
-                  </div>
-                </TooltipContent>
-              </Tooltip>
-            ))}
+            {historyItems.map((item) => {
+              const shortTitle = item.preview.split(' ').slice(0, 4).join(' ');
+              
+              return (
+                <Tooltip key={item.id}>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      className="w-full h-auto px-3 py-2 mb-1 justify-between text-left hover:bg-pastel-lavender-hover/50 transition-colors group"
+                    >
+                      <span className="text-sm text-sidebar-text-dark text-left flex-1 min-w-0">
+                        {shortTitle}
+                      </span>
+                      <MoreHorizontal className="h-3 w-3 text-sidebar-text-violet ml-2 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right" className="bg-white border border-gray-200 shadow-lg p-3 max-w-xs">
+                    <p className="text-sm text-gray-900">{item.preview}</p>
+                  </TooltipContent>
+                </Tooltip>
+              );
+            })}
           </div>
         </TooltipProvider>
       </ScrollArea>
