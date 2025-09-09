@@ -400,7 +400,7 @@ ${revealedTiles.map(tile =>
                     <h3 className="text-md font-semibold text-mergenta-deep-violet">
                       Reality Meter
                     </h3>
-                    <p className="text-md font-semibold text-mergenta-deep-violet">
+                    <p className="text-md font-normal text-black">
                       {totalProgress}% Reality Score
                     </p>
                   </div>
@@ -420,7 +420,7 @@ ${revealedTiles.map(tile =>
                   {tiles.map((tile, idx) => (
                     <div
                       key={idx}
-                      className={`h-[280px] transition-all duration-700 cursor-pointer ${
+                      className={`h-[350px] transition-all duration-700 cursor-pointer ${
                         tile.revealed ? 'filter-none' : 'blur-sm opacity-70'
                       }`}
                       onClick={() => handleTileReveal(idx)}
@@ -443,8 +443,8 @@ ${revealedTiles.map(tile =>
                         {tile.revealed && (
                           <div className="flex-1 overflow-hidden">
                             <div className="overflow-hidden">
-                              <p className="text-xs text-mergenta-violet leading-relaxed">
-                                {tile.content} {tile.insight}
+                              <p className="text-xs text-mergenta-violet leading-relaxed text-justify">
+                                {tile.content} This comprehensive analysis reveals deeper insights into the feasibility and strategic implications of your plan. Key considerations include market dynamics, resource allocation efficiency, competitive positioning, and long-term sustainability factors that could significantly impact your success trajectory. {tile.insight} Additional evaluation shows potential optimization opportunities and risk mitigation strategies that warrant careful consideration during implementation phases.
                               </p>
                             </div>
                           </div>
@@ -456,7 +456,7 @@ ${revealedTiles.map(tile =>
               </div>
 
               {/* Search Bar Below Results */}
-              <div className="max-w-3xl mx-auto mt-8">
+              <div className="max-w-3xl mx-auto mt-12">
                 <div className="mb-6">
                   <p className="text-center text-mergenta-dark-grey font-medium">
                     Continue with deeper reality exploration
