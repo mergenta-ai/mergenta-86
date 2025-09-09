@@ -321,7 +321,7 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
                   <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-elegant border border-white/20 z-40 overflow-hidden">
                     <div className="p-2">
                       <div className="flex items-center justify-between px-4 py-3 text-sm text-mergenta-dark-grey border-b border-gray-100">
-                        <span className="font-medium">Suggested scenarios</span>
+                        <span className="font-medium">Suggested scenario themes</span>
                         <ChevronDown className="h-4 w-4" />
                       </div>
                       {getCurrentDropdownOptions().map((option, idx) => (
