@@ -402,7 +402,7 @@ ${revealedTiles.map(tile =>
                   <div className="relative">
                     <Progress 
                       value={totalProgress} 
-                      className="h-2 bg-white/50 [&>div]:bg-gradient-to-r [&>div]:from-mergenta-light-violet [&>div]:to-mergenta-magenta [&>div]:transition-all [&>div]:duration-1000 [&>div]:shadow-glow"
+                      className="h-[7px] bg-white/50 [&>div]:bg-gradient-to-r [&>div]:from-mergenta-light-violet [&>div]:to-mergenta-magenta [&>div]:transition-all [&>div]:duration-1000 [&>div]:shadow-glow"
                     />
                     <div className="absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse" />
                   </div>
@@ -414,53 +414,50 @@ ${revealedTiles.map(tile =>
 
               {/* Reality Tiles in Diagonal Cascade Layout */}
               <div className="max-w-7xl mx-auto mb-12">
-                <div className="relative h-[500px] flex items-start justify-start pl-8">
-                  {tiles.map((tile, idx) => (
-                    <div
-                      key={idx}
-                      className={`absolute w-80 h-60 transition-all duration-700 cursor-pointer ${
-                        tile.revealed 
-                          ? 'transform rotate-0' 
-                          : 'transform rotate-45 blur-sm opacity-70'
-                      }`}
-                      style={{
-                        left: `${idx * 100}px`,
-                        top: `${idx * 50}px`,
-                        zIndex: tiles.length - idx
-                      }}
-                      onClick={() => handleTileReveal(idx)}
-                      onMouseEnter={() => !tile.revealed && handleTileReveal(idx)}
-                    >
-                      <div className={`h-full bg-white/30 backdrop-blur-sm rounded-2xl p-6 shadow-soft hover:shadow-elegant transition-all duration-300 flex flex-col ${
-                        tile.revealed ? 'border-2 border-mergenta-violet/30' : ''
-                      }`}>
-                        <div className="mb-4">
-                          <h3 className="text-xl font-semibold text-mergenta-deep-violet mb-2">
-                            {tile.title}
-                          </h3>
-                          <p className="text-sm text-mergenta-dark-grey/80">
-                            {tile.subtitle}
-                          </p>
-                        </div>
-                        
-                        {tile.revealed && (
-                          <div className="flex-1 space-y-3 overflow-hidden">
-                            <div className="h-32 overflow-y-auto pr-2">
-                              <p className="text-xs text-mergenta-dark-grey leading-relaxed">
-                                {tile.content}
-                              </p>
-                            </div>
-                            <div className="p-3 bg-white/40 rounded-lg">
-                              <p className="text-sm text-mergenta-violet font-medium italic">
-                                "{tile.insight}"
-                              </p>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+               <div className="flex flex-row gap-6 justify-center flex-wrap">
+  {tiles.map((tile, idx) => (
+    <div
+      key={idx}
+      className={`w-80 h-60 transition-all duration-700 cursor-pointer ${
+        tile.revealed 
+          ? 'transform rotate-0' 
+          : 'transform rotate-45 blur-sm opacity-70'
+      }`}
+      onClick={() => handleTileReveal(idx)}
+      onMouseEnter={() => !tile.revealed && handleTileReveal(idx)}
+    >
+      <div
+        className={`h-full bg-white/30 backdrop-blur-sm rounded-2xl p-6 shadow-soft hover:shadow-elegant transition-all duration-300 flex flex-col ${
+          tile.revealed ? 'border-2 border-mergenta-violet/30' : ''
+        }`}
+      >
+        <div className="mb-4">
+          <h3 className="text-xl font-semibold text-mergenta-deep-violet mb-2">
+            {tile.title}
+          </h3>
+          <p className="text-sm text-mergenta-dark-grey/80">
+            {tile.subtitle}
+          </p>
+        </div>
+
+        {tile.revealed && (
+          <div className="flex-1 space-y-3 overflow-hidden">
+            <div className="h-32 overflow-y-auto pr-2">
+              <p className="text-xs text-mergenta-dark-grey leading-relaxed">
+                {tile.content}
+              </p>
+            </div>
+            <div className="p-3 bg-white/40 rounded-lg">
+              <p className="text-sm text-mergenta-violet font-medium italic">
+                "{tile.insight}"
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  ))}
+</div>
               </div>
 
               {/* Search Bar Below Results */}
