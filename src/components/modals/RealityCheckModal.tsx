@@ -456,7 +456,6 @@ ${revealedTiles.map(tile =>
       </div>
     ))}
   </div>
-</div>
 
               </div>
 
