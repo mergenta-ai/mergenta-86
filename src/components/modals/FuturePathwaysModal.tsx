@@ -83,7 +83,7 @@ const FuturePathwaysModal = ({ open, onOpenChange, onAddToChat }: FuturePathways
   useEffect(() => {
     if (showDropdown) {
       const interval = setInterval(() => {
-        setCurrentDropdownPair(prev => (prev + 1) % 3); // 6 options / 2 = 3 pairs
+        setCurrentDropdownPair(prev => (prev + 1) % 5); // 10 options / 2 = 5 pairs
       }, 3000);
       return () => clearInterval(interval);
     }
@@ -95,7 +95,11 @@ const FuturePathwaysModal = ({ open, onOpenChange, onAddToChat }: FuturePathways
     "My startup has been running steadily for the last three years and is now generating consistent revenue. Over the next five years, I want to expand into at least two more cities. I am debating whether to raise external funding, grow organically from current profits or explore a joint venture with a regional partner.",
     "I have been working long hours and my health has suffered in terms of stress and weight gain. Over the next 12 months, I want to focus on improving fitness and reducing anxiety. I am considering joining a gym, hiring a personal trainer or following a structured online health programme.",
     "I have savings of around 25,000 dollars currently placed in low-risk deposits and I am now considering long-term wealth creation. Over the next 10 years, I want to build a strong and diversified investment portfolio. I am unsure whether to focus on equities, mutual funds, property or insurance products and I need clarity on the potential returns and risks of each option.",
-    "I am currently living in a large city and feel overwhelmed by the pace of life. Within the next 2–3 years, I want to explore relocation for a more balanced lifestyle. I am weighing options such as moving to a smaller city, relocating abroad to a place like Sydney for work or staying where I am but shifting to hybrid or remote work arrangements."
+    "I am currently living in a large city and feel overwhelmed by the pace of life. Within the next 2–3 years, I want to explore relocation for a more balanced lifestyle. I am weighing options such as moving to a smaller city, relocating abroad to a place like Sydney for work or staying where I am but shifting to hybrid or remote work arrangements.",
+    "I feel strongly about contributing to sustainability and community development. Over the next 5–10 years, I want to make meaningful impact while balancing my professional career. I am considering pursuing a master's in public policy, joining an established non-profit organisation or starting a social enterprise of my own. I am uncertain whether I should gain more financial stability first before dedicating myself full-time to impact work.",
+    "I am currently completing my graduate degree and need to plan my next step. Over the coming years, I want to consider pursuing a master's, enrolling in a professional certification or preparing for a research qualification like a PhD. I am uncertain whether gaining work experience first would strengthen my applications or if I should continue directly with further studies.",
+    "I am working as a project manager but see technology reshaping my industry. In the next 2–3 years, I want to develop strong skills in areas such as AI, data analysis or automation. I am weighing options like structured online learning, an intensive bootcamp or enrolling in a postgraduate diploma. I am not sure whether employers will value formal qualifications more than practical, hands-on projects.",
+    "I have always had an interest in writing and the arts but have pursued a career in business so far. Over the next 3–5 years, I want to explore whether I can develop this into a serious pursuit. I am considering publishing short stories, starting a creative blog or taking professional training in design and media. I am uncertain whether to treat this as a side passion, a parallel career or attempt a full shift into the creative field."
   ];
 
   // Get current pair of dropdown options
