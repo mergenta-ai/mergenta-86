@@ -412,51 +412,50 @@ ${revealedTiles.map(tile =>
                 </div>
               </div>
 
-              {/* Reality Tiles — single horizontal row (no wrap) */}
-<div className="w-full overflow-x-auto">
-  <div className="flex flex-row gap-6 items-start px-8 pb-6 min-h-[440px] flex-nowrap">
-    {tiles.map((tile, idx) => (
-      <div
-        key={idx}
-        className={`flex-shrink-0 w-96 h-[420px] transition-all duration-700 cursor-pointer ${
-          tile.revealed ? 'transform rotate-0' : 'transform rotate-0 blur-sm opacity-90'
-        }`}
-        onClick={() => handleTileReveal(idx)}
-        onMouseEnter={() => !tile.revealed && handleTileReveal(idx)}
-      >
-        <div
-          className={`h-full bg-white/30 backdrop-blur-sm rounded-2xl p-6 shadow-soft hover:shadow-elegant transition-all duration-300 flex flex-col ${
-            tile.revealed ? 'border-2 border-mergenta-violet/30' : ''
-          }`}
-        >
-          <div className="mb-4">
-            <h3 className="text-xl font-semibold text-mergenta-deep-violet mb-2">
-              {tile.title}
-            </h3>
-            <p className="text-sm text-mergenta-dark-grey/80">
-              {tile.subtitle}
-            </p>
-          </div>
+              {/* Reality Tiles — Side by side layout */}
+              <div className="max-w-6xl mx-auto mb-8">
+                <div className="grid grid-cols-5 gap-4">
+                  {tiles.map((tile, idx) => (
+                    <div
+                      key={idx}
+                      className={`h-[480px] transition-all duration-700 cursor-pointer ${
+                        tile.revealed ? 'filter-none' : 'blur-sm opacity-70'
+                      }`}
+                      onClick={() => handleTileReveal(idx)}
+                      onMouseEnter={() => !tile.revealed && handleTileReveal(idx)}
+                    >
+                      <div
+                        className={`h-full bg-white/30 backdrop-blur-sm rounded-2xl p-4 shadow-soft hover:shadow-elegant transition-all duration-300 flex flex-col ${
+                          tile.revealed ? 'border-2 border-mergenta-violet/30' : ''
+                        }`}
+                      >
+                        <div className="mb-4">
+                          <h3 className="text-lg font-semibold text-mergenta-deep-violet mb-2">
+                            {tile.title}
+                          </h3>
+                          <p className="text-xs text-mergenta-dark-grey/80">
+                            {tile.subtitle}
+                          </p>
+                        </div>
 
-          {tile.revealed && (
-            <div className="flex-1 space-y-3 overflow-visible">
-              <div className="pr-2">
-                <p className="text-xs text-mergenta-dark-grey leading-relaxed">
-                  {tile.content}
-                </p>
-              </div>
-              <div className="p-3 bg-white/40 rounded-lg">
-                <p className="text-sm text-mergenta-violet font-medium italic">
-                  "{tile.insight}"
-                </p>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    ))}
-  </div>
-
+                        {tile.revealed && (
+                          <div className="flex-1 space-y-3 overflow-hidden">
+                            <div className="overflow-hidden">
+                              <p className="text-[10px] text-mergenta-dark-grey leading-relaxed">
+                                {tile.content}
+                              </p>
+                            </div>
+                            <div className="p-2 bg-white/40 rounded-lg">
+                              <p className="text-xs text-mergenta-violet font-medium italic">
+                                "{tile.insight}"
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {/* Search Bar Below Results */}
@@ -474,23 +473,23 @@ ${revealedTiles.map(tile =>
                 </div>
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex justify-center gap-6 max-w-3xl mx-auto">
-                <Button
-                  variant="outline"
-                  onClick={handleSaveMyTruth}
-                  className="bg-mergenta-violet border-mergenta-violet text-white hover:bg-mergenta-deep-violet"
-                >
-                  Save My Truth
-                </Button>
-                <Button
-                  variant="outline" 
-                  onClick={resetModal}
-                  className="bg-mergenta-violet border-mergenta-violet text-white hover:bg-mergenta-deep-violet"
-                >
-                  Run Again
-                </Button>
-              </div>
+                {/* Action Buttons Below Search Bar */}
+                <div className="flex justify-center gap-12 mt-8">
+                  <Button
+                    variant="outline"
+                    onClick={handleSaveMyTruth}
+                    className="bg-mergenta-deep-violet/80 border-mergenta-deep-violet text-white hover:bg-mergenta-deep-violet"
+                  >
+                    Save My Truth
+                  </Button>
+                  <Button
+                    variant="outline" 
+                    onClick={resetModal}
+                    className="bg-mergenta-deep-violet/80 border-mergenta-deep-violet text-white hover:bg-mergenta-deep-violet"
+                  >
+                    Run Again
+                  </Button>
+                </div>
             </div>
           )}
         </div>
