@@ -331,7 +331,7 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
                           className="w-full text-left px-4 py-3 text-sm text-mergenta-dark-grey hover:bg-pastel-lavender hover:text-mergenta-violet transition-colors rounded-lg mx-1 my-1 animate-in fade-in-50"
                           style={{ animationDelay: `${idx * 100}ms` }}
                         >
-                          {option.length > 150 ? `${option.substring(0, 150)}...` : option}
+                          {option}
                         </button>
                       ))}
                     </div>
