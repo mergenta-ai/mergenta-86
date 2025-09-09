@@ -35,6 +35,7 @@ import { SnapshotModal } from "./modals/SnapshotModal";
 import { POVLabModal } from "./modals/POVLabModal";
 import { PowerPlaybookModal } from "./modals/PowerPlaybookModal";
 import { FuturePathwaysModal } from "./modals/FuturePathwaysModal";
+import RoleplayHubModal from "./modals/RoleplayHubModal";
 
 const WorkflowTabs = ({ onAddToChat }: { onAddToChat?: (message: string, response: string) => void }) => {
   const [activeTab, setActiveTab] = useState<string | null>(null);
@@ -43,6 +44,7 @@ const WorkflowTabs = ({ onAddToChat }: { onAddToChat?: (message: string, respons
   const [povLabModalOpen, setPovLabModalOpen] = useState(false);
   const [powerPlaybookModalOpen, setPowerPlaybookModalOpen] = useState(false);
   const [futurePathwaysModalOpen, setFuturePathwaysModalOpen] = useState(false);
+  const [roleplayHubModalOpen, setRoleplayHubModalOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const tabs = [
@@ -513,6 +515,8 @@ const WorkflowTabs = ({ onAddToChat }: { onAddToChat?: (message: string, respons
                                 setPovLabModalOpen(true);
                               } else if (item === "Future Pathways") {
                                 setFuturePathwaysModalOpen(true);
+                              } else if (item === "Roleplay Hub") {
+                                setRoleplayHubModalOpen(true);
                               } else {
                                 console.log(`Selected: ${item}`);
                               }
@@ -552,6 +556,12 @@ const WorkflowTabs = ({ onAddToChat }: { onAddToChat?: (message: string, respons
       <FuturePathwaysModal 
         open={futurePathwaysModalOpen} 
         onOpenChange={setFuturePathwaysModalOpen}
+        onAddToChat={onAddToChat}
+      />
+      
+      <RoleplayHubModal 
+        open={roleplayHubModalOpen} 
+        onOpenChange={setRoleplayHubModalOpen}
         onAddToChat={onAddToChat}
       />
     </TooltipProvider>
