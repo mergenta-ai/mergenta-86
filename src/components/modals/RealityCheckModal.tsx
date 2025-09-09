@@ -418,7 +418,7 @@ ${revealedTiles.map(tile =>
                   {tiles.map((tile, idx) => (
                     <div
                       key={idx}
-                      className={`h-[480px] transition-all duration-700 cursor-pointer ${
+                      className={`h-[380px] transition-all duration-700 cursor-pointer ${
                         tile.revealed ? 'filter-none' : 'blur-sm opacity-70'
                       }`}
                       onClick={() => handleTileReveal(idx)}
@@ -429,8 +429,8 @@ ${revealedTiles.map(tile =>
                           tile.revealed ? 'border-2 border-mergenta-violet/30' : ''
                         }`}
                       >
-                        <div className="mb-4">
-                          <h3 className="text-lg font-semibold text-mergenta-deep-violet mb-2">
+                        <div className="mb-2">
+                          <h3 className="text-lg font-semibold text-mergenta-deep-violet mb-1">
                             {tile.title}
                           </h3>
                           <p className="text-xs text-mergenta-dark-grey/80">
@@ -439,7 +439,7 @@ ${revealedTiles.map(tile =>
                         </div>
 
                         {tile.revealed && (
-                          <div className="flex-1 space-y-3 overflow-hidden">
+                          <div className="flex-1 space-y-2 overflow-hidden">
                             <div className="overflow-hidden">
                               <p className="text-[10px] text-mergenta-dark-grey leading-relaxed">
                                 {tile.content}
