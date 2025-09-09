@@ -472,22 +472,25 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
                   />
                 </div>
                 
-                {/* Control Buttons */}
-                <div className="flex justify-center space-x-4">
+                 {/* Control Buttons */}
+                <div className="flex justify-center gap-12">
                   <Button
+                    variant="outline"
                     onClick={handleRoleFlip}
-                    className="bg-mergenta-violet hover:bg-mergenta-deep-violet text-white px-8 py-3 rounded-full text-lg transition-all duration-300 hover:scale-105 shadow-soft"
+                    className="bg-mergenta-violet border-mergenta-violet text-white hover:bg-mergenta-deep-violet"
                   >
                     Flip The Role
                   </Button>
                   <Button
+                    variant="outline"
                     onClick={handleSearchAgain}
-                    className="bg-mergenta-violet hover:bg-mergenta-deep-violet text-white px-8 py-3 rounded-full text-lg transition-all duration-300 hover:scale-105 shadow-soft"
+                    className="bg-mergenta-violet border-mergenta-violet text-white hover:bg-mergenta-deep-violet"
                   >
                     Search Again
                   </Button>
                   {globalHistory.feedbacks.length > 0 && (
                     <Button
+                      variant="outline"
                       onClick={() => {
                         const latestFeedback = globalHistory.feedbacks[globalHistory.feedbacks.length - 1];
                         if (latestFeedback) {
@@ -495,7 +498,7 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
                           setCurrentPage('feedback');
                         }
                       }}
-                      className="bg-mergenta-violet hover:bg-mergenta-deep-violet text-white px-8 py-3 rounded-full text-lg transition-all duration-300 hover:scale-105 shadow-soft"
+                      className="bg-mergenta-violet border-mergenta-violet text-white hover:bg-mergenta-deep-violet"
                     >
                       View Latest Insights
                     </Button>
@@ -572,22 +575,38 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
 
               {/* Action Buttons - Fixed at bottom */}
               <div className="flex-shrink-0 px-8 pb-8 pt-6 border-t border-white/10">
-                <div className="flex justify-center space-x-8 animate-in fade-in" style={{animationDelay: '300ms'}}>
+                <div className="flex justify-center gap-12 animate-in fade-in" style={{animationDelay: '300ms'}}>
                   <Button
+                    variant="outline"
                     onClick={() => setCurrentPage('dialogue')}
-                    className="bg-mergenta-violet hover:bg-mergenta-deep-violet text-white px-8 py-3 rounded-full text-lg transition-all duration-300 hover:scale-105 shadow-soft"
+                    className="bg-mergenta-violet border-mergenta-violet text-white hover:bg-mergenta-deep-violet"
                   >
                     Continue Discussion
                   </Button>
                   <Button
+                    variant="outline"
                     onClick={handleSearchAgain}
-                    className="bg-mergenta-violet hover:bg-mergenta-deep-violet text-white px-8 py-3 rounded-full text-lg transition-all duration-300 hover:scale-105 shadow-soft"
+                    className="bg-mergenta-violet border-mergenta-violet text-white hover:bg-mergenta-deep-violet"
                   >
                     Search Again
                   </Button>
                 </div>
               </div>
             </>
+          )}
+
+          {/* Loading State - Transition from search to dialogue */}
+          {isLoading && currentPage === 'search' && (
+            <div className="flex-1 flex items-center justify-center px-8 pb-8">
+              <div className="text-center">
+                <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mb-4 mx-auto animate-pulse">
+                  <Users className="h-8 w-8 text-mergenta-violet" />
+                </div>
+                <p className="text-lg text-mergenta-dark-grey">
+                  Taking you to the discussion room...
+                </p>
+              </div>
+            </div>
           )}
         </div>
       </CustomDialogContent>
