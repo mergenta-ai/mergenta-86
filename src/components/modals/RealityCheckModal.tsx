@@ -143,7 +143,7 @@ const RealityCheckModal = ({ open, onOpenChange, onAddToChat }: RealityCheckModa
   useEffect(() => {
     if (showDropdown) {
       const interval = setInterval(() => {
-        setCurrentDropdownPair(prev => (prev + 1) % 4); // 8 options / 2 = 4 pairs
+        setCurrentDropdownPair(prev => (prev + 1) % 8); // 8 options total, show one at a time
       }, 3000);
       return () => clearInterval(interval);
     }
@@ -160,10 +160,9 @@ const RealityCheckModal = ({ open, onOpenChange, onAddToChat }: RealityCheckModa
     "If I quit my IT job now, I can definitely build a mobile app that reaches 50,000 users in six months. I have already developed a prototype and tested it with 120 users, where 40% said they would use it regularly. With my personal savings of $15,000, I believe I can sustain myself without income for about 10 months, so I don't expect financial risks. I also think investors will show interest within the first few months, since my pitch deck highlights a projected 200% ROI in two years. Because I am hardworking and determined, I feel success is almost guaranteed and the business can scale for at least three years. Per se, I don't see much that can go wrong with this plan."
   ];
 
-  // Get current pair of dropdown options
-  const getCurrentDropdownOptions = () => {
-    const startIndex = currentDropdownPair * 2;
-    return allDropdownOptions.slice(startIndex, startIndex + 2);
+  // Get current single dropdown option
+  const getCurrentDropdownOption = () => {
+    return allDropdownOptions[currentDropdownPair];
   };
 
   const handleSearchSubmit = async (message: string) => {
@@ -306,7 +305,7 @@ ${revealedTiles.map(tile =>
           <X className="h-5 w-5 text-mergenta-dark-grey" />
         </button>
 
-        <div className="flex flex-col h-full overflow-y-auto">
+        <div className="flex flex-col h-full">{/* Remove overflow-y-auto */}
           {/* Loading State - Transition from search to results */}
           {isLoading && (
             <div className="flex-1 flex items-center justify-center px-8 pb-8">
@@ -314,8 +313,8 @@ ${revealedTiles.map(tile =>
                 <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mb-4 mx-auto animate-pulse">
                   <Target className="h-8 w-8 text-mergenta-violet" />
                 </div>
-                <p className="text-lg text-mergenta-dark-grey">
-                  Analyzing your reality assumptions...
+                <p className="text-lg text-mergenta-dark-grey animate-pulse">
+                  Taking you to the reality analysis room...
                 </p>
               </div>
             </div>
@@ -374,24 +373,16 @@ ${revealedTiles.map(tile =>
                   onFocus={handleSearchFocus}
                 />
 
-                {/* Dropdown Menu with rotating options */}
+                {/* Dropdown Menu with single rotating option */}
                 {showDropdown && (
                   <div className="absolute top-full mt-2 w-full bg-white/90 backdrop-blur-md rounded-xl shadow-elegant border border-white/20 z-40 overflow-hidden">
                     <div className="p-2">
-                      <div className="flex items-center justify-between px-4 py-3 text-sm text-mergenta-dark-grey/60 border-b border-gray-100">
-                        <span className="font-medium opacity-50">Reality Check Scenarios</span>
-                        <ChevronDown className="h-4 w-4 opacity-50" />
-                      </div>
-                      {getCurrentDropdownOptions().map((option, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => handleDropdownSelect(option)}
-                          className="w-full text-left px-4 py-3 text-sm text-mergenta-dark-grey/70 hover:bg-pastel-lavender hover:text-mergenta-violet transition-colors rounded-lg mx-1 my-1 animate-in fade-in-50"
-                          style={{ animationDelay: `${idx * 100}ms` }}
-                        >
-                          <div className="opacity-60">{option}</div>
-                        </button>
-                      ))}
+                      <button
+                        onClick={() => handleDropdownSelect(getCurrentDropdownOption())}
+                        className="w-full text-left px-4 py-3 text-sm text-mergenta-dark-grey/70 hover:bg-pastel-lavender hover:text-mergenta-violet transition-colors rounded-lg mx-1 my-1 animate-in fade-in-50"
+                      >
+                        <div>{getCurrentDropdownOption()}</div>
+                      </button>
                     </div>
                   </div>
                 )}
@@ -403,7 +394,7 @@ ${revealedTiles.map(tile =>
           {showResults && !isLoading && (
             <div className="flex-1 px-8 pb-8">
               {/* Reality Meter */}
-              <div className="max-w-4xl mx-auto mb-8">
+              <div className="max-w-4xl mx-auto mb-6">
                 <div className="bg-white/30 backdrop-blur-sm rounded-2xl p-6 shadow-soft">
                   <h3 className="text-lg font-semibold text-mergenta-deep-violet mb-4 text-center">
                     Reality Meter
@@ -411,7 +402,7 @@ ${revealedTiles.map(tile =>
                   <div className="relative">
                     <Progress 
                       value={totalProgress} 
-                      className="h-4 bg-white/50 [&>div]:bg-gradient-to-r [&>div]:from-mergenta-light-violet [&>div]:to-mergenta-magenta [&>div]:transition-all [&>div]:duration-1000 [&>div]:shadow-glow"
+                      className="h-2 bg-white/50 [&>div]:bg-gradient-to-r [&>div]:from-mergenta-light-violet [&>div]:to-mergenta-magenta [&>div]:transition-all [&>div]:duration-1000 [&>div]:shadow-glow"
                     />
                     <div className="absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse" />
                   </div>
@@ -421,30 +412,30 @@ ${revealedTiles.map(tile =>
                 </div>
               </div>
 
-              {/* Reality Tiles in Diagonal Layout */}
-              <div className="max-w-6xl mx-auto mb-16">
-                <div className="relative h-[600px] flex items-center justify-center">
+              {/* Reality Tiles in Diagonal Cascade Layout */}
+              <div className="max-w-7xl mx-auto mb-12">
+                <div className="relative h-[500px] flex items-start justify-start pl-8">
                   {tiles.map((tile, idx) => (
                     <div
                       key={idx}
-                      className={`absolute w-64 h-48 transition-all duration-700 cursor-pointer ${
+                      className={`absolute w-80 h-60 transition-all duration-700 cursor-pointer ${
                         tile.revealed 
-                          ? 'transform rotate-0 translate-y-0' 
+                          ? 'transform rotate-0' 
                           : 'transform rotate-45 blur-sm opacity-70'
                       }`}
                       style={{
-                        left: `${idx * 120}px`,
-                        top: `${idx * 60}px`,
+                        left: `${idx * 100}px`,
+                        top: `${idx * 50}px`,
                         zIndex: tiles.length - idx
                       }}
                       onClick={() => handleTileReveal(idx)}
                       onMouseEnter={() => !tile.revealed && handleTileReveal(idx)}
                     >
-                      <div className={`h-full bg-white/30 backdrop-blur-sm rounded-2xl p-4 shadow-soft hover:shadow-elegant transition-all duration-300 flex flex-col ${
+                      <div className={`h-full bg-white/30 backdrop-blur-sm rounded-2xl p-6 shadow-soft hover:shadow-elegant transition-all duration-300 flex flex-col ${
                         tile.revealed ? 'border-2 border-mergenta-violet/30' : ''
                       }`}>
-                        <div className="mb-3">
-                          <h3 className="text-lg font-semibold text-mergenta-deep-violet mb-1">
+                        <div className="mb-4">
+                          <h3 className="text-xl font-semibold text-mergenta-deep-violet mb-2">
                             {tile.title}
                           </h3>
                           <p className="text-sm text-mergenta-dark-grey/80">
@@ -453,11 +444,13 @@ ${revealedTiles.map(tile =>
                         </div>
                         
                         {tile.revealed && (
-                          <div className="flex-1 space-y-2">
-                            <p className="text-xs text-mergenta-dark-grey leading-relaxed">
-                              {tile.content}
-                            </p>
-                            <div className="mt-3 p-2 bg-white/40 rounded-lg">
+                          <div className="flex-1 space-y-3 overflow-hidden">
+                            <div className="h-32 overflow-y-auto pr-2">
+                              <p className="text-xs text-mergenta-dark-grey leading-relaxed">
+                                {tile.content}
+                              </p>
+                            </div>
+                            <div className="p-3 bg-white/40 rounded-lg">
                               <p className="text-sm text-mergenta-violet font-medium italic">
                                 "{tile.insight}"
                               </p>
