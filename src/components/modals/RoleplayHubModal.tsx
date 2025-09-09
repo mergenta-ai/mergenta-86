@@ -437,7 +437,7 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
 
               {/* Dialogue Area */}
               <div className="flex-1 px-8 overflow-hidden">
-                <div className="h-full bg-white/30 backdrop-blur-sm rounded-2xl p-6 shadow-soft overflow-y-auto">
+                <div className="h-[97.5%] bg-white/30 backdrop-blur-sm rounded-2xl p-6 shadow-soft overflow-y-auto">
                   <div className="space-y-4 pb-4">
                     {dialogueMessages.map((message) => (
                       <div
@@ -464,8 +464,8 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
               </div>
 
               {/* Input Area */}
-              <div className="flex-shrink-0 px-8 py-6 pb-8">
-                <div className="max-w-3xl mx-auto mb-4">
+              <div className="flex-shrink-0 px-8 -mt-4 py-6 pb-8">
+                <div className="max-w-3xl mx-auto mb-4 transform -translate-y-2">
                   <ChatInput 
                     onSendMessage={handleDialogueSubmit}
                     placeholder="Type your response..."
