@@ -522,7 +522,7 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
               </div>
 
               {/* Feedback Tiles */}
-              <div className="flex-1 px-8 pb-16 overflow-y-auto">
+              <div className="flex-1 px-8 overflow-y-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto mt-8">
                   {/* Strengths Tile */}
                   <div className="bg-white/30 backdrop-blur-sm rounded-2xl p-5 shadow-soft hover:shadow-elegant transition-all duration-300 transform hover:-translate-y-1 animate-in slide-in-from-left">
@@ -568,9 +568,11 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
                     </ul>
                   </div>
                 </div>
+              </div>
 
-                {/* Action Buttons */}
-                <div className="flex justify-center space-x-4 mt-12 mb-8 animate-in fade-in" style={{animationDelay: '300ms'}}>
+              {/* Action Buttons - Fixed at bottom */}
+              <div className="flex-shrink-0 px-8 pb-8 pt-6 border-t border-white/10">
+                <div className="flex justify-center space-x-8 animate-in fade-in" style={{animationDelay: '300ms'}}>
                   <Button
                     onClick={() => setCurrentPage('dialogue')}
                     className="bg-mergenta-violet hover:bg-mergenta-deep-violet text-white px-8 py-3 rounded-full text-lg transition-all duration-300 hover:scale-105 shadow-soft"
