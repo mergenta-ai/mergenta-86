@@ -307,7 +307,7 @@ ${revealedTiles.map(tile =>
 
         <div className="flex flex-col h-full">{/* Remove overflow-y-auto */}
           {/* Loading State - Transition from search to results */}
-          {isLoading && (
+          {isLoading && !showResults && (
             <div className="flex-1 flex items-center justify-center px-8 pb-8">
               <div className="text-center">
                 <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mb-4 mx-auto animate-pulse">
