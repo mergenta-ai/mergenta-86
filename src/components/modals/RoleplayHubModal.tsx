@@ -71,6 +71,57 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
     improvements: []
   });
 
+  // Global history storage
+  const [globalHistory, setGlobalHistory] = useState<{
+    interactions: DialogueMessage[];
+    feedbacks: Array<{
+      timestamp: Date;
+      strengths: string[];
+      improvements: string[];
+    }>;
+    roleFlips: Array<{
+      timestamp: Date;
+      newRole: string;
+    }>;
+  }>({
+    interactions: [],
+    feedbacks: [],
+    roleFlips: []
+  });
+
+  // Load history on mount
+  useEffect(() => {
+    const savedHistory = localStorage.getItem('roleplayHubHistory');
+    if (savedHistory) {
+      try {
+        const parsed = JSON.parse(savedHistory);
+        // Convert timestamp strings back to Date objects
+        parsed.interactions = parsed.interactions.map((msg: any) => ({
+          ...msg,
+          timestamp: new Date(msg.timestamp)
+        }));
+        parsed.feedbacks = parsed.feedbacks.map((feedback: any) => ({
+          ...feedback,
+          timestamp: new Date(feedback.timestamp)
+        }));
+        parsed.roleFlips = parsed.roleFlips.map((flip: any) => ({
+          ...flip,
+          timestamp: new Date(flip.timestamp)
+        }));
+        setGlobalHistory(parsed);
+      } catch (error) {
+        console.error('Error loading roleplay history:', error);
+      }
+    }
+  }, []);
+
+  // Save history whenever it changes
+  useEffect(() => {
+    if (globalHistory.interactions.length > 0 || globalHistory.feedbacks.length > 0 || globalHistory.roleFlips.length > 0) {
+      localStorage.setItem('roleplayHubHistory', JSON.stringify(globalHistory));
+    }
+  }, [globalHistory]);
+
   // Rotate dropdown options every 3 seconds
   useEffect(() => {
     if (showDropdown) {
@@ -151,6 +202,12 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
     setDialogueMessages(prev => [...prev, userMessage]);
     setQueryCount(prev => prev + 1);
     
+    // Add to global history
+    setGlobalHistory(prev => ({
+      ...prev,
+      interactions: [...prev.interactions, userMessage]
+    }));
+    
     // Simulate AI response
     await new Promise(resolve => setTimeout(resolve, 1500));
     
@@ -162,6 +219,12 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
     };
     
     setDialogueMessages(prev => [...prev, aiMessage]);
+    
+    // Add AI response to global history
+    setGlobalHistory(prev => ({
+      ...prev,
+      interactions: [...prev.interactions, aiMessage]
+    }));
     
     // Check if we need to show feedback after 5 queries
     if ((queryCount + 1) % 5 === 0) {
@@ -175,6 +238,11 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
   const handleRoleFlip = () => {
     setIsUserRole(prev => !prev);
     
+    const roleFlipRecord = {
+      timestamp: new Date(),
+      newRole: !isUserRole ? "User asks, AI responds" : "AI asks, User responds"
+    };
+    
     const flipMessage: DialogueMessage = {
       id: Date.now().toString(),
       content: `Roles have been flipped! ${!isUserRole ? "You'll now ask questions and I'll respond." : "I'll now ask questions and you'll respond."}`,
@@ -183,29 +251,49 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
     };
     
     setDialogueMessages(prev => [...prev, flipMessage]);
+    
+    // Add to global history
+    setGlobalHistory(prev => ({
+      ...prev,
+      interactions: [...prev.interactions, flipMessage],
+      roleFlips: [...prev.roleFlips, roleFlipRecord]
+    }));
   };
 
   const generateFeedback = () => {
     const sampleStrengths = [
-      "Excellent communication clarity in your responses",
-      "Strong confidence level throughout the interaction",
-      "Good use of specific examples to support your points",
-      "Effective listening and response adaptation",
-      "Professional tone maintained consistently"
+      "Excellent communication clarity in your responses - your points came across clearly and professionally",
+      "Strong confidence level throughout the interaction - you maintained composure under pressure",
+      "Good use of specific examples to support your points - concrete details strengthened your arguments",
+      "Effective listening and response adaptation - you showed active engagement with feedback",
+      "Professional tone maintained consistently - your demeanor remained appropriate throughout",
+      "Strategic thinking demonstrated in complex scenarios - you considered multiple angles effectively",
+      "Excellent problem-solving approach when faced with challenging questions"
     ];
     
     const sampleImprovements = [
-      "Consider providing more concrete examples",
-      "Work on reducing filler words and pauses",
-      "Practice more assertive body language cues",
-      "Develop stronger closing statements",
-      "Focus on asking clarifying questions"
+      "Consider providing more concrete examples to illustrate your experience and achievements",
+      "Work on reducing filler words and pauses to maintain stronger presentation flow",
+      "Practice more assertive body language cues to project greater confidence",
+      "Develop stronger closing statements that leave lasting positive impressions",
+      "Focus on asking clarifying questions to better understand expectations and requirements",
+      "Enhance your storytelling technique to make responses more engaging and memorable",
+      "Work on time management to ensure key points are covered within allocated response time"
     ];
     
-    setFeedbackData({
-      strengths: sampleStrengths.slice(0, 3),
-      improvements: sampleImprovements.slice(0, 3)
-    });
+    const currentFeedback = {
+      timestamp: new Date(),
+      strengths: sampleStrengths.slice(0, Math.max(5, Math.floor(Math.random() * 3) + 5)),
+      improvements: sampleImprovements.slice(0, Math.max(5, Math.floor(Math.random() * 3) + 5))
+    };
+    
+    setFeedbackData(currentFeedback);
+    
+    // Add to global history
+    setGlobalHistory(prev => ({
+      ...prev,
+      feedbacks: [...prev.feedbacks, currentFeedback]
+    }));
   };
 
   const resetModal = () => {
@@ -386,16 +474,14 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
                 <div className="flex justify-center space-x-4">
                   <Button
                     onClick={handleRoleFlip}
-                    className="bg-amber-500 hover:bg-amber-600 text-white px-6 py-2 rounded-full transition-all duration-300 hover:scale-105"
+                    className="bg-white/80 hover:bg-white text-purple-700 px-8 py-3 rounded-full text-lg transition-all duration-300 hover:scale-105"
                   >
-                    <RefreshCw className="h-4 w-4 mr-2" />
                     Flip The Role
                   </Button>
                   <Button
                     onClick={handleSearchAgain}
-                    className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-full transition-all duration-300 hover:scale-105"
+                    className="bg-white/80 hover:bg-white text-purple-700 px-8 py-3 rounded-full text-lg transition-all duration-300 hover:scale-105"
                   >
-                    <MessageCircle className="h-4 w-4 mr-2" />
                     Search Again
                   </Button>
                 </div>
@@ -409,7 +495,7 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
               {/* Header */}
               <div className="flex-shrink-0 text-center pt-16 pb-8 px-8">
                 <div className="flex items-center justify-center mb-8">
-                  <TrendingUp className="h-12 w-12 text-green-600" />
+                  <TrendingUp className="h-12 w-12 text-purple-600" />
                 </div>
                 <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-3">
                   Performance Insights
@@ -421,57 +507,68 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
 
               {/* Feedback Tiles */}
               <div className="flex-1 px-8 pb-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
                   {/* Strengths Tile */}
-                  <div className="bg-gradient-to-br from-green-100 to-emerald-100 rounded-2xl p-8 shadow-lg">
+                  <div className="bg-white/30 backdrop-blur-sm rounded-2xl p-8 shadow-lg min-h-[400px] flex flex-col">
                     <div className="flex items-center mb-6">
                       <div className="p-3 bg-green-500 rounded-full mr-4">
                         <TrendingUp className="h-6 w-6 text-white" />
                       </div>
                       <h2 className="text-2xl font-bold text-green-800">Your Strengths So Far</h2>
                     </div>
-                    <ul className="space-y-3">
+                    <ul className="space-y-4 flex-1">
                       {feedbackData.strengths.map((strength, idx) => (
                         <li
                           key={idx}
                           className="flex items-start text-green-700"
                         >
                           <Zap className="h-5 w-5 mr-3 mt-0.5 text-green-500 flex-shrink-0" />
-                          <span className="text-sm leading-relaxed">{strength}</span>
+                          <span className="text-sm leading-relaxed break-words">{strength}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
 
                   {/* Improvements Tile */}
-                  <div className="bg-gradient-to-br from-orange-100 to-red-100 rounded-2xl p-8 shadow-lg">
+                  <div className="bg-white/30 backdrop-blur-sm rounded-2xl p-8 shadow-lg min-h-[400px] flex flex-col">
                     <div className="flex items-center mb-6">
                       <div className="p-3 bg-orange-500 rounded-full mr-4">
                         <AlertTriangle className="h-6 w-6 text-white" />
                       </div>
                       <h2 className="text-2xl font-bold text-orange-800">Work On This</h2>
                     </div>
-                    <ul className="space-y-3">
+                    <ul className="space-y-4 flex-1">
                       {feedbackData.improvements.map((improvement, idx) => (
                         <li
                           key={idx}
                           className="flex items-start text-orange-700"
                         >
                           <AlertTriangle className="h-5 w-5 mr-3 mt-0.5 text-orange-500 flex-shrink-0" />
-                          <span className="text-sm leading-relaxed">{improvement}</span>
+                          <span className="text-sm leading-relaxed break-words">{improvement}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
                 </div>
 
-                {/* Continue Button */}
-                <div className="flex justify-center mt-12">
+                {/* Action Buttons */}
+                <div className="flex justify-center space-x-4 mt-12">
                   <Button
                     onClick={() => setCurrentPage('dialogue')}
-                    className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-full text-lg transition-all duration-300 hover:scale-105"
+                    className="bg-white/80 hover:bg-white text-purple-700 px-8 py-3 rounded-full text-lg transition-all duration-300 hover:scale-105"
                   >
                     Continue Practice
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      const latestFeedback = globalHistory.feedbacks[globalHistory.feedbacks.length - 1];
+                      if (latestFeedback) {
+                        setFeedbackData(latestFeedback);
+                      }
+                    }}
+                    className="bg-white/80 hover:bg-white text-purple-700 px-8 py-3 rounded-full text-lg transition-all duration-300 hover:scale-105"
+                  >
+                    View Latest Insights
                   </Button>
                 </div>
               </div>
