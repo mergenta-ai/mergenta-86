@@ -75,22 +75,33 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
     setInput(initialValue);
   }, [initialValue]);
 
-  // Auto-resize textarea whenever input changes
+  // Auto-resize textarea whenever input changes or initialValue changes
   useEffect(() => {
     const resizeTextarea = () => {
-      const textarea = document.querySelector('textarea');
-      if (textarea) {
-        textarea.style.height = 'auto';
-        textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
-      }
+      const textareas = document.querySelectorAll('textarea');
+      textareas.forEach(textarea => {
+        if (textarea.value === input || textarea.value === initialValue) {
+          textarea.style.height = 'auto';
+          const newHeight = Math.min(Math.max(textarea.scrollHeight, 24), 120);
+          textarea.style.height = newHeight + 'px';
+          // Force reflow to ensure proper rendering
+          textarea.offsetHeight;
+        }
+      });
     };
 
-    // Resize immediately and after a short delay to handle all cases
+    // Multiple resize attempts to ensure proper display
     resizeTextarea();
-    const timeoutId = setTimeout(resizeTextarea, 10);
+    const timeoutId1 = setTimeout(resizeTextarea, 5);
+    const timeoutId2 = setTimeout(resizeTextarea, 50);
+    const timeoutId3 = setTimeout(resizeTextarea, 100);
     
-    return () => clearTimeout(timeoutId);
-  }, [input]);
+    return () => {
+      clearTimeout(timeoutId1);
+      clearTimeout(timeoutId2);
+      clearTimeout(timeoutId3);
+    };
+  }, [input, initialValue]);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (modelDropdownRef.current && !modelDropdownRef.current.contains(event.target as Node)) {
@@ -117,7 +128,7 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                 onKeyDown={handleKeyDown}
                 onFocus={onFocus}
                 placeholder={placeholder}
-                className="w-full resize-none focus:outline-none text-gray-700 placeholder-gray-400 min-h-[24px] bg-transparent border-none outline-none whitespace-pre-wrap"
+                className="w-full resize-none focus:outline-none text-gray-700 placeholder-gray-400 min-h-[24px] bg-transparent border-none outline-none"
                 disabled={isLoading}
                 style={{
                   height: 'auto',
@@ -125,12 +136,16 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                   maxHeight: '120px',
                   overflowY: 'auto',
                   wordWrap: 'break-word',
-                  whiteSpace: 'pre-wrap'
+                  whiteSpace: 'normal',
+                  lineHeight: '1.5',
+                  wordBreak: 'break-word',
+                  overflowWrap: 'break-word'
                 }}
                 onInput={(e) => {
                   const target = e.target as HTMLTextAreaElement;
                   target.style.height = 'auto';
-                  target.style.height = Math.min(target.scrollHeight, 120) + 'px';
+                  const newHeight = Math.min(Math.max(target.scrollHeight, 24), 120);
+                  target.style.height = newHeight + 'px';
                 }}
               />
             </div>
