@@ -73,17 +73,24 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
   // Update input when initialValue changes
   useEffect(() => {
     setInput(initialValue);
-    // Auto-resize textarea when initialValue changes
-    if (initialValue) {
-      setTimeout(() => {
-        const textarea = document.querySelector('textarea');
-        if (textarea) {
-          textarea.style.height = 'auto';
-          textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
-        }
-      }, 0);
-    }
   }, [initialValue]);
+
+  // Auto-resize textarea whenever input changes
+  useEffect(() => {
+    const resizeTextarea = () => {
+      const textarea = document.querySelector('textarea');
+      if (textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+      }
+    };
+
+    // Resize immediately and after a short delay to handle all cases
+    resizeTextarea();
+    const timeoutId = setTimeout(resizeTextarea, 10);
+    
+    return () => clearTimeout(timeoutId);
+  }, [input]);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (modelDropdownRef.current && !modelDropdownRef.current.contains(event.target as Node)) {
@@ -110,13 +117,15 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                 onKeyDown={handleKeyDown}
                 onFocus={onFocus}
                 placeholder={placeholder}
-                className="w-full resize-none focus:outline-none text-gray-700 placeholder-gray-400 min-h-[24px] bg-transparent border-none outline-none"
+                className="w-full resize-none focus:outline-none text-gray-700 placeholder-gray-400 min-h-[24px] bg-transparent border-none outline-none whitespace-pre-wrap"
                 disabled={isLoading}
-                rows={1}
                 style={{
                   height: 'auto',
                   minHeight: '24px',
-                  maxHeight: '120px'
+                  maxHeight: '120px',
+                  overflowY: 'auto',
+                  wordWrap: 'break-word',
+                  whiteSpace: 'pre-wrap'
                 }}
                 onInput={(e) => {
                   const target = e.target as HTMLTextAreaElement;
