@@ -394,31 +394,33 @@ ${revealedTiles.map(tile =>
           {showResults && !isLoading && (
             <div className="flex-1 px-8 pb-8">
               {/* Reality Meter */}
-              <div className="max-w-4xl mx-auto mb-6">
-                <div className="bg-white/30 backdrop-blur-sm rounded-2xl p-6 shadow-soft">
-                  <h3 className="text-lg font-semibold text-mergenta-deep-violet mb-4 text-center">
-                    Reality Meter
-                  </h3>
+              <div className="max-w-4xl mx-auto mb-4">
+                <div className="bg-white/30 backdrop-blur-sm rounded-2xl p-3 shadow-soft">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-md font-semibold text-mergenta-deep-violet">
+                      Reality Meter
+                    </h3>
+                    <p className="text-md font-semibold text-mergenta-deep-violet">
+                      {totalProgress}% Reality Score
+                    </p>
+                  </div>
                   <div className="relative">
                     <Progress 
                       value={totalProgress} 
-                      className="h-[7px] bg-white/50 [&>div]:bg-gradient-to-r [&>div]:from-mergenta-light-violet [&>div]:to-mergenta-magenta [&>div]:transition-all [&>div]:duration-1000 [&>div]:shadow-glow"
+                      className="h-[4px] bg-white/50 [&>div]:bg-gradient-to-r [&>div]:from-mergenta-light-violet [&>div]:to-mergenta-magenta [&>div]:transition-all [&>div]:duration-1000 [&>div]:shadow-glow"
                     />
                     <div className="absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse" />
                   </div>
-                  <p className="text-center text-mergenta-dark-grey mt-2 text-sm">
-                    {totalProgress}% Reality Score
-                  </p>
                 </div>
               </div>
 
               {/* Reality Tiles — Side by side layout */}
-              <div className="max-w-6xl mx-auto mb-8">
+              <div className="max-w-6xl mx-auto mb-6">
                 <div className="grid grid-cols-5 gap-4">
                   {tiles.map((tile, idx) => (
                     <div
                       key={idx}
-                      className={`h-[380px] transition-all duration-700 cursor-pointer ${
+                      className={`h-[280px] transition-all duration-700 cursor-pointer ${
                         tile.revealed ? 'filter-none' : 'blur-sm opacity-70'
                       }`}
                       onClick={() => handleTileReveal(idx)}
@@ -439,15 +441,10 @@ ${revealedTiles.map(tile =>
                         </div>
 
                         {tile.revealed && (
-                          <div className="flex-1 space-y-2 overflow-hidden">
+                          <div className="flex-1 overflow-hidden">
                             <div className="overflow-hidden">
-                              <p className="text-[10px] text-mergenta-dark-grey leading-relaxed">
-                                {tile.content}
-                              </p>
-                            </div>
-                            <div className="p-2 bg-white/40 rounded-lg">
-                              <p className="text-xs text-mergenta-violet font-medium italic">
-                                "{tile.insight}"
+                              <p className="text-xs text-mergenta-violet leading-relaxed">
+                                {tile.content} {tile.insight}
                               </p>
                             </div>
                           </div>
