@@ -486,6 +486,20 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
                   >
                     Search Again
                   </Button>
+                  {globalHistory.feedbacks.length > 0 && (
+                    <Button
+                      onClick={() => {
+                        const latestFeedback = globalHistory.feedbacks[globalHistory.feedbacks.length - 1];
+                        if (latestFeedback) {
+                          setFeedbackData(latestFeedback);
+                          setCurrentPage('feedback');
+                        }
+                      }}
+                      className="bg-mergenta-violet hover:bg-mergenta-deep-violet text-white px-8 py-3 rounded-full text-lg transition-all duration-300 hover:scale-105 shadow-soft"
+                    >
+                      View Latest Insights
+                    </Button>
+                  )}
                 </div>
               </div>
             </>
@@ -495,11 +509,11 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
           {currentPage === 'feedback' && (
             <>
               {/* Header */}
-              <div className="flex-shrink-0 text-center pt-12 pb-4 px-8">
-                <div className="flex items-center justify-center mb-6">
+              <div className="flex-shrink-0 text-center pt-16 pb-8 px-8">
+                <div className="flex items-center justify-center mb-8">
                   <TrendingUp className="h-10 w-10 text-mergenta-violet animate-in scale-in" />
                 </div>
-                <h1 className="text-3xl md:text-4xl font-bold text-mergenta-deep-violet mb-2 animate-in fade-in">
+                <h1 className="text-3xl md:text-4xl font-bold text-mergenta-deep-violet mb-4 animate-in fade-in">
                   Performance Insights
                 </h1>
                 <p className="text-sm md:text-base text-mergenta-dark-grey max-w-4xl mx-auto leading-relaxed animate-in fade-in" style={{animationDelay: '100ms'}}>
@@ -508,15 +522,15 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
               </div>
 
               {/* Feedback Tiles */}
-              <div className="flex-1 px-8 pb-8 overflow-y-auto">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+              <div className="flex-1 px-8 pb-16 overflow-y-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto mt-8">
                   {/* Strengths Tile */}
-                  <div className="bg-white/30 backdrop-blur-sm rounded-2xl p-6 shadow-soft hover:shadow-elegant transition-all duration-300 transform hover:-translate-y-1 animate-in slide-in-from-left">
+                  <div className="bg-white/30 backdrop-blur-sm rounded-2xl p-5 shadow-soft hover:shadow-elegant transition-all duration-300 transform hover:-translate-y-1 animate-in slide-in-from-left">
                     <div className="flex items-center mb-4">
                       <div className="p-2 bg-green-500 rounded-full mr-3">
-                        <TrendingUp className="h-5 w-5 text-white" />
+                        <TrendingUp className="h-4 w-4 text-white" />
                       </div>
-                      <h2 className="text-xl font-bold text-green-800">Your Strengths So Far</h2>
+                      <h2 className="text-lg font-bold text-green-800">Your Strengths So Far</h2>
                     </div>
                     <ul className="space-y-3">
                       {feedbackData.strengths.map((strength, idx) => (
@@ -525,7 +539,7 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
                           className="flex items-start text-green-700 animate-in fade-in"
                           style={{animationDelay: `${idx * 50}ms`}}
                         >
-                          <Zap className="h-4 w-4 mr-2 mt-0.5 text-green-500 flex-shrink-0" />
+                          <Zap className="h-3 w-3 mr-2 mt-1 text-green-500 flex-shrink-0" />
                           <span className="text-sm leading-relaxed break-words">{strength}</span>
                         </li>
                       ))}
@@ -533,12 +547,12 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
                   </div>
 
                   {/* Improvements Tile */}
-                  <div className="bg-white/30 backdrop-blur-sm rounded-2xl p-6 shadow-soft hover:shadow-elegant transition-all duration-300 transform hover:-translate-y-1 animate-in slide-in-from-right">
+                  <div className="bg-white/30 backdrop-blur-sm rounded-2xl p-5 shadow-soft hover:shadow-elegant transition-all duration-300 transform hover:-translate-y-1 animate-in slide-in-from-right">
                     <div className="flex items-center mb-4">
                       <div className="p-2 bg-orange-500 rounded-full mr-3">
-                        <AlertTriangle className="h-5 w-5 text-white" />
+                        <AlertTriangle className="h-4 w-4 text-white" />
                       </div>
-                      <h2 className="text-xl font-bold text-orange-800">Work On This</h2>
+                      <h2 className="text-lg font-bold text-orange-800">Work On This</h2>
                     </div>
                     <ul className="space-y-3">
                       {feedbackData.improvements.map((improvement, idx) => (
@@ -547,7 +561,7 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
                           className="flex items-start text-orange-700 animate-in fade-in"
                           style={{animationDelay: `${idx * 50}ms`}}
                         >
-                          <AlertTriangle className="h-4 w-4 mr-2 mt-0.5 text-orange-500 flex-shrink-0" />
+                          <AlertTriangle className="h-3 w-3 mr-2 mt-1 text-orange-500 flex-shrink-0" />
                           <span className="text-sm leading-relaxed break-words">{improvement}</span>
                         </li>
                       ))}
@@ -556,23 +570,12 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex justify-center space-x-4 mt-8 animate-in fade-in" style={{animationDelay: '300ms'}}>
+                <div className="flex justify-center space-x-4 mt-12 mb-8 animate-in fade-in" style={{animationDelay: '300ms'}}>
                   <Button
                     onClick={() => setCurrentPage('dialogue')}
                     className="bg-mergenta-violet hover:bg-mergenta-deep-violet text-white px-8 py-3 rounded-full text-lg transition-all duration-300 hover:scale-105 shadow-soft"
                   >
                     Continue Discussion
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      const latestFeedback = globalHistory.feedbacks[globalHistory.feedbacks.length - 1];
-                      if (latestFeedback) {
-                        setFeedbackData(latestFeedback);
-                      }
-                    }}
-                    className="bg-mergenta-violet hover:bg-mergenta-deep-violet text-white px-8 py-3 rounded-full text-lg transition-all duration-300 hover:scale-105 shadow-soft"
-                  >
-                    View Latest Insights
                   </Button>
                   <Button
                     onClick={handleSearchAgain}
