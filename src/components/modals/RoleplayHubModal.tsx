@@ -309,9 +309,11 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
 
   const handleSearchAgain = () => {
     setCurrentPage('search');
+    setSearchValue(""); // Clear previous text
     setDialogueMessages([]);
     setQueryCount(0);
     setIsUserRole(true);
+    setShowDropdown(false); // Don't show search bar dropdown
   };
 
   // Close dropdown when clicking outside
@@ -337,14 +339,14 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogOverlay className="bg-gradient-to-br from-blue-900/80 via-purple-900/70 to-indigo-900/60 backdrop-blur-lg" />
-      <CustomDialogContent className="max-w-[1210px] max-h-[86vh] w-[105vw] h-[100vh] p-0 overflow-hidden bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50 border-0" onOpenAutoFocus={(e) => e.preventDefault()}>
+      <DialogOverlay className="bg-gradient-to-br from-mergenta-deep-violet/80 via-mergenta-violet/70 to-mergenta-magenta/60 backdrop-blur-lg" />
+      <CustomDialogContent className="max-w-[1210px] max-h-[86vh] w-[105vw] h-[100vh] p-0 overflow-hidden bg-gradient-to-br from-pastel-lavender via-mergenta-light-violet to-pastel-magenta border-0" onOpenAutoFocus={(e) => e.preventDefault()}>
         {/* Close Button */}
         <button
           onClick={() => onOpenChange(false)}
-          className="absolute right-6 top-6 z-50 p-2 rounded-full bg-white/80 hover:bg-white transition-colors shadow-lg"
+          className="absolute right-6 top-6 z-50 p-2 rounded-full bg-white/80 hover:bg-white transition-colors shadow-soft"
         >
-          <X className="h-5 w-5 text-gray-700" />
+          <X className="h-5 w-5 text-mergenta-dark-grey" />
         </button>
 
         <div className="flex flex-col h-full overflow-hidden">
@@ -354,18 +356,18 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
               {/* Header Section */}
               <div className="flex-shrink-0 text-center pt-16 pb-6 px-8">
                 <div className="flex items-center justify-center mb-8">
-                  <Users className="h-12 w-12 text-purple-600" />
+                  <Users className="h-12 w-12 text-mergenta-violet" />
                 </div>
-                <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-3">
+                <h1 className="text-4xl md:text-5xl font-bold text-mergenta-deep-violet mb-3">
                   Roleplay Hub
                 </h1>
-                <p className="text-base md:text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed">
+                <p className="text-base md:text-lg text-mergenta-dark-grey max-w-4xl mx-auto leading-relaxed">
                   Practise real scenarios through live dialogue — simulate interviews, pitches, and tough talks.
                 </p>
               </div>
 
               {/* Search Section */}
-              <div className="flex-shrink-0 px-8 mb-8 mt-16">
+              <div className="flex-shrink-0 px-8 mb-8 mt-16 pb-8">
                 <div className="max-w-3xl mx-auto relative" ref={searchRef}>
                   <ChatInput 
                     onSendMessage={handleSearchSubmit} 
@@ -376,9 +378,9 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
 
                   {/* Dropdown Menu with rotating options */}
                   {showDropdown && (
-                    <div className="absolute top-full mt-2 w-full bg-white/90 backdrop-blur-sm rounded-xl shadow-2xl border border-white/20 z-40 overflow-hidden">
+                    <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-elegant border border-white/20 z-40 overflow-hidden">
                       <div className="p-2">
-                        <div className="flex items-center justify-between px-4 py-3 text-sm text-gray-600 border-b border-gray-100">
+                        <div className="flex items-center justify-between px-4 py-3 text-sm text-mergenta-dark-grey border-b border-gray-100">
                           <span className="font-medium">Suggested roleplay scenarios</span>
                           <ChevronDown className="h-4 w-4" />
                         </div>
@@ -386,7 +388,7 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
                           <button
                             key={idx}
                             onClick={() => handleDropdownSelect(option)}
-                            className="w-full text-left px-4 py-3 text-sm text-gray-600/70 hover:bg-purple-50 hover:text-purple-700 transition-colors rounded-lg mx-1 my-1 animate-in fade-in-50"
+                            className="w-full text-left px-4 py-3 text-sm text-mergenta-dark-grey hover:bg-pastel-lavender hover:text-mergenta-violet transition-colors rounded-lg mx-1 my-1 animate-in fade-in-50"
                             style={{ 
                               animationDelay: `${idx * 100}ms`,
                               fontSize: '0.85rem',
@@ -412,19 +414,19 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
                 <div className="flex items-center justify-between">
                   <button
                     onClick={() => setCurrentPage('search')}
-                    className="p-2 rounded-full bg-white/80 hover:bg-white transition-colors shadow-lg"
+                    className="p-2 rounded-full bg-white/80 hover:bg-white transition-colors shadow-soft"
                   >
-                    <ArrowLeft className="h-5 w-5 text-gray-700" />
+                    <ArrowLeft className="h-5 w-5 text-mergenta-dark-grey" />
                   </button>
                   <div className="flex items-center space-x-3">
-                    <Users className="h-8 w-8 text-purple-600" />
+                    <Users className="h-8 w-8 text-mergenta-violet" />
                     <div className="flex items-center space-x-2">
                       {isUserRole ? (
-                        <Mic className={`h-5 w-5 text-green-500 ${queryCount % 2 === 0 ? 'animate-pulse' : ''}`} />
+                        <Mic className={`h-5 w-5 text-mergenta-violet ${queryCount % 2 === 0 ? 'animate-pulse' : ''}`} />
                       ) : (
-                        <Lightbulb className={`h-5 w-5 text-yellow-500 ${queryCount % 2 === 1 ? 'animate-pulse' : ''}`} />
+                        <Lightbulb className={`h-5 w-5 text-mergenta-magenta ${queryCount % 2 === 1 ? 'animate-pulse' : ''}`} />
                       )}
-                      <span className="text-sm text-gray-600">
+                      <span className="text-sm text-mergenta-dark-grey">
                         {isUserRole ? 'Your Turn' : 'AI Turn'}
                       </span>
                     </div>
@@ -435,7 +437,7 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
 
               {/* Dialogue Area */}
               <div className="flex-1 px-8 overflow-hidden">
-                <div className="h-full bg-white/30 backdrop-blur-sm rounded-2xl p-6 shadow-lg overflow-y-auto">
+                <div className="h-full bg-white/30 backdrop-blur-sm rounded-2xl p-6 shadow-soft overflow-y-auto">
                   <div className="space-y-4 pb-4">
                     {dialogueMessages.map((message) => (
                       <div
@@ -445,8 +447,8 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
                         <div
                           className={`max-w-[80%] p-4 rounded-2xl ${
                             message.isUser
-                              ? 'bg-purple-600 text-white'
-                              : 'bg-white text-gray-800 shadow-md'
+                              ? 'bg-mergenta-violet text-white'
+                              : 'bg-white text-mergenta-dark-grey shadow-soft'
                           }`}
                         >
                           <p className="text-sm leading-relaxed">{message.content}</p>
@@ -462,7 +464,7 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
               </div>
 
               {/* Input Area */}
-              <div className="flex-shrink-0 px-8 py-6">
+              <div className="flex-shrink-0 px-8 py-6 pb-8">
                 <div className="max-w-3xl mx-auto mb-4">
                   <ChatInput 
                     onSendMessage={handleDialogueSubmit}
@@ -474,13 +476,13 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
                 <div className="flex justify-center space-x-4">
                   <Button
                     onClick={handleRoleFlip}
-                    className="bg-white/80 hover:bg-white text-purple-700 px-8 py-3 rounded-full text-lg transition-all duration-300 hover:scale-105"
+                    className="bg-mergenta-violet hover:bg-mergenta-deep-violet text-white px-8 py-3 rounded-full text-lg transition-all duration-300 hover:scale-105 shadow-soft"
                   >
                     Flip The Role
                   </Button>
                   <Button
                     onClick={handleSearchAgain}
-                    className="bg-white/80 hover:bg-white text-purple-700 px-8 py-3 rounded-full text-lg transition-all duration-300 hover:scale-105"
+                    className="bg-mergenta-violet hover:bg-mergenta-deep-violet text-white px-8 py-3 rounded-full text-lg transition-all duration-300 hover:scale-105 shadow-soft"
                   >
                     Search Again
                   </Button>
@@ -493,36 +495,37 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
           {currentPage === 'feedback' && (
             <>
               {/* Header */}
-              <div className="flex-shrink-0 text-center pt-16 pb-8 px-8">
-                <div className="flex items-center justify-center mb-8">
-                  <TrendingUp className="h-12 w-12 text-purple-600" />
+              <div className="flex-shrink-0 text-center pt-12 pb-4 px-8">
+                <div className="flex items-center justify-center mb-6">
+                  <TrendingUp className="h-10 w-10 text-mergenta-violet animate-in scale-in" />
                 </div>
-                <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-3">
+                <h1 className="text-3xl md:text-4xl font-bold text-mergenta-deep-violet mb-2 animate-in fade-in">
                   Performance Insights
                 </h1>
-                <p className="text-base md:text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed">
+                <p className="text-sm md:text-base text-mergenta-dark-grey max-w-4xl mx-auto leading-relaxed animate-in fade-in" style={{animationDelay: '100ms'}}>
                   Your progress analysis from the last 5 interactions
                 </p>
               </div>
 
               {/* Feedback Tiles */}
-              <div className="flex-1 px-8 pb-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+              <div className="flex-1 px-8 pb-8 overflow-y-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
                   {/* Strengths Tile */}
-                  <div className="bg-white/30 backdrop-blur-sm rounded-2xl p-8 shadow-lg min-h-[400px] flex flex-col">
-                    <div className="flex items-center mb-6">
-                      <div className="p-3 bg-green-500 rounded-full mr-4">
-                        <TrendingUp className="h-6 w-6 text-white" />
+                  <div className="bg-white/30 backdrop-blur-sm rounded-2xl p-6 shadow-soft hover:shadow-elegant transition-all duration-300 transform hover:-translate-y-1 animate-in slide-in-from-left">
+                    <div className="flex items-center mb-4">
+                      <div className="p-2 bg-green-500 rounded-full mr-3">
+                        <TrendingUp className="h-5 w-5 text-white" />
                       </div>
-                      <h2 className="text-2xl font-bold text-green-800">Your Strengths So Far</h2>
+                      <h2 className="text-xl font-bold text-green-800">Your Strengths So Far</h2>
                     </div>
-                    <ul className="space-y-4 flex-1">
+                    <ul className="space-y-3">
                       {feedbackData.strengths.map((strength, idx) => (
                         <li
                           key={idx}
-                          className="flex items-start text-green-700"
+                          className="flex items-start text-green-700 animate-in fade-in"
+                          style={{animationDelay: `${idx * 50}ms`}}
                         >
-                          <Zap className="h-5 w-5 mr-3 mt-0.5 text-green-500 flex-shrink-0" />
+                          <Zap className="h-4 w-4 mr-2 mt-0.5 text-green-500 flex-shrink-0" />
                           <span className="text-sm leading-relaxed break-words">{strength}</span>
                         </li>
                       ))}
@@ -530,20 +533,21 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
                   </div>
 
                   {/* Improvements Tile */}
-                  <div className="bg-white/30 backdrop-blur-sm rounded-2xl p-8 shadow-lg min-h-[400px] flex flex-col">
-                    <div className="flex items-center mb-6">
-                      <div className="p-3 bg-orange-500 rounded-full mr-4">
-                        <AlertTriangle className="h-6 w-6 text-white" />
+                  <div className="bg-white/30 backdrop-blur-sm rounded-2xl p-6 shadow-soft hover:shadow-elegant transition-all duration-300 transform hover:-translate-y-1 animate-in slide-in-from-right">
+                    <div className="flex items-center mb-4">
+                      <div className="p-2 bg-orange-500 rounded-full mr-3">
+                        <AlertTriangle className="h-5 w-5 text-white" />
                       </div>
-                      <h2 className="text-2xl font-bold text-orange-800">Work On This</h2>
+                      <h2 className="text-xl font-bold text-orange-800">Work On This</h2>
                     </div>
-                    <ul className="space-y-4 flex-1">
+                    <ul className="space-y-3">
                       {feedbackData.improvements.map((improvement, idx) => (
                         <li
                           key={idx}
-                          className="flex items-start text-orange-700"
+                          className="flex items-start text-orange-700 animate-in fade-in"
+                          style={{animationDelay: `${idx * 50}ms`}}
                         >
-                          <AlertTriangle className="h-5 w-5 mr-3 mt-0.5 text-orange-500 flex-shrink-0" />
+                          <AlertTriangle className="h-4 w-4 mr-2 mt-0.5 text-orange-500 flex-shrink-0" />
                           <span className="text-sm leading-relaxed break-words">{improvement}</span>
                         </li>
                       ))}
@@ -552,12 +556,12 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex justify-center space-x-4 mt-12">
+                <div className="flex justify-center space-x-4 mt-8 animate-in fade-in" style={{animationDelay: '300ms'}}>
                   <Button
                     onClick={() => setCurrentPage('dialogue')}
-                    className="bg-white/80 hover:bg-white text-purple-700 px-8 py-3 rounded-full text-lg transition-all duration-300 hover:scale-105"
+                    className="bg-mergenta-violet hover:bg-mergenta-deep-violet text-white px-8 py-3 rounded-full text-lg transition-all duration-300 hover:scale-105 shadow-soft"
                   >
-                    Continue Practice
+                    Continue Discussion
                   </Button>
                   <Button
                     onClick={() => {
@@ -566,9 +570,15 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
                         setFeedbackData(latestFeedback);
                       }
                     }}
-                    className="bg-white/80 hover:bg-white text-purple-700 px-8 py-3 rounded-full text-lg transition-all duration-300 hover:scale-105"
+                    className="bg-mergenta-violet hover:bg-mergenta-deep-violet text-white px-8 py-3 rounded-full text-lg transition-all duration-300 hover:scale-105 shadow-soft"
                   >
                     View Latest Insights
+                  </Button>
+                  <Button
+                    onClick={handleSearchAgain}
+                    className="bg-mergenta-violet hover:bg-mergenta-deep-violet text-white px-8 py-3 rounded-full text-lg transition-all duration-300 hover:scale-105 shadow-soft"
+                  >
+                    Search Again
                   </Button>
                 </div>
               </div>
