@@ -418,7 +418,7 @@ ${revealedTiles.map(tile =>
   {tiles.map((tile, idx) => (
     <div
       key={idx}
-      className={`w-80 h-60 transition-all duration-700 cursor-pointer ${
+      className={`w-80 h-96 transition-all duration-700 cursor-pointer ${
         tile.revealed 
           ? 'transform rotate-0' 
           : 'transform rotate-45 blur-sm opacity-70'
@@ -442,7 +442,7 @@ ${revealedTiles.map(tile =>
 
         {tile.revealed && (
           <div className="flex-1 space-y-3 overflow-hidden">
-            <div className="h-32 overflow-y-auto pr-2">
+            <div className="pr-2">
               <p className="text-xs text-mergenta-dark-grey leading-relaxed">
                 {tile.content}
               </p>
