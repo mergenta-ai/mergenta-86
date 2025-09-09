@@ -73,6 +73,16 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
   // Update input when initialValue changes
   useEffect(() => {
     setInput(initialValue);
+    // Auto-resize textarea when initialValue changes
+    if (initialValue) {
+      setTimeout(() => {
+        const textarea = document.querySelector('textarea');
+        if (textarea) {
+          textarea.style.height = 'auto';
+          textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+        }
+      }, 0);
+    }
   }, [initialValue]);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
