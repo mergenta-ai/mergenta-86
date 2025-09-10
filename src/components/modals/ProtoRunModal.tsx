@@ -87,7 +87,7 @@ const ProtoRunModal = ({ open, onOpenChange, onAddToChat }: ProtoRunModalProps) 
 
   const playbackData: PlaybackData[] = [
     {
-      title: "Seed Playbook",
+      title: "Seed Playback",
       subtitle: "Surface early signals with minimal effort",
       beats: [
         "Define your core assumption",
@@ -101,7 +101,7 @@ const ProtoRunModal = ({ open, onOpenChange, onAddToChat }: ProtoRunModalProps) 
       ]
     },
     {
-      title: "Grow Playbook", 
+      title: "Grow Playback", 
       subtitle: "Refine your idea through small trials",
       beats: [
         "Build on validated assumptions",
@@ -115,7 +115,7 @@ const ProtoRunModal = ({ open, onOpenChange, onAddToChat }: ProtoRunModalProps) 
       ]
     },
     {
-      title: "Scale Playbook",
+      title: "Scale Playback",
       subtitle: "Expand impact across new audiences",
       beats: [
         "Validate scalability factors",
@@ -169,9 +169,9 @@ const ProtoRunModal = ({ open, onOpenChange, onAddToChat }: ProtoRunModalProps) 
 
   const handleLaunchSprint = (playbackIndex: number) => {
     setSelectedPlaybackType(playbackIndex);
-    const playbook = playbackData[playbackIndex];
-    setSprintTitle(`${playbook.title} Sprint`);
-    setSprintDescription(`A focused experiment based on your ${playbook.title.toLowerCase()} approach. This sprint will help you test key assumptions and gather actionable insights to move your idea forward with confidence.`);
+    const playback = playbackData[playbackIndex];
+    setSprintTitle(`${playback.title} Sprint`);
+    setSprintDescription(`A focused experiment based on your ${playback.title.toLowerCase()} approach. This sprint will help you test key assumptions and gather actionable insights to move your idea forward with confidence.`);
     setShowSprint(true);
   };
 
@@ -213,7 +213,7 @@ const ProtoRunModal = ({ open, onOpenChange, onAddToChat }: ProtoRunModalProps) 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogOverlay className="bg-gradient-to-br from-mergenta-deep-violet/80 via-mergenta-violet/70 to-mergenta-magenta/60 backdrop-blur-lg" />
-      <CustomDialogContent className="max-w-[1210px] max-h-[86vh] w-[105vw] h-[100vh] p-0 overflow-hidden bg-gradient-to-br from-pastel-lavender via-mergenta-light-violet to-pastel-magenta border-0" onOpenAutoFocus={(e) => e.preventDefault()}>
+      <CustomDialogContent className="max-w-[1210px] w-full h-[100vh] max-h-[100vh] p-0 overflow-hidden bg-gradient-to-br from-pastel-lavender via-mergenta-light-violet to-pastel-magenta border-0"onOpenAutoFocus={(e) => e.preventDefault()}>
         {/* Close Button */}
         <button
           onClick={() => onOpenChange(false)}
@@ -222,7 +222,7 @@ const ProtoRunModal = ({ open, onOpenChange, onAddToChat }: ProtoRunModalProps) 
           <X className="h-5 w-5 text-mergenta-dark-grey" />
         </button>
 
-        <div className="flex flex-col h-full overflow-y-auto">
+        <div className="flex flex-col h-full overflow-hidden justify-between">
           {/* First Page - Search Interface */}
           {!showPlayback && !showSprint && (
             <>
@@ -282,7 +282,7 @@ const ProtoRunModal = ({ open, onOpenChange, onAddToChat }: ProtoRunModalProps) 
                       <Zap className="h-8 w-8 text-mergenta-violet" />
                     </div>
                     <p className="text-lg text-mergenta-dark-grey">
-                      Generating your proto run playbook...
+                      Generating your proto run playbackk...
                     </p>
                   </div>
                 </div>
@@ -360,7 +360,7 @@ const ProtoRunModal = ({ open, onOpenChange, onAddToChat }: ProtoRunModalProps) 
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex justify-center gap-12">
+                <div className="flex justify-center gap-12 mt-8">
                   <Button
                     variant="outline"
                     onClick={() => {
