@@ -294,7 +294,7 @@ const ProtoRunModal = ({ open, onOpenChange, onAddToChat }: ProtoRunModalProps) 
           {showPlayback && !showSprint && (
             <>
               {/* Header Section */}
-              <div className="flex-shrink-0 px-6 pt-6 pb-4">
+              <div className="flex-shrink-0 px-8 pt-8 pb-6">
                 <div className="flex items-center justify-between">
                   <button
                     onClick={goBackToSearch}
@@ -303,47 +303,47 @@ const ProtoRunModal = ({ open, onOpenChange, onAddToChat }: ProtoRunModalProps) 
                     <ArrowLeft className="h-5 w-5 text-mergenta-dark-grey" />
                   </button>
                   <div className="flex items-center justify-center">
-                    <Zap className="h-7 w-7 text-mergenta-violet" />
+                    <Zap className="h-8 w-8 text-mergenta-violet" />
                   </div>
                   <div className="w-9 h-9"></div>
                 </div>
-                <div className="text-center mt-4">
-                  <h1 className="text-2xl md:text-3xl font-bold text-mergenta-deep-violet mb-2">
+                <div className="text-center mt-6">
+                  <h1 className="text-3xl md:text-4xl font-bold text-mergenta-deep-violet mb-3">
                     Playback
                   </h1>
-                  <p className="text-sm text-mergenta-dark-grey max-w-4xl mx-auto leading-relaxed">
+                  <p className="text-base text-mergenta-dark-grey max-w-4xl mx-auto leading-relaxed">
                     A Playback is a flow of beats that lets you rehearse your idea step by step. Each path leads to a Sprint, where imagination moves into action.
                   </p>
                 </div>
               </div>
 
               {/* Playback Tiles */}
-              <div className="flex-1 px-6 pb-4">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6 max-w-6xl mx-auto">
+              <div className="flex-1 px-8 pb-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12 max-w-6xl mx-auto">
                   {playbackData.map((playback, idx) => (
                     <div
                       key={idx}
-                      className="bg-white/30 backdrop-blur-sm rounded-xl p-4 shadow-soft hover:shadow-elegant transition-all duration-300 transform hover:-translate-y-1 animate-in slide-in-from-bottom-4 flex flex-col h-[340px] relative"
+                      className="bg-white/30 backdrop-blur-sm rounded-2xl p-6 shadow-soft hover:shadow-elegant transition-all duration-300 transform hover:-translate-y-1 animate-in slide-in-from-bottom-4 flex flex-col min-h-[400px] relative"
                       style={{ animationDelay: `${idx * 100}ms` }}
                     >
-                      <div className="mb-3">
-                        <h3 className="text-lg font-semibold text-mergenta-deep-violet mb-2">
+                      <div className="mb-4">
+                        <h3 className="text-xl font-semibold text-mergenta-deep-violet mb-2">
                           {idx + 1}. {playback.title}
                         </h3>
-                        <p className="text-xs text-mergenta-dark-grey/80 leading-relaxed">
+                        <p className="text-sm text-mergenta-dark-grey/80">
                           {playback.subtitle}
                         </p>
                       </div>
                       
-                      <div className="flex-1 mb-3">
-                        <ul className="space-y-1.5">
+                      <div className="flex-1 mb-4">
+                        <ul className="space-y-2">
                           {playback.beats.map((beat, beatIdx) => (
                             <li
                               key={beatIdx}
-                              className="flex items-start text-xs text-mergenta-dark-grey"
+                              className="flex items-start text-sm text-mergenta-dark-grey"
                             >
-                              <div className="w-1 h-1 rounded-full bg-mergenta-violet mt-1.5 mr-2 flex-shrink-0" />
-                              <span className="leading-tight">{beat}</span>
+                              <div className="w-1.5 h-1.5 rounded-full bg-mergenta-violet mt-1.5 mr-2 flex-shrink-0" />
+                              <span>{beat}</span>
                             </li>
                           ))}
                         </ul>
@@ -351,7 +351,7 @@ const ProtoRunModal = ({ open, onOpenChange, onAddToChat }: ProtoRunModalProps) 
 
                       <Button
                         onClick={() => handleLaunchSprint(idx)}
-                        className="w-full bg-mergenta-deep-violet/80 border-mergenta-deep-violet text-white hover:bg-mergenta-deep-violet mt-auto text-sm py-2"
+                        className="w-full bg-mergenta-deep-violet/80 border-mergenta-deep-violet text-white hover:bg-mergenta-deep-violet mt-auto"
                       >
                         Launch Sprint
                       </Button>
@@ -360,7 +360,7 @@ const ProtoRunModal = ({ open, onOpenChange, onAddToChat }: ProtoRunModalProps) 
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex justify-center gap-8">
+                <div className="flex justify-center gap-12">
                   <Button
                     variant="outline"
                     onClick={() => {
@@ -370,16 +370,16 @@ const ProtoRunModal = ({ open, onOpenChange, onAddToChat }: ProtoRunModalProps) 
                       ).join('\n\n');
                       navigator.clipboard.writeText(allBeats);
                     }}
-                    className="bg-mergenta-deep-violet/80 border-mergenta-deep-violet text-white hover:bg-mergenta-deep-violet text-sm"
+                    className="bg-mergenta-deep-violet/80 border-mergenta-deep-violet text-white hover:bg-mergenta-deep-violet"
                   >
                     Copy Playback Beats
                   </Button>
                   <Button
                     variant="outline"
                     onClick={resetModal}
-                    className="bg-mergenta-deep-violet/80 border-mergenta-deep-violet text-white hover:bg-mergenta-deep-violet text-sm"
+                    className="bg-mergenta-deep-violet/80 border-mergenta-deep-violet text-white hover:bg-mergenta-deep-violet"
                   >
-                     Start Again
+                    Start Again
                   </Button>
                 </div>
               </div>
