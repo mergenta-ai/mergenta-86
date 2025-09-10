@@ -318,12 +318,12 @@ const ProtoRunModal = ({ open, onOpenChange, onAddToChat }: ProtoRunModalProps) 
               </div>
 
               {/* Playback Tiles */}
-              <div className="flex-1 px-8 pb-8">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12 max-w-6xl mx-auto">
+              <div className="flex-1 px-8 pb-4">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-20 max-w-6xl mx-auto">
                   {playbackData.map((playback, idx) => (
                     <div
                       key={idx}
-                      className="bg-white/30 backdrop-blur-sm rounded-2xl p-6 shadow-soft hover:shadow-elegant transition-all duration-300 transform hover:-translate-y-1 animate-in slide-in-from-bottom-4 flex flex-col min-h-[400px] relative"
+                      className="bg-white/30 backdrop-blur-sm rounded-2xl p-6 shadow-soft hover:shadow-elegant transition-all duration-300 transform hover:-translate-y-1 animate-in slide-in-from-bottom-4 flex flex-col min-h-[500px] relative"
                       style={{ animationDelay: `${idx * 100}ms` }}
                     >
                       <div className="mb-4">
