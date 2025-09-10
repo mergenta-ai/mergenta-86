@@ -319,7 +319,7 @@ const ProtoRunModal = ({ open, onOpenChange, onAddToChat }: ProtoRunModalProps) 
 
               {/* Playback Tiles */}
               <div className="flex-1 px-8 pb-4">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 max-w-6xl mx-auto">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10 max-w-6xl mx-auto">
                   {playbackData.map((playback, idx) => (
                     <div
                       key={idx}
