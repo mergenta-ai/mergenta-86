@@ -323,7 +323,7 @@ const ProtoRunModal = ({ open, onOpenChange, onAddToChat }: ProtoRunModalProps) 
                   {playbackData.map((playback, idx) => (
                     <div
                       key={idx}
-                      className="bg-white/30 backdrop-blur-sm rounded-2xl p-6 shadow-soft hover:shadow-elegant transition-all duration-300 transform hover:-translate-y-1 animate-in slide-in-from-bottom-4 flex flex-col min-h-[480px] lg:min-h-[520px] relative"
+                      className="bg-white/30 backdrop-blur-sm rounded-2xl p-6 shadow-soft hover:shadow-elegant transition-all duration-300 transform hover:-translate-y-1 animate-in slide-in-from-bottom-4 flex flex-col min-h-[440px] lg:min-h-[480px] relative"
                       style={{ animationDelay: `${idx * 100}ms` }}
                     >
                       <div className="mb-4">
