@@ -37,6 +37,7 @@ import { PowerPlaybookModal } from "./modals/PowerPlaybookModal";
 import { FuturePathwaysModal } from "./modals/FuturePathwaysModal";
 import RealityCheckModal from "./modals/RealityCheckModal";
 import RoleplayHubModal from "./modals/RoleplayHubModal";
+import { ProtoRunModal } from "./modals/ProtoRunModal";
 
 const WorkflowTabs = ({ onAddToChat }: { onAddToChat?: (message: string, response: string) => void }) => {
   const [activeTab, setActiveTab] = useState<string | null>(null);
@@ -47,6 +48,7 @@ const WorkflowTabs = ({ onAddToChat }: { onAddToChat?: (message: string, respons
   const [futurePathwaysModalOpen, setFuturePathwaysModalOpen] = useState(false);
   const [realityCheckModalOpen, setRealityCheckModalOpen] = useState(false);
   const [roleplayHubModalOpen, setRoleplayHubModalOpen] = useState(false);
+  const [protoRunModalOpen, setProtoRunModalOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const tabs = [
@@ -505,7 +507,7 @@ const WorkflowTabs = ({ onAddToChat }: { onAddToChat?: (message: string, respons
                       <div className="py-2">
                         {[
                           "360° Snapshot", "POV Lab", "Future Pathways", 
-                          "Roleplay Hub", "Reality Check", "Impact Radar"
+                          "Roleplay Hub", "Reality Check", "Proto Run"
                         ].map((item, idx) => (
                           <button
                             key={idx}
@@ -521,6 +523,8 @@ const WorkflowTabs = ({ onAddToChat }: { onAddToChat?: (message: string, respons
                                 setRealityCheckModalOpen(true);
                               } else if (item === "Roleplay Hub") {
                                 setRoleplayHubModalOpen(true);
+                              } else if (item === "Proto Run") {
+                                setProtoRunModalOpen(true);
                               } else {
                                 console.log(`Selected: ${item}`);
                               }
@@ -572,6 +576,12 @@ const WorkflowTabs = ({ onAddToChat }: { onAddToChat?: (message: string, respons
       <RoleplayHubModal 
         open={roleplayHubModalOpen} 
         onOpenChange={setRoleplayHubModalOpen}
+        onAddToChat={onAddToChat}
+      />
+      
+      <ProtoRunModal 
+        open={protoRunModalOpen} 
+        onOpenChange={setProtoRunModalOpen}
         onAddToChat={onAddToChat}
       />
     </TooltipProvider>
