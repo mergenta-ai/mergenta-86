@@ -360,7 +360,7 @@ const ProtoRunModal = ({ open, onOpenChange, onAddToChat }: ProtoRunModalProps) 
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex justify-center gap-12 mt-8">
+                <div className="flex justify-center gap-12">
                   <Button
                     variant="outline"
                     onClick={() => {
