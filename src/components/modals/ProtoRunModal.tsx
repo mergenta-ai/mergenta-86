@@ -414,7 +414,7 @@ const ProtoRunModal = ({ open, onOpenChange, onAddToChat }: ProtoRunModalProps) 
               </div>
 
               {/* Sprint Details Tile */}
-              <div className="flex-shrink-0 px-8 mb-8">
+              <div className="flex-shrink-0 px-8 mb-16">
                 <div className="max-w-4xl mx-auto">
                   <div className="bg-white/30 backdrop-blur-sm rounded-2xl p-6 shadow-soft">
                     <h3 className="text-lg font-semibold text-mergenta-deep-violet mb-3">
@@ -428,7 +428,7 @@ const ProtoRunModal = ({ open, onOpenChange, onAddToChat }: ProtoRunModalProps) 
               </div>
 
               {/* Search Section */}
-              <div className="flex-shrink-0 px-8 mb-8">
+              <div className="flex-shrink-0 px-8 mb-8 mt-8">
                 <div className="max-w-3xl mx-auto">
                   <div className="mb-4">
                     <p className="text-center text-mergenta-dark-grey font-medium">
