@@ -87,7 +87,7 @@ const ProtoRunModal = ({ open, onOpenChange, onAddToChat }: ProtoRunModalProps) 
 
   const playbackData: PlaybackData[] = [
     {
-      title: "Seed Playbook",
+      title: "Seed Playback",
       subtitle: "Surface early signals with minimal effort",
       beats: [
         "Define your core assumption",
@@ -101,7 +101,7 @@ const ProtoRunModal = ({ open, onOpenChange, onAddToChat }: ProtoRunModalProps) 
       ]
     },
     {
-      title: "Grow Playbook", 
+      title: "Grow Playback", 
       subtitle: "Refine your idea through small trials",
       beats: [
         "Build on validated assumptions",
@@ -115,7 +115,7 @@ const ProtoRunModal = ({ open, onOpenChange, onAddToChat }: ProtoRunModalProps) 
       ]
     },
     {
-      title: "Scale Playbook",
+      title: "Scale Playback",
       subtitle: "Expand impact across new audiences",
       beats: [
         "Validate scalability factors",
@@ -169,9 +169,9 @@ const ProtoRunModal = ({ open, onOpenChange, onAddToChat }: ProtoRunModalProps) 
 
   const handleLaunchSprint = (playbackIndex: number) => {
     setSelectedPlaybackType(playbackIndex);
-    const playbook = playbackData[playbackIndex];
-    setSprintTitle(`${playbook.title} Sprint`);
-    setSprintDescription(`A focused experiment based on your ${playbook.title.toLowerCase()} approach. This sprint will help you test key assumptions and gather actionable insights to move your idea forward with confidence.`);
+    const playback = playbackData[playbackIndex];
+    setSprintTitle(`${playback.title} Sprint`);
+    setSprintDescription(`A focused experiment based on your ${playback.title.toLowerCase()} approach. This sprint will help you test key assumptions and gather actionable insights to move your idea forward with confidence.`);
     setShowSprint(true);
   };
 
@@ -282,7 +282,7 @@ const ProtoRunModal = ({ open, onOpenChange, onAddToChat }: ProtoRunModalProps) 
                       <Zap className="h-8 w-8 text-mergenta-violet" />
                     </div>
                     <p className="text-lg text-mergenta-dark-grey">
-                      Generating your proto run playbook...
+                      Generating your proto run playbackk...
                     </p>
                   </div>
                 </div>
