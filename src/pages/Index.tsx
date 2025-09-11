@@ -4,7 +4,10 @@ import ChatInterface from "@/components/ChatInterface";
 import ChatInput from "@/components/ChatInput";
 import WorkflowTabs from "@/components/WorkflowTabs";
 import MergentaSidebar from "@/components/MergentaSidebar";
+import MobileNavigation from "@/components/MobileNavigation";
+import TouchFriendlyWorkflowTabs from "@/components/TouchFriendlyWorkflowTabs";
 import { useToast } from "@/hooks/use-toast";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface Message {
   id: string;
@@ -17,6 +20,7 @@ const Index = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   const simulateAIResponse = (userMessage: string): string => {
     const responses = [
@@ -83,13 +87,16 @@ const Index = () => {
 
   return (
     <div className="min-h-screen flex">
-      {/* Sidebar */}
+      {/* Mobile Navigation */}
+      <MobileNavigation />
+      
+      {/* Desktop Sidebar */}
       <MergentaSidebar />
       
       {/* Main Content */}
-      <div className="flex-1 ml-20 flex flex-col">
-        {/* Logo (top-left) */}
-        <div className="p-6">
+      <div className="flex-1 ml-20 lg:ml-20 md:ml-0 sm:ml-0 flex flex-col">
+        {/* Logo (top-left) - Hidden on mobile */}
+        <div className="p-6 lg:block md:hidden sm:hidden">
           <img 
             src="/lovable-uploads/0ef37e7c-4020-4d43-b3cb-e900815b9635.png" 
             alt="Mergenta Logo" 
@@ -103,14 +110,17 @@ const Index = () => {
         {/* Input bar */}
         <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />
 
-        {/* Workflow tabs */}
-        <WorkflowTabs onAddToChat={handleAddToChat} />
+        {/* Workflow tabs - Desktop */}
+        {!isMobile && <WorkflowTabs onAddToChat={handleAddToChat} />}
 
         {/* Chat messages */}
         <main className="flex-1 flex flex-col">
           <ChatInterface messages={messages} isLoading={isLoading} />
         </main>
       </div>
+
+      {/* Touch-Friendly Workflow Tabs - Mobile */}
+      <TouchFriendlyWorkflowTabs onAddToChat={handleAddToChat} />
     </div>
   );
 };

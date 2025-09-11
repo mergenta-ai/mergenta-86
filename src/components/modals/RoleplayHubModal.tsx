@@ -340,7 +340,7 @@ const RoleplayHubModal = ({ open, onOpenChange, onAddToChat }: RoleplayHubModalP
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogOverlay className="bg-gradient-to-br from-mergenta-deep-violet/80 via-mergenta-violet/70 to-mergenta-magenta/60 backdrop-blur-lg" />
-      <CustomDialogContent className="max-w-[1210px] max-h-[86vh] w-[105vw] h-[100vh] p-0 overflow-hidden bg-gradient-to-br from-pastel-lavender via-mergenta-light-violet to-pastel-magenta border-0" onOpenAutoFocus={(e) => e.preventDefault()}>
+      <CustomDialogContent className="max-w-[95vw] lg:max-w-[1210px] max-h-[90vh] lg:max-h-[86vh] w-full lg:w-[105vw] h-[90vh] lg:h-[100vh] p-0 overflow-hidden bg-gradient-to-br from-pastel-lavender via-mergenta-light-violet to-pastel-magenta border-0" onOpenAutoFocus={(e) => e.preventDefault()}>
         {/* Close Button */}
         <button
           onClick={() => onOpenChange(false)}
