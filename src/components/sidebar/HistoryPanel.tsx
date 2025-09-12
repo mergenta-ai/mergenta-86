@@ -1,7 +1,13 @@
 import React from 'react';
 import { ScrollArea } from '../ui/scroll-area';
 import { Button } from '../ui/button';
-import { MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal, Edit, Share, Archive, Trash2 } from 'lucide-react';
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from '../ui/context-menu';
 
 interface HistoryItem {
   id: string;
@@ -121,17 +127,36 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose }) => {
             const shortTitle = item.preview.split(' ').slice(0, 4).join(' ');
             
             return (
-              <div
-                key={item.id}
-                className="group relative mx-1 mb-0.5 rounded-lg hover:bg-purple-200/60 transition-colors cursor-pointer"
-              >
-                <div className="flex items-center justify-between px-3 py-2.5">
-                  <span className="text-sm text-sidebar-text-dark flex-1 min-w-0 truncate pr-6">
-                    {shortTitle}
-                  </span>
-                  <MoreHorizontal className="h-3.5 w-3.5 text-sidebar-text-violet flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity absolute right-3" />
-                </div>
-              </div>
+              <ContextMenu key={item.id}>
+                <ContextMenuTrigger asChild>
+                  <div className="group relative mx-1 mb-0.5 rounded-lg hover:bg-purple-200/60 transition-colors cursor-pointer overflow-hidden">
+                    <div className="flex items-center justify-between px-3 py-2.5">
+                      <span className="text-sm text-sidebar-text-dark flex-1 min-w-0 truncate pr-2">
+                        {shortTitle}
+                      </span>
+                      <MoreHorizontal className="h-3.5 w-3.5 text-sidebar-text-violet flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
+                  </div>
+                </ContextMenuTrigger>
+                <ContextMenuContent className="w-48">
+                  <ContextMenuItem className="flex items-center gap-2 cursor-pointer">
+                    <Edit className="h-4 w-4" />
+                    Rename
+                  </ContextMenuItem>
+                  <ContextMenuItem className="flex items-center gap-2 cursor-pointer">
+                    <Share className="h-4 w-4" />
+                    Share
+                  </ContextMenuItem>
+                  <ContextMenuItem className="flex items-center gap-2 cursor-pointer">
+                    <Archive className="h-4 w-4" />
+                    Archive
+                  </ContextMenuItem>
+                  <ContextMenuItem className="flex items-center gap-2 cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50">
+                    <Trash2 className="h-4 w-4" />
+                    Delete
+                  </ContextMenuItem>
+                </ContextMenuContent>
+              </ContextMenu>
             );
           })}
         </div>
