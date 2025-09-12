@@ -118,12 +118,12 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose }) => {
 
   return (
     <div 
-      className={`fixed left-20 top-0 h-full w-64 bg-gradient-to-b from-blue-50 to-indigo-50 border-r border-blue-100 z-30 transform transition-transform duration-300 ease-in-out shadow-lg ${
+      className={`fixed left-20 top-0 h-full w-80 bg-gradient-to-b from-purple-50 to-purple-100 border-r border-purple-200 z-30 transform transition-transform duration-300 ease-in-out shadow-lg ${
         isVisible ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
-      <div className="p-4 border-b border-blue-200">
-        <h2 className="text-lg font-semibold text-blue-800 text-center">Chat History</h2>
+      <div className="p-4 border-b border-purple-200">
+        <h2 className="text-lg font-semibold text-purple-800 text-center">Chat History</h2>
       </div>
       
       <ScrollArea className="h-[calc(100%-140px)] pr-3">
@@ -134,7 +134,7 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose }) => {
             return (
               <div
                 key={item.id}
-                className="group relative mx-1 mb-0.5 rounded-lg hover:bg-blue-100/60 transition-colors cursor-pointer"
+                className="group relative mx-1 mb-0.5 rounded-lg hover:bg-purple-200/60 transition-colors cursor-pointer"
               >
                 <div className="flex items-center justify-between px-3 py-2.5">
                   <span className="text-sm text-sidebar-text-dark flex-1 min-w-0 truncate pr-2">
@@ -150,20 +150,20 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose }) => {
                   >
                     <PopoverTrigger asChild>
                       <button 
-                        className="h-6 w-6 flex items-center justify-center rounded hover:bg-blue-200/50 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                        className="h-6 w-6 flex items-center justify-center rounded hover:bg-purple-300/50 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
                         onClick={(e) => {
                           e.stopPropagation();
                           console.log('Button clicked for item:', item.id);
                           setOpenDropdown(openDropdown === item.id ? null : item.id);
                         }}
                       >
-                        <MoreHorizontal className="h-3.5 w-3.5 text-blue-600" />
+                        <MoreHorizontal className="h-3.5 w-3.5 text-sidebar-text-violet" />
                       </button>
                     </PopoverTrigger>
                     <PopoverContent 
                       className="w-40 p-1 z-[9999]" 
                       align="end"
-                      side="bottom"
+                      side="right"
                       sideOffset={5}
                     >
                       <div className="space-y-1">
@@ -205,10 +205,10 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose }) => {
         </div>
       </ScrollArea>
       
-      <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-blue-200 bg-gradient-to-b from-blue-50 to-indigo-50">
+      <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-purple-200 bg-gradient-to-b from-purple-50 to-purple-100">
         <Button 
           variant="outline" 
-          className="w-full border-blue-300 text-blue-700 hover:bg-blue-200"
+          className="w-full border-purple-300 text-purple-700 hover:bg-purple-200"
           onClick={() => console.log('View all chats')}
         >
           View all chats
