@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ScrollArea } from '../ui/scroll-area';
 import { Button } from '../ui/button';
 import { MoreHorizontal, Edit, Share, Archive, Trash2 } from 'lucide-react';
 import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuTrigger,
-} from '../ui/context-menu';
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu';
 
 interface HistoryItem {
   id: string;
@@ -23,6 +23,12 @@ interface HistoryPanelProps {
 }
 
 const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose }) => {
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  
+  const handleAction = (action: string, itemId: string) => {
+    console.log(`${action} item:`, itemId);
+    setOpenDropdown(null);
+  };
   // Mock data - replace with actual chat history
   const historyItems: HistoryItem[] = [
     {
@@ -127,36 +133,68 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose }) => {
             const shortTitle = item.preview.split(' ').slice(0, 4).join(' ');
             
             return (
-              <ContextMenu key={item.id}>
-                <ContextMenuTrigger asChild>
-                  <div className="group relative mx-1 mb-0.5 rounded-lg hover:bg-purple-200/60 transition-colors cursor-pointer overflow-hidden">
-                    <div className="flex items-center justify-between px-3 py-2.5">
-                      <span className="text-sm text-sidebar-text-dark flex-1 min-w-0 truncate pr-2">
-                        {shortTitle}
-                      </span>
-                      <MoreHorizontal className="h-3.5 w-3.5 text-sidebar-text-violet flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </div>
-                  </div>
-                </ContextMenuTrigger>
-                <ContextMenuContent className="w-48">
-                  <ContextMenuItem className="flex items-center gap-2 cursor-pointer">
-                    <Edit className="h-4 w-4" />
-                    Rename
-                  </ContextMenuItem>
-                  <ContextMenuItem className="flex items-center gap-2 cursor-pointer">
-                    <Share className="h-4 w-4" />
-                    Share
-                  </ContextMenuItem>
-                  <ContextMenuItem className="flex items-center gap-2 cursor-pointer">
-                    <Archive className="h-4 w-4" />
-                    Archive
-                  </ContextMenuItem>
-                  <ContextMenuItem className="flex items-center gap-2 cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50">
-                    <Trash2 className="h-4 w-4" />
-                    Delete
-                  </ContextMenuItem>
-                </ContextMenuContent>
-              </ContextMenu>
+              <div
+                key={item.id}
+                className="group relative mx-1 mb-0.5 rounded-lg hover:bg-purple-200/60 transition-colors cursor-pointer overflow-hidden"
+              >
+                <div className="flex items-center justify-between px-3 py-2.5">
+                  <span className="text-sm text-sidebar-text-dark flex-1 min-w-0 truncate pr-2">
+                    {shortTitle}
+                  </span>
+                  
+                  <DropdownMenu 
+                    open={openDropdown === item.id} 
+                    onOpenChange={(open) => setOpenDropdown(open ? item.id : null)}
+                  >
+                    <DropdownMenuTrigger asChild>
+                      <button 
+                        className="h-6 w-6 flex items-center justify-center rounded hover:bg-purple-300/50 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setOpenDropdown(openDropdown === item.id ? null : item.id);
+                        }}
+                      >
+                        <MoreHorizontal className="h-3.5 w-3.5 text-sidebar-text-violet" />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent 
+                      className="w-40 z-50" 
+                      align="end"
+                      side="right"
+                      sideOffset={5}
+                    >
+                      <DropdownMenuItem 
+                        className="flex items-center gap-2 cursor-pointer"
+                        onClick={() => handleAction('rename', item.id)}
+                      >
+                        <Edit className="h-4 w-4" />
+                        Rename
+                      </DropdownMenuItem>
+                      <DropdownMenuItem 
+                        className="flex items-center gap-2 cursor-pointer"
+                        onClick={() => handleAction('share', item.id)}
+                      >
+                        <Share className="h-4 w-4" />
+                        Share
+                      </DropdownMenuItem>
+                      <DropdownMenuItem 
+                        className="flex items-center gap-2 cursor-pointer"
+                        onClick={() => handleAction('archive', item.id)}
+                      >
+                        <Archive className="h-4 w-4" />
+                        Archive
+                      </DropdownMenuItem>
+                      <DropdownMenuItem 
+                        className="flex items-center gap-2 cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50"
+                        onClick={() => handleAction('delete', item.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </div>
             );
           })}
         </div>
