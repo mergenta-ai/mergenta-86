@@ -3,11 +3,10 @@ import { ScrollArea } from '../ui/scroll-area';
 import { Button } from '../ui/button';
 import { MoreHorizontal, Edit, Share, Archive, Trash2 } from 'lucide-react';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '../ui/dropdown-menu';
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '../ui/popover';
 
 interface HistoryItem {
   id: string;
@@ -26,7 +25,7 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose }) => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   
   const handleAction = (action: string, itemId: string) => {
-    console.log(`${action} item:`, itemId);
+    console.log(`Clicked ${action} for item:`, itemId);
     setOpenDropdown(null);
   };
   // Mock data - replace with actual chat history
@@ -135,64 +134,70 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose }) => {
             return (
               <div
                 key={item.id}
-                className="group relative mx-1 mb-0.5 rounded-lg hover:bg-purple-200/60 transition-colors cursor-pointer overflow-hidden"
+                className="group relative mx-1 mb-0.5 rounded-lg hover:bg-purple-200/60 transition-colors cursor-pointer"
               >
                 <div className="flex items-center justify-between px-3 py-2.5">
                   <span className="text-sm text-sidebar-text-dark flex-1 min-w-0 truncate pr-2">
                     {shortTitle}
                   </span>
                   
-                  <DropdownMenu 
+                  <Popover 
                     open={openDropdown === item.id} 
-                    onOpenChange={(open) => setOpenDropdown(open ? item.id : null)}
+                    onOpenChange={(open) => {
+                      console.log('Popover open change:', open, item.id);
+                      setOpenDropdown(open ? item.id : null);
+                    }}
                   >
-                    <DropdownMenuTrigger asChild>
+                    <PopoverTrigger asChild>
                       <button 
                         className="h-6 w-6 flex items-center justify-center rounded hover:bg-purple-300/50 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
                         onClick={(e) => {
                           e.stopPropagation();
+                          console.log('Button clicked for item:', item.id);
                           setOpenDropdown(openDropdown === item.id ? null : item.id);
                         }}
                       >
                         <MoreHorizontal className="h-3.5 w-3.5 text-sidebar-text-violet" />
                       </button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent 
-                      className="w-40 z-50" 
+                    </PopoverTrigger>
+                    <PopoverContent 
+                      className="w-40 p-1 z-[9999]" 
                       align="end"
                       side="right"
                       sideOffset={5}
                     >
-                      <DropdownMenuItem 
-                        className="flex items-center gap-2 cursor-pointer"
-                        onClick={() => handleAction('rename', item.id)}
-                      >
-                        <Edit className="h-4 w-4" />
-                        Rename
-                      </DropdownMenuItem>
-                      <DropdownMenuItem 
-                        className="flex items-center gap-2 cursor-pointer"
-                        onClick={() => handleAction('share', item.id)}
-                      >
-                        <Share className="h-4 w-4" />
-                        Share
-                      </DropdownMenuItem>
-                      <DropdownMenuItem 
-                        className="flex items-center gap-2 cursor-pointer"
-                        onClick={() => handleAction('archive', item.id)}
-                      >
-                        <Archive className="h-4 w-4" />
-                        Archive
-                      </DropdownMenuItem>
-                      <DropdownMenuItem 
-                        className="flex items-center gap-2 cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50"
-                        onClick={() => handleAction('delete', item.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                        Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                      <div className="space-y-1">
+                        <button 
+                          className="w-full flex items-center gap-2 px-2 py-1.5 text-sm rounded hover:bg-accent hover:text-accent-foreground cursor-pointer"
+                          onClick={() => handleAction('rename', item.id)}
+                        >
+                          <Edit className="h-4 w-4" />
+                          Rename
+                        </button>
+                        <button 
+                          className="w-full flex items-center gap-2 px-2 py-1.5 text-sm rounded hover:bg-accent hover:text-accent-foreground cursor-pointer"
+                          onClick={() => handleAction('share', item.id)}
+                        >
+                          <Share className="h-4 w-4" />
+                          Share
+                        </button>
+                        <button 
+                          className="w-full flex items-center gap-2 px-2 py-1.5 text-sm rounded hover:bg-accent hover:text-accent-foreground cursor-pointer"
+                          onClick={() => handleAction('archive', item.id)}
+                        >
+                          <Archive className="h-4 w-4" />
+                          Archive
+                        </button>
+                        <button 
+                          className="w-full flex items-center gap-2 px-2 py-1.5 text-sm rounded text-red-600 hover:bg-red-50 hover:text-red-600 cursor-pointer"
+                          onClick={() => handleAction('delete', item.id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                          Delete
+                        </button>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </div>
             );
