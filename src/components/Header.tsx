@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { UserProfile } from "./UserProfile";
+import { useAuth } from "@/contexts/AuthContext";
 
 const taglines = [
   "AI reimagined",
@@ -13,6 +15,7 @@ const taglines = [
 
 const Header = () => {
   const [currentTagline, setCurrentTagline] = useState("");
+  const { user } = useAuth();
 
   useEffect(() => {
     const randomTagline = taglines[Math.floor(Math.random() * taglines.length)];
@@ -20,7 +23,14 @@ const Header = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center pt-12 md:pt-16 px-4">
+    <div className="flex flex-col items-center pt-12 md:pt-16 px-4 relative">
+      {/* User Profile - positioned absolutely in top right */}
+      {user && (
+        <div className="absolute top-4 right-4">
+          <UserProfile />
+        </div>
+      )}
+
       {/* Softer Title */}
       <h1 className="font-inter text-4xl md:text-5xl font-medium text-[#7D55C7] tracking-[-0.01em] text-center">
         Mergenta
