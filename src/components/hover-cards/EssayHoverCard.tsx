@@ -173,7 +173,7 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children }) => {
                     id="tone"
                     value={tone}
                     onChange={(e) => setTone(e.target.value)}
-                    placeholder="formal, analytical, neutral"
+                    placeholder="formal, analytical, neutral, critical, narrative, persuasive, imaginative, humorous, motivating, empathitic, optimistic. etc..."
                     className="text-sm min-h-[60px] resize-none"
                   />
                 </div>
@@ -185,7 +185,7 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children }) => {
                     id="audience"
                     value={audience}
                     onChange={(e) => setAudience(e.target.value)}
-                    placeholder="academic, business, professional"
+                    placeholder="academic, business, professional, technical, media, government, community, American, European, Australian, Asian, African, Chinese, Indian, etc..."
                     className="text-sm min-h-[60px] resize-none"
                   />
                 </div>
