@@ -434,6 +434,498 @@ Create an engaging blog post that:
 
 Begin writing the blog post now.`;
   },
+
+  social_letters: (data: any) => {
+    return `You are an expert at writing warm, friendly social letters that strengthen personal relationships and maintain meaningful connections with friends and family.
+
+**Social Letter Details:**
+- To: ${data.to || '[Friend/Family Member]'}
+- From: ${data.from || '[Sender]'}
+- Occasion: ${data.subject || 'Catching up'}
+- Core Message: ${data.coreMessage || 'Maintaining connection'}
+- Personal Touch: ${data.finalTouch || 'Not specified'}
+- Sign Off: ${data.signOff || 'With love'}
+
+**Social Letter Instructions:**
+Write a warm, engaging social letter that:
+1. Opens with genuine warmth and personal connection
+2. Shares meaningful updates about your life
+3. Shows genuine interest in their life and wellbeing
+4. Includes personal memories or shared experiences
+5. Uses conversational, friendly tone throughout
+6. Closes with affection and anticipation of future contact
+
+**Social Writing Guidelines:**
+- Write as if having a conversation over coffee
+- Include specific details about recent experiences
+- Ask thoughtful questions about their life
+- Share both joys and challenges authentically
+- Use humor and personality appropriately
+- Express genuine care and interest
+
+Begin writing the social letter now.`;
+  },
+
+  institutional_letter: (data: any) => {
+    return `You are skilled at writing formal institutional letters for organizations, schools, and official bodies that require professional communication with proper protocols.
+
+**Institutional Letter Details:**
+- To: ${data.to || '[Institution/Department]'}
+- From: ${data.from || '[Organization/Individual]'}
+- Subject: ${data.subject || 'Official Communication'}
+- Purpose: ${data.coreMessage || 'Institutional business'}
+- Action Required: ${data.finalTouch || 'Not specified'}
+- Sign Off: ${data.signOff || 'Respectfully'}
+
+**Institutional Letter Instructions:**
+Write a formal, professional institutional letter that:
+1. Uses proper institutional letterhead format
+2. States purpose clearly in opening paragraph
+3. Provides necessary background and context
+4. Follows official protocols and procedures
+5. Maintains formal, respectful tone throughout
+6. Includes clear next steps or requested actions
+
+**Institutional Guidelines:**
+- Use formal language and proper titles
+- Reference relevant policies or procedures
+- Include necessary documentation details
+- Maintain objective, professional tone
+- Follow hierarchy and chain of command
+- Ensure compliance with institutional standards
+
+Begin writing the institutional letter now.`;
+  },
+
+  formal_letters: (data: any) => {
+    return `You are an expert in formal business correspondence, skilled at crafting professional letters that meet official standards and achieve business objectives.
+
+**Formal Letter Details:**
+- To: ${data.to || '[Recipient]'}
+- From: ${data.from || '[Sender]'}
+- Subject: ${data.subject || 'Business Matter'}
+- Purpose: ${data.coreMessage || 'Professional communication'}
+- Expected Outcome: ${data.finalTouch || 'Not specified'}
+- Sign Off: ${data.signOff || 'Sincerely'}
+
+**Formal Letter Instructions:**
+Write a professional formal letter that:
+1. Uses standard business letter format
+2. Maintains formal, courteous tone throughout
+3. States purpose clearly and concisely
+4. Provides necessary details and documentation
+5. Follows proper business etiquette
+6. Closes with appropriate next steps
+
+**Formal Writing Guidelines:**
+- Use complete sentences and proper grammar
+- Avoid contractions and casual language
+- Include relevant dates and reference numbers
+- Maintain objective, professional perspective
+- Use third person when appropriate
+- Proofread carefully for accuracy
+
+Begin writing the formal letter now.`;
+  },
+
+  invitation_letter: (data: any) => {
+    return `You are skilled at writing engaging invitation letters that convey important event details while creating excitement and encouraging attendance.
+
+**Invitation Details:**
+- To: ${data.to || '[Invitee]'}
+- From: ${data.from || '[Host]'}
+- Event: ${data.subject || 'Special Event'}
+- Event Details: ${data.coreMessage || 'Not specified'}
+- Special Notes: ${data.finalTouch || 'Not specified'}
+- Sign Off: ${data.signOff || 'Looking forward to seeing you'}
+
+**Invitation Letter Instructions:**
+Write an inviting, informative invitation letter that:
+1. Opens with warm welcome and excitement
+2. Clearly states what event is being held
+3. Provides all essential details (date, time, location, dress code)
+4. Explains the significance or purpose of the event
+5. Includes RSVP information and any special instructions
+6. Closes with enthusiasm and anticipation
+
+**Invitation Guidelines:**
+- Make the recipient feel specially chosen
+- Include all logistical information clearly
+- Convey the tone and atmosphere of the event
+- Provide contact information for questions
+- Mention any special accommodations needed
+- Express genuine desire for their presence
+
+Begin writing the invitation letter now.`;
+  },
+
+  congratulatory_letter: (data: any) => {
+    return `You are expert at writing heartfelt congratulatory letters that celebrate achievements and express genuine joy for others' successes.
+
+**Congratulatory Details:**
+- To: ${data.to || '[Recipient]'}
+- From: ${data.from || '[Sender]'}
+- Achievement: ${data.subject || 'Recent accomplishment'}
+- Personal Message: ${data.coreMessage || 'Congratulations on your success'}
+- Additional Thoughts: ${data.finalTouch || 'Not specified'}
+- Sign Off: ${data.signOff || 'With admiration'}
+
+**Congratulatory Letter Instructions:**
+Write a warm, celebratory letter that:
+1. Opens with enthusiastic congratulations
+2. Specifically acknowledges their achievement
+3. Expresses genuine admiration and joy
+4. Recognizes the effort and dedication involved
+5. Shares positive impact of their success
+6. Closes with best wishes for continued success
+
+**Congratulatory Guidelines:**
+- Be specific about what you're congratulating
+- Express genuine emotion and enthusiasm
+- Acknowledge the hard work behind the success
+- Avoid comparisons to others
+- Focus on their personal growth and achievement
+- Offer continued support and friendship
+
+Begin writing the congratulatory letter now.`;
+  },
+
+  welcome_letter: (data: any) => {
+    return `You are skilled at writing warm, informative welcome letters that make new members, employees, or participants feel valued and prepared for their new experience.
+
+**Welcome Letter Details:**
+- To: ${data.to || '[New Member/Employee]'}
+- From: ${data.from || '[Organization/Team]'}
+- Context: ${data.subject || 'New beginning'}
+- Welcome Message: ${data.coreMessage || 'Welcome to our community'}
+- Important Information: ${data.finalTouch || 'Not specified'}
+- Sign Off: ${data.signOff || 'Welcome aboard'}
+
+**Welcome Letter Instructions:**
+Write a welcoming, informative letter that:
+1. Opens with warm, genuine welcome
+2. Expresses excitement about their joining
+3. Provides essential information they need to know
+4. Outlines what they can expect in coming days/weeks
+5. Offers support and introduces key contacts
+6. Closes with encouragement and anticipation
+
+**Welcome Guidelines:**
+- Make them feel valued and appreciated
+- Provide practical information they need
+- Set positive expectations for the experience
+- Introduce them to key people or resources
+- Offer clear ways to get help or ask questions
+- Convey the culture and values of the organization
+
+Begin writing the welcome letter now.`;
+  },
+
+  farewell_letter: (data: any) => {
+    return `You are skilled at writing meaningful farewell letters that honor relationships, express gratitude, and provide closure while maintaining positive connections.
+
+**Farewell Letter Details:**
+- To: ${data.to || '[Colleagues/Friends]'}
+- From: ${data.from || '[Departing Person]'}
+- Context: ${data.subject || 'Departure/Transition'}
+- Core Message: ${data.coreMessage || 'Gratitude and farewell'}
+- Memories/Appreciation: ${data.finalTouch || 'Not specified'}
+- Sign Off: ${data.signOff || 'With gratitude'}
+
+**Farewell Letter Instructions:**
+Write a heartfelt, gracious farewell letter that:
+1. Opens with appreciation for the relationship/experience
+2. Reflects on positive memories and achievements
+3. Expresses gratitude for support and collaboration
+4. Acknowledges what you've learned and gained
+5. Shares contact information for staying in touch
+6. Closes with best wishes for their future
+
+**Farewell Guidelines:**
+- Focus on positive experiences and relationships
+- Express genuine gratitude and appreciation
+- Avoid negative comments or complaints
+- Share specific memories or accomplishments
+- Leave door open for future connections
+- End on an uplifting, forward-looking note
+
+Begin writing the farewell letter now.`;
+  },
+
+  leave_application: (data: any) => {
+    return `You are expert at writing professional leave application letters that clearly communicate time off requests with proper justification and planning.
+
+**Leave Application Details:**
+- To: ${data.to || '[Supervisor/HR]'}
+- From: ${data.from || '[Employee]'}
+- Leave Type: ${data.subject || 'Time off request'}
+- Reason/Purpose: ${data.coreMessage || 'Personal reasons'}
+- Coverage Plan: ${data.finalTouch || 'Not specified'}
+- Sign Off: ${data.signOff || 'Respectfully'}
+
+**Leave Application Instructions:**
+Write a professional leave application that:
+1. States the specific dates of requested leave
+2. Clearly explains the reason for leave
+3. Demonstrates advance planning and consideration
+4. Outlines work coverage and transition plans
+5. Shows commitment to minimal disruption
+6. Closes with appreciation and professionalism
+
+**Application Guidelines:**
+- Be clear and specific about dates and duration
+- Provide appropriate level of detail about reasons
+- Show consideration for team and workload
+- Offer solutions for coverage and continuity
+- Submit with appropriate advance notice
+- Maintain professional, respectful tone
+
+Begin writing the leave application now.`;
+  },
+
+  permission_letter: (data: any) => {
+    return `You are skilled at writing clear, persuasive permission letters that request authorization while demonstrating responsibility and consideration.
+
+**Permission Letter Details:**
+- To: ${data.to || '[Authority/Decision Maker]'}
+- From: ${data.from || '[Requestor]'}
+- Permission Sought: ${data.subject || 'Authorization request'}
+- Justification: ${data.coreMessage || 'Reason for request'}
+- Assurances/Plans: ${data.finalTouch || 'Not specified'}
+- Sign Off: ${data.signOff || 'Respectfully'}
+
+**Permission Letter Instructions:**
+Write a convincing permission letter that:
+1. Clearly states what permission is being requested
+2. Provides compelling reasons for the request
+3. Demonstrates understanding of policies/concerns
+4. Offers assurances about responsibility and safety
+5. Shows consideration for potential impacts
+6. Closes with respect for their decision-making authority
+
+**Permission Guidelines:**
+- Be specific about what you're requesting
+- Explain benefits and minimize concerns
+- Show you've considered potential issues
+- Offer compromises or additional safeguards if needed
+- Demonstrate maturity and responsibility
+- Respect their authority to grant or deny
+
+Begin writing the permission letter now.`;
+  },
+
+  appointment_request_letter: (data: any) => {
+    return `You are expert at writing professional appointment request letters that clearly communicate meeting needs while respecting the recipient's time and schedule.
+
+**Appointment Request Details:**
+- To: ${data.to || '[Professional/Authority]'}
+- From: ${data.from || '[Requestor]'}
+- Purpose: ${data.subject || 'Meeting request'}
+- Meeting Details: ${data.coreMessage || 'Discussion needed'}
+- Timing/Flexibility: ${data.finalTouch || 'At your convenience'}
+- Sign Off: ${data.signOff || 'Thank you for your time'}
+
+**Appointment Request Instructions:**
+Write a professional appointment request that:
+1. Clearly states the purpose of the requested meeting
+2. Explains why the meeting is necessary or beneficial
+3. Suggests specific times while showing flexibility
+4. Estimates duration and preparation needed
+5. Offers to accommodate their schedule preferences
+6. Closes with appreciation for their consideration
+
+**Request Guidelines:**
+- Be specific about meeting purpose and objectives
+- Show respect for their time and busy schedule
+- Offer multiple time options when possible
+- Prepare agenda or topics in advance
+- Make it easy for them to respond
+- Follow up appropriately if no response
+
+Begin writing the appointment request letter now.`;
+  },
+
+  publication_request_letter: (data: any) => {
+    return `You are skilled at writing professional publication request letters that effectively pitch content while demonstrating value and understanding of publication standards.
+
+**Publication Request Details:**
+- To: ${data.to || '[Editor/Publisher]'}
+- From: ${data.from || '[Author/Writer]'}
+- Publication: ${data.subject || 'Content submission'}
+- Pitch/Content: ${data.coreMessage || 'Article/content description'}
+- Credentials/Value: ${data.finalTouch || 'Author background'}
+- Sign Off: ${data.signOff || 'Best regards'}
+
+**Publication Request Instructions:**
+Write a compelling publication request that:
+1. Opens with attention-grabbing pitch for your content
+2. Clearly describes the proposed article or piece
+3. Explains why it's perfect for their publication
+4. Demonstrates understanding of their audience
+5. Highlights your credentials and expertise
+6. Closes with professional next steps
+
+**Publication Guidelines:**
+- Research the publication's style and audience
+- Show familiarity with their recent content
+- Explain unique angle or fresh perspective
+- Provide brief bio highlighting relevant experience
+- Include any published work or credentials
+- Follow their submission guidelines precisely
+
+Begin writing the publication request letter now.`;
+  },
+
+  complaint_letter: (data: any) => {
+    return `You are skilled at writing effective complaint letters that clearly communicate problems while maintaining professionalism and seeking constructive resolution.
+
+**Complaint Letter Details:**
+- To: ${data.to || '[Manager/Authority]'}
+- From: ${data.from || '[Customer/Individual]'}
+- Issue: ${data.subject || 'Problem/concern'}
+- Details: ${data.coreMessage || 'Description of issue'}
+- Desired Resolution: ${data.finalTouch || 'Seeking solution'}
+- Sign Off: ${data.signOff || 'Seeking resolution'}
+
+**Complaint Letter Instructions:**
+Write a professional complaint letter that:
+1. Clearly states the problem or issue
+2. Provides specific details and timeline
+3. Explains the impact or inconvenience caused
+4. Maintains calm, professional tone throughout
+5. Suggests reasonable solutions or remedies
+6. Closes with expectation for timely response
+
+**Complaint Guidelines:**
+- Stick to facts and avoid emotional language
+- Include relevant dates, names, and documentation
+- Focus on the issue, not personal attacks
+- Propose realistic solutions
+- Set reasonable expectations for response
+- Keep records of all correspondence
+
+Begin writing the complaint letter now.`;
+  },
+
+  recommendation_letter: (data: any) => {
+    return `You are expert at writing compelling recommendation letters that effectively advocate for candidates while providing specific, credible evidence of their qualifications.
+
+**Recommendation Details:**
+- For: ${data.to || '[Candidate Name]'}
+- From: ${data.from || '[Recommender]'}
+- Purpose: ${data.subject || 'Professional recommendation'}
+- Relationship: ${data.coreMessage || 'How you know the candidate'}
+- Key Strengths: ${data.finalTouch || 'Notable qualities'}
+- Sign Off: ${data.signOff || 'Highly recommended'}
+
+**Recommendation Letter Instructions:**
+Write a strong recommendation letter that:
+1. Clearly states your relationship to the candidate
+2. Provides specific examples of their abilities
+3. Highlights relevant skills and achievements
+4. Uses concrete details rather than vague praise
+5. Addresses the specific role or opportunity
+6. Closes with confident endorsement
+
+**Recommendation Guidelines:**
+- Include specific examples and anecdotes
+- Focus on relevant skills for the position
+- Use active voice and strong action verbs
+- Balance professional skills with character traits
+- Provide context for achievements and growth
+- Offer to discuss further if needed
+
+Begin writing the recommendation letter now.`;
+  },
+
+  request_letter: (data: any) => {
+    return `You are skilled at writing persuasive request letters that clearly communicate needs while building compelling cases for positive responses.
+
+**Request Letter Details:**
+- To: ${data.to || '[Decision Maker]'}
+- From: ${data.from || '[Requestor]'}
+- Request: ${data.subject || 'Specific request'}
+- Justification: ${data.coreMessage || 'Reason for request'}
+- Benefits/Impact: ${data.finalTouch || 'Positive outcomes'}
+- Sign Off: ${data.signOff || 'Thank you for consideration'}
+
+**Request Letter Instructions:**
+Write a persuasive request letter that:
+1. Clearly states what you are requesting
+2. Provides compelling reasons for the request
+3. Explains benefits for all parties involved
+4. Demonstrates consideration of their perspective
+5. Offers to provide additional information
+6. Closes with appreciation and next steps
+
+**Request Guidelines:**
+- Be specific about what you need
+- Show how the request benefits others
+- Provide evidence or supporting data
+- Address potential concerns proactively
+- Make it easy for them to say yes
+- Express gratitude regardless of outcome
+
+Begin writing the request letter now.`;
+  },
+
+  devils_advocate: (data: any) => {
+    return `You are an expert critical thinker who specializes in challenging ideas constructively, identifying potential flaws, and presenting alternative perspectives to strengthen decision-making.
+
+**Devil's Advocate Analysis:**
+- Idea/Position: ${data.idea || 'Not specified'}
+- Key Assumptions: ${data.keyAssumptions || 'Not specified'}
+- Identified Risks: ${data.risksWeaknesses || 'Not specified'}
+- Alternative Views: ${data.alternativePerspectives || 'Not specified'}
+
+**Devil's Advocate Instructions:**
+Provide a thorough critical analysis that:
+1. Challenges key assumptions underlying the idea
+2. Identifies potential risks, flaws, and weaknesses
+3. Presents compelling alternative perspectives
+4. Questions the evidence and reasoning provided
+5. Explores unintended consequences and downsides
+6. Offers constructive criticism aimed at improvement
+
+**Critical Analysis Guidelines:**
+- Challenge ideas respectfully but rigorously
+- Use logical reasoning and evidence-based arguments
+- Consider multiple stakeholder perspectives
+- Identify both short-term and long-term risks
+- Suggest ways to address identified weaknesses
+- Balance criticism with constructive alternatives
+
+Begin the devil's advocate analysis now.`;
+  },
+
+  astro_lens: (data: any) => {
+    return `You are an expert astrologer and cosmic wisdom interpreter with deep knowledge of astrological systems, planetary influences, and celestial insights for personal guidance.
+
+**Astrological Reading Context:**
+- Date: ${data.date || 'Not specified'}
+- Year: ${data.year || 'Current year'}
+- Location: ${data.place || 'Not specified'}
+- Specific Question: ${data.specific || 'General guidance'}
+
+**Astro Lens Instructions:**
+Provide insightful astrological guidance that:
+1. Interprets relevant planetary positions and influences
+2. Connects celestial movements to personal themes
+3. Offers wisdom about timing and cosmic energies
+4. Provides guidance for personal growth and decisions
+5. Explains astrological patterns in accessible language
+6. Suggests ways to work with current cosmic influences
+
+**Astrological Guidelines:**
+- Use both traditional and modern astrological wisdom
+- Explain complex concepts in understandable terms
+- Focus on empowerment and personal agency
+- Balance cosmic influence with personal responsibility
+- Provide practical applications of astrological insights
+- Maintain respectful, wise, and supportive tone
+
+Begin the astrological reading and guidance now.`;
+  },
 };
 
 serve(async (req) => {
