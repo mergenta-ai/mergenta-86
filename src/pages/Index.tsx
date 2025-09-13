@@ -66,6 +66,7 @@ const Index = () => {
 
     setMessages(prev => [...prev, userMessage]);
     setIsLoading(true);
+    setGeneratedPrompt(""); // Clear the prompt after sending
 
     try {
       // Simulate API delay
@@ -117,7 +118,6 @@ const Index = () => {
           onSendMessage={handleSendMessage} 
           isLoading={isLoading} 
           initialValue={generatedPrompt}
-          onFocus={() => setGeneratedPrompt("")}
         />
 
         {/* Workflow tabs - Desktop */}
