@@ -42,7 +42,7 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
 
   const handleGeneratePrompt = async () => {
     try {
-      const { data, error } = await supabase.functions.invoke('prompt-engine', {
+      const { data, error } = await supabase.functions.invoke('prompt-engine-creative', {
         body: { 
           contentType: 'script', 
           formData: { 

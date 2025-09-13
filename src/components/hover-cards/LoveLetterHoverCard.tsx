@@ -39,7 +39,7 @@ const LoveLetterHoverCard = ({ children, onPromptGenerated }: LoveLetterHoverCar
 
   const handleGeneratePrompt = async () => {
     try {
-      const { data, error } = await supabase.functions.invoke('prompt-engine', {
+      const { data, error } = await supabase.functions.invoke('prompt-engine-communication', {
         body: { 
           contentType: 'love_letter', 
           formData: { 

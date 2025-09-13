@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Button } from '../ui/button';
+import { supabase } from '@/integrations/supabase/client';
 
 interface PoetryHoverCardProps {
   children: React.ReactNode;
@@ -36,9 +37,31 @@ const PoetryHoverCard: React.FC<PoetryHoverCardProps> = ({ children, onPromptGen
     e.stopPropagation();
   };
 
-  const handleStartPoetry = () => {
-    console.log('Start Poetry clicked');
-    // Future implementation for poetry generation
+  const handleGeneratePrompt = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('prompt-engine-creative', {
+        body: { 
+          contentType: 'poetry', 
+          formData: { 
+            title,
+            theme, 
+            form, 
+            mood, 
+            numberOfLines, 
+            audience 
+          } 
+        }
+      });
+
+      if (error) throw error;
+
+      if (data?.prompt && onPromptGenerated) {
+        onPromptGenerated(data.prompt);
+        setShowCard(false);
+      }
+    } catch (error) {
+      console.error('Error generating poetry prompt:', error);
+    }
   };
 
   // Close card when clicking outside
@@ -182,7 +205,7 @@ const PoetryHoverCard: React.FC<PoetryHoverCardProps> = ({ children, onPromptGen
                 {/* Start Poetry Button */}
                 <Button
                   className="w-full bg-sidebar-text-violet hover:bg-sidebar-text-violet/90 text-white transition-colors duration-200"
-                  onClick={handleStartPoetry}
+                  onClick={handleGeneratePrompt}
                 >
                   Start Poetry
                 </Button>

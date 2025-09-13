@@ -44,7 +44,7 @@ const BlogHoverCard: React.FC<BlogHoverCardProps> = ({ children, onPromptGenerat
 
   const handleGeneratePrompt = async () => {
     try {
-      const { data, error } = await supabase.functions.invoke('prompt-engine', {
+      const { data, error } = await supabase.functions.invoke('prompt-engine-creative', {
         body: { 
           contentType: 'blog', 
           formData: { 

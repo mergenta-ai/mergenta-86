@@ -68,11 +68,11 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
 
   const handleGeneratePrompt = async () => {
     try {
-      const { data, error } = await supabase.functions.invoke('prompt-engine', {
+      const { data, error } = await supabase.functions.invoke('prompt-engine-creative', {
         body: { 
           contentType: 'essay', 
           formData: { 
-            essayTitle, 
+            essayTitle,
             keyPoints, 
             wordCount, 
             tone, 

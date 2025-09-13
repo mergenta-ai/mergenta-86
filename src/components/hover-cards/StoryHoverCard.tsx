@@ -3,6 +3,7 @@ import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { Label } from '../ui/label';
 import { Button } from '../ui/button';
+import { supabase } from '@/integrations/supabase/client';
 
 interface StoryHoverCardProps {
   children: React.ReactNode;
@@ -40,9 +41,32 @@ const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children, onPromptGener
     e.stopPropagation();
   };
 
-  const handleStartStory = () => {
-    console.log('Start Story clicked');
-    // Future implementation for story generation
+  const handleGeneratePrompt = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('prompt-engine-creative', {
+        body: { 
+          contentType: 'story', 
+          formData: { 
+            title: storyTitle,
+            storyTitle,
+            genre, 
+            keyDetails, 
+            wordCount, 
+            tone, 
+            audience 
+          } 
+        }
+      });
+
+      if (error) throw error;
+
+      if (data?.prompt && onPromptGenerated) {
+        onPromptGenerated(data.prompt);
+        setShowCard(false);
+      }
+    } catch (error) {
+      console.error('Error generating story prompt:', error);
+    }
   };
 
   // Close card when clicking outside
@@ -188,7 +212,7 @@ const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children, onPromptGener
                 {/* Start Story Button */}
                 <Button
                   className="w-full bg-sidebar-text-violet hover:bg-sidebar-text-violet/90 text-white transition-colors duration-200"
-                  onClick={handleStartStory}
+                  onClick={handleGeneratePrompt}
                 >
                   Start Story
                 </Button>

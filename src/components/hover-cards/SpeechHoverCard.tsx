@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Button } from '../ui/button';
+import { supabase } from '@/integrations/supabase/client';
 
 interface SpeechHoverCardProps {
   children: React.ReactNode;
@@ -37,9 +38,31 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
     e.stopPropagation();
   };
 
-  const handleStartSpeech = () => {
-    console.log('Start Speech clicked');
-    // Future implementation for speech generation
+  const handleGeneratePrompt = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('prompt-engine-creative', {
+        body: { 
+          contentType: 'speech', 
+          formData: { 
+            topic: theme,
+            audience,
+            length: duration,
+            tone,
+            keyMessages: engagementTechniques,
+            callToAction: impact
+          } 
+        }
+      });
+
+      if (error) throw error;
+
+      if (data?.prompt && onPromptGenerated) {
+        onPromptGenerated(data.prompt);
+        setShowCard(false);
+      }
+    } catch (error) {
+      console.error('Error generating speech prompt:', error);
+    }
   };
 
   // Close card when clicking outside
@@ -196,7 +219,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
                 {/* Start Speech Button */}
                 <Button
                   className="w-full bg-sidebar-text-violet hover:bg-sidebar-text-violet/90 text-white transition-colors duration-200"
-                  onClick={handleStartSpeech}
+                  onClick={handleGeneratePrompt}
                 >
                   Start Speech
                 </Button>

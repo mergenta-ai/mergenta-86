@@ -1,1 +1,13 @@
 project_id = "sqpiuquzcejtyuqykvxn"
+
+[functions.prompt-engine]
+verify_jwt = false
+
+[functions.prompt-engine-creative]  
+verify_jwt = false
+
+[functions.prompt-engine-communication]
+verify_jwt = false
+
+[functions.prompt-engine-strategic]
+verify_jwt = false
