@@ -141,14 +141,15 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
                   <Label htmlFor="essay-title" className="text-sm font-medium text-sidebar-text-dark">
                     Essay Title
                   </Label>
-                  <Input
-                    id="essay-title"
-                    value={essayTitle}
-                    onChange={(e) => setEssayTitle(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Enter your essay title..."
-                    className="text-sm"
-                  />
+                   <Input
+                     id="essay-title"
+                     value={essayTitle}
+                     onChange={(e) => setEssayTitle(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Enter your essay title..."
+                     className="text-sm"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Key Points Input */}
@@ -156,14 +157,15 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
                   <Label htmlFor="key-points" className="text-sm font-medium text-sidebar-text-dark">
                     Key Points / Topics
                   </Label>
-                  <Textarea
-                    id="key-points"
-                    value={keyPoints}
-                    onChange={(e) => setKeyPoints(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="List your main points or topics..."
-                    className="text-sm min-h-[70px] resize-none"
-                  />
+                   <Textarea
+                     id="key-points"
+                     value={keyPoints}
+                     onChange={(e) => setKeyPoints(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="List your main points or topics..."
+                     className="text-sm min-h-[70px] resize-none"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Word Count Input */}
@@ -171,43 +173,46 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
                   <Label htmlFor="word-count" className="text-sm font-medium text-sidebar-text-dark">
                     Word Count
                   </Label>
-                  <Input
-                    id="word-count"
-                    type="number"
-                    value={wordCount}
-                    onChange={(e) => setWordCount(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="400–2000"
-                    min="400"
-                    max="2000"
-                    className="text-sm"
-                  />
+                   <Input
+                     id="word-count"
+                     type="number"
+                     value={wordCount}
+                     onChange={(e) => setWordCount(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="400–2000"
+                     min="400"
+                     max="2000"
+                     className="text-sm"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Tone Input */}
                 <div className="space-y-2">
                   <Label htmlFor="tone" className="text-sm font-medium text-sidebar-text-dark">Tone</Label>
-                  <Textarea
-                    id="tone"
-                    value={tone}
-                    onChange={(e) => setTone(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="formal, analytical, neutral, critical, narrative, persuasive, imaginative, humorous, motivating, empathitic, optimistic. etc..."
-                    className="text-sm min-h-[60px] resize-none"
-                  />
+                   <Textarea
+                     id="tone"
+                     value={tone}
+                     onChange={(e) => setTone(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="formal, analytical, neutral, critical, narrative, persuasive, imaginative, humorous, motivating, empathitic, optimistic. etc..."
+                     className="text-sm min-h-[60px] resize-none"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Audience Input */}
                 <div className="space-y-2">
                   <Label htmlFor="audience" className="text-sm font-medium text-sidebar-text-dark">Audience</Label>
-                  <Textarea
-                    id="audience"
-                    value={audience}
-                    onChange={(e) => setAudience(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="academic, business, professional, technical, media, government, community, American, European, Australian, Asian, African, Chinese, Indian, etc..."
-                    className="text-sm min-h-[60px] resize-none"
-                  />
+                   <Textarea
+                     id="audience"
+                     value={audience}
+                     onChange={(e) => setAudience(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="academic, business, professional, technical, media, government, community, American, European, Australian, Asian, African, Chinese, Indian, etc..."
+                     className="text-sm min-h-[60px] resize-none"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Start Essay Button */}

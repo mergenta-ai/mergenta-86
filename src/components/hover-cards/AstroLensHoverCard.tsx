@@ -20,33 +20,6 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children, onPro
   const [specific, setSpecific] = useState('');
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Load saved values from localStorage
-  useEffect(() => {
-    const savedData = localStorage.getItem('AstroLensFormData');
-    if (savedData) {
-      try {
-        const parsed = JSON.parse(savedData);
-        setDate(parsed.date || '');
-        setYear(parsed.year || '');
-        setPlace(parsed.place || '');
-        setSpecific(parsed.specific || '');
-      } catch (error) {
-        console.error('Error loading saved astro lens:', error);
-      }
-    }
-  }, []);
-
-  // Save to localStorage whenever inputs change
-  useEffect(() => {
-    const dataToSave = {
-      date,
-      year,
-      place,
-      specific,
-    };
-    localStorage.setItem('AstroLensFormData', JSON.stringify(dataToSave));
-  }, [date, year, place, specific]);
-
   const handleMouseEnter = () => {
     if (closeTimeoutRef.current) {
       clearTimeout(closeTimeoutRef.current);
@@ -113,14 +86,15 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children, onPro
                   <Label htmlFor="date" className="text-sm font-medium text-sidebar-text-dark">
                     Date of birth
                   </Label>
-                   <Input
-                     id="date"
-                     value={date || undefined}
-                     onChange={(e) => setDate(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="Enter your date of birth (DD/MM)"
-                     className="text-sm bg-white"
-                   />
+                    <Input
+                      id="date"
+                      value={date || undefined}
+                      onChange={(e) => setDate(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Enter your date of birth (DD/MM)"
+                      className="text-sm bg-white"
+                      autoComplete="off"
+                    />
                 </div>
 
                 {/* Year of Birth Input */}
@@ -128,14 +102,15 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children, onPro
                   <Label htmlFor="year" className="text-sm font-medium text-sidebar-text-dark">
                     Year of birth
                   </Label>
-                   <Input
-                     id="year"
-                     value={year || undefined}
-                     onChange={(e) => setYear(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="Enter your year of birth (YYYY)"
-                     className="text-sm bg-white"
-                   />
+                    <Input
+                      id="year"
+                      value={year || undefined}
+                      onChange={(e) => setYear(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Enter your year of birth (YYYY)"
+                      className="text-sm bg-white"
+                      autoComplete="off"
+                    />
                 </div>
 
                 {/* Place of birth Input */}
@@ -143,14 +118,15 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children, onPro
                   <Label htmlFor="place" className="text-sm font-medium text-sidebar-text-dark">
                     Place of Birth
                   </Label>
-                   <Textarea
-                     id="place"
-                     value={place || undefined}
-                     onChange={(e) => setPlace(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="Write city, state and country"
-                     className="text-sm bg-white"
-                   />
+                    <Textarea
+                      id="place"
+                      value={place || undefined}
+                      onChange={(e) => setPlace(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Write city, state and country"
+                      className="text-sm bg-white"
+                      autoComplete="off"
+                    />
                 </div>
 
                 {/* Specific information you seek Input */}
@@ -158,14 +134,15 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children, onPro
                   <Label htmlFor="specific" className="text-sm font-medium text-sidebar-text-dark">
                     Specific information you seek
                   </Label>
-                   <Textarea
-                     id="specific"
-                     value={specific || undefined}
-                     onChange={(e) => setSpecific(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="Describe what you want to know in particular"
-                     className="text-sm bg-white"
-                   />
+                    <Textarea
+                      id="specific"
+                      value={specific || undefined}
+                      onChange={(e) => setSpecific(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Describe what you want to know in particular"
+                      className="text-sm bg-white"
+                      autoComplete="off"
+                    />
                 </div>
 
                 {/* Give Prediction */}

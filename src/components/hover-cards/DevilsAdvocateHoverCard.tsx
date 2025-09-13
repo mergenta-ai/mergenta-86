@@ -19,33 +19,6 @@ const DevilsAdvocateHoverCard: React.FC<DevilsAdvocateHoverCardProps> = ({ child
   const [alternativePerspectives, setAlternativePerspectives] = useState('');
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Load saved values from localStorage
-  useEffect(() => {
-    const savedData = localStorage.getItem('devilsAdvocateFormData');
-    if (savedData) {
-      try {
-        const parsed = JSON.parse(savedData);
-        setIdea(parsed.idea || '');
-        setKeyAssumptions(parsed.keyAssumptions || '');
-        setRisksWeaknesses(parsed.risksWeaknesses || '');
-        setAlternativePerspectives(parsed.alternativePerspectives || '');
-      } catch (error) {
-        console.error('Error loading saved devil\'s advocate data:', error);
-      }
-    }
-  }, []);
-
-  // Save to localStorage whenever inputs change
-  useEffect(() => {
-    const dataToSave = {
-      idea,
-      keyAssumptions,
-      risksWeaknesses,
-      alternativePerspectives,
-    };
-    localStorage.setItem('devilsAdvocateFormData', JSON.stringify(dataToSave));
-  }, [idea, keyAssumptions, risksWeaknesses, alternativePerspectives]);
-
   const handleMouseEnter = () => {
     if (closeTimeoutRef.current) {
       clearTimeout(closeTimeoutRef.current);
@@ -112,14 +85,15 @@ const DevilsAdvocateHoverCard: React.FC<DevilsAdvocateHoverCardProps> = ({ child
                   <Label htmlFor="idea" className="text-sm font-medium" style={{ color: '#6E6E6E' }}>
                     Idea
                   </Label>
-                   <Textarea
-                     id="idea"
-                     value={idea || undefined}
-                     onChange={(e) => setIdea(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="Enter idea, plan or decision to be tested…"
-                     className="text-sm min-h-[70px] resize-none bg-white"
-                   />
+                    <Textarea
+                      id="idea"
+                      value={idea || undefined}
+                      onChange={(e) => setIdea(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Enter idea, plan or decision to be tested…"
+                      className="text-sm min-h-[70px] resize-none bg-white"
+                      autoComplete="off"
+                    />
                  </div>
 
                  {/* Key Assumptions Input */}
@@ -127,14 +101,15 @@ const DevilsAdvocateHoverCard: React.FC<DevilsAdvocateHoverCardProps> = ({ child
                    <Label htmlFor="key-assumptions" className="text-sm font-medium" style={{ color: '#6E6E6E' }}>
                      Key Assumptions
                    </Label>
-                   <Input
-                     id="key-assumptions"
-                     value={keyAssumptions || undefined}
-                     onChange={(e) => setKeyAssumptions(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="Beliefs to challenge…"
-                     className="text-sm bg-white"
-                   />
+                    <Input
+                      id="key-assumptions"
+                      value={keyAssumptions || undefined}
+                      onChange={(e) => setKeyAssumptions(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Beliefs to challenge…"
+                      className="text-sm bg-white"
+                      autoComplete="off"
+                    />
                  </div>
 
                  {/* Risks / Weaknesses Input */}
@@ -142,14 +117,15 @@ const DevilsAdvocateHoverCard: React.FC<DevilsAdvocateHoverCardProps> = ({ child
                    <Label htmlFor="risks-weaknesses" className="text-sm font-medium" style={{ color: '#6E6E6E' }}>
                      Risks / Weaknesses
                    </Label>
-                   <Input
-                     id="risks-weaknesses"
-                     value={risksWeaknesses || undefined}
-                     onChange={(e) => setRisksWeaknesses(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="Potential flaws, oversights, vulnerabilities…"
-                     className="text-sm bg-white"
-                   />
+                    <Input
+                      id="risks-weaknesses"
+                      value={risksWeaknesses || undefined}
+                      onChange={(e) => setRisksWeaknesses(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Potential flaws, oversights, vulnerabilities…"
+                      className="text-sm bg-white"
+                      autoComplete="off"
+                    />
                 </div>
 
                 {/* Alternative Perspectives Input */}
@@ -157,14 +133,15 @@ const DevilsAdvocateHoverCard: React.FC<DevilsAdvocateHoverCardProps> = ({ child
                   <Label htmlFor="alternative-perspectives" className="text-sm font-medium" style={{ color: '#6E6E6E' }}>
                     Alternative Perspectives
                   </Label>
-                   <Input
-                     id="alternative-perspectives"
-                     value={alternativePerspectives || undefined}
-                     onChange={(e) => setAlternativePerspectives(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="Different viewpoints, counter arguments…"
-                     className="text-sm bg-white"
-                   />
+                    <Input
+                      id="alternative-perspectives"
+                      value={alternativePerspectives || undefined}
+                      onChange={(e) => setAlternativePerspectives(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Different viewpoints, counter arguments…"
+                      className="text-sm bg-white"
+                      autoComplete="off"
+                    />
                 </div>
 
                 {/* Play Devil's Advocate Button */}

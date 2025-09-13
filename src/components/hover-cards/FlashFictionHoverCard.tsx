@@ -115,14 +115,15 @@ const FlashFictionHoverCard: React.FC<FlashFictionHoverCardProps> = ({ children,
                   <Label htmlFor="flash-fiction-title" className="text-sm font-medium text-sidebar-text-dark">
                     Story Title
                   </Label>
-                   <Input
-                     id="flash-fiction-title"
-                     value={storyTitle}
-                     onChange={(e) => setStoryTitle(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="Enter your story title..."
-                     className="text-sm placeholder:text-gray-500"
-                   />
+                    <Input
+                      id="flash-fiction-title"
+                      value={storyTitle}
+                      onChange={(e) => setStoryTitle(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Enter your story title..."
+                      className="text-sm placeholder:text-gray-500"
+                      autoComplete="off"
+                    />
                  </div>
 
                  {/* Genre Input */}
@@ -130,14 +131,15 @@ const FlashFictionHoverCard: React.FC<FlashFictionHoverCardProps> = ({ children,
                    <Label htmlFor="flash-fiction-genre" className="text-sm font-medium text-sidebar-text-dark">
                      Genre
                    </Label>
-                   <Input
-                     id="flash-fiction-genre"
-                     value={genre}
-                     onChange={(e) => setGenre(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="Realist, Gothic, Satire, Romance, Surreal"
-                     className="text-sm placeholder:text-gray-500"
-                   />
+                    <Input
+                      id="flash-fiction-genre"
+                      value={genre}
+                      onChange={(e) => setGenre(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Realist, Gothic, Satire, Romance, Surreal"
+                      className="text-sm placeholder:text-gray-500"
+                      autoComplete="off"
+                    />
                  </div>
 
                  {/* Key Details / Plot Points Input */}
@@ -145,14 +147,15 @@ const FlashFictionHoverCard: React.FC<FlashFictionHoverCardProps> = ({ children,
                    <Label htmlFor="flash-fiction-key-details" className="text-sm font-medium text-sidebar-text-dark">
                      Key Details / Plot Points
                    </Label>
-                   <Textarea
-                     id="flash-fiction-key-details"
-                     value={keyDetails}
-                     onChange={(e) => setKeyDetails(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="Main characters, twist, key moments..."
-                     className="text-sm min-h-[70px] resize-none placeholder:text-gray-500"
-                   />
+                    <Textarea
+                      id="flash-fiction-key-details"
+                      value={keyDetails}
+                      onChange={(e) => setKeyDetails(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Main characters, twist, key moments..."
+                      className="text-sm min-h-[70px] resize-none placeholder:text-gray-500"
+                      autoComplete="off"
+                    />
                  </div>
 
                  {/* Word Count Input */}
@@ -160,17 +163,18 @@ const FlashFictionHoverCard: React.FC<FlashFictionHoverCardProps> = ({ children,
                    <Label htmlFor="flash-fiction-word-count" className="text-sm font-medium text-sidebar-text-dark">
                      Word Count
                    </Label>
-                   <Input
-                     id="flash-fiction-word-count"
-                     type="number"
-                     value={wordCount}
-                     onChange={(e) => setWordCount(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="100–500"
-                     min="100"
-                     max="500"
-                     className="text-sm placeholder:text-gray-500"
-                   />
+                    <Input
+                      id="flash-fiction-word-count"
+                      type="number"
+                      value={wordCount}
+                      onChange={(e) => setWordCount(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="100–500"
+                      min="100"
+                      max="500"
+                      className="text-sm placeholder:text-gray-500"
+                      autoComplete="off"
+                    />
                  </div>
 
                  {/* Tone Input */}
@@ -178,14 +182,15 @@ const FlashFictionHoverCard: React.FC<FlashFictionHoverCardProps> = ({ children,
                    <Label htmlFor="flash-fiction-tone" className="text-sm font-medium text-sidebar-text-dark">
                      Tone
                    </Label>
-                   <Input
-                     id="flash-fiction-tone"
-                     value={tone}
-                     onChange={(e) => setTone(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="Sharp, Witty, Emotional, Reflective"
-                     className="text-sm placeholder:text-gray-500"
-                   />
+                    <Input
+                      id="flash-fiction-tone"
+                      value={tone}
+                      onChange={(e) => setTone(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Sharp, Witty, Emotional, Reflective"
+                      className="text-sm placeholder:text-gray-500"
+                      autoComplete="off"
+                    />
                  </div>
 
                  {/* Audience Input */}
@@ -193,14 +198,15 @@ const FlashFictionHoverCard: React.FC<FlashFictionHoverCardProps> = ({ children,
                    <Label htmlFor="flash-fiction-audience" className="text-sm font-medium text-sidebar-text-dark">
                      Audience
                    </Label>
-                   <Input
-                     id="flash-fiction-audience"
-                     value={audience}
-                     onChange={(e) => setAudience(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="Commuter, Youth, Scroller, Creator, Fan"
-                     className="text-sm placeholder:text-gray-500"
-                   />
+                    <Input
+                      id="flash-fiction-audience"
+                      value={audience}
+                      onChange={(e) => setAudience(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Commuter, Youth, Scroller, Creator, Fan"
+                      className="text-sm placeholder:text-gray-500"
+                      autoComplete="off"
+                    />
                 </div>
 
                 {/* Start Flash Fiction Button */}

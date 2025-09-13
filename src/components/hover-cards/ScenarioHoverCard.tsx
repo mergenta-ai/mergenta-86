@@ -21,37 +21,6 @@ const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children, onPromp
   const [desiredResponse, setDesiredResponse] = useState('');
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Load saved values from localStorage
-  useEffect(() => {
-    const savedData = localStorage.getItem('scenarioFormData');
-    if (savedData) {
-      try {
-        const parsed = JSON.parse(savedData);
-        setCentralChallenge(parsed.centralChallenge || '');
-        setKeyVariables(parsed.keyVariables || '');
-        setPossibleOutcomes(parsed.possibleOutcomes || '');
-        setFocus(parsed.focus || '');
-        setTimeHorizon(parsed.timeHorizon || '');
-        setDesiredResponse(parsed.desiredResponse || '');
-      } catch (error) {
-        console.error('Error loading saved scenario data:', error);
-      }
-    }
-  }, []);
-
-  // Save to localStorage whenever inputs change
-  useEffect(() => {
-    const dataToSave = {
-      centralChallenge,
-      keyVariables,
-      possibleOutcomes,
-      focus,
-      timeHorizon,
-      desiredResponse,
-    };
-    localStorage.setItem('scenarioFormData', JSON.stringify(dataToSave));
-  }, [centralChallenge, keyVariables, possibleOutcomes, focus, timeHorizon, desiredResponse]);
-
   const handleMouseEnter = () => {
     if (closeTimeoutRef.current) {
       clearTimeout(closeTimeoutRef.current);
@@ -118,14 +87,15 @@ const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children, onPromp
                   <Label htmlFor="central-challenge" className="text-sm font-medium text-sidebar-text-dark">
                     Central Challenge
                   </Label>
-                  <Textarea
-                    id="central-challenge"
-                    value={centralChallenge || undefined}
-                    onChange={(e) => setCentralChallenge(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Enter the core issue or question…"
-                    className="text-sm min-h-[60px] resize-none bg-white"
-                  />
+                   <Textarea
+                     id="central-challenge"
+                     value={centralChallenge || undefined}
+                     onChange={(e) => setCentralChallenge(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Enter the core issue or question…"
+                     className="text-sm min-h-[60px] resize-none bg-white"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Key Variables Input */}
@@ -133,14 +103,15 @@ const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children, onPromp
                   <Label htmlFor="key-variables" className="text-sm font-medium text-sidebar-text-dark">
                     Key Variables / Factors
                   </Label>
-                  <Input
-                    id="key-variables"
-                    value={keyVariables || undefined}
-                    onChange={(e) => setKeyVariables(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Political, economic, social, technological etc."
-                    className="text-sm bg-white"
-                  />
+                   <Input
+                     id="key-variables"
+                     value={keyVariables || undefined}
+                     onChange={(e) => setKeyVariables(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Political, economic, social, technological etc."
+                     className="text-sm bg-white"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Possible Outcomes Input */}
@@ -148,14 +119,15 @@ const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children, onPromp
                   <Label htmlFor="possible-outcomes" className="text-sm font-medium text-sidebar-text-dark">
                     Possible Outcomes
                   </Label>
-                  <Input
-                    id="possible-outcomes"
-                    value={possibleOutcomes || undefined}
-                    onChange={(e) => setPossibleOutcomes(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Best case, worst case, alternatives..."
-                    className="text-sm bg-white"
-                  />
+                   <Input
+                     id="possible-outcomes"
+                     value={possibleOutcomes || undefined}
+                     onChange={(e) => setPossibleOutcomes(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Best case, worst case, alternatives..."
+                     className="text-sm bg-white"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Focus Input */}
@@ -163,14 +135,15 @@ const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children, onPromp
                   <Label htmlFor="focus" className="text-sm font-medium text-sidebar-text-dark">
                     Focus
                   </Label>
-                  <Input
-                    id="focus"
-                    value={focus || undefined}
-                    onChange={(e) => setFocus(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Risks, Benefits, Trade-offs, Outcomes.."
-                    className="text-sm bg-white"
-                  />
+                   <Input
+                     id="focus"
+                     value={focus || undefined}
+                     onChange={(e) => setFocus(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Risks, Benefits, Trade-offs, Outcomes.."
+                     className="text-sm bg-white"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Time Horizon Input */}
@@ -178,14 +151,15 @@ const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children, onPromp
                   <Label htmlFor="time-horizon" className="text-sm font-medium text-sidebar-text-dark">
                     Time Horizon
                   </Label>
-                  <Input
-                    id="time-horizon"
-                    value={timeHorizon || undefined}
-                    onChange={(e) => setTimeHorizon(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Months, years, decades"
-                    className="text-sm bg-white"
-                  />
+                   <Input
+                     id="time-horizon"
+                     value={timeHorizon || undefined}
+                     onChange={(e) => setTimeHorizon(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Months, years, decades"
+                     className="text-sm bg-white"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Desired Response Input */}
@@ -193,14 +167,15 @@ const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children, onPromp
                   <Label htmlFor="desired-response" className="text-sm font-medium text-sidebar-text-dark">
                     Desired Response
                   </Label>
-                  <Input
-                    id="desired-response"
-                    value={desiredResponse || undefined}
-                    onChange={(e) => setDesiredResponse(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Strategies, policies, actions to test..."
-                    className="text-sm bg-white"
-                  />
+                   <Input
+                     id="desired-response"
+                     value={desiredResponse || undefined}
+                     onChange={(e) => setDesiredResponse(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Strategies, policies, actions to test..."
+                     className="text-sm bg-white"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Start Planning Button */}

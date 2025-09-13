@@ -118,14 +118,15 @@ const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children, onPromptGener
                   <Label htmlFor="story-title" className="text-sm font-medium text-sidebar-text-dark">
                     Story Title
                   </Label>
-                  <Input
-                    id="story-title"
-                    value={storyTitle}
-                    onChange={(e) => setStoryTitle(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Enter your story title..."
-                    className="text-sm placeholder:text-gray-500"
-                  />
+                   <Input
+                     id="story-title"
+                     value={storyTitle}
+                     onChange={(e) => setStoryTitle(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Enter your story title..."
+                     className="text-sm placeholder:text-gray-500"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Genre Input */}
@@ -133,14 +134,15 @@ const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children, onPromptGener
                   <Label htmlFor="genre" className="text-sm font-medium text-sidebar-text-dark">
                     Genre
                   </Label>
-                  <Input
-                    id="genre"
-                    value={genre}
-                    onChange={(e) => setGenre(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Fantasy, Mystery, Romance, Sci-Fi etc."
-                    className="text-sm placeholder:text-gray-500"
-                  />
+                   <Input
+                     id="genre"
+                     value={genre}
+                     onChange={(e) => setGenre(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Fantasy, Mystery, Romance, Sci-Fi etc."
+                     className="text-sm placeholder:text-gray-500"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Key Details / Plot Points Input */}
@@ -148,14 +150,15 @@ const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children, onPromptGener
                   <Label htmlFor="key-details" className="text-sm font-medium text-sidebar-text-dark">
                     Key Details / Plot Points
                   </Label>
-                  <Textarea
-                    id="key-details"
-                    value={keyDetails}
-                    onChange={(e) => setKeyDetails(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Main characters, plot points, key events..."
-                    className="text-sm min-h-[70px] resize-none placeholder:text-gray-500"
-                  />
+                   <Textarea
+                     id="key-details"
+                     value={keyDetails}
+                     onChange={(e) => setKeyDetails(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Main characters, plot points, key events..."
+                     className="text-sm min-h-[70px] resize-none placeholder:text-gray-500"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Word Count Input */}
@@ -163,17 +166,18 @@ const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children, onPromptGener
                   <Label htmlFor="word-count" className="text-sm font-medium text-sidebar-text-dark">
                     Word Count
                   </Label>
-                  <Input
-                    id="word-count"
-                    type="number"
-                    value={wordCount}
-                    onChange={(e) => setWordCount(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="500–2000"
-                    min="500"
-                    max="5000"
-                    className="text-sm placeholder:text-gray-500"
-                  />
+                   <Input
+                     id="word-count"
+                     type="number"
+                     value={wordCount}
+                     onChange={(e) => setWordCount(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="500–2000"
+                     min="500"
+                     max="5000"
+                     className="text-sm placeholder:text-gray-500"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Tone Input */}
@@ -181,14 +185,15 @@ const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children, onPromptGener
                   <Label htmlFor="tone" className="text-sm font-medium text-sidebar-text-dark">
                     Tone
                   </Label>
-                  <Input
-                    id="tone"
-                    value={tone}
-                    onChange={(e) => setTone(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Descriptive, Humorous, Passionate etc."
-                    className="text-sm placeholder:text-gray-500"
-                  />
+                   <Input
+                     id="tone"
+                     value={tone}
+                     onChange={(e) => setTone(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Descriptive, Humorous, Passionate etc."
+                     className="text-sm placeholder:text-gray-500"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Audience Input */}
@@ -196,14 +201,15 @@ const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children, onPromptGener
                   <Label htmlFor="audience" className="text-sm font-medium text-sidebar-text-dark">
                     Audience
                   </Label>
-                  <Input
-                    id="audience"
-                    value={audience}
-                    onChange={(e) => setAudience(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Children, Young Adults, Mature etc."
-                    className="text-sm placeholder:text-gray-500"
-                  />
+                   <Input
+                     id="audience"
+                     value={audience}
+                     onChange={(e) => setAudience(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Children, Young Adults, Mature etc."
+                     className="text-sm placeholder:text-gray-500"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Start Story Button */}

@@ -18,31 +18,6 @@ const BrainstormHoverCard: React.FC<BrainstormHoverCardProps> = ({ children, onP
   const [desiredOutcome, setDesiredOutcome] = useState('');
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Load saved values from localStorage
-  useEffect(() => {
-    const savedData = localStorage.getItem('brainstormFormData');
-    if (savedData) {
-      try {
-        const parsed = JSON.parse(savedData);
-        setProblemStatement(parsed.problemStatement || '');
-        setConstraints(parsed.constraints || '');
-        setDesiredOutcome(parsed.desiredOutcome || '');
-      } catch (error) {
-        console.error('Error loading saved brainstorm data:', error);
-      }
-    }
-  }, []);
-
-  // Save to localStorage whenever inputs change
-  useEffect(() => {
-    const dataToSave = {
-      problemStatement,
-      constraints,
-      desiredOutcome,
-    };
-    localStorage.setItem('brainstormFormData', JSON.stringify(dataToSave));
-  }, [problemStatement, constraints, desiredOutcome]);
-
   const handleGeneratePrompt = async () => {
     try {
       const { data, error } = await supabase.functions.invoke('prompt-engine-strategic', {
@@ -134,14 +109,15 @@ const BrainstormHoverCard: React.FC<BrainstormHoverCardProps> = ({ children, onP
                   <Label htmlFor="problem-statement" className="text-sm font-medium text-sidebar-text-dark">
                     Problem Statement
                   </Label>
-                   <Textarea
-                     id="problem-statement"
-                     value={problemStatement || undefined}
-                     onChange={(e) => setProblemStatement(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="Enter topic, challenge or idea…"
-                     className="text-sm min-h-[70px] resize-none bg-white"
-                   />
+                    <Textarea
+                      id="problem-statement"
+                      value={problemStatement || undefined}
+                      onChange={(e) => setProblemStatement(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Enter topic, challenge or idea…"
+                      className="text-sm min-h-[70px] resize-none bg-white"
+                      autoComplete="off"
+                    />
                 </div>
 
                 {/* Constraints Input */}
@@ -149,14 +125,15 @@ const BrainstormHoverCard: React.FC<BrainstormHoverCardProps> = ({ children, onP
                   <Label htmlFor="constraints" className="text-sm font-medium text-sidebar-text-dark">
                     Constraints
                   </Label>
-                   <Input
-                     id="constraints"
-                     value={constraints || undefined}
-                     onChange={(e) => setConstraints(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="Budget, time limit, resources etc."
-                     className="text-sm bg-white"
-                   />
+                    <Input
+                      id="constraints"
+                      value={constraints || undefined}
+                      onChange={(e) => setConstraints(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Budget, time limit, resources etc."
+                      className="text-sm bg-white"
+                      autoComplete="off"
+                    />
                 </div>
 
                 {/* Desired Outcome Input */}
@@ -164,14 +141,15 @@ const BrainstormHoverCard: React.FC<BrainstormHoverCardProps> = ({ children, onP
                   <Label htmlFor="desired-outcome" className="text-sm font-medium text-sidebar-text-dark">
                     Desired Outcome
                   </Label>
-                   <Input
-                     id="desired-outcome"
-                     value={desiredOutcome || undefined}
-                     onChange={(e) => setDesiredOutcome(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="Innovation, efficiency, alternatives etc."
-                     className="text-sm bg-white"
-                   />
+                    <Input
+                      id="desired-outcome"
+                      value={desiredOutcome || undefined}
+                      onChange={(e) => setDesiredOutcome(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Innovation, efficiency, alternatives etc."
+                      className="text-sm bg-white"
+                      autoComplete="off"
+                    />
                 </div>
 
                 {/* Start Brainstorming Button */}

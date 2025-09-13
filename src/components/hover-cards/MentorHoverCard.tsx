@@ -19,35 +19,6 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children, onPromptGen
   const [preferredStyle, setPreferredStyle] = useState('');
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Load saved values from localStorage
-  useEffect(() => {
-    const savedData = localStorage.getItem('mentorFormData');
-    if (savedData) {
-      try {
-        const parsed = JSON.parse(savedData);
-        setMentorshipDomain(parsed.mentorshipDomain || '');
-        setCurrentStage(parsed.currentStage || '');
-        setChallenges(parsed.challenges || '');
-        setDesiredOutcome(parsed.desiredOutcome || '');
-        setPreferredStyle(parsed.preferredStyle || '');
-      } catch (error) {
-        console.error('Error loading saved mentor data:', error);
-      }
-    }
-  }, []);
-
-  // Save to localStorage whenever inputs change
-  useEffect(() => {
-    const dataToSave = {
-      mentorshipDomain,
-      currentStage,
-      challenges,
-      desiredOutcome,
-      preferredStyle,
-    };
-    localStorage.setItem('mentorFormData', JSON.stringify(dataToSave));
-  }, [mentorshipDomain, currentStage, challenges, desiredOutcome, preferredStyle]);
-
   const handleMouseEnter = () => {
     if (closeTimeoutRef.current) {
       clearTimeout(closeTimeoutRef.current);
@@ -114,14 +85,15 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children, onPromptGen
                   <Label htmlFor="mentorship-domain" className="text-sm font-medium" style={{ color: '#6E6E6E' }}>
                     Mentorship Domain
                   </Label>
-                  <Input
-                    id="mentorship-domain"
-                    value={mentorshipDomain || undefined}
-                    onChange={(e) => setMentorshipDomain(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Career, entrepreneurship, leadership, personal growth…"
-                    className="text-sm bg-white"
-                  />
+                   <Input
+                     id="mentorship-domain"
+                     value={mentorshipDomain || undefined}
+                     onChange={(e) => setMentorshipDomain(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Career, entrepreneurship, leadership, personal growth…"
+                     className="text-sm bg-white"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Current Stage Input */}
@@ -129,14 +101,15 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children, onPromptGen
                   <Label htmlFor="current-stage" className="text-sm font-medium" style={{ color: '#6E6E6E' }}>
                     Your Current Stage
                   </Label>
-                  <Input
-                    id="current-stage"
-                    value={currentStage || undefined}
-                    onChange={(e) => setCurrentStage(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Beginner, intermediate, advanced…"
-                    className="text-sm bg-white"
-                  />
+                   <Input
+                     id="current-stage"
+                     value={currentStage || undefined}
+                     onChange={(e) => setCurrentStage(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Beginner, intermediate, advanced…"
+                     className="text-sm bg-white"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Challenges Input */}
@@ -144,14 +117,15 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children, onPromptGen
                   <Label htmlFor="challenges" className="text-sm font-medium" style={{ color: '#6E6E6E' }}>
                     Challenges / Obstacles
                   </Label>
-                  <Input
-                    id="challenges"
-                    value={challenges || undefined}
-                    onChange={(e) => setChallenges(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Confidence, skills, direction…"
-                    className="text-sm bg-white"
-                  />
+                   <Input
+                     id="challenges"
+                     value={challenges || undefined}
+                     onChange={(e) => setChallenges(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Confidence, skills, direction…"
+                     className="text-sm bg-white"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Desired Outcome Input */}
@@ -159,14 +133,15 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children, onPromptGen
                   <Label htmlFor="desired-outcome" className="text-sm font-medium" style={{ color: '#6E6E6E' }}>
                     Desired Outcome
                   </Label>
-                  <Input
-                    id="desired-outcome"
-                    value={desiredOutcome || undefined}
-                    onChange={(e) => setDesiredOutcome(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Decision-making, clarity, confidence…"
-                    className="text-sm bg-white"
-                  />
+                   <Input
+                     id="desired-outcome"
+                     value={desiredOutcome || undefined}
+                     onChange={(e) => setDesiredOutcome(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Decision-making, clarity, confidence…"
+                     className="text-sm bg-white"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Preferred Style Input */}
@@ -174,14 +149,15 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children, onPromptGen
                   <Label htmlFor="preferred-style" className="text-sm font-medium" style={{ color: '#6E6E6E' }}>
                     Preferred Style
                   </Label>
-                  <Input
-                    id="preferred-style"
-                    value={preferredStyle || undefined}
-                    onChange={(e) => setPreferredStyle(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Encouraging, tough-love, structured…"
-                    className="text-sm bg-white"
-                  />
+                   <Input
+                     id="preferred-style"
+                     value={preferredStyle || undefined}
+                     onChange={(e) => setPreferredStyle(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Encouraging, tough-love, structured…"
+                     className="text-sm bg-white"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Start Mentoring Button */}
