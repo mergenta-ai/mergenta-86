@@ -3,6 +3,7 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { BookOpen } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useClickOutside } from "@/lib/clickOutside";
 
 interface PublicationRequestHoverCardProps {
   children: React.ReactNode;
@@ -57,22 +58,12 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
   };
 
   // Close card when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (showCard) {
-        const target = event.target as HTMLElement;
-        const card = document.querySelector('[data-publication-card]');
-        if (card && !card.contains(target) && !target.closest('[data-publication-trigger]')) {
-          setShowCard(false);
-        }
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showCard]);
+  useClickOutside(
+    showCard,
+    () => setShowCard(false),
+    '[data-publication-card]',
+    '[data-publication-trigger]'
+  );
 
   return (
     <>
@@ -112,6 +103,7 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
                     <Textarea
                       value={to || undefined}
                       onChange={(e) => setTo(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
                       placeholder="Dear Sir/Madam, Editor, Journal name, Magazine name, Publication name, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
@@ -122,6 +114,7 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
                     <Textarea
                       value={subject || undefined}
                       onChange={(e) => setSubject(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
                       placeholder="Publication submission, Article proposal, Content request, Book publication, Story publication, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
@@ -132,6 +125,7 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
                       placeholder="Article summary, genre, book excerpt, story/novel/book/publication details, research paper summary, story idea, etc..."
                       className="w-full min-h-[80px] resize-none"
                     />
@@ -142,6 +136,7 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
                     <Textarea
                       value={finalTouch || undefined}
                       onChange={(e) => setFinalTouch(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
                       placeholder="Tone, length, audience specification, special requests, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
@@ -152,6 +147,7 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
                     <Textarea
                       value={signOff || undefined}
                       onChange={(e) => setSignOff(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
                       placeholder="Other details, closing lines, wrap-up..."
                       className="w-full min-h-[60px] resize-none"
                     />
@@ -162,6 +158,7 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
                     <Input
                       value={from || undefined}
                       onChange={(e) => setFrom(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
                       placeholder="Your name, Your instirution/organisation..."
                       className="w-full"
                     />

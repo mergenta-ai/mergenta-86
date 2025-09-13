@@ -118,6 +118,7 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children, onPromptGen
                     id="mentorship-domain"
                     value={mentorshipDomain || undefined}
                     onChange={(e) => setMentorshipDomain(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Career, entrepreneurship, leadership, personal growth…"
                     className="text-sm bg-white"
                   />
@@ -132,6 +133,7 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children, onPromptGen
                     id="current-stage"
                     value={currentStage || undefined}
                     onChange={(e) => setCurrentStage(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Beginner, intermediate, advanced…"
                     className="text-sm bg-white"
                   />
@@ -146,6 +148,7 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children, onPromptGen
                     id="challenges"
                     value={challenges || undefined}
                     onChange={(e) => setChallenges(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Confidence, skills, direction…"
                     className="text-sm bg-white"
                   />
@@ -160,6 +163,7 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children, onPromptGen
                     id="desired-outcome"
                     value={desiredOutcome || undefined}
                     onChange={(e) => setDesiredOutcome(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Decision-making, clarity, confidence…"
                     className="text-sm bg-white"
                   />
@@ -174,6 +178,7 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children, onPromptGen
                     id="preferred-style"
                     value={preferredStyle || undefined}
                     onChange={(e) => setPreferredStyle(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Encouraging, tough-love, structured…"
                     className="text-sm bg-white"
                   />

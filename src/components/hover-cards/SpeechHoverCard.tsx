@@ -118,6 +118,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
                     id="theme"
                     value={theme}
                     onChange={(e) => setTheme(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Write your central idea..."
                     className="text-sm placeholder:text-gray-500"
                   />
@@ -132,6 +133,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
                     id="tone"
                     value={tone}
                     onChange={(e) => setTone(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Solemn, Motivational, Humorous etc."
                     className="text-sm placeholder:text-gray-500"
                   />
@@ -146,6 +148,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
                     id="audience"
                     value={audience}
                     onChange={(e) => setAudience(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Students, Public, Leaders, Associations"
                     className="text-sm placeholder:text-gray-500"
                   />
@@ -160,6 +163,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
                     id="language-style"
                     value={languageStyle}
                     onChange={(e) => setLanguageStyle(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Simple, Poetic, Technical, Rhetorical etc."
                     className="text-sm placeholder:text-gray-500"
                   />
@@ -174,6 +178,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
                     id="engagement-techniques"
                     value={engagementTechniques}
                     onChange={(e) => setEngagementTechniques(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Stories, Questions, Humour, Quotes etc."
                     className="text-sm placeholder:text-gray-500"
                   />
@@ -188,6 +193,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
                     id="duration"
                     value={duration}
                     onChange={(e) => setDuration(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Mention minutes or hours..."
                     className="text-sm placeholder:text-gray-500"
                   />
@@ -202,6 +208,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
                     id="impact"
                     value={impact}
                     onChange={(e) => setImpact(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Memorable, Thought-provoking etc."
                     className="text-sm placeholder:text-gray-500"
                   />

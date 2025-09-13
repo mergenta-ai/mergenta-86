@@ -4,6 +4,7 @@ import { Textarea } from '../ui/textarea';
 import { Label } from '../ui/label';
 import { Button } from '../ui/button';
 import { supabase } from "@/integrations/supabase/client";
+import { useClickOutside } from "@/lib/clickOutside";
 
 interface EssayHoverCardProps {
   children: React.ReactNode;
@@ -93,26 +94,12 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
   };
 
   // Close card when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (showCard) {
-        const target = event.target as HTMLElement;
-        const card = document.querySelector('[data-essay-card]');
-        const trigger = document.querySelector('[data-essay-trigger]');
-        
-        // Don't close if clicking on card or trigger
-        if (card && !card.contains(target) && 
-            trigger && !trigger.contains(target)) {
-          setShowCard(false);
-        }
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showCard]);
+  useClickOutside(
+    showCard,
+    () => setShowCard(false),
+    '[data-essay-card]',
+    '[data-essay-trigger]'
+  );
 
   return (
     <div className="relative">
@@ -158,6 +145,7 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
                     id="essay-title"
                     value={essayTitle}
                     onChange={(e) => setEssayTitle(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Enter your essay title..."
                     className="text-sm"
                   />
@@ -172,6 +160,7 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
                     id="key-points"
                     value={keyPoints}
                     onChange={(e) => setKeyPoints(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="List your main points or topics..."
                     className="text-sm min-h-[70px] resize-none"
                   />
@@ -187,6 +176,7 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
                     type="number"
                     value={wordCount}
                     onChange={(e) => setWordCount(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="400–2000"
                     min="400"
                     max="2000"
@@ -201,6 +191,7 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
                     id="tone"
                     value={tone}
                     onChange={(e) => setTone(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="formal, analytical, neutral, critical, narrative, persuasive, imaginative, humorous, motivating, empathitic, optimistic. etc..."
                     className="text-sm min-h-[60px] resize-none"
                   />
@@ -213,6 +204,7 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
                     id="audience"
                     value={audience}
                     onChange={(e) => setAudience(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="academic, business, professional, technical, media, government, community, American, European, Australian, Asian, African, Chinese, Indian, etc..."
                     className="text-sm min-h-[60px] resize-none"
                   />

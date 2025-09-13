@@ -122,6 +122,7 @@ const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children, onPromp
                     id="central-challenge"
                     value={centralChallenge || undefined}
                     onChange={(e) => setCentralChallenge(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Enter the core issue or question…"
                     className="text-sm min-h-[60px] resize-none bg-white"
                   />
@@ -136,6 +137,7 @@ const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children, onPromp
                     id="key-variables"
                     value={keyVariables || undefined}
                     onChange={(e) => setKeyVariables(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Political, economic, social, technological etc."
                     className="text-sm bg-white"
                   />
@@ -150,6 +152,7 @@ const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children, onPromp
                     id="possible-outcomes"
                     value={possibleOutcomes || undefined}
                     onChange={(e) => setPossibleOutcomes(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Best case, worst case, alternatives..."
                     className="text-sm bg-white"
                   />
@@ -164,6 +167,7 @@ const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children, onPromp
                     id="focus"
                     value={focus || undefined}
                     onChange={(e) => setFocus(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Risks, Benefits, Trade-offs, Outcomes.."
                     className="text-sm bg-white"
                   />
@@ -178,6 +182,7 @@ const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children, onPromp
                     id="time-horizon"
                     value={timeHorizon || undefined}
                     onChange={(e) => setTimeHorizon(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Months, years, decades"
                     className="text-sm bg-white"
                   />
@@ -192,6 +197,7 @@ const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children, onPromp
                     id="desired-response"
                     value={desiredResponse || undefined}
                     onChange={(e) => setDesiredResponse(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Strategies, policies, actions to test..."
                     className="text-sm bg-white"
                   />

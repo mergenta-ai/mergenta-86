@@ -121,6 +121,7 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
                     id="script-title"
                     value={scriptTitle}
                     onChange={(e) => setScriptTitle(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Enter your script title..."
                     className="text-sm placeholder-gray-400"
                   />
@@ -135,6 +136,7 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
                     id="key-details"
                     value={keyDetails}
                     onChange={(e) => setKeyDetails(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Main characters, scenes, key movements..."
                     className="text-sm min-h-[70px] resize-none placeholder-gray-400"
                   />
@@ -149,6 +151,7 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
                     id="structure"
                     value={structure}
                     onChange={(e) => setStructure(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Long, Medium, Short, Micro"
                     className="text-sm placeholder-gray-400"
                   />
@@ -163,6 +166,7 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
                     id="theme"
                     value={theme}
                     onChange={(e) => setTheme(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Identity, Revenge, Power, Love, etc."
                     className="text-sm placeholder-gray-400"
                   />
@@ -177,6 +181,7 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
                     id="mood"
                     value={mood}
                     onChange={(e) => setMood(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Romantic, Eerie, Dark, Light, Suspense"
                     className="text-sm placeholder-gray-400"
                   />
@@ -191,6 +196,7 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
                     id="format"
                     value={format}
                     onChange={(e) => setFormat(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Screenplay, Radio, TV, Web Series"
                     className="text-sm placeholder-gray-400"
                   />
@@ -205,6 +211,7 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
                     id="audience"
                     value={audience}
                     onChange={(e) => setAudience(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Children, Teens, Young Adults, Mature"
                     className="text-sm placeholder-gray-400"
                   />
