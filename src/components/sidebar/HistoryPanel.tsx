@@ -163,7 +163,7 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose }) => {
                     <PopoverContent 
                       className="w-40 p-1 z-[9999]" 
                       align="end"
-                      side="right"
+                      side="bottom"
                       sideOffset={5}
                     >
                       <div className="space-y-1">
