@@ -120,7 +120,18 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children }) => {
       if (showCard) {
         const target = event.target as HTMLElement;
         const card = document.querySelector('[data-essay-card]');
-        if (card && !card.contains(target) && !target.closest('[data-essay-trigger]')) {
+        const trigger = document.querySelector('[data-essay-trigger]');
+        
+        // Check if click is on a select dropdown or its content
+        const isSelectDropdown = target.closest('[data-radix-select-content]') || 
+                                 target.closest('[role="listbox"]') ||
+                                 target.closest('[role="option"]') ||
+                                 target.closest('[data-radix-popper-content-wrapper]');
+        
+        // Don't close if clicking on card, trigger, or select dropdown
+        if (card && !card.contains(target) && 
+            trigger && !trigger.contains(target) && 
+            !isSelectDropdown) {
           setShowCard(false);
         }
       }
@@ -228,7 +239,12 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children }) => {
                     <SelectContent
                       className="z-[300] bg-white border shadow-lg max-h-48 overflow-auto"
                       sideOffset={5}
-                      onPointerDownOutside={(e) => e.preventDefault()}
+                      onCloseAutoFocus={(e) => e.preventDefault()}
+                      onEscapeKeyDown={(e) => e.preventDefault()}
+                      onPointerDownOutside={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
                     >
                       {toneOptions.map((tone) => (
                         <SelectItem
@@ -306,7 +322,12 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children }) => {
                     <SelectContent
                       className="z-[300] bg-white border shadow-lg max-h-48 overflow-auto"
                       sideOffset={5}
-                      onPointerDownOutside={(e) => e.preventDefault()}
+                      onCloseAutoFocus={(e) => e.preventDefault()}
+                      onEscapeKeyDown={(e) => e.preventDefault()}
+                      onPointerDownOutside={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
                     >
                       {audienceOptions.map((audience) => (
                         <SelectItem
