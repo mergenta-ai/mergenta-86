@@ -58,22 +58,12 @@ const ComplaintLetterHoverCard = ({ children, onPromptGenerated }: ComplaintLett
   };
 
   // Close card when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (showCard) {
-        const target = event.target as HTMLElement;
-        const card = document.querySelector('[data-complaint-card]');
-        if (card && !card.contains(target) && !target.closest('[data-complaint-trigger]')) {
-          setShowCard(false);
-        }
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showCard]);
+  useClickOutside(
+    showCard,
+    () => setShowCard(false),
+    '[data-complaint-card]',
+    '[data-complaint-trigger]'
+  );
 
   return (
     <>
@@ -113,6 +103,7 @@ const ComplaintLetterHoverCard = ({ children, onPromptGenerated }: ComplaintLett
                     <Textarea
                       value={to || undefined}
                       onChange={(e) => setTo(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
                       placeholder="Dear Sir/Madam, Manager, Service Provider, HR, Authority, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
@@ -123,6 +114,7 @@ const ComplaintLetterHoverCard = ({ children, onPromptGenerated }: ComplaintLett
                     <Textarea
                       value={subject || undefined}
                       onChange={(e) => setSubject(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
                       placeholder="Mention about complaint, issue, defect, concern, problem, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
@@ -133,6 +125,7 @@ const ComplaintLetterHoverCard = ({ children, onPromptGenerated }: ComplaintLett
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
                       placeholder="Details about issue, service lapses, saults, problems, fficers not paying attention, indiscipline, etc..."
                       className="w-full min-h-[80px] resize-none"
                     />
@@ -143,6 +136,7 @@ const ComplaintLetterHoverCard = ({ children, onPromptGenerated }: ComplaintLett
                     <Textarea
                       value={finalTouch || undefined}
                       onChange={(e) => setFinalTouch(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
                       placeholder="Mention evidence, dates, proof and your expectation of resolution, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
@@ -153,6 +147,7 @@ const ComplaintLetterHoverCard = ({ children, onPromptGenerated }: ComplaintLett
                     <Textarea
                       value={signOff || undefined}
                       onChange={(e) => setSignOff(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
                       placeholder="Other details, if any. Expect resolution, Await response, Regards, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
@@ -163,6 +158,7 @@ const ComplaintLetterHoverCard = ({ children, onPromptGenerated }: ComplaintLett
                     <Input
                       value={from || undefined}
                       onChange={(e) => setFrom(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
                       placeholder="Your Name, Conerrned User"
                       className="w-full"
                     />

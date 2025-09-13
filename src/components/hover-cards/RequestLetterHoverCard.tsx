@@ -103,6 +103,7 @@ const RequestLetterHoverCard = ({ children, onPromptGenerated }: RequestLetterHo
                     <Textarea
                       value={to || undefined}
                       onChange={(e) => setTo(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
                       placeholder="Manager, Teacher, Official, Colleague, Minister, Friend, Relative, Principal, Vice Chancellor, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
@@ -113,6 +114,7 @@ const RequestLetterHoverCard = ({ children, onPromptGenerated }: RequestLetterHo
                     <Textarea
                       value={subject || undefined}
                       onChange={(e) => setSubject(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
                       placeholder="Request for assistance, permission, inquiry, favour, guidance, approval, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
@@ -123,6 +125,7 @@ const RequestLetterHoverCard = ({ children, onPromptGenerated }: RequestLetterHo
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
                       placeholder="Request details, help needed, support required, access, decision review, reconsideration, etc..."
                       className="w-full min-h-[80px] resize-none"
                     />
@@ -133,6 +136,7 @@ const RequestLetterHoverCard = ({ children, onPromptGenerated }: RequestLetterHo
                     <Textarea
                       value={finalTouch || undefined}
                       onChange={(e) => setFinalTouch(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
                       placeholder="Reason, urgency, context, background, purpose importance, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
@@ -143,6 +147,7 @@ const RequestLetterHoverCard = ({ children, onPromptGenerated }: RequestLetterHo
                     <Textarea
                       value={signOff || undefined}
                       onChange={(e) => setSignOff(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
                       placeholder="Hoping for your support, with thanks, early resolution, request assistance, kind consideration, positive response, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
@@ -153,6 +158,7 @@ const RequestLetterHoverCard = ({ children, onPromptGenerated }: RequestLetterHo
                     <Input
                       value={from || undefined}
                       onChange={(e) => setFrom(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
                       placeholder="Your Name, Your Organisation"
                       className="w-full"
                     />

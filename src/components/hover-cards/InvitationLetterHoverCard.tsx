@@ -127,62 +127,68 @@ const InvitationLetterHoverCard = ({ children, onPromptGenerated }: InvitationLe
                 <div className="space-y-3">
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label>
-                    <Textarea
-                       value={to || undefined}
-                       onChange={(e) => setTo(e.target.value)}
-                       placeholder="Dear [Name], Friend, Colleague, Guest, Relative, etc..."
-                       className="w-full min-h-[60px] resize-none"
-                     />
+                     <Textarea
+                        value={to || undefined}
+                        onChange={(e) => setTo(e.target.value)}
+                        onClick={(e) => e.stopPropagation()}
+                        placeholder="Dear [Name], Friend, Colleague, Guest, Relative, etc..."
+                        className="w-full min-h-[60px] resize-none"
+                      />
                   </div>
                   
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label>
-                    <Textarea
-                       value={subject || undefined}
-                       onChange={(e) => setSubject(e.target.value)}
-                       placeholder="Marriage Invitation, Birthday Invitation, Celebration, Gathering, Party, Event, etc..."
+                     <Textarea
+                        value={subject || undefined}
+                        onChange={(e) => setSubject(e.target.value)}
+                        onClick={(e) => e.stopPropagation()}
+                        placeholder="Marriage Invitation, Birthday Invitation, Celebration, Gathering, Party, Event, etc..."
+                        className="w-full min-h-[60px] resize-none"
+                      />
+                  </div>
+                  
+                  <div>
+                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Core Message</label>
+                     <Textarea
+                       value={coreMessage || undefined}
+                       onChange={(e) => setCoreMessage(e.target.value)}
+                       onClick={(e) => e.stopPropagation()}
+                       placeholder="You are invited, Join us, Please attend, Be our guest, etc. to write message..."
+                       className="w-full min-h-[80px] resize-none"
+                     />
+                  </div>
+                  
+                  <div>
+                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Final Touch</label>
+                     <Textarea
+                       value={finalTouch || undefined}
+                       onChange={(e) => setFinalTouch(e.target.value)}
+                       onClick={(e) => e.stopPropagation()}
+                       placeholder="Mention Date, time, venue, occasion, RSVP details..."
                        className="w-full min-h-[60px] resize-none"
                      />
                   </div>
                   
                   <div>
-                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Core Message</label>
-                    <Textarea
-                      value={coreMessage || undefined}
-                      onChange={(e) => setCoreMessage(e.target.value)}
-                      placeholder="You are invited, Join us, Please attend, Be our guest, etc. to write message..."
-                      className="w-full min-h-[80px] resize-none"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Final Touch</label>
-                    <Textarea
-                      value={finalTouch || undefined}
-                      onChange={(e) => setFinalTouch(e.target.value)}
-                      placeholder="Mention Date, time, venue, occasion, RSVP details..."
-                      className="w-full min-h-[60px] resize-none"
-                    />
-                  </div>
-                  
-                  <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Sign Off</label>
-                    <Textarea
-                      value={signOff || undefined}
-                      onChange={(e) => setSignOff(e.target.value)}
-                      placeholder="Use phrases like Looking forward, With regards, Warm wishes, Best wishes, You have to be there, etc..."
-                      className="w-full min-h-[60px] resize-none"
-                    />
+                     <Textarea
+                       value={signOff || undefined}
+                       onChange={(e) => setSignOff(e.target.value)}
+                       onClick={(e) => e.stopPropagation()}
+                       placeholder="Use phrases like Looking forward, With regards, Warm wishes, Best wishes, You have to be there, etc..."
+                       className="w-full min-h-[60px] resize-none"
+                     />
                   </div>
                   
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">From</label>
-                    <Input
-                      value={from || undefined}
-                      onChange={(e) => setFrom(e.target.value)}
-                      placeholder="Your Name, Host, Organiser, etc..."
-                      className="w-full"
-                    />
+                     <Input
+                       value={from || undefined}
+                       onChange={(e) => setFrom(e.target.value)}
+                       onClick={(e) => e.stopPropagation()}
+                       placeholder="Your Name, Host, Organiser, etc..."
+                       className="w-full"
+                     />
                   </div>
                   
                   <button

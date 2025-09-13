@@ -85,22 +85,12 @@ const CongratulatoryLetterHoverCard = ({ children, onPromptGenerated }: Congratu
   };
 
   // Close card when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (showCard) {
-        const target = event.target as HTMLElement;
-        const card = document.querySelector('[data-congratulatory-card]');
-        if (card && !card.contains(target) && !target.closest('[data-congratulatory-trigger]')) {
-          setShowCard(false);
-        }
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showCard]);
+  useClickOutside(
+    showCard,
+    () => setShowCard(false),
+    '[data-congratulatory-card]',
+    '[data-congratulatory-trigger]'
+  );
 
   return (
     <>
@@ -140,6 +130,7 @@ const CongratulatoryLetterHoverCard = ({ children, onPromptGenerated }: Congratu
                     <Textarea
                        value={to || undefined}
                        onChange={(e) => setTo(e.target.value)}
+                       onClick={(e) => e.stopPropagation()}
                        placeholder="Dear [Name], Friend, Colleague, Team, Family..."
                        className="w-full min-h-[60px] resize-none"
                      />
@@ -150,6 +141,7 @@ const CongratulatoryLetterHoverCard = ({ children, onPromptGenerated }: Congratu
                     <Textarea
                        value={subject || undefined}
                        onChange={(e) => setSubject(e.target.value)}
+                       onClick={(e) => e.stopPropagation()}
                        placeholder="Mention about Achievement, Success, Promotion, Milestone, Marriage etc..."
                        className="w-full min-h-[60px] resize-none"
                      />
@@ -160,6 +152,7 @@ const CongratulatoryLetterHoverCard = ({ children, onPromptGenerated }: Congratu
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
                       placeholder="Use phrases like Congratulations, Proud of you, Good job, Well done, etc. to write your message."
                       className="w-full min-h-[80px] resize-none"
                     />
@@ -170,6 +163,7 @@ const CongratulatoryLetterHoverCard = ({ children, onPromptGenerated }: Congratu
                     <Textarea
                       value={finalTouch || undefined}
                       onChange={(e) => setFinalTouch(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
                       placeholder="Use phrases like Personal pride, Shared joy, Looking ahead, Keep going etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
@@ -180,6 +174,7 @@ const CongratulatoryLetterHoverCard = ({ children, onPromptGenerated }: Congratu
                     <Textarea
                       value={signOff || undefined}
                       onChange={(e) => setSignOff(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
                       placeholder="Consider writing Best wishes, Heartfelt regards, Cheers, Warmly etc. to close the message"
                       className="w-full min-h-[60px] resize-none"
                     />
@@ -190,6 +185,7 @@ const CongratulatoryLetterHoverCard = ({ children, onPromptGenerated }: Congratu
                     <Input
                       value={from || undefined}
                       onChange={(e) => setFrom(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
                       placeholder="Proud Friend, Warm Regards, Your Name, "
                       className="w-full"
                     />

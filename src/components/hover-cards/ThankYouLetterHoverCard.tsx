@@ -103,9 +103,10 @@ const ThankYouLetterHoverCard = ({ children, onPromptGenerated }: ThankYouLetter
                     <Textarea
                        value={to || undefined}
                        onChange={(e) => setTo(e.target.value)}
+                       onClick={(e) => e.stopPropagation()}
                        placeholder="Dear [Name], Relative, Teacher, Colleague, Friend, etc..."
                        className="w-full min-h-[60px] resize-none"
-                     />
+                      />
                   </div>
                   
                   <div>
@@ -113,9 +114,10 @@ const ThankYouLetterHoverCard = ({ children, onPromptGenerated }: ThankYouLetter
                     <Textarea
                        value={subject || undefined}
                        onChange={(e) => setSubject(e.target.value)}
+                       onClick={(e) => e.stopPropagation()}
                        placeholder="Add Gratitude, Appreciation, Recognition, Thankfullness, etc..."
                        className="w-full min-h-[60px] resize-none"
-                     />
+                      />
                   </div>
                   
                   <div>
@@ -123,6 +125,7 @@ const ThankYouLetterHoverCard = ({ children, onPromptGenerated }: ThankYouLetter
                     <Textarea
                       value={coreMessage || undefined}
                       onChange={(e) => setCoreMessage(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
                       placeholder="Express Sincere thanks, Your support, Your guidance, Your kindness, etc. towards the help/support offered."
                       className="w-full min-h-[80px] resize-none"
                     />
@@ -133,6 +136,7 @@ const ThankYouLetterHoverCard = ({ children, onPromptGenerated }: ThankYouLetter
                     <Textarea
                       value={finalTouch || undefined}
                       onChange={(e) => setFinalTouch(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
                       placeholder="How it helped me, lasting impact, warm wishes, etc..."
                       className="w-full min-h-[60px] resize-none"
                     />
