@@ -269,7 +269,7 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
 
                           if (item.text === "Flash Fiction") {
                             return (
-                              <FlashFictionHoverCard key={idx}>
+                              <FlashFictionHoverCard key={idx} onPromptGenerated={onPromptGenerated}>
                                 <button
                                   className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
                                   onClick={() => console.log(`Selected: ${item.text}`)}
@@ -282,7 +282,7 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
 
                           if (item.text === "Script") {
                             return (
-                              <ScriptHoverCard key={idx}>
+                              <ScriptHoverCard key={idx} onPromptGenerated={onPromptGenerated}>
                                 <button
                                   className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
                                   onClick={() => console.log(`Selected: ${item.text}`)}
@@ -295,7 +295,7 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
 
                           if (item.text === "Blog") {
                             return (
-                              <BlogHoverCard key={idx}>
+                              <BlogHoverCard key={idx} onPromptGenerated={onPromptGenerated}>
                                 <button
                                   className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
                                   onClick={() => console.log(`Selected: ${item.text}`)}
@@ -308,7 +308,7 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
 
                           if (item.text === "Poetry") {
                             return (
-                              <PoetryHoverCard key={idx}>
+                              <PoetryHoverCard key={idx} onPromptGenerated={onPromptGenerated}>
                                 <button
                                   className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
                                   onClick={() => console.log(`Selected: ${item.text}`)}
@@ -321,7 +321,7 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
 
                           if (item.text === "Speech") {
                             return (
-                              <SpeechHoverCard key={idx}>
+                              <SpeechHoverCard key={idx} onPromptGenerated={onPromptGenerated}>
                                 <button
                                   className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
                                   onClick={() => console.log(`Selected: ${item.text}`)}
@@ -390,8 +390,8 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                                           "Publication request letter": PublicationRequestHoverCard,
                                         };
                                        
-                                       const HoverCard = hoverCards[item];
-                                       return HoverCard ? React.createElement(HoverCard, { key: itemIdx, children: content }) : content;
+                                        const HoverCard = hoverCards[item];
+                                        return HoverCard ? React.createElement(HoverCard, { key: itemIdx, onPromptGenerated, children: content }) : content;
                                      };
 
                                       const displayText = item === "Appointment request letter" 

@@ -3,12 +3,14 @@ import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { Label } from '../ui/label';
 import { Button } from '../ui/button';
+import { supabase } from "@/integrations/supabase/client";
 
 interface ScriptHoverCardProps {
   children: React.ReactNode;
+  onPromptGenerated?: (prompt: string) => void;
 }
 
-const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children }) => {
+const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGenerated }) => {
   const [showCard, setShowCard] = useState(false);
   const [scriptTitle, setScriptTitle] = useState('');
   const [keyDetails, setKeyDetails] = useState('');
@@ -38,9 +40,32 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children }) => {
     e.stopPropagation();
   };
 
-  const handleStartScript = () => {
-    console.log('Start Script clicked');
-    // Future implementation for script generation
+  const handleGeneratePrompt = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('prompt-engine', {
+        body: { 
+          contentType: 'script', 
+          formData: { 
+            scriptTitle, 
+            keyDetails, 
+            structure, 
+            theme, 
+            mood, 
+            format, 
+            audience 
+          } 
+        }
+      });
+
+      if (error) throw error;
+      
+      if (data?.success && data?.prompt) {
+        onPromptGenerated?.(data.prompt);
+        setShowCard(false);
+      }
+    } catch (error) {
+      console.error('Error generating prompt:', error);
+    }
   };
 
   // Close card when clicking outside
@@ -196,7 +221,7 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children }) => {
 
                 {/* Start Button */}
                 <Button 
-                  onClick={handleStartScript}
+                  onClick={handleGeneratePrompt}
                   className="w-full mt-4 bg-sidebar-text-violet hover:bg-sidebar-text-violet/90 text-white font-medium"
                 >
                   Start Script

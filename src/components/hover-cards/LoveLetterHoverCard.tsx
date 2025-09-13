@@ -197,7 +197,7 @@ const LoveLetterHoverCard = ({ children, onPromptGenerated }: LoveLetterHoverCar
                      className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
                      onClick={handleGeneratePrompt}
                    >
-                     Generate Prompt
+                     Start Love Letter
                    </button>
                 </div>
               </div>

@@ -3,12 +3,14 @@ import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { Label } from '../ui/label';
 import { Button } from '../ui/button';
+import { supabase } from "@/integrations/supabase/client";
 
 interface BlogHoverCardProps {
   children: React.ReactNode;
+  onPromptGenerated?: (prompt: string) => void;
 }
 
-const BlogHoverCard: React.FC<BlogHoverCardProps> = ({ children }) => {
+const BlogHoverCard: React.FC<BlogHoverCardProps> = ({ children, onPromptGenerated }) => {
   const [showCard, setShowCard] = useState(false);
   const [blogTitle, setBlogTitle] = useState('');
   const [keywords, setKeywords] = useState('');
@@ -40,9 +42,30 @@ const BlogHoverCard: React.FC<BlogHoverCardProps> = ({ children }) => {
     e.stopPropagation();
   };
 
-  const handleStartBlog = () => {
-    console.log('Start Blog clicked');
-    // Future implementation for blog generation
+  const handleGeneratePrompt = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('prompt-engine', {
+        body: { 
+          contentType: 'blog', 
+          formData: { 
+            blogTitle, 
+            keyPoints, 
+            wordCount, 
+            tone, 
+            audience 
+          } 
+        }
+      });
+
+      if (error) throw error;
+      
+      if (data?.success && data?.prompt) {
+        onPromptGenerated?.(data.prompt);
+        setShowCard(false);
+      }
+    } catch (error) {
+      console.error('Error generating prompt:', error);
+    }
   };
 
   // Close card when clicking outside

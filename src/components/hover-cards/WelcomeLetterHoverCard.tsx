@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Smile } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface WelcomeLetterHoverCardProps {
   children: React.ReactNode;
+  onPromptGenerated?: (prompt: string) => void;
 }
 
-const WelcomeLetterHoverCard = ({ children }: WelcomeLetterHoverCardProps) => {
+const WelcomeLetterHoverCard = ({ children, onPromptGenerated }: WelcomeLetterHoverCardProps) => {
   const [showCard, setShowCard] = useState(false);
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
@@ -52,6 +54,33 @@ const WelcomeLetterHoverCard = ({ children }: WelcomeLetterHoverCardProps) => {
 
   const handleCardClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+  };
+
+  const handleGeneratePrompt = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('prompt-engine', {
+        body: { 
+          contentType: 'welcome_letter', 
+          formData: { 
+            to, 
+            subject, 
+            coreMessage, 
+            finalTouch, 
+            signOff, 
+            from 
+          } 
+        }
+      });
+
+      if (error) throw error;
+      
+      if (data?.success && data?.prompt) {
+        onPromptGenerated?.(data.prompt);
+        setShowCard(false);
+      }
+    } catch (error) {
+      console.error('Error generating prompt:', error);
+    }
   };
 
   // Close card when clicking outside
@@ -167,7 +196,7 @@ const WelcomeLetterHoverCard = ({ children }: WelcomeLetterHoverCardProps) => {
                   
                   <button
                     className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
-                    onClick={() => console.log("Start Welcome Letter")}
+                    onClick={handleGeneratePrompt}
                   >
                     Start Welcome Letter
                   </button>

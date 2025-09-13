@@ -5,9 +5,10 @@ import { Button } from '../ui/button';
 
 interface SpeechHoverCardProps {
   children: React.ReactNode;
+  onPromptGenerated?: (prompt: string) => void;
 }
 
-const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children }) => {
+const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGenerated }) => {
   const [showCard, setShowCard] = useState(false);
   const [theme, setTheme] = useState('');
   const [tone, setTone] = useState('');

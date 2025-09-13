@@ -3,12 +3,14 @@ import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { Label } from '../ui/label';
 import { Button } from '../ui/button';
+import { supabase } from "@/integrations/supabase/client";
 
 interface FlashFictionHoverCardProps {
   children: React.ReactNode;
+  onPromptGenerated?: (prompt: string) => void;
 }
 
-const FlashFictionHoverCard: React.FC<FlashFictionHoverCardProps> = ({ children }) => {
+const FlashFictionHoverCard: React.FC<FlashFictionHoverCardProps> = ({ children, onPromptGenerated }) => {
   const [showCard, setShowCard] = useState(false);
   const [storyTitle, setStoryTitle] = useState('');
   const [genre, setGenre] = useState('');
@@ -37,9 +39,31 @@ const FlashFictionHoverCard: React.FC<FlashFictionHoverCardProps> = ({ children 
     e.stopPropagation();
   };
 
-  const handleStartFlashFiction = () => {
-    console.log('Start Flash Fiction clicked');
-    // Future implementation for flash fiction generation
+  const handleGeneratePrompt = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('prompt-engine', {
+        body: { 
+          contentType: 'flash_fiction', 
+          formData: { 
+            storyTitle, 
+            genre, 
+            keyDetails, 
+            wordCount, 
+            tone, 
+            audience 
+          } 
+        }
+      });
+
+      if (error) throw error;
+      
+      if (data?.success && data?.prompt) {
+        onPromptGenerated?.(data.prompt);
+        setShowCard(false);
+      }
+    } catch (error) {
+      console.error('Error generating prompt:', error);
+    }
   };
 
   // Close card when clicking outside
@@ -185,7 +209,7 @@ const FlashFictionHoverCard: React.FC<FlashFictionHoverCardProps> = ({ children 
                 {/* Start Flash Fiction Button */}
                 <Button
                   className="w-full bg-sidebar-text-violet hover:bg-sidebar-text-violet/90 text-white transition-colors duration-200"
-                  onClick={handleStartFlashFiction}
+                  onClick={handleGeneratePrompt}
                 >
                   Start Flash Fiction
                 </Button>

@@ -5,9 +5,10 @@ import { Button } from '../ui/button';
 
 interface PoetryHoverCardProps {
   children: React.ReactNode;
+  onPromptGenerated?: (prompt: string) => void;
 }
 
-const PoetryHoverCard: React.FC<PoetryHoverCardProps> = ({ children }) => {
+const PoetryHoverCard: React.FC<PoetryHoverCardProps> = ({ children, onPromptGenerated }) => {
   const [showCard, setShowCard] = useState(false);
   const [title, setTitle] = useState('');
   const [theme, setTheme] = useState('');

@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Trophy } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface CongratulatoryLetterHoverCardProps {
   children: React.ReactNode;
+  onPromptGenerated?: (prompt: string) => void;
 }
 
-const CongratulatoryLetterHoverCard = ({ children }: CongratulatoryLetterHoverCardProps) => {
+const CongratulatoryLetterHoverCard = ({ children, onPromptGenerated }: CongratulatoryLetterHoverCardProps) => {
   const [showCard, setShowCard] = useState(false);
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
@@ -52,6 +54,33 @@ const CongratulatoryLetterHoverCard = ({ children }: CongratulatoryLetterHoverCa
 
   const handleCardClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+  };
+
+  const handleGeneratePrompt = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('prompt-engine', {
+        body: { 
+          contentType: 'congratulatory_letter', 
+          formData: { 
+            to, 
+            subject, 
+            coreMessage, 
+            finalTouch, 
+            signOff, 
+            from 
+          } 
+        }
+      });
+
+      if (error) throw error;
+      
+      if (data?.success && data?.prompt) {
+        onPromptGenerated?.(data.prompt);
+        setShowCard(false);
+      }
+    } catch (error) {
+      console.error('Error generating prompt:', error);
+    }
   };
 
   // Close card when clicking outside
@@ -167,7 +196,7 @@ const CongratulatoryLetterHoverCard = ({ children }: CongratulatoryLetterHoverCa
                   
                   <button
                     className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
-                    onClick={() => console.log("Start Congratulatory Letter")}
+                    onClick={handleGeneratePrompt}
                   >
                     Start Congratulatory Letter
                   </button>

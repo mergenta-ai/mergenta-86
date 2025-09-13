@@ -218,12 +218,12 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
                   />
                 </div>
 
-                {/* Generate Prompt Button */}
+                {/* Start Essay Button */}
                 <Button
                   className="w-full bg-[#6F42C1] hover:bg-[#5A359A] text-white transition-colors duration-200"
                   onClick={handleGeneratePrompt}
                 >
-                  Generate Prompt
+                  Start Essay
                 </Button>
               </div>
             </div>

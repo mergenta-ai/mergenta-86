@@ -2,12 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Clock } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface LeaveApplicationHoverCardProps {
   children: React.ReactNode;
+  onPromptGenerated?: (prompt: string) => void;
 }
 
-const LeaveApplicationHoverCard = ({ children }: LeaveApplicationHoverCardProps) => {
+const LeaveApplicationHoverCard = ({ children, onPromptGenerated }: LeaveApplicationHoverCardProps) => {
   const [showCard, setShowCard] = useState(false);
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
@@ -47,6 +49,33 @@ const LeaveApplicationHoverCard = ({ children }: LeaveApplicationHoverCardProps)
 
   const handleCardClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+  };
+
+  const handleGeneratePrompt = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('prompt-engine', {
+        body: { 
+          contentType: 'leave_application', 
+          formData: { 
+            to, 
+            subject, 
+            coreMessage, 
+            finalTouch, 
+            signOff, 
+            from 
+          } 
+        }
+      });
+
+      if (error) throw error;
+      
+      if (data?.success && data?.prompt) {
+        onPromptGenerated?.(data.prompt);
+        setShowCard(false);
+      }
+    } catch (error) {
+      console.error('Error generating prompt:', error);
+    }
   };
 
   // Close card when clicking outside
@@ -104,7 +133,7 @@ const LeaveApplicationHoverCard = ({ children }: LeaveApplicationHoverCardProps)
                   <div><label className="text-sm font-medium text-[#5B34A0] mb-1 block">Final Touch</label><Textarea value={finalTouch || undefined} onChange={(e) => setFinalTouch(e.target.value)} placeholder="Tell about medical note, family reason, urgency, context, etc..." className="w-full min-h-[60px] resize-none" /></div>
                   <div><label className="text-sm font-medium text-[#5B34A0] mb-1 block">Sign Off</label><Textarea value={signOff || undefined} onChange={(e) => setSignOff(e.target.value)} placeholder="Kindly approve, With regards, Thank you, etc..." className="w-full min-h-[60px] resize-none" /></div>
                   <div><label className="text-sm font-medium text-[#5B34A0] mb-1 block">From</label><Input value={from || undefined} onChange={(e) => setFrom(e.target.value)} placeholder="Your Name" className="w-full" /></div>
-                  <button className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors" onClick={() => console.log("Start Leave Application")}>Start Leave Application</button>
+                  <button className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors" onClick={handleGeneratePrompt}>Start Leave Application</button>
                 </div>
               </div>
             </div>
