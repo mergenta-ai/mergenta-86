@@ -3,6 +3,7 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { HandHeart } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useClickOutside } from "@/lib/clickOutside";
 
 interface ThankYouLetterHoverCardProps {
   children: React.ReactNode;
@@ -57,22 +58,12 @@ const ThankYouLetterHoverCard = ({ children, onPromptGenerated }: ThankYouLetter
   };
 
   // Close card when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (showCard) {
-        const target = event.target as HTMLElement;
-        const card = document.querySelector('[data-thank-you-card]');
-        if (card && !card.contains(target) && !target.closest('[data-thank-you-trigger]')) {
-          setShowCard(false);
-        }
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showCard]);
+  useClickOutside(
+    showCard,
+    () => setShowCard(false),
+    '[data-thank-you-card]',
+    '[data-thank-you-trigger]'
+  );
 
   return (
     <>
