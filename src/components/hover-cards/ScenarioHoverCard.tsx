@@ -3,12 +3,14 @@ import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { Label } from '../ui/label';
 import { Button } from '../ui/button';
+import { supabase } from "@/integrations/supabase/client";
 
 interface ScenarioHoverCardProps {
   children: React.ReactNode;
+  onPromptGenerated?: (prompt: string) => void;
 }
 
-const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children }) => {
+const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children, onPromptGenerated }) => {
   const [showCard, setShowCard] = useState(false);
   const [centralChallenge, setCentralChallenge] = useState('');
   const [keyVariables, setKeyVariables] = useState('');
@@ -210,7 +212,30 @@ const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children }) => {
                   style={{ backgroundColor: '#6C3EB6' }}
                   onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#5A2F9A')}
                   onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#6C3EB6')}
-                  onClick={() => console.log('Start Planning clicked')}
+                  onClick={async () => {
+                    try {
+                      const { data, error } = await supabase.functions.invoke('prompt-engine-strategic', {
+                        body: { 
+                          contentType: 'scenario_planning', 
+                          formData: { 
+                            centralChallenge, 
+                            keyVariables, 
+                            possibleOutcomes, 
+                            focus, 
+                            timeHorizon, 
+                            desiredResponse 
+                          } 
+                        }
+                      });
+                      if (error) throw error;
+                      if (data?.success && data?.prompt) {
+                        onPromptGenerated?.(data.prompt);
+                        setShowCard(false);
+                      }
+                    } catch (error) {
+                      console.error('Error generating prompt:', error);
+                    }
+                  }}
                 >
                   Start Planning
                 </Button>

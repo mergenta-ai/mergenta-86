@@ -4,12 +4,14 @@ import { Textarea } from '../ui/textarea';
 import { Label } from '../ui/label';
 import { Button } from '../ui/button';
 import { Sparkles } from 'lucide-react';
+import { supabase } from "@/integrations/supabase/client";
 
 interface AstroLensHoverCardProps {
   children: React.ReactNode;
+  onPromptGenerated?: (prompt: string) => void;
 }
 
-const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children }) => {
+const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children, onPromptGenerated }) => {
   const [showCard, setShowCard] = useState(false);
   const [date, setDate] = useState('');
   const [year, setYear] = useState('');
@@ -177,7 +179,23 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children }) => 
                   style={{ backgroundColor: '#6C3EB6' }}
                   onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#5B34A0')}
                   onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#6C3EB6')}
-                  onClick={() => console.log('Be My Life Coach clicked')}
+                  onClick={async () => {
+                    try {
+                      const { data, error } = await supabase.functions.invoke('prompt-engine-strategic', {
+                        body: { 
+                          contentType: 'astro_lens', 
+                          formData: { date, year, place, specific } 
+                        }
+                      });
+                      if (error) throw error;
+                      if (data?.success && data?.prompt) {
+                        onPromptGenerated?.(data.prompt);
+                        setShowCard(false);
+                      }
+                    } catch (error) {
+                      console.error('Error generating prompt:', error);
+                    }
+                  }}
                 >
                   Give Prediction
                 </Button>

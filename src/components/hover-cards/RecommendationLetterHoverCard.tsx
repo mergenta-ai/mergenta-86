@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Star } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface RecommendationLetterHoverCardProps {
   children: React.ReactNode;
+  onPromptGenerated?: (prompt: string) => void;
 }
 
-const RecommendationLetterHoverCard = ({ children }: RecommendationLetterHoverCardProps) => {
+const RecommendationLetterHoverCard = ({ children, onPromptGenerated }: RecommendationLetterHoverCardProps) => {
   const [showCard, setShowCard] = useState(false);
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
@@ -167,7 +169,23 @@ const RecommendationLetterHoverCard = ({ children }: RecommendationLetterHoverCa
                   
                   <button
                     className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
-                    onClick={() => console.log("Start Recommendation Letter")}
+                    onClick={async () => {
+                      try {
+                        const { data, error } = await supabase.functions.invoke('prompt-engine-communication', {
+                          body: { 
+                            contentType: 'recommendation_letter', 
+                            formData: { to, subject, coreMessage, finalTouch, signOff, from } 
+                          }
+                        });
+                        if (error) throw error;
+                        if (data?.success && data?.prompt) {
+                          onPromptGenerated?.(data.prompt);
+                          setShowCard(false);
+                        }
+                      } catch (error) {
+                        console.error('Error generating prompt:', error);
+                      }
+                    }}
                   >
                     Start Recommendation Letter
                   </button>

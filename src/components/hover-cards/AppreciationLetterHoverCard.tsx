@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { ThumbsUp } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface AppreciationLetterHoverCardProps {
   children: React.ReactNode;
+  onPromptGenerated?: (prompt: string) => void;
 }
 
-const AppreciationLetterHoverCard = ({ children }: AppreciationLetterHoverCardProps) => {
+const AppreciationLetterHoverCard = ({ children, onPromptGenerated }: AppreciationLetterHoverCardProps) => {
   const [showCard, setShowCard] = useState(false);
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
@@ -167,7 +169,23 @@ const AppreciationLetterHoverCard = ({ children }: AppreciationLetterHoverCardPr
                   
                   <button
                     className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
-                    onClick={() => console.log("Start Appreciation Letter")}
+                    onClick={async () => {
+                      try {
+                        const { data, error } = await supabase.functions.invoke('prompt-engine-communication', {
+                          body: { 
+                            contentType: 'appreciation_letter', 
+                            formData: { to, subject, coreMessage, finalTouch, signOff, from } 
+                          }
+                        });
+                        if (error) throw error;
+                        if (data?.success && data?.prompt) {
+                          onPromptGenerated?.(data.prompt);
+                          setShowCard(false);
+                        }
+                      } catch (error) {
+                        console.error('Error generating prompt:', error);
+                      }
+                    }}
                   >
                     Start Appreciation Letter
                   </button>

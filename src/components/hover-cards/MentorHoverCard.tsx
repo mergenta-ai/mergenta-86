@@ -2,12 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Button } from '../ui/button';
+import { supabase } from "@/integrations/supabase/client";
 
 interface MentorHoverCardProps {
   children: React.ReactNode;
+  onPromptGenerated?: (prompt: string) => void;
 }
 
-const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children }) => {
+const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children, onPromptGenerated }) => {
   const [showCard, setShowCard] = useState(false);
   const [mentorshipDomain, setMentorshipDomain] = useState('');
   const [currentStage, setCurrentStage] = useState('');
@@ -192,7 +194,23 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children }) => {
                   style={{ backgroundColor: '#6C3EB6' }}
                   onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#5B34A0')}
                   onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#6C3EB6')}
-                  onClick={() => console.log('Start Mentoring clicked')}
+                  onClick={async () => {
+                    try {
+                      const { data, error } = await supabase.functions.invoke('prompt-engine-strategic', {
+                        body: { 
+                          contentType: 'mentor', 
+                          formData: { mentorshipDomain, currentStage, challenges, desiredOutcome, preferredStyle } 
+                        }
+                      });
+                      if (error) throw error;
+                      if (data?.success && data?.prompt) {
+                        onPromptGenerated?.(data.prompt);
+                        setShowCard(false);
+                      }
+                    } catch (error) {
+                      console.error('Error generating prompt:', error);
+                    }
+                  }}
                 >
                   Start Mentoring
                 </Button>

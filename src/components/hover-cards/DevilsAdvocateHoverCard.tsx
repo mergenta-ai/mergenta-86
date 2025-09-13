@@ -3,12 +3,14 @@ import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { Label } from '../ui/label';
 import { Button } from '../ui/button';
+import { supabase } from "@/integrations/supabase/client";
 
 interface DevilsAdvocateHoverCardProps {
   children: React.ReactNode;
+  onPromptGenerated?: (prompt: string) => void;
 }
 
-const DevilsAdvocateHoverCard: React.FC<DevilsAdvocateHoverCardProps> = ({ children }) => {
+const DevilsAdvocateHoverCard: React.FC<DevilsAdvocateHoverCardProps> = ({ children, onPromptGenerated }) => {
   const [showCard, setShowCard] = useState(false);
   const [idea, setIdea] = useState('');
   const [keyAssumptions, setKeyAssumptions] = useState('');
@@ -176,7 +178,23 @@ const DevilsAdvocateHoverCard: React.FC<DevilsAdvocateHoverCardProps> = ({ child
                   style={{ backgroundColor: '#6C3EB6' }}
                   onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#5B34A0')}
                   onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#6C3EB6')}
-                  onClick={() => console.log('Play Devil\'s Advocate clicked')}
+                  onClick={async () => {
+                    try {
+                      const { data, error } = await supabase.functions.invoke('prompt-engine-strategic', {
+                        body: { 
+                          contentType: 'devils_advocate', 
+                          formData: { idea, keyAssumptions, risksWeaknesses, alternativePerspectives } 
+                        }
+                      });
+                      if (error) throw error;
+                      if (data?.success && data?.prompt) {
+                        onPromptGenerated?.(data.prompt);
+                        setShowCard(false);
+                      }
+                    } catch (error) {
+                      console.error('Error generating prompt:', error);
+                    }
+                  }}
                 >
                   Play Devil's Advocate
                 </Button>

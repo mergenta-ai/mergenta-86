@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Mail } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface GeneralLetterHoverCardProps {
   children: React.ReactNode;
+  onPromptGenerated?: (prompt: string) => void;
 }
 
-const GeneralLetterHoverCard = ({ children }: GeneralLetterHoverCardProps) => {
+const GeneralLetterHoverCard = ({ children, onPromptGenerated }: GeneralLetterHoverCardProps) => {
   const [showCard, setShowCard] = useState(false);
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
@@ -125,7 +127,23 @@ const GeneralLetterHoverCard = ({ children }: GeneralLetterHoverCardProps) => {
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">From</label>
                     <Input value={from || undefined} onChange={(e) => setFrom(e.target.value)} placeholder="Your Name, Your Organisation..." className="w-full" />
                   </div>
-                  <button className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors" onClick={() => console.log("Start General Letter")}>
+                  <button className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors" onClick={async () => {
+                    try {
+                      const { data, error } = await supabase.functions.invoke('prompt-engine-communication', {
+                        body: { 
+                          contentType: 'general_letter', 
+                          formData: { to, subject, coreMessage, finalTouch, signOff, from } 
+                        }
+                      });
+                      if (error) throw error;
+                      if (data?.success && data?.prompt) {
+                        onPromptGenerated?.(data.prompt);
+                        setShowCard(false);
+                      }
+                    } catch (error) {
+                      console.error('Error generating prompt:', error);
+                    }
+                  }}>
                     Start General Letter
                   </button>
                 </div>
