@@ -20,23 +20,7 @@ const ApologyLetterHoverCard = ({ children, onPromptGenerated }: ApologyLetterHo
   const [from, setFrom] = useState("");
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    const saved = localStorage.getItem('apologyLetter-form');
-    if (saved) {
-      const data = JSON.parse(saved);
-      setTo(data.to || "");
-      setSubject(data.subject || "");
-      setCoreMessage(data.coreMessage || "");
-      setFinalTouch(data.finalTouch || "");
-      setSignOff(data.signOff || "");
-      setFrom(data.from || "");
-    }
-  }, []);
-
-  useEffect(() => {
-    const formData = { to, subject, coreMessage, finalTouch, signOff, from };
-    localStorage.setItem('apologyLetter-form', JSON.stringify(formData));
-  }, [to, subject, coreMessage, finalTouch, signOff, from]);
+  // No localStorage - forms always start empty
 
   const handleMouseEnter = () => {
     if (closeTimeout) {
@@ -101,67 +85,73 @@ const ApologyLetterHoverCard = ({ children, onPromptGenerated }: ApologyLetterHo
               <div>
                 <label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label>
                  <Textarea
-                    value={to || undefined}
-                    onChange={(e) => setTo(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Dear [Name], Friend, Colleague, Family, Boss, etc..."
-                    className="w-full min-h-[60px] resize-none"
-                  />
+                     value={to || undefined}
+                     onChange={(e) => setTo(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Dear [Name], Friend, Colleague, Family, Boss, etc..."
+                     className="w-full min-h-[60px] resize-none"
+                     autoComplete="off"
+                   />
               </div>
               
               <div>
                 <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label>
                  <Textarea
-                    value={subject || undefined}
-                    onChange={(e) => setSubject(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Use words like Regret, Forgiveness, Mistake, Misunderstanding, etc..."
-                    className="w-full min-h-[60px] resize-none"
-                  />
+                     value={subject || undefined}
+                     onChange={(e) => setSubject(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Use words like Regret, Forgiveness, Mistake, Misunderstanding, etc..."
+                     className="w-full min-h-[60px] resize-none"
+                     autoComplete="off"
+                   />
               </div>
               
               <div>
                 <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Core Message</label>
                  <Textarea
-                   value={coreMessage || undefined}
-                   onChange={(e) => setCoreMessage(e.target.value)}
-                   onClick={(e) => e.stopPropagation()}
-                   placeholder="Write phrases like I am sorry, please forgive, I regret my words, etc..."
-                   className="w-full min-h-[80px] resize-none"
-                 />
+                    value={coreMessage || undefined}
+                    onChange={(e) => setCoreMessage(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder="Write phrases like I am sorry, please forgive, I regret my words, etc..."
+                    className="w-full min-h-[80px] resize-none"
+                    autoComplete="off"
+                  />
               </div>
               
               <div>
                 <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Final Touch</label>
                  <Textarea
-                   value={finalTouch || undefined}
-                   onChange={(e) => setFinalTouch(e.target.value)}
-                   onClick={(e) => e.stopPropagation()}
-                   placeholder="Commit by saying I will improve, lessons learned, reassurance, etc..."
-                   className="w-full min-h-[60px] resize-none"
-                 />
+                    value={finalTouch || undefined}
+                    onChange={(e) => setFinalTouch(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder="Commit by saying I will improve, lessons learned, reassurance, etc..."
+                    className="w-full min-h-[60px] resize-none"
+                    autoComplete="off"
+                  />
               </div>
               
               <div>
                 <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Sign Off</label>
                  <Textarea
-                   value={signOff || undefined}
-                   onChange={(e) => setSignOff(e.target.value)}
-                   onClick={(e) => e.stopPropagation()}
-                   placeholder="Write Sincerely sorry, Yours truly, Humbly yours, etc..."
-                   className="w-full min-h-[60px] resize-none"
-                 />
+                    value={signOff || undefined}
+                    onChange={(e) => setSignOff(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder="Write Sincerely sorry, Yours truly, Humbly yours, etc..."
+                    className="w-full min-h-[60px] resize-none"
+                    autoComplete="off"
+                  />
               </div>
               
               <div>
                 <label className="text-sm font-medium text-[#5B34A0] mb-1 block">From</label>
                  <Input
-                   value={from || undefined}
-                   onChange={(e) => setFrom(e.target.value)}
-                   onClick={(e) => e.stopPropagation()}
-                   placeholder="Your Name"
-                   className="w-full"
-                 />
+                    value={from || undefined}
+                    onChange={(e) => setFrom(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder="Your Name"
+                    className="w-full"
+                    autoComplete="off"
+                  />
               </div>
               
               <button

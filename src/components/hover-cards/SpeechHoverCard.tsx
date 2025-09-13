@@ -114,14 +114,15 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
                   <Label htmlFor="theme" className="text-sm font-medium text-sidebar-text-dark">
                     Theme
                   </Label>
-                  <Input
-                    id="theme"
-                    value={theme}
-                    onChange={(e) => setTheme(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Write your central idea..."
-                    className="text-sm placeholder:text-gray-500"
-                  />
+                   <Input
+                     id="theme"
+                     value={theme}
+                     onChange={(e) => setTheme(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Write your central idea..."
+                     className="text-sm placeholder:text-gray-500"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Tone Input */}
@@ -129,14 +130,15 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
                   <Label htmlFor="tone" className="text-sm font-medium text-sidebar-text-dark">
                     Tone
                   </Label>
-                  <Input
-                    id="tone"
-                    value={tone}
-                    onChange={(e) => setTone(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Solemn, Motivational, Humorous etc."
-                    className="text-sm placeholder:text-gray-500"
-                  />
+                   <Input
+                     id="tone"
+                     value={tone}
+                     onChange={(e) => setTone(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Solemn, Motivational, Humorous etc."
+                     className="text-sm placeholder:text-gray-500"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Audience Input */}
@@ -144,14 +146,15 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
                   <Label htmlFor="audience" className="text-sm font-medium text-sidebar-text-dark">
                     Audience
                   </Label>
-                  <Input
-                    id="audience"
-                    value={audience}
-                    onChange={(e) => setAudience(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Students, Public, Leaders, Associations"
-                    className="text-sm placeholder:text-gray-500"
-                  />
+                   <Input
+                     id="audience"
+                     value={audience}
+                     onChange={(e) => setAudience(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Students, Public, Leaders, Associations"
+                     className="text-sm placeholder:text-gray-500"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Language Style Input */}

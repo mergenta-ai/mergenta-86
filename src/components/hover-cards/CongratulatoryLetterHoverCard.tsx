@@ -20,23 +20,7 @@ const CongratulatoryLetterHoverCard = ({ children, onPromptGenerated }: Congratu
   const [from, setFrom] = useState("");
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    const saved = localStorage.getItem('congratulatoryLetter-form');
-    if (saved) {
-      const data = JSON.parse(saved);
-      setTo(data.to || "");
-      setSubject(data.subject || "");
-      setCoreMessage(data.coreMessage || "");
-      setFinalTouch(data.finalTouch || "");
-      setSignOff(data.signOff || "");
-      setFrom(data.from || "");
-    }
-  }, []);
-
-  useEffect(() => {
-    const formData = { to, subject, coreMessage, finalTouch, signOff, from };
-    localStorage.setItem('congratulatoryLetter-form', JSON.stringify(formData));
-  }, [to, subject, coreMessage, finalTouch, signOff, from]);
+  // No localStorage - forms always start empty
 
   const handleMouseEnter = () => {
     if (closeTimeout) {

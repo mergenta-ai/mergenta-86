@@ -117,14 +117,15 @@ const BlogHoverCard: React.FC<BlogHoverCardProps> = ({ children, onPromptGenerat
                   <Label htmlFor="blog-title" className="text-sm font-medium text-sidebar-text-dark">
                     Blog Title
                   </Label>
-                  <Input
-                    id="blog-title"
-                    value={blogTitle}
-                    onChange={(e) => setBlogTitle(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Enter your blog title..."
-                    className="text-sm placeholder:text-gray-500"
-                  />
+                   <Input
+                     id="blog-title"
+                     value={blogTitle}
+                     onChange={(e) => setBlogTitle(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Enter your blog title..."
+                     className="text-sm placeholder:text-gray-500"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Keywords Input */}
@@ -132,14 +133,15 @@ const BlogHoverCard: React.FC<BlogHoverCardProps> = ({ children, onPromptGenerat
                   <Label htmlFor="keywords" className="text-sm font-medium text-sidebar-text-dark">
                     Keywords
                   </Label>
-                  <Input
-                    id="keywords"
-                    value={keywords}
-                    onChange={(e) => setKeywords(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Add key phrases or focus keywords..."
-                    className="text-sm placeholder:text-gray-500"
-                  />
+                   <Input
+                     id="keywords"
+                     value={keywords}
+                     onChange={(e) => setKeywords(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Add key phrases or focus keywords..."
+                     className="text-sm placeholder:text-gray-500"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Word Count Input */}
@@ -147,17 +149,18 @@ const BlogHoverCard: React.FC<BlogHoverCardProps> = ({ children, onPromptGenerat
                   <Label htmlFor="word-count" className="text-sm font-medium text-sidebar-text-dark">
                     Word Count
                   </Label>
-                  <Input
-                    id="word-count"
-                    type="number"
-                    value={wordCount}
-                    onChange={(e) => setWordCount(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="600–2000 words"
-                    min="600"
-                    max="2000"
-                    className="text-sm placeholder:text-gray-500"
-                  />
+                   <Input
+                     id="word-count"
+                     type="number"
+                     value={wordCount}
+                     onChange={(e) => setWordCount(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="600–2000 words"
+                     min="600"
+                     max="2000"
+                     className="text-sm placeholder:text-gray-500"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Voice Input */}
@@ -165,14 +168,15 @@ const BlogHoverCard: React.FC<BlogHoverCardProps> = ({ children, onPromptGenerat
                   <Label htmlFor="voice" className="text-sm font-medium text-sidebar-text-dark">
                     Voice
                   </Label>
-                  <Input
-                    id="voice"
-                    value={voice}
-                    onChange={(e) => setVoice(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Informative, Conversational, Persuasive, Storytelling"
-                    className="text-sm placeholder:text-gray-500"
-                  />
+                   <Input
+                     id="voice"
+                     value={voice}
+                     onChange={(e) => setVoice(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Informative, Conversational, Persuasive, Storytelling"
+                     className="text-sm placeholder:text-gray-500"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Tone Input */}
@@ -180,14 +184,15 @@ const BlogHoverCard: React.FC<BlogHoverCardProps> = ({ children, onPromptGenerat
                   <Label htmlFor="tone" className="text-sm font-medium text-sidebar-text-dark">
                     Tone
                   </Label>
-                  <Input
-                    id="tone"
-                    value={tone}
-                    onChange={(e) => setTone(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Friendly, Formal, Expert, Humorous"
-                    className="text-sm placeholder:text-gray-500"
-                  />
+                   <Input
+                     id="tone"
+                     value={tone}
+                     onChange={(e) => setTone(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Friendly, Formal, Expert, Humorous"
+                     className="text-sm placeholder:text-gray-500"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Audience Input */}
@@ -195,14 +200,15 @@ const BlogHoverCard: React.FC<BlogHoverCardProps> = ({ children, onPromptGenerat
                   <Label htmlFor="audience" className="text-sm font-medium text-sidebar-text-dark">
                     Audience
                   </Label>
-                  <Input
-                    id="audience"
-                    value={audience}
-                    onChange={(e) => setAudience(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Professionals, Students, General Readers, Academia"
-                    className="text-sm placeholder:text-gray-500"
-                  />
+                   <Input
+                     id="audience"
+                     value={audience}
+                     onChange={(e) => setAudience(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Professionals, Students, General Readers, Academia"
+                     className="text-sm placeholder:text-gray-500"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Primary Keywords for SEO Input */}
@@ -210,14 +216,15 @@ const BlogHoverCard: React.FC<BlogHoverCardProps> = ({ children, onPromptGenerat
                   <Label htmlFor="seo-keywords" className="text-sm font-medium text-sidebar-text-dark">
                     Primary Keywords for SEO
                   </Label>
-                  <Input
-                    id="seo-keywords"
-                    value={seoKeywords}
-                    onChange={(e) => setSeoKeywords(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Add your SEO keywords..."
-                    className="text-sm placeholder:text-gray-500"
-                  />
+                   <Input
+                     id="seo-keywords"
+                     value={seoKeywords}
+                     onChange={(e) => setSeoKeywords(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Add your SEO keywords..."
+                     className="text-sm placeholder:text-gray-500"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Start Blog Button */}

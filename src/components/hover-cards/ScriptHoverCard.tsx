@@ -117,14 +117,15 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
                   <Label htmlFor="script-title" className="text-sm font-medium text-sidebar-text-dark">
                     Script Title
                   </Label>
-                  <Input
-                    id="script-title"
-                    value={scriptTitle}
-                    onChange={(e) => setScriptTitle(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Enter your script title..."
-                    className="text-sm placeholder-gray-400"
-                  />
+                   <Input
+                     id="script-title"
+                     value={scriptTitle}
+                     onChange={(e) => setScriptTitle(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Enter your script title..."
+                     className="text-sm placeholder-gray-400"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Key Details Input */}
@@ -132,14 +133,15 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
                   <Label htmlFor="key-details" className="text-sm font-medium text-sidebar-text-dark">
                     Key Details / Plot Points
                   </Label>
-                  <Textarea
-                    id="key-details"
-                    value={keyDetails}
-                    onChange={(e) => setKeyDetails(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Main characters, scenes, key movements..."
-                    className="text-sm min-h-[70px] resize-none placeholder-gray-400"
-                  />
+                   <Textarea
+                     id="key-details"
+                     value={keyDetails}
+                     onChange={(e) => setKeyDetails(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Main characters, scenes, key movements..."
+                     className="text-sm min-h-[70px] resize-none placeholder-gray-400"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Structure Input */}
@@ -147,14 +149,15 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
                   <Label htmlFor="structure" className="text-sm font-medium text-sidebar-text-dark">
                     Structure
                   </Label>
-                  <Input
-                    id="structure"
-                    value={structure}
-                    onChange={(e) => setStructure(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder="Long, Medium, Short, Micro"
-                    className="text-sm placeholder-gray-400"
-                  />
+                   <Input
+                     id="structure"
+                     value={structure}
+                     onChange={(e) => setStructure(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Long, Medium, Short, Micro"
+                     className="text-sm placeholder-gray-400"
+                     autoComplete="off"
+                   />
                 </div>
 
                 {/* Theme Input */}
