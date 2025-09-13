@@ -121,6 +121,7 @@ const BlogHoverCard: React.FC<BlogHoverCardProps> = ({ children, onPromptGenerat
                     id="blog-title"
                     value={blogTitle}
                     onChange={(e) => setBlogTitle(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Enter your blog title..."
                     className="text-sm placeholder:text-gray-500"
                   />
@@ -135,6 +136,7 @@ const BlogHoverCard: React.FC<BlogHoverCardProps> = ({ children, onPromptGenerat
                     id="keywords"
                     value={keywords}
                     onChange={(e) => setKeywords(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Add key phrases or focus keywords..."
                     className="text-sm placeholder:text-gray-500"
                   />
@@ -150,6 +152,7 @@ const BlogHoverCard: React.FC<BlogHoverCardProps> = ({ children, onPromptGenerat
                     type="number"
                     value={wordCount}
                     onChange={(e) => setWordCount(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="600–2000 words"
                     min="600"
                     max="2000"
@@ -166,6 +169,7 @@ const BlogHoverCard: React.FC<BlogHoverCardProps> = ({ children, onPromptGenerat
                     id="voice"
                     value={voice}
                     onChange={(e) => setVoice(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Informative, Conversational, Persuasive, Storytelling"
                     className="text-sm placeholder:text-gray-500"
                   />
@@ -180,6 +184,7 @@ const BlogHoverCard: React.FC<BlogHoverCardProps> = ({ children, onPromptGenerat
                     id="tone"
                     value={tone}
                     onChange={(e) => setTone(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Friendly, Formal, Expert, Humorous"
                     className="text-sm placeholder:text-gray-500"
                   />
@@ -194,6 +199,7 @@ const BlogHoverCard: React.FC<BlogHoverCardProps> = ({ children, onPromptGenerat
                     id="audience"
                     value={audience}
                     onChange={(e) => setAudience(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Professionals, Students, General Readers, Academia"
                     className="text-sm placeholder:text-gray-500"
                   />
@@ -208,6 +214,7 @@ const BlogHoverCard: React.FC<BlogHoverCardProps> = ({ children, onPromptGenerat
                     id="seo-keywords"
                     value={seoKeywords}
                     onChange={(e) => setSeoKeywords(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Add your SEO keywords..."
                     className="text-sm placeholder:text-gray-500"
                   />

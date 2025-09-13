@@ -113,13 +113,14 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children, onPro
                   <Label htmlFor="date" className="text-sm font-medium text-sidebar-text-dark">
                     Date of birth
                   </Label>
-                  <Input
-                    id="date"
-                    value={date || undefined}
-                    onChange={(e) => setDate(e.target.value)}
-                    placeholder="Enter your date of birth (DD/MM)"
-                    className="text-sm bg-white"
-                  />
+                   <Input
+                     id="date"
+                     value={date || undefined}
+                     onChange={(e) => setDate(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Enter your date of birth (DD/MM)"
+                     className="text-sm bg-white"
+                   />
                 </div>
 
                 {/* Year of Birth Input */}
@@ -127,13 +128,14 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children, onPro
                   <Label htmlFor="year" className="text-sm font-medium text-sidebar-text-dark">
                     Year of birth
                   </Label>
-                  <Input
-                    id="year"
-                    value={year || undefined}
-                    onChange={(e) => setYear(e.target.value)}
-                    placeholder="Enter your year of birth (YYYY)"
-                    className="text-sm bg-white"
-                  />
+                   <Input
+                     id="year"
+                     value={year || undefined}
+                     onChange={(e) => setYear(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Enter your year of birth (YYYY)"
+                     className="text-sm bg-white"
+                   />
                 </div>
 
                 {/* Place of birth Input */}
@@ -141,13 +143,14 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children, onPro
                   <Label htmlFor="place" className="text-sm font-medium text-sidebar-text-dark">
                     Place of Birth
                   </Label>
-                  <Textarea
-                    id="place"
-                    value={place || undefined}
-                    onChange={(e) => setPlace(e.target.value)}
-                    placeholder="Write city, state and country"
-                    className="text-sm bg-white"
-                  />
+                   <Textarea
+                     id="place"
+                     value={place || undefined}
+                     onChange={(e) => setPlace(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Write city, state and country"
+                     className="text-sm bg-white"
+                   />
                 </div>
 
                 {/* Specific information you seek Input */}
@@ -155,13 +158,14 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children, onPro
                   <Label htmlFor="specific" className="text-sm font-medium text-sidebar-text-dark">
                     Specific information you seek
                   </Label>
-                  <Textarea
-                    id="specific"
-                    value={specific || undefined}
-                    onChange={(e) => setSpecific(e.target.value)}
-                    placeholder="Describe what you want to know in particular"
-                    className="text-sm bg-white"
-                  />
+                   <Textarea
+                     id="specific"
+                     value={specific || undefined}
+                     onChange={(e) => setSpecific(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Describe what you want to know in particular"
+                     className="text-sm bg-white"
+                   />
                 </div>
 
                 {/* Give Prediction */}

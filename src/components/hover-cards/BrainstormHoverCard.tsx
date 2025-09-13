@@ -134,13 +134,14 @@ const BrainstormHoverCard: React.FC<BrainstormHoverCardProps> = ({ children, onP
                   <Label htmlFor="problem-statement" className="text-sm font-medium text-sidebar-text-dark">
                     Problem Statement
                   </Label>
-                  <Textarea
-                    id="problem-statement"
-                    value={problemStatement || undefined}
-                    onChange={(e) => setProblemStatement(e.target.value)}
-                    placeholder="Enter topic, challenge or idea…"
-                    className="text-sm min-h-[70px] resize-none bg-white"
-                  />
+                   <Textarea
+                     id="problem-statement"
+                     value={problemStatement || undefined}
+                     onChange={(e) => setProblemStatement(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Enter topic, challenge or idea…"
+                     className="text-sm min-h-[70px] resize-none bg-white"
+                   />
                 </div>
 
                 {/* Constraints Input */}
@@ -148,13 +149,14 @@ const BrainstormHoverCard: React.FC<BrainstormHoverCardProps> = ({ children, onP
                   <Label htmlFor="constraints" className="text-sm font-medium text-sidebar-text-dark">
                     Constraints
                   </Label>
-                  <Input
-                    id="constraints"
-                    value={constraints || undefined}
-                    onChange={(e) => setConstraints(e.target.value)}
-                    placeholder="Budget, time limit, resources etc."
-                    className="text-sm bg-white"
-                  />
+                   <Input
+                     id="constraints"
+                     value={constraints || undefined}
+                     onChange={(e) => setConstraints(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Budget, time limit, resources etc."
+                     className="text-sm bg-white"
+                   />
                 </div>
 
                 {/* Desired Outcome Input */}
@@ -162,13 +164,14 @@ const BrainstormHoverCard: React.FC<BrainstormHoverCardProps> = ({ children, onP
                   <Label htmlFor="desired-outcome" className="text-sm font-medium text-sidebar-text-dark">
                     Desired Outcome
                   </Label>
-                  <Input
-                    id="desired-outcome"
-                    value={desiredOutcome || undefined}
-                    onChange={(e) => setDesiredOutcome(e.target.value)}
-                    placeholder="Innovation, efficiency, alternatives etc."
-                    className="text-sm bg-white"
-                  />
+                   <Input
+                     id="desired-outcome"
+                     value={desiredOutcome || undefined}
+                     onChange={(e) => setDesiredOutcome(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Innovation, efficiency, alternatives etc."
+                     className="text-sm bg-white"
+                   />
                 </div>
 
                 {/* Start Brainstorming Button */}

@@ -100,62 +100,68 @@ const AppreciationLetterHoverCard = ({ children, onPromptGenerated }: Appreciati
                 <div className="space-y-3">
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label>
-                    <Textarea
-                      value={to || undefined}
-                      onChange={(e) => setTo(e.target.value)}
-                      placeholder="Dear [Name], Employee, Colleague, Student, Team, Relative, Teacher, etc..."
-                      className="w-full min-h-[60px] resize-none"
-                    />
+                     <Textarea
+                       value={to || undefined}
+                       onChange={(e) => setTo(e.target.value)}
+                       onClick={(e) => e.stopPropagation()}
+                       placeholder="Dear [Name], Employee, Colleague, Student, Team, Relative, Teacher, etc..."
+                       className="w-full min-h-[60px] resize-none"
+                     />
                   </div>
                   
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label>
-                    <Textarea
-                      value={subject || undefined}
-                      onChange={(e) => setSubject(e.target.value)}
-                      placeholder="Recognition, Gratitude, Thanks, Appreciation, etc..."
-                      className="w-full min-h-[60px] resize-none"
-                    />
+                     <Textarea
+                       value={subject || undefined}
+                       onChange={(e) => setSubject(e.target.value)}
+                       onClick={(e) => e.stopPropagation()}
+                       placeholder="Recognition, Gratitude, Thanks, Appreciation, etc..."
+                       className="w-full min-h-[60px] resize-none"
+                     />
                   </div>
                   
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Core Message</label>
-                    <Textarea
-                      value={coreMessage || undefined}
-                      onChange={(e) => setCoreMessage(e.target.value)}
-                      placeholder="Efforts, Contributions, Achievements, Great work, Gratitude..."
-                      className="w-full min-h-[80px] resize-none"
-                    />
+                     <Textarea
+                       value={coreMessage || undefined}
+                       onChange={(e) => setCoreMessage(e.target.value)}
+                       onClick={(e) => e.stopPropagation()}
+                       placeholder="Efforts, Contributions, Achievements, Great work, Gratitude..."
+                       className="w-full min-h-[80px] resize-none"
+                     />
                   </div>
                   
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Final Touch</label>
-                    <Textarea
-                      value={finalTouch || undefined}
-                      onChange={(e) => setFinalTouch(e.target.value)}
-                      placeholder="Sincerity, Specific examples, Inspiration, Positive traits, etc..."
-                      className="w-full min-h-[60px] resize-none"
-                    />
+                     <Textarea
+                       value={finalTouch || undefined}
+                       onChange={(e) => setFinalTouch(e.target.value)}
+                       onClick={(e) => e.stopPropagation()}
+                       placeholder="Sincerity, Specific examples, Inspiration, Positive traits, etc..."
+                       className="w-full min-h-[60px] resize-none"
+                     />
                   </div>
                   
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Sign Off</label>
-                    <Textarea
-                      value={signOff || undefined}
-                      onChange={(e) => setSignOff(e.target.value)}
-                      placeholder="Keep inspiring, Best wishes, Energy to you, With regards, With thanks, etc..."
-                      className="w-full min-h-[60px] resize-none"
-                    />
+                     <Textarea
+                       value={signOff || undefined}
+                       onChange={(e) => setSignOff(e.target.value)}
+                       onClick={(e) => e.stopPropagation()}
+                       placeholder="Keep inspiring, Best wishes, Energy to you, With regards, With thanks, etc..."
+                       className="w-full min-h-[60px] resize-none"
+                     />
                   </div>
                   
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">From</label>
-                    <Input
-                      value={from || undefined}
-                      onChange={(e) => setFrom(e.target.value)}
-                      placeholder="Your Name"
-                      className="w-full"
-                    />
+                     <Input
+                       value={from || undefined}
+                       onChange={(e) => setFrom(e.target.value)}
+                       onClick={(e) => e.stopPropagation()}
+                       placeholder="Your Name"
+                       className="w-full"
+                     />
                   </div>
                   
                   <button

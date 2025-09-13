@@ -122,6 +122,7 @@ const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children, onPromptGener
                     id="story-title"
                     value={storyTitle}
                     onChange={(e) => setStoryTitle(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Enter your story title..."
                     className="text-sm placeholder:text-gray-500"
                   />
@@ -136,6 +137,7 @@ const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children, onPromptGener
                     id="genre"
                     value={genre}
                     onChange={(e) => setGenre(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Fantasy, Mystery, Romance, Sci-Fi etc."
                     className="text-sm placeholder:text-gray-500"
                   />
@@ -150,6 +152,7 @@ const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children, onPromptGener
                     id="key-details"
                     value={keyDetails}
                     onChange={(e) => setKeyDetails(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Main characters, plot points, key events..."
                     className="text-sm min-h-[70px] resize-none placeholder:text-gray-500"
                   />
@@ -165,6 +168,7 @@ const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children, onPromptGener
                     type="number"
                     value={wordCount}
                     onChange={(e) => setWordCount(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="500–2000"
                     min="500"
                     max="5000"
@@ -181,6 +185,7 @@ const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children, onPromptGener
                     id="tone"
                     value={tone}
                     onChange={(e) => setTone(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Descriptive, Humorous, Passionate etc."
                     className="text-sm placeholder:text-gray-500"
                   />
@@ -195,6 +200,7 @@ const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children, onPromptGener
                     id="audience"
                     value={audience}
                     onChange={(e) => setAudience(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     placeholder="Children, Young Adults, Mature etc."
                     className="text-sm placeholder:text-gray-500"
                   />
