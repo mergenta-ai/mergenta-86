@@ -3,6 +3,7 @@ import { Textarea } from "../ui/textarea";
 import { Input } from "../ui/input";
 import { Heart } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useClickOutside } from "@/lib/clickOutside";
 
 interface LoveLetterHoverCardProps {
   children: React.ReactNode;
@@ -83,22 +84,12 @@ const LoveLetterHoverCard = ({ children, onPromptGenerated }: LoveLetterHoverCar
   };
 
   // Close card when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (showCard) {
-        const target = event.target as HTMLElement;
-        const card = document.querySelector('[data-love-letter-card]');
-        if (card && !card.contains(target) && !target.closest('[data-love-letter-trigger]')) {
-          setShowCard(false);
-        }
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showCard]);
+  useClickOutside(
+    showCard,
+    () => setShowCard(false),
+    '[data-love-letter-card]',
+    '[data-love-letter-trigger]'
+  );
 
   return (
     <>

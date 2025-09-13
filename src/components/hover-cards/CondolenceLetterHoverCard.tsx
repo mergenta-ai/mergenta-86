@@ -3,6 +3,7 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Flower } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useClickOutside } from "@/lib/clickOutside";
 
 interface CondolenceLetterHoverCardProps {
   children: React.ReactNode;
@@ -57,22 +58,12 @@ const CondolenceLetterHoverCard = ({ children, onPromptGenerated }: CondolenceLe
   };
 
   // Close card when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (showCard) {
-        const target = event.target as HTMLElement;
-        const card = document.querySelector('[data-condolence-letter-card]');
-        if (card && !card.contains(target) && !target.closest('[data-condolence-letter-trigger]')) {
-          setShowCard(false);
-        }
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showCard]);
+  useClickOutside(
+    showCard,
+    () => setShowCard(false),
+    '[data-condolence-letter-card]',
+    '[data-condolence-letter-trigger]'
+  );
 
   return (
     <>

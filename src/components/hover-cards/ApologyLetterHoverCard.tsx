@@ -3,6 +3,7 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Heart } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useClickOutside } from "@/lib/clickOutside";
 
 interface ApologyLetterHoverCardProps {
   children: React.ReactNode;
@@ -57,22 +58,12 @@ const ApologyLetterHoverCard = ({ children, onPromptGenerated }: ApologyLetterHo
   };
 
   // Close card when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (showCard) {
-        const target = event.target as HTMLElement;
-        const card = document.querySelector('[data-apology-letter-card]');
-        if (card && !card.contains(target) && !target.closest('[data-apology-letter-trigger]')) {
-          setShowCard(false);
-        }
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showCard]);
+  useClickOutside(
+    showCard,
+    () => setShowCard(false),
+    '[data-apology-letter-card]',
+    '[data-apology-letter-trigger]'
+  );
 
   return (
     <>

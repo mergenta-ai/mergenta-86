@@ -3,6 +3,7 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Send } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useClickOutside } from "@/lib/clickOutside";
 
 interface InvitationLetterHoverCardProps {
   children: React.ReactNode;
@@ -84,22 +85,12 @@ const InvitationLetterHoverCard = ({ children, onPromptGenerated }: InvitationLe
   };
 
   // Close card when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (showCard) {
-        const target = event.target as HTMLElement;
-        const card = document.querySelector('[data-invitation-letter-card]');
-        if (card && !card.contains(target) && !target.closest('[data-invitation-letter-trigger]')) {
-          setShowCard(false);
-        }
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showCard]);
+  useClickOutside(
+    showCard,
+    () => setShowCard(false),
+    '[data-invitation-letter-card]',
+    '[data-invitation-letter-trigger]'
+  );
 
   return (
     <>

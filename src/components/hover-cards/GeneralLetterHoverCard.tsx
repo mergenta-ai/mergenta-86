@@ -3,6 +3,7 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Mail } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useClickOutside } from "@/lib/clickOutside";
 
 interface GeneralLetterHoverCardProps {
   children: React.ReactNode;
@@ -57,22 +58,12 @@ const GeneralLetterHoverCard = ({ children, onPromptGenerated }: GeneralLetterHo
   };
 
   // Close card when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (showCard) {
-        const target = event.target as HTMLElement;
-        const card = document.querySelector('[data-general-letter-card]');
-        if (card && !card.contains(target) && !target.closest('[data-general-letter-trigger]')) {
-          setShowCard(false);
-        }
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showCard]);
+  useClickOutside(
+    showCard,
+    () => setShowCard(false),
+    '[data-general-letter-card]',
+    '[data-general-letter-trigger]'
+  );
 
   return (
     <>

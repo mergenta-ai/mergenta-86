@@ -3,6 +3,7 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Calendar } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useClickOutside } from "@/lib/clickOutside";
 
 interface AppointmentRequestHoverCardProps {
   children: React.ReactNode;
@@ -57,22 +58,12 @@ const AppointmentRequestHoverCard = ({ children, onPromptGenerated }: Appointmen
   };
 
   // Close card when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (showCard) {
-        const target = event.target as HTMLElement;
-        const card = document.querySelector('[data-appointment-request-card]');
-        if (card && !card.contains(target) && !target.closest('[data-appointment-request-trigger]')) {
-          setShowCard(false);
-        }
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showCard]);
+  useClickOutside(
+    showCard,
+    () => setShowCard(false),
+    '[data-appointment-request-card]',
+    '[data-appointment-request-trigger]'
+  );
 
   return (
     <>

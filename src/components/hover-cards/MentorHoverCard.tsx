@@ -3,6 +3,7 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Button } from '../ui/button';
 import { supabase } from "@/integrations/supabase/client";
+import { useClickOutside } from "@/lib/clickOutside";
 
 interface MentorHoverCardProps {
   children: React.ReactNode;
@@ -66,22 +67,12 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children, onPromptGen
   };
 
   // Close card when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (showCard) {
-        const target = event.target as HTMLElement;
-        const card = document.querySelector('[data-mentor-card]');
-        if (card && !card.contains(target) && !target.closest('[data-mentor-trigger]')) {
-          setShowCard(false);
-        }
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showCard]);
+  useClickOutside(
+    showCard,
+    () => setShowCard(false),
+    '[data-mentor-card]',
+    '[data-mentor-trigger]'
+  );
 
   return (
     <div className="relative">

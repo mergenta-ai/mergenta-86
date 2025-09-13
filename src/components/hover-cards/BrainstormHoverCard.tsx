@@ -4,6 +4,7 @@ import { Textarea } from '../ui/textarea';
 import { Label } from '../ui/label';
 import { Button } from '../ui/button';
 import { supabase } from "@/integrations/supabase/client";
+import { useClickOutside } from "@/lib/clickOutside";
 
 interface BrainstormHoverCardProps {
   children: React.ReactNode;
@@ -86,22 +87,12 @@ const BrainstormHoverCard: React.FC<BrainstormHoverCardProps> = ({ children, onP
   };
 
   // Close card when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (showCard) {
-        const target = event.target as HTMLElement;
-        const card = document.querySelector('[data-brainstorm-card]');
-        if (card && !card.contains(target) && !target.closest('[data-brainstorm-trigger]')) {
-          setShowCard(false);
-        }
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showCard]);
+  useClickOutside(
+    showCard,
+    () => setShowCard(false),
+    '[data-brainstorm-card]',
+    '[data-brainstorm-trigger]'
+  );
 
   return (
     <div className="relative">
