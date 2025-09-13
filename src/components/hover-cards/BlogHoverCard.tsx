@@ -49,7 +49,7 @@ const BlogHoverCard: React.FC<BlogHoverCardProps> = ({ children, onPromptGenerat
           contentType: 'blog', 
           formData: { 
             blogTitle, 
-            keyPoints, 
+            keywords, 
             wordCount, 
             tone, 
             audience 
@@ -225,7 +225,7 @@ const BlogHoverCard: React.FC<BlogHoverCardProps> = ({ children, onPromptGenerat
                 {/* Start Blog Button */}
                 <Button
                   className="w-full bg-sidebar-text-violet hover:bg-sidebar-text-violet/90 text-white transition-colors duration-200"
-                  onClick={handleStartBlog}
+                  onClick={handleGeneratePrompt}
                 >
                   Start Blog
                 </Button>
