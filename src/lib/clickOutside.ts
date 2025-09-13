@@ -26,8 +26,7 @@ export const createClickOutsideHandler = (
   triggerSelector: string,
   options: ClickOutsideOptions = {}
 ) => {
-  const { delay = 50, excludeSelectors = [] } = options;
-  let timeoutId: NodeJS.Timeout;
+  const { excludeSelectors = [] } = options;
 
   const handleClickOutside = (event: MouseEvent) => {
     if (!isOpen) return;
@@ -52,40 +51,16 @@ export const createClickOutsideHandler = (
       return;
     }
 
-    // Check if the target is part of browser autocomplete dropdown
-    // Browser autocomplete dropdowns are typically outside our DOM tree
-    // and may have specific characteristics we can detect
-    const isAutocompleteRelated = 
-      target.closest('[role="listbox"]') ||
-      target.closest('[role="option"]') ||
-      target.closest('datalist') ||
-      target.tagName === 'OPTION' ||
-      // Chrome autocomplete dropdowns
-      target.closest('div[data-is-autofill-preview]') ||
-      // Firefox autocomplete
-      target.closest('.autocomplete-richlistbox') ||
-      // Generic autocomplete indicators
-      target.className.includes('autocomplete') ||
-      target.className.includes('suggestion');
-
-    if (isAutocompleteRelated) {
-      return;
-    }
-
-    // Add a small delay to allow browser autocomplete to process
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
-      onOutsideClick();
-    }, delay);
+    // Call the callback directly
+    onOutsideClick();
   };
 
   // Add event listener
-  document.addEventListener('mousedown', handleClickOutside);
+  document.addEventListener('click', handleClickOutside);
 
   // Return cleanup function
   return () => {
-    clearTimeout(timeoutId);
-    document.removeEventListener('mousedown', handleClickOutside);
+    document.removeEventListener('click', handleClickOutside);
   };
 };
 
