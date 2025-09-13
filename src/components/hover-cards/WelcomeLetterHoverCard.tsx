@@ -125,24 +125,26 @@ const WelcomeLetterHoverCard = ({ children, onPromptGenerated }: WelcomeLetterHo
                  </div>
                 
                 <div className="space-y-3">
-                  <div>
-                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label>
-                    <Textarea
-                      value={to || undefined}
-                      onChange={(e) => setTo(e.target.value)}
-                      placeholder="Dear [Name], New Member, Employee, Guest, Friend, etc..."
-                      className="w-full min-h-[60px] resize-none"
-                    />
+                   <div>
+                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label>
+                     <Textarea
+                       value={to || undefined}
+                       onChange={(e) => setTo(e.target.value)}
+                       onClick={(e) => e.stopPropagation()}
+                       placeholder="Dear [Name], New Member, Employee, Guest, Friend, etc..."
+                       className="w-full min-h-[60px] resize-none"
+                     />
                   </div>
                   
-                  <div>
-                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label>
-                    <Textarea
-                      value={subject || undefined}
-                      onChange={(e) => setSubject(e.target.value)}
-                      placeholder="Use expressions like Greetings, onboarding, new start, arrival, etc...."
-                      className="w-full min-h-[60px] resize-none"
-                    />
+                   <div>
+                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label>
+                     <Textarea
+                       value={subject || undefined}
+                       onChange={(e) => setSubject(e.target.value)}
+                       onClick={(e) => e.stopPropagation()}
+                       placeholder="Use expressions like Greetings, onboarding, new start, arrival, etc...."
+                       className="w-full min-h-[60px] resize-none"
+                     />
                   </div>
                   
                   <div>
@@ -155,14 +157,15 @@ const WelcomeLetterHoverCard = ({ children, onPromptGenerated }: WelcomeLetterHo
                     />
                   </div>
                   
-                  <div>
-                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Final Touch</label>
-                    <Textarea
-                      value={finalTouch || undefined}
-                      onChange={(e) => setFinalTouch(e.target.value)}
-                      placeholder="Use words like Support, Opportunities, Encouragement, etc..."
-                      className="w-full min-h-[60px] resize-none"
-                    />
+                   <div>
+                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Final Touch</label>
+                     <Textarea
+                       value={finalTouch || undefined}
+                       onChange={(e) => setFinalTouch(e.target.value)}
+                       onClick={(e) => e.stopPropagation()}
+                       placeholder="Use words like Support, Opportunities, Encouragement, etc..."
+                       className="w-full min-h-[60px] resize-none"
+                     />
                   </div>
                   
                   <div>
@@ -175,14 +178,15 @@ const WelcomeLetterHoverCard = ({ children, onPromptGenerated }: WelcomeLetterHo
                     />
                   </div>
                   
-                  <div>
-                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">From</label>
-                    <Input
-                      value={from || undefined}
-                      onChange={(e) => setFrom(e.target.value)}
-                      placeholder="Your Name, On behalf of team, Sincerely, etc..."
-                      className="w-full"
-                    />
+                   <div>
+                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">From</label>
+                     <Input
+                       value={from || undefined}
+                       onChange={(e) => setFrom(e.target.value)}
+                       onClick={(e) => e.stopPropagation()}
+                       placeholder="Your Name, On behalf of team, Sincerely, etc..."
+                       className="w-full"
+                     />
                   </div>
                   
                   <button

@@ -3,6 +3,7 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useClickOutside } from "@/lib/clickOutside";
 
 interface LeaveApplicationHoverCardProps {
   children: React.ReactNode;
@@ -79,22 +80,12 @@ const LeaveApplicationHoverCard = ({ children, onPromptGenerated }: LeaveApplica
   };
 
   // Close card when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (showCard) {
-        const target = event.target as HTMLElement;
-        const card = document.querySelector('[data-leave-card]');
-        if (card && !card.contains(target) && !target.closest('[data-leave-trigger]')) {
-          setShowCard(false);
-        }
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showCard]);
+  useClickOutside(
+    showCard,
+    () => setShowCard(false),
+    '[data-leave-card]',
+    '[data-leave-trigger]'
+  );
 
   return (
     <div className="relative">
@@ -126,15 +117,15 @@ const LeaveApplicationHoverCard = ({ children, onPromptGenerated }: LeaveApplica
                    </div>
                    <p className="text-sm text-[#6E6E6E] mb-4">Request time off professionally</p>
                  </div>
-                <div className="space-y-3">
-                  <div><label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label><Textarea value={to || undefined} onChange={(e) => setTo(e.target.value)} placeholder="Dear Sir/Madam, Manager, Principal, HR, Supervisor, etc..." className="w-full min-h-[60px] resize-none" /></div>
-                  <div><label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label><Textarea value={subject || undefined} onChange={(e) => setSubject(e.target.value)} placeholder="Leave, Absence, Sick, Vacation, Emergency, etc..." className="w-full min-h-[60px] resize-none" /></div>
-                  <div><label className="text-sm font-medium text-[#5B34A0] mb-1 block">Core Message</label><Textarea value={coreMessage || undefined} onChange={(e) => setCoreMessage(e.target.value)} placeholder="Enter dates, reason, duration, explanation, absence, etc..." className="w-full min-h-[80px] resize-none" /></div>
-                  <div><label className="text-sm font-medium text-[#5B34A0] mb-1 block">Final Touch</label><Textarea value={finalTouch || undefined} onChange={(e) => setFinalTouch(e.target.value)} placeholder="Tell about medical note, family reason, urgency, context, etc..." className="w-full min-h-[60px] resize-none" /></div>
-                  <div><label className="text-sm font-medium text-[#5B34A0] mb-1 block">Sign Off</label><Textarea value={signOff || undefined} onChange={(e) => setSignOff(e.target.value)} placeholder="Kindly approve, With regards, Thank you, etc..." className="w-full min-h-[60px] resize-none" /></div>
-                  <div><label className="text-sm font-medium text-[#5B34A0] mb-1 block">From</label><Input value={from || undefined} onChange={(e) => setFrom(e.target.value)} placeholder="Your Name" className="w-full" /></div>
-                  <button className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors" onClick={handleGeneratePrompt}>Start Leave Application</button>
-                </div>
+                 <div className="space-y-3">
+                   <div><label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label><Textarea value={to || undefined} onChange={(e) => setTo(e.target.value)} onClick={(e) => e.stopPropagation()} placeholder="Dear Sir/Madam, Manager, Principal, HR, Supervisor, etc..." className="w-full min-h-[60px] resize-none" /></div>
+                   <div><label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label><Textarea value={subject || undefined} onChange={(e) => setSubject(e.target.value)} onClick={(e) => e.stopPropagation()} placeholder="Leave, Absence, Sick, Vacation, Emergency, etc..." className="w-full min-h-[60px] resize-none" /></div>
+                   <div><label className="text-sm font-medium text-[#5B34A0] mb-1 block">Core Message</label><Textarea value={coreMessage || undefined} onChange={(e) => setCoreMessage(e.target.value)} onClick={(e) => e.stopPropagation()} placeholder="Enter dates, reason, duration, explanation, absence, etc..." className="w-full min-h-[80px] resize-none" /></div>
+                   <div><label className="text-sm font-medium text-[#5B34A0] mb-1 block">Final Touch</label><Textarea value={finalTouch || undefined} onChange={(e) => setFinalTouch(e.target.value)} onClick={(e) => e.stopPropagation()} placeholder="Tell about medical note, family reason, urgency, context, etc..." className="w-full min-h-[60px] resize-none" /></div>
+                   <div><label className="text-sm font-medium text-[#5B34A0] mb-1 block">Sign Off</label><Textarea value={signOff || undefined} onChange={(e) => setSignOff(e.target.value)} onClick={(e) => e.stopPropagation()} placeholder="Kindly approve, With regards, Thank you, etc..." className="w-full min-h-[60px] resize-none" /></div>
+                   <div><label className="text-sm font-medium text-[#5B34A0] mb-1 block">From</label><Input value={from || undefined} onChange={(e) => setFrom(e.target.value)} onClick={(e) => e.stopPropagation()} placeholder="Your Name" className="w-full" /></div>
+                   <button className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors" onClick={handleGeneratePrompt}>Start Leave Application</button>
+                 </div>
               </div>
             </div>
           </div>

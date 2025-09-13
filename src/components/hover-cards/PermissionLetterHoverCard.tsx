@@ -3,6 +3,7 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { FileText } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useClickOutside } from "@/lib/clickOutside";
 
 interface PermissionLetterHoverCardProps {
   children: React.ReactNode;
@@ -79,22 +80,12 @@ const PermissionLetterHoverCard = ({ children, onPromptGenerated }: PermissionLe
   };
 
   // Close card when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (showCard) {
-        const target = event.target as HTMLElement;
-        const card = document.querySelector('[data-permission-card]');
-        if (card && !card.contains(target) && !target.closest('[data-permission-trigger]')) {
-          setShowCard(false);
-        }
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showCard]);
+  useClickOutside(
+    showCard,
+    () => setShowCard(false),
+    '[data-permission-card]',
+    '[data-permission-trigger]'
+  );
 
   return (
     <div className="relative">
@@ -131,62 +122,68 @@ const PermissionLetterHoverCard = ({ children, onPromptGenerated }: PermissionLe
                 <div className="space-y-3">
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label>
-                    <Textarea
-                      value={to || undefined}
-                      onChange={(e) => setTo(e.target.value)}
-                      placeholder="Dear Sir/Madam, Manager, Principal, Authority, Supervisor, etc..."
-                      className="w-full min-h-[60px] resize-none"
-                    />
+                     <Textarea
+                       value={to || undefined}
+                       onChange={(e) => setTo(e.target.value)}
+                       onClick={(e) => e.stopPropagation()}
+                       placeholder="Dear Sir/Madam, Manager, Principal, Authority, Supervisor, etc..."
+                       className="w-full min-h-[60px] resize-none"
+                     />
                   </div>
                   
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label>
-                    <Textarea
-                      value={subject || undefined}
-                      onChange={(e) => setSubject(e.target.value)}
-                      placeholder="Approval, Access, Entry, Activity, Event, Sports, Special case, etc..."
-                      className="w-full min-h-[60px] resize-none"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Core Message</label>
-                    <Textarea
-                      value={coreMessage || undefined}
-                      onChange={(e) => setCoreMessage(e.target.value)}
-                      placeholder="Reason, Duration, Purpose, Justification, etc..."
-                      className="w-full min-h-[80px] resize-none"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Final Touch</label>
-                    <Textarea
-                      value={finalTouch || undefined}
-                      onChange={(e) => setFinalTouch(e.target.value)}
-                      placeholder="Responsibility, Assurance, Explanation, etc..."
-                      className="w-full min-h-[60px] resize-none"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Sign Off</label>
-                    <Textarea
-                      value={signOff || undefined}
-                      onChange={(e) => setSignOff(e.target.value)}
-                      placeholder="Thank you, Kindly approve, With respect, etc..."
-                      className="w-full min-h-[60px] resize-none"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">From</label>
-                    <Input
-                      value={from || undefined}
-                      onChange={(e) => setFrom(e.target.value)}
-                      placeholder="Your Name, Class, Name of organisation, etc."
-                      className="w-full"
-                    />
+                     <Textarea
+                       value={subject || undefined}
+                       onChange={(e) => setSubject(e.target.value)}
+                       onClick={(e) => e.stopPropagation()}
+                       placeholder="Approval, Access, Entry, Activity, Event, Sports, Special case, etc..."
+                       className="w-full min-h-[60px] resize-none"
+                     />
+                   </div>
+                   
+                   <div>
+                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Core Message</label>
+                     <Textarea
+                       value={coreMessage || undefined}
+                       onChange={(e) => setCoreMessage(e.target.value)}
+                       onClick={(e) => e.stopPropagation()}
+                       placeholder="Reason, Duration, Purpose, Justification, etc..."
+                       className="w-full min-h-[80px] resize-none"
+                     />
+                   </div>
+                   
+                   <div>
+                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Final Touch</label>
+                     <Textarea
+                       value={finalTouch || undefined}
+                       onChange={(e) => setFinalTouch(e.target.value)}
+                       onClick={(e) => e.stopPropagation()}
+                       placeholder="Responsibility, Assurance, Explanation, etc..."
+                       className="w-full min-h-[60px] resize-none"
+                     />
+                   </div>
+                   
+                   <div>
+                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Sign Off</label>
+                     <Textarea
+                       value={signOff || undefined}
+                       onChange={(e) => setSignOff(e.target.value)}
+                       onClick={(e) => e.stopPropagation()}
+                       placeholder="Thank you, Kindly approve, With respect, etc..."
+                       className="w-full min-h-[60px] resize-none"
+                     />
+                   </div>
+                   
+                   <div>
+                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">From</label>
+                     <Input
+                       value={from || undefined}
+                       onChange={(e) => setFrom(e.target.value)}
+                       onClick={(e) => e.stopPropagation()}
+                       placeholder="Your Name, Class, Name of organisation, etc."
+                       className="w-full"
+                     />
                   </div>
                   
                   <button

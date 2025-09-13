@@ -113,13 +113,14 @@ const PoetryHoverCard: React.FC<PoetryHoverCardProps> = ({ children, onPromptGen
                   <Label htmlFor="title" className="text-sm font-medium text-sidebar-text-dark">
                     Title
                   </Label>
-                  <Input
-                    id="title"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Enter your poem title..."
-                    className="text-sm placeholder:text-gray-500"
-                  />
+                   <Input
+                     id="title"
+                     value={title}
+                     onChange={(e) => setTitle(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Enter your poem title..."
+                     className="text-sm placeholder:text-gray-500"
+                   />
                 </div>
 
                 {/* Theme Input */}
@@ -127,13 +128,14 @@ const PoetryHoverCard: React.FC<PoetryHoverCardProps> = ({ children, onPromptGen
                   <Label htmlFor="theme" className="text-sm font-medium text-sidebar-text-dark">
                     Theme
                   </Label>
-                  <Input
-                    id="theme"
-                    value={theme}
-                    onChange={(e) => setTheme(e.target.value)}
-                    placeholder="Love, Nature, Time, Identity, Mystery"
-                    className="text-sm placeholder:text-gray-500"
-                  />
+                   <Input
+                     id="theme"
+                     value={theme}
+                     onChange={(e) => setTheme(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Love, Nature, Time, Identity, Mystery"
+                     className="text-sm placeholder:text-gray-500"
+                   />
                 </div>
 
                 {/* Form Input */}
@@ -141,13 +143,14 @@ const PoetryHoverCard: React.FC<PoetryHoverCardProps> = ({ children, onPromptGen
                   <Label htmlFor="form" className="text-sm font-medium text-sidebar-text-dark">
                     Form
                   </Label>
-                  <Input
-                    id="form"
-                    value={form}
-                    onChange={(e) => setForm(e.target.value)}
-                    placeholder="Sonnet, Chhand, Haiku, Ghazal, Ode etc."
-                    className="text-sm placeholder:text-gray-500"
-                  />
+                   <Input
+                     id="form"
+                     value={form}
+                     onChange={(e) => setForm(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Sonnet, Chhand, Haiku, Ghazal, Ode etc."
+                     className="text-sm placeholder:text-gray-500"
+                   />
                 </div>
 
                 {/* Mood Input */}
@@ -155,13 +158,14 @@ const PoetryHoverCard: React.FC<PoetryHoverCardProps> = ({ children, onPromptGen
                   <Label htmlFor="mood" className="text-sm font-medium text-sidebar-text-dark">
                     Mood
                   </Label>
-                  <Input
-                    id="mood"
-                    value={mood}
-                    onChange={(e) => setMood(e.target.value)}
-                    placeholder="Serious, Playful, Ironic, Philosophical etc."
-                    className="text-sm placeholder:text-gray-500"
-                  />
+                   <Input
+                     id="mood"
+                     value={mood}
+                     onChange={(e) => setMood(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Serious, Playful, Ironic, Philosophical etc."
+                     className="text-sm placeholder:text-gray-500"
+                   />
                 </div>
 
                 {/* Number of Lines Input */}
@@ -169,14 +173,15 @@ const PoetryHoverCard: React.FC<PoetryHoverCardProps> = ({ children, onPromptGen
                   <Label htmlFor="number-of-lines" className="text-sm font-medium text-sidebar-text-dark">
                     Number of Lines
                   </Label>
-                  <Input
-                    id="number-of-lines"
-                    type="number"
-                    value={numberOfLines}
-                    onChange={(e) => setNumberOfLines(e.target.value)}
-                    placeholder="Enter number of lines..."
-                    className="text-sm placeholder:text-gray-500"
-                  />
+                   <Input
+                     id="number-of-lines"
+                     type="number"
+                     value={numberOfLines}
+                     onChange={(e) => setNumberOfLines(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Enter number of lines..."
+                     className="text-sm placeholder:text-gray-500"
+                   />
                 </div>
 
                 {/* Audience Input */}
@@ -184,13 +189,14 @@ const PoetryHoverCard: React.FC<PoetryHoverCardProps> = ({ children, onPromptGen
                   <Label htmlFor="audience" className="text-sm font-medium text-sidebar-text-dark">
                     Audience
                   </Label>
-                  <Input
-                    id="audience"
-                    value={audience}
-                    onChange={(e) => setAudience(e.target.value)}
-                    placeholder="Children, Youth, Adults, Mature"
-                    className="text-sm placeholder:text-gray-500"
-                  />
+                   <Input
+                     id="audience"
+                     value={audience}
+                     onChange={(e) => setAudience(e.target.value)}
+                     onClick={(e) => e.stopPropagation()}
+                     placeholder="Children, Youth, Adults, Mature"
+                     className="text-sm placeholder:text-gray-500"
+                   />
                 </div>
 
                 {/* Start Poetry Button */}
