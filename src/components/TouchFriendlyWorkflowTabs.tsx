@@ -11,9 +11,10 @@ import FlashFictionHoverCard from './hover-cards/FlashFictionHoverCard';
 
 interface TouchFriendlyWorkflowTabsProps {
   onAddToChat?: (message: string, response: string) => void;
+  onPromptGenerated?: (prompt: string) => void;
 }
 
-const TouchFriendlyWorkflowTabs: React.FC<TouchFriendlyWorkflowTabsProps> = ({ onAddToChat }) => {
+const TouchFriendlyWorkflowTabs: React.FC<TouchFriendlyWorkflowTabsProps> = ({ onAddToChat, onPromptGenerated }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const isMobile = useIsMobile();
@@ -40,7 +41,7 @@ const TouchFriendlyWorkflowTabs: React.FC<TouchFriendlyWorkflowTabsProps> = ({ o
   const renderContent = (item: any) => {
     const Component = item.component;
     return (
-      <Component>
+      <Component onPromptGenerated={onPromptGenerated}>
         <div className="p-4">
           <Button 
             className="w-full h-12 text-lg font-medium"

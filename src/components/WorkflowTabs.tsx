@@ -39,7 +39,10 @@ import RealityCheckModal from "./modals/RealityCheckModal";
 import RoleplayHubModal from "./modals/RoleplayHubModal";
 import { ProtoRunModal } from "./modals/ProtoRunModal";
 
-const WorkflowTabs = ({ onAddToChat }: { onAddToChat?: (message: string, response: string) => void }) => {
+const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: { 
+  onAddToChat?: (message: string, response: string) => void;
+  onPromptGenerated?: (prompt: string) => void;
+}) => {
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
   const [snapshotModalOpen, setSnapshotModalOpen] = useState(false);
@@ -240,7 +243,7 @@ const WorkflowTabs = ({ onAddToChat }: { onAddToChat?: (message: string, respons
                         {beautifulWritingItems.map((item, idx) => {
                           if (item.text === "Essay") {
                             return (
-                              <EssayHoverCard key={idx}>
+                              <EssayHoverCard key={idx} onPromptGenerated={onPromptGenerated}>
                                 <button
                                   className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
                                   onClick={() => console.log(`Selected: ${item.text}`)}
@@ -253,7 +256,7 @@ const WorkflowTabs = ({ onAddToChat }: { onAddToChat?: (message: string, respons
 
                           if (item.text === "Story") {
                             return (
-                              <StoryHoverCard key={idx}>
+                              <StoryHoverCard key={idx} onPromptGenerated={onPromptGenerated}>
                                 <button
                                   className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
                                   onClick={() => console.log(`Selected: ${item.text}`)}

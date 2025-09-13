@@ -3,12 +3,14 @@ import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { Label } from '../ui/label';
 import { Button } from '../ui/button';
+import { supabase } from "@/integrations/supabase/client";
 
 interface BrainstormHoverCardProps {
   children: React.ReactNode;
+  onPromptGenerated?: (prompt: string) => void;
 }
 
-const BrainstormHoverCard: React.FC<BrainstormHoverCardProps> = ({ children }) => {
+const BrainstormHoverCard: React.FC<BrainstormHoverCardProps> = ({ children, onPromptGenerated }) => {
   const [showCard, setShowCard] = useState(false);
   const [problemStatement, setProblemStatement] = useState('');
   const [constraints, setConstraints] = useState('');
@@ -39,6 +41,31 @@ const BrainstormHoverCard: React.FC<BrainstormHoverCardProps> = ({ children }) =
     };
     localStorage.setItem('brainstormFormData', JSON.stringify(dataToSave));
   }, [problemStatement, constraints, desiredOutcome]);
+
+  const handleGeneratePrompt = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('prompt-engine', {
+        body: { 
+          contentType: 'brainstorm', 
+          formData: { 
+            idea: problemStatement, 
+            keyAssumptions: constraints, 
+            risksWeaknesses: desiredOutcome, 
+            alternativePerspectives: '' 
+          } 
+        }
+      });
+
+      if (error) throw error;
+      
+      if (data?.success && data?.prompt) {
+        onPromptGenerated?.(data.prompt);
+        setShowCard(false);
+      }
+    } catch (error) {
+      console.error('Error generating prompt:', error);
+    }
+  };
 
   const handleMouseEnter = () => {
     if (closeTimeoutRef.current) {
@@ -159,9 +186,9 @@ const BrainstormHoverCard: React.FC<BrainstormHoverCardProps> = ({ children }) =
                   style={{ backgroundColor: '#7D4EFF' }}
                   onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#6A3DD4')}
                   onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#7D4EFF')}
-                  onClick={() => console.log('Start Brainstorming clicked')}
+                  onClick={handleGeneratePrompt}
                 >
-                  Start Brainstorming
+                  Generate Prompt
                 </Button>
               </div>
             </div>

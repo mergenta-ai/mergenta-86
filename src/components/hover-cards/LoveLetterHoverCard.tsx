@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
-import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import { Input } from "../ui/input";
 import { Heart } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface LoveLetterHoverCardProps {
   children: React.ReactNode;
+  onPromptGenerated?: (prompt: string) => void;
 }
 
-const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
+const LoveLetterHoverCard = ({ children, onPromptGenerated }: LoveLetterHoverCardProps) => {
   const [showCard, setShowCard] = useState(false);
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
@@ -34,6 +36,32 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
     const formData = { to, subject, coreMessage, finalTouch, signOff, from };
     localStorage.setItem('loveLetter-form', JSON.stringify(formData));
   }, [to, subject, coreMessage, finalTouch, signOff, from]);
+
+  const handleGeneratePrompt = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('prompt-engine', {
+        body: { 
+          contentType: 'love_letter', 
+          formData: { 
+            to, 
+            from, 
+            coreMessage, 
+            finalTouch, 
+            signOff 
+          } 
+        }
+      });
+
+      if (error) throw error;
+      
+      if (data?.success && data?.prompt) {
+        onPromptGenerated?.(data.prompt);
+        setShowCard(false);
+      }
+    } catch (error) {
+      console.error('Error generating prompt:', error);
+    }
+  };
 
   const handleMouseEnter = () => {
     if (closeTimeout) {
@@ -165,12 +193,12 @@ const LoveLetterHoverCard = ({ children }: LoveLetterHoverCardProps) => {
                     />
                   </div>
                   
-                  <button
-                    className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
-                    onClick={() => console.log("Start Love Letter")}
-                  >
-                    Start Love Letter
-                  </button>
+                   <button
+                     className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
+                     onClick={handleGeneratePrompt}
+                   >
+                     Generate Prompt
+                   </button>
                 </div>
               </div>
             </div>

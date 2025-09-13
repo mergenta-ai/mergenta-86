@@ -6,9 +6,10 @@ import { Button } from '../ui/button';
 
 interface StoryHoverCardProps {
   children: React.ReactNode;
+  onPromptGenerated?: (prompt: string) => void;
 }
 
-const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children }) => {
+const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children, onPromptGenerated }) => {
   const [showCard, setShowCard] = useState(false);
   const [storyTitle, setStoryTitle] = useState('');
   const [genre, setGenre] = useState('');

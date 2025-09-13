@@ -3,12 +3,14 @@ import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { Label } from '../ui/label';
 import { Button } from '../ui/button';
+import { supabase } from "@/integrations/supabase/client";
 
 interface EssayHoverCardProps {
   children: React.ReactNode;
+  onPromptGenerated?: (prompt: string) => void;
 }
 
-const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children }) => {
+const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGenerated }) => {
   const [showCard, setShowCard] = useState(false);
   const [essayTitle, setEssayTitle] = useState('');
   const [keyPoints, setKeyPoints] = useState('');
@@ -62,6 +64,32 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children }) => {
 
   const handleCardClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+  };
+
+  const handleGeneratePrompt = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('prompt-engine', {
+        body: { 
+          contentType: 'essay', 
+          formData: { 
+            essayTitle, 
+            keyPoints, 
+            wordCount, 
+            tone, 
+            audience 
+          } 
+        }
+      });
+
+      if (error) throw error;
+      
+      if (data?.success && data?.prompt) {
+        onPromptGenerated?.(data.prompt);
+        setShowCard(false);
+      }
+    } catch (error) {
+      console.error('Error generating prompt:', error);
+    }
   };
 
   // Close card when clicking outside
@@ -190,12 +218,12 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children }) => {
                   />
                 </div>
 
-                {/* Start Essay Button */}
+                {/* Generate Prompt Button */}
                 <Button
                   className="w-full bg-[#6F42C1] hover:bg-[#5A359A] text-white transition-colors duration-200"
-                  onClick={() => console.log('Start Essay clicked')}
+                  onClick={handleGeneratePrompt}
                 >
-                  Start Essay
+                  Generate Prompt
                 </Button>
               </div>
             </div>

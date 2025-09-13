@@ -19,8 +19,13 @@ interface Message {
 const Index = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [generatedPrompt, setGeneratedPrompt] = useState("");
   const { toast } = useToast();
   const isMobile = useIsMobile();
+
+  const handlePromptGenerated = (prompt: string) => {
+    setGeneratedPrompt(prompt);
+  };
 
   const simulateAIResponse = (userMessage: string): string => {
     const responses = [
@@ -108,10 +113,15 @@ const Index = () => {
         <Header />
 
         {/* Input bar */}
-        <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />
+        <ChatInput 
+          onSendMessage={handleSendMessage} 
+          isLoading={isLoading} 
+          initialValue={generatedPrompt}
+          onFocus={() => setGeneratedPrompt("")}
+        />
 
         {/* Workflow tabs - Desktop */}
-        {!isMobile && <WorkflowTabs onAddToChat={handleAddToChat} />}
+        {!isMobile && <WorkflowTabs onAddToChat={handleAddToChat} onPromptGenerated={handlePromptGenerated} />}
 
         {/* Chat messages */}
         <main className="flex-1 flex flex-col">
@@ -120,7 +130,7 @@ const Index = () => {
       </div>
 
       {/* Touch-Friendly Workflow Tabs - Mobile */}
-      <TouchFriendlyWorkflowTabs onAddToChat={handleAddToChat} />
+      <TouchFriendlyWorkflowTabs onAddToChat={handleAddToChat} onPromptGenerated={handlePromptGenerated} />
     </div>
   );
 };
