@@ -232,7 +232,7 @@ const BlogHoverCard: React.FC<BlogHoverCardProps> = ({ children, onPromptGenerat
                   className="w-full bg-sidebar-text-violet hover:bg-sidebar-text-violet/90 text-white transition-colors duration-200"
                   onClick={handleGeneratePrompt}
                 >
-                  Start Blog
+                  Publish Blog
                 </Button>
               </div>
             </div>

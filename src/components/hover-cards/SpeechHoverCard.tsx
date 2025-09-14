@@ -226,7 +226,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
                   className="w-full bg-sidebar-text-violet hover:bg-sidebar-text-violet/90 text-white transition-colors duration-200"
                   onClick={handleGeneratePrompt}
                 >
-                  Write Speech
+                  Deliver Speech
                 </Button>
               </div>
             </div>

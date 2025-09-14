@@ -210,7 +210,7 @@ const PoetryHoverCard: React.FC<PoetryHoverCardProps> = ({ children, onPromptGen
                   className="w-full bg-sidebar-text-violet hover:bg-sidebar-text-violet/90 text-white transition-colors duration-200"
                   onClick={handleGeneratePrompt}
                 >
-                  Start Poetry
+                  Compose Poem
                 </Button>
               </div>
             </div>

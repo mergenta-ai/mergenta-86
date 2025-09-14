@@ -229,7 +229,7 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
                   onClick={handleGeneratePrompt}
                   className="w-full mt-4 bg-sidebar-text-violet hover:bg-sidebar-text-violet/90 text-white font-medium"
                 >
-                  Start Script
+                  Craft Script
                 </Button>
               </div>
             </div>

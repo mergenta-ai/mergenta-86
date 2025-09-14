@@ -214,7 +214,7 @@ const FlashFictionHoverCard: React.FC<FlashFictionHoverCardProps> = ({ children,
                   className="w-full bg-sidebar-text-violet hover:bg-sidebar-text-violet/90 text-white transition-colors duration-200"
                   onClick={handleGeneratePrompt}
                 >
-                  Start Flash Fiction
+                  Create Flash Fiction
                 </Button>
               </div>
             </div>
