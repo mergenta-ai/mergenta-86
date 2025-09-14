@@ -90,7 +90,7 @@ const PoetryHoverCard: React.FC<PoetryHoverCardProps> = ({ children, onPromptGen
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-poetry-card
-            className="absolute left-[620px] top-[160px] w-80 pointer-events-auto"
+            className="absolute left-[620px] top-[180px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
@@ -120,6 +120,7 @@ const PoetryHoverCard: React.FC<PoetryHoverCardProps> = ({ children, onPromptGen
                      onClick={(e) => e.stopPropagation()}
                      placeholder="Enter your poem title..."
                      className="text-sm placeholder:text-gray-500"
+                     autoComplete="off"
                    />
                 </div>
 
@@ -135,6 +136,7 @@ const PoetryHoverCard: React.FC<PoetryHoverCardProps> = ({ children, onPromptGen
                      onClick={(e) => e.stopPropagation()}
                      placeholder="Love, Nature, Time, Identity, Mystery"
                      className="text-sm placeholder:text-gray-500"
+                     autoComplete="off"
                    />
                 </div>
 
@@ -150,6 +152,7 @@ const PoetryHoverCard: React.FC<PoetryHoverCardProps> = ({ children, onPromptGen
                      onClick={(e) => e.stopPropagation()}
                      placeholder="Sonnet, Chhand, Haiku, Ghazal, Ode etc."
                      className="text-sm placeholder:text-gray-500"
+                     autoComplete="off"
                    />
                 </div>
 
@@ -165,6 +168,7 @@ const PoetryHoverCard: React.FC<PoetryHoverCardProps> = ({ children, onPromptGen
                      onClick={(e) => e.stopPropagation()}
                      placeholder="Serious, Playful, Ironic, Philosophical etc."
                      className="text-sm placeholder:text-gray-500"
+                     autoComplete="off"
                    />
                 </div>
 
@@ -181,6 +185,7 @@ const PoetryHoverCard: React.FC<PoetryHoverCardProps> = ({ children, onPromptGen
                      onClick={(e) => e.stopPropagation()}
                      placeholder="Enter number of lines..."
                      className="text-sm placeholder:text-gray-500"
+                     autoComplete="off"
                    />
                 </div>
 
@@ -196,6 +201,7 @@ const PoetryHoverCard: React.FC<PoetryHoverCardProps> = ({ children, onPromptGen
                      onClick={(e) => e.stopPropagation()}
                      placeholder="Children, Youth, Adults, Mature"
                      className="text-sm placeholder:text-gray-500"
+                     autoComplete="off"
                    />
                 </div>
 
