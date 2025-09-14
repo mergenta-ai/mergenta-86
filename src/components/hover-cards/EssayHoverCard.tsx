@@ -19,36 +19,6 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
   const [tone, setTone] = useState('');
   const [audience, setAudience] = useState('');
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Load saved values from localStorage
-  useEffect(() => {
-    const savedData = localStorage.getItem('essayFormData');
-    if (savedData) {
-      try {
-        const parsed = JSON.parse(savedData);
-        setEssayTitle(parsed.essayTitle || '');
-        setKeyPoints(parsed.keyPoints || '');
-        setWordCount(parsed.wordCount || '');
-        setTone(parsed.tone || '');
-        setAudience(parsed.audience || '');
-      } catch (error) {
-        console.error('Error loading saved essay data:', error);
-      }
-    }
-  }, []);
-
-  // Save to localStorage whenever inputs change
-  useEffect(() => {
-    const dataToSave = {
-      essayTitle,
-      keyPoints,
-      wordCount,
-      tone,
-      audience,
-    };
-    localStorage.setItem('essayFormData', JSON.stringify(dataToSave));
-  }, [essayTitle, keyPoints, wordCount, tone, audience]);
-
   const handleMouseEnter = () => {
     if (closeTimeoutRef.current) {
       clearTimeout(closeTimeoutRef.current);
