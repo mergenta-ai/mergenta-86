@@ -18,7 +18,7 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
   const [finalTouch, setFinalTouch] = useState("");
   const [signOff, setSignOff] = useState("");
   const [from, setFrom] = useState("");
-  cconst closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleMouseEnter = () => {
     if (closeTimeoutRef.current) {
