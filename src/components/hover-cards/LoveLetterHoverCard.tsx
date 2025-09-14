@@ -114,6 +114,7 @@ const LoveLetterHoverCard = ({ children, onPromptGenerated }: LoveLetterHoverCar
                         onClick={(e) => e.stopPropagation()}
                         placeholder="Dear [Name], My Love, Darling, Sweetheart, Honey, Hubby etc..."
                         className="w-full min-h-[60px] resize-none"
+                       autoComplete="off"
                       />
                   </div>
                   
@@ -125,6 +126,7 @@ const LoveLetterHoverCard = ({ children, onPromptGenerated }: LoveLetterHoverCar
                         onClick={(e) => e.stopPropagation()}
                         placeholder="Mention Affection, Care, Commitment, Admiration, Attraction, Deep love, etc..."
                         className="w-full min-h-[60px] resize-none"
+                       autoComplete="off"
                       />
                   </div>
                   
@@ -136,6 +138,7 @@ const LoveLetterHoverCard = ({ children, onPromptGenerated }: LoveLetterHoverCar
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Type your message here about feelings, love, emotions, cherished moments, nostalgia, longing etc..."
                        className="w-full min-h-[80px] resize-none"
+                       autoComplete="off"
                      />
                   </div>
                   
@@ -147,6 +150,7 @@ const LoveLetterHoverCard = ({ children, onPromptGenerated }: LoveLetterHoverCar
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Talk about Future dreams, shared memories, promises, yearning etc..."
                        className="w-full min-h-[60px] resize-none"
+                       autoComplete="off"
                      />
                   </div>
                   
@@ -158,6 +162,7 @@ const LoveLetterHoverCard = ({ children, onPromptGenerated }: LoveLetterHoverCar
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Forever yours, with all my love, yours truly, love you etc...."
                        className="w-full min-h-[60px] resize-none"
+                       autoComplete="off"
                      />
                   </div>
                   
@@ -169,6 +174,7 @@ const LoveLetterHoverCard = ({ children, onPromptGenerated }: LoveLetterHoverCar
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Sender: Your Name"
                        className="w-full"
+                       autoComplete="off"
                      />
                   </div>
                   
