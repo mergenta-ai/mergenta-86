@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Send, Loader2, Cpu, Paperclip, Globe, Mic, Share, Download, AudioWaveform } from "lucide-react";
+import { Send, Loader2, Cpu, Paperclip, Globe, Mic, Share, Download, AudioWaveform, X } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
 interface ChatInputProps {
@@ -55,6 +55,18 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
       // Start recording
       setIsRecording(true);
     }
+  };
+
+  const handleClearInput = () => {
+    setInput("");
+    // Reset textarea height
+    const textarea = document.querySelector('textarea');
+    if (textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = '24px';
+    }
+    // Focus back on textarea
+    textarea?.focus();
   };
 
   const getActionButtonIcon = () => {
@@ -121,14 +133,14 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
         <form onSubmit={handleSubmit} className="w-full max-w-3xl mx-auto">
           <div className="flex flex-col w-full rounded-xl shadow-sm bg-white px-4 pt-3 pb-3 min-h-[94px]">
             {/* Input field at top */}
-            <div className="flex-grow">
+            <div className="flex-grow relative">
               <textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 onFocus={onFocus}
                 placeholder={placeholder}
-                className="w-full resize-none focus:outline-none text-gray-700 placeholder-gray-400 min-h-[24px] bg-transparent border-none outline-none text-base lg:text-lg touch-manipulation"
+                className="w-full resize-none focus:outline-none text-gray-700 placeholder-gray-400 min-h-[24px] bg-transparent border-none outline-none text-base lg:text-lg touch-manipulation pr-10"
                 disabled={isLoading}
                 style={{
                   height: 'auto',
@@ -148,6 +160,22 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                   target.style.height = newHeight + 'px';
                 }}
               />
+              
+              {/* Clear button */}
+              {input.trim() && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      onClick={handleClearInput}
+                      className="absolute right-2 top-1 p-1 rounded-md hover:bg-gray-100 transition-colors text-gray-400 hover:text-gray-600"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>Clear prompt bar</TooltipContent>
+                </Tooltip>
+              )}
             </div>
 
             {/* Icons row at bottom */}
