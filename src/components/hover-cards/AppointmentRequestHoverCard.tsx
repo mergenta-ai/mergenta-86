@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Calendar } from "lucide-react";
@@ -18,23 +18,22 @@ const AppointmentRequestHoverCard = ({ children, onPromptGenerated }: Appointmen
   const [finalTouch, setFinalTouch] = useState("");
   const [signOff, setSignOff] = useState("");
   const [from, setFrom] = useState("");
-  const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
+  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // No localStorage - forms always start empty
 
   const handleMouseEnter = () => {
-    if (closeTimeout) {
-      clearTimeout(closeTimeout);
-      setCloseTimeout(null);
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
     }
     setShowCard(true);
   };
 
   const handleMouseLeave = () => {
-    const timeout = setTimeout(() => {
+    closeTimeoutRef.current = setTimeout(() => {
       setShowCard(false);
     }, 250);
-    setCloseTimeout(timeout);
   };
 
   const handleCardClick = (e: React.MouseEvent) => {
@@ -50,7 +49,7 @@ const AppointmentRequestHoverCard = ({ children, onPromptGenerated }: Appointmen
   );
 
   return (
-    <>
+    <div className="relative">
       {/* Trigger Element */}
       <div 
         data-appointment-request-trigger
@@ -182,7 +181,7 @@ const AppointmentRequestHoverCard = ({ children, onPromptGenerated }: Appointmen
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
