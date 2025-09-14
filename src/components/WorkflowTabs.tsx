@@ -168,8 +168,15 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
   };
 
   const handleSubmenuLeave = () => {
-    // Clear submenu immediately when leaving it
-    setExpandedGroups(new Set());
+    // Clear any existing timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    // Delay clearing the expanded groups to allow moving to hover cards
+    timeoutRef.current = setTimeout(() => {
+      setExpandedGroups(new Set());
+      timeoutRef.current = null;
+    }, 800);
   };
 
   // Close dropdown when clicking outside
