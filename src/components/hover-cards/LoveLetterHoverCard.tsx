@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Textarea } from "../ui/textarea";
 import { Input } from "../ui/input";
 import { Heart } from "lucide-react";
@@ -18,7 +18,7 @@ const LoveLetterHoverCard = ({ children, onPromptGenerated }: LoveLetterHoverCar
   const [finalTouch, setFinalTouch] = useState("");
   const [signOff, setSignOff] = useState("");
   const [from, setFrom] = useState("");
-  const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
+  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleGeneratePrompt = async () => {
     try {
@@ -47,18 +47,17 @@ const LoveLetterHoverCard = ({ children, onPromptGenerated }: LoveLetterHoverCar
   };
 
   const handleMouseEnter = () => {
-    if (closeTimeout) {
-      clearTimeout(closeTimeout);
-      setCloseTimeout(null);
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
     }
     setShowCard(true);
   };
 
   const handleMouseLeave = () => {
-    const timeout = setTimeout(() => {
+   closeTimeoutRef.current = setTimeout(() => {
       setShowCard(false);
     }, 250);
-    setCloseTimeout(timeout);
   };
 
   const handleCardClick = (e: React.MouseEvent) => {
@@ -74,7 +73,7 @@ const LoveLetterHoverCard = ({ children, onPromptGenerated }: LoveLetterHoverCar
   );
 
   return (
-    <>
+   <div className="relative">
       {/* Trigger Element */}
       <div 
         data-love-letter-trigger
@@ -90,7 +89,7 @@ const LoveLetterHoverCard = ({ children, onPromptGenerated }: LoveLetterHoverCar
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-love-letter-card
-            className="absolute left-[918px] top-[220px] w-80 pointer-events-auto"
+            className="absolute left-[918px] top-[120px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
@@ -190,7 +189,7 @@ const LoveLetterHoverCard = ({ children, onPromptGenerated }: LoveLetterHoverCar
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
