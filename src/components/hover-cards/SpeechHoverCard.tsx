@@ -169,6 +169,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
                     onClick={(e) => e.stopPropagation()}
                     placeholder="Simple, Poetic, Technical, Rhetorical etc."
                     className="text-sm placeholder:text-gray-500"
+                    autoComplete="off"
                   />
                 </div>
 
@@ -184,6 +185,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
                     onClick={(e) => e.stopPropagation()}
                     placeholder="Stories, Questions, Humour, Quotes etc."
                     className="text-sm placeholder:text-gray-500"
+                    autoComplete="off"
                   />
                 </div>
 
@@ -199,6 +201,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
                     onClick={(e) => e.stopPropagation()}
                     placeholder="Mention minutes or hours..."
                     className="text-sm placeholder:text-gray-500"
+                    autoComplete="off"
                   />
                 </div>
 
@@ -214,6 +217,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
                     onClick={(e) => e.stopPropagation()}
                     placeholder="Memorable, Thought-provoking etc."
                     className="text-sm placeholder:text-gray-500"
+                    autoComplete="off"
                   />
                 </div>
 
@@ -222,7 +226,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
                   className="w-full bg-sidebar-text-violet hover:bg-sidebar-text-violet/90 text-white transition-colors duration-200"
                   onClick={handleGeneratePrompt}
                 >
-                  Start Speech
+                  Write Speech
                 </Button>
               </div>
             </div>
