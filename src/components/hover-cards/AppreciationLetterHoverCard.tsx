@@ -174,7 +174,7 @@ const AppreciationLetterHoverCard = ({ children, onPromptGenerated }: Appreciati
                       }
                     }}
                   >
-                    Start Appreciation Letter
+                    Show Appreciation
                   </button>
                 </div>
               </div>

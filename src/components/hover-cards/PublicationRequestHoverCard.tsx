@@ -20,24 +20,6 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
   const [from, setFrom] = useState("");
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    const saved = localStorage.getItem('publicationRequest-form');
-    if (saved) {
-      const data = JSON.parse(saved);
-      setTo(data.to || "");
-      setSubject(data.subject || "");
-      setCoreMessage(data.coreMessage || "");
-      setFinalTouch(data.finalTouch || "");
-      setSignOff(data.signOff || "");
-      setFrom(data.from || "");
-    }
-  }, []);
-
-  useEffect(() => {
-    const formData = { to, subject, coreMessage, finalTouch, signOff, from };
-    localStorage.setItem('publicationRequest-form', JSON.stringify(formData));
-  }, [to, subject, coreMessage, finalTouch, signOff, from]);
-
   const handleMouseEnter = () => {
     if (closeTimeout) {
       clearTimeout(closeTimeout);
@@ -106,7 +88,8 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Dear Sir/Madam, Editor, Journal name, Magazine name, Publication name, etc..."
                       className="w-full min-h-[60px] resize-none"
-                    />
+                      autoComplete="off"
+                      />
                   </div>
                   
                   <div>
@@ -117,6 +100,7 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Publication submission, Article proposal, Content request, Book publication, Story publication, etc..."
                       className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -128,6 +112,7 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Article summary, genre, book excerpt, story/novel/book/publication details, research paper summary, story idea, etc..."
                       className="w-full min-h-[80px] resize-none"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -139,6 +124,7 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Tone, length, audience specification, special requests, etc..."
                       className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -150,6 +136,7 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Other details, closing lines, wrap-up..."
                       className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -161,6 +148,7 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Your name, Your instirution/organisation..."
                       className="w-full"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -184,7 +172,7 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
                       }
                     }}
                   >
-                    Start Publication Request
+                    Request Publication
                   </button>
                 </div>
               </div>

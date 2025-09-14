@@ -90,6 +90,7 @@ const CondolenceLetterHoverCard = ({ children, onPromptGenerated }: CondolenceLe
                         onClick={(e) => e.stopPropagation()}
                         placeholder="Dear [NAME], Friend, Family, Relative, Colleague, etc..."
                         className="w-full min-h-[60px] resize-none"
+                       autoComplete="off"
                       />
                   </div>
                   
@@ -101,6 +102,7 @@ const CondolenceLetterHoverCard = ({ children, onPromptGenerated }: CondolenceLe
                         onClick={(e) => e.stopPropagation()}
                         placeholder="Sympathy, Loss, Comfort, Support, etc..."
                         className="w-full min-h-[60px] resize-none"
+                       autoComplete="off"
                       />
                   </div>
                   
@@ -112,6 +114,7 @@ const CondolenceLetterHoverCard = ({ children, onPromptGenerated }: CondolenceLe
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Use phrases like Deepest sympathies, sharing grief, prayers, etc..."
                        className="w-full min-h-[80px] resize-none"
+                       autoComplete="off"
                      />
                   </div>
                   
@@ -123,6 +126,7 @@ const CondolenceLetterHoverCard = ({ children, onPromptGenerated }: CondolenceLe
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Mention about Fond memories, peace, strength, standing with you, comfort, etc..."
                        className="w-full min-h-[60px] resize-none"
+                       autoComplete="off"
                      />
                   </div>
                   
@@ -134,6 +138,7 @@ const CondolenceLetterHoverCard = ({ children, onPromptGenerated }: CondolenceLe
                        onClick={(e) => e.stopPropagation()}
                        placeholder="With sympathy, In remembrance, Respectfully yours, In sorrow, Sincerely, etc..."
                        className="w-full min-h-[60px] resize-none"
+                       autoComplete="off"
                      />
                   </div>
                   
@@ -145,6 +150,7 @@ const CondolenceLetterHoverCard = ({ children, onPromptGenerated }: CondolenceLe
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Your Name"
                        className="w-full"
+                       autoComplete="off"
                      />
                   </div>
                   
@@ -168,7 +174,7 @@ const CondolenceLetterHoverCard = ({ children, onPromptGenerated }: CondolenceLe
                       }
                     }}
                   >
-                    Start Condolence Letter
+                    Offer Condolences
                   </button>
                 </div>
               </div>

@@ -174,7 +174,7 @@ const ApologyLetterHoverCard = ({ children, onPromptGenerated }: ApologyLetterHo
                   }
                 }}
               >
-                Start Apology Letter
+                Say Sorry
               </button>
             </div>
           </div>

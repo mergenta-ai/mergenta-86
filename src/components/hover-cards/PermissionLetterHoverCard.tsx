@@ -20,20 +20,6 @@ const PermissionLetterHoverCard = ({ children, onPromptGenerated }: PermissionLe
   const [from, setFrom] = useState("");
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    const saved = localStorage.getItem('permissionLetter-form');
-    if (saved) {
-      const data = JSON.parse(saved);
-      setTo(data.to || ""); setSubject(data.subject || ""); setCoreMessage(data.coreMessage || "");
-      setFinalTouch(data.finalTouch || ""); setSignOff(data.signOff || ""); setFrom(data.from || "");
-    }
-  }, []);
-
-  useEffect(() => {
-    const formData = { to, subject, coreMessage, finalTouch, signOff, from };
-    localStorage.setItem('permissionLetter-form', JSON.stringify(formData));
-  }, [to, subject, coreMessage, finalTouch, signOff, from]);
-
   const handleMouseEnter = () => {
     if (closeTimeoutRef.current) {
       clearTimeout(closeTimeoutRef.current);
@@ -128,6 +114,7 @@ const PermissionLetterHoverCard = ({ children, onPromptGenerated }: PermissionLe
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Dear Sir/Madam, Manager, Principal, Authority, Supervisor, etc..."
                        className="w-full min-h-[60px] resize-none"
+                       autoComplete="off"
                      />
                   </div>
                   
@@ -139,6 +126,7 @@ const PermissionLetterHoverCard = ({ children, onPromptGenerated }: PermissionLe
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Approval, Access, Entry, Activity, Event, Sports, Special case, etc..."
                        className="w-full min-h-[60px] resize-none"
+                       autoComplete="off"
                      />
                    </div>
                    
@@ -150,6 +138,7 @@ const PermissionLetterHoverCard = ({ children, onPromptGenerated }: PermissionLe
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Reason, Duration, Purpose, Justification, etc..."
                        className="w-full min-h-[80px] resize-none"
+                       autoComplete="off"
                      />
                    </div>
                    
@@ -161,6 +150,7 @@ const PermissionLetterHoverCard = ({ children, onPromptGenerated }: PermissionLe
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Responsibility, Assurance, Explanation, etc..."
                        className="w-full min-h-[60px] resize-none"
+                       autoComplete="off"
                      />
                    </div>
                    
@@ -172,6 +162,7 @@ const PermissionLetterHoverCard = ({ children, onPromptGenerated }: PermissionLe
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Thank you, Kindly approve, With respect, etc..."
                        className="w-full min-h-[60px] resize-none"
+                       autoComplete="off"
                      />
                    </div>
                    
@@ -183,6 +174,7 @@ const PermissionLetterHoverCard = ({ children, onPromptGenerated }: PermissionLe
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Your Name, Class, Name of organisation, etc."
                        className="w-full"
+                       autoComplete="off"
                      />
                   </div>
                   
@@ -190,8 +182,7 @@ const PermissionLetterHoverCard = ({ children, onPromptGenerated }: PermissionLe
                     className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
                     onClick={handleGeneratePrompt}
                   >
-                    Start Permission Letter
-                  </button>
+                    Request Permission
                 </div>
               </div>
             </div>

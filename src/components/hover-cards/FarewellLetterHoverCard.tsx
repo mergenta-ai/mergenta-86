@@ -20,24 +20,6 @@ const FarewellLetterHoverCard = ({ children, onPromptGenerated }: FarewellLetter
   const [from, setFrom] = useState("");
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    const saved = localStorage.getItem('farewellLetter-form');
-    if (saved) {
-      const data = JSON.parse(saved);
-      setTo(data.to || "");
-      setSubject(data.subject || "");
-      setCoreMessage(data.coreMessage || "");
-      setFinalTouch(data.finalTouch || "");
-      setSignOff(data.signOff || "");
-      setFrom(data.from || "");
-    }
-  }, []);
-
-  useEffect(() => {
-    const formData = { to, subject, coreMessage, finalTouch, signOff, from };
-    localStorage.setItem('farewellLetter-form', JSON.stringify(formData));
-  }, [to, subject, coreMessage, finalTouch, signOff, from]);
-
   const handleMouseEnter = () => {
     if (closeTimeout) {
       clearTimeout(closeTimeout);
@@ -133,6 +115,7 @@ const FarewellLetterHoverCard = ({ children, onPromptGenerated }: FarewellLetter
                         onClick={(e) => e.stopPropagation()}
                         placeholder="Dear [Name], Colleague, Coach, Friend, Mentor, Team, etc..."
                         className="w-full min-h-[60px] resize-none"
+                       autoComplete="off"
                       />
                   </div>
                   
@@ -141,8 +124,10 @@ const FarewellLetterHoverCard = ({ children, onPromptGenerated }: FarewellLetter
                      <Textarea
                       value={subject || undefined}
                       onChange={(e) => setSubject(e.target.value)}
+                       onClick={(e) => e.stopPropagation()}
                       placeholder="Include “Goodbye, best wishes, happy departure, retirement wishes, etc..."
                        className="w-full min-h-[60px] resize-none"
+                       autoComplete="off"
                     />
                   </div>
                   
@@ -154,6 +139,7 @@ const FarewellLetterHoverCard = ({ children, onPromptGenerated }: FarewellLetter
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Add Bidding farewell, Wishing success, Parting words, etc..."
                        className="w-full min-h-[80px] resize-none"
+                       autoComplete="off"
                      />
                   </div>
                   
@@ -165,6 +151,7 @@ const FarewellLetterHoverCard = ({ children, onPromptGenerated }: FarewellLetter
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Mention Memories, Gratitude, Hopes for future, etc..."
                        className="w-full min-h-[60px] resize-none"
+                       autoComplete="off"
                      />
                   </div>
                   
@@ -176,6 +163,7 @@ const FarewellLetterHoverCard = ({ children, onPromptGenerated }: FarewellLetter
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Say With best wishes, Fondly, Sincerely, etc..."
                        className="w-full min-h-[60px] resize-none"
+                       autoComplete="off"
                      />
                   </div>
                   
@@ -187,6 +175,7 @@ const FarewellLetterHoverCard = ({ children, onPromptGenerated }: FarewellLetter
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Your Name, Yours truly, With affection, etc..."
                        className="w-full"
+                       autoComplete="off"
                      />
                   </div>
                   
@@ -194,7 +183,7 @@ const FarewellLetterHoverCard = ({ children, onPromptGenerated }: FarewellLetter
                     className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
                     onClick={handleGeneratePrompt}
                   >
-                    Start Farewell Letter
+                    Bid Farewell
                   </button>
                 </div>
               </div>

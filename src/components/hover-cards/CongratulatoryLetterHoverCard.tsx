@@ -117,6 +117,7 @@ const CongratulatoryLetterHoverCard = ({ children, onPromptGenerated }: Congratu
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Dear [Name], Friend, Colleague, Team, Family..."
                        className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
                      />
                   </div>
                   
@@ -128,6 +129,7 @@ const CongratulatoryLetterHoverCard = ({ children, onPromptGenerated }: Congratu
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Mention about Achievement, Success, Promotion, Milestone, Marriage etc..."
                        className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
                      />
                   </div>
                   
@@ -139,6 +141,7 @@ const CongratulatoryLetterHoverCard = ({ children, onPromptGenerated }: Congratu
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Use phrases like Congratulations, Proud of you, Good job, Well done, etc. to write your message."
                       className="w-full min-h-[80px] resize-none"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -150,6 +153,7 @@ const CongratulatoryLetterHoverCard = ({ children, onPromptGenerated }: Congratu
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Use phrases like Personal pride, Shared joy, Looking ahead, Keep going etc..."
                       className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -161,6 +165,7 @@ const CongratulatoryLetterHoverCard = ({ children, onPromptGenerated }: Congratu
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Consider writing Best wishes, Heartfelt regards, Cheers, Warmly etc. to close the message"
                       className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -172,6 +177,7 @@ const CongratulatoryLetterHoverCard = ({ children, onPromptGenerated }: Congratu
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Proud Friend, Warm Regards, Your Name, "
                       className="w-full"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -179,7 +185,7 @@ const CongratulatoryLetterHoverCard = ({ children, onPromptGenerated }: Congratu
                     className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
                     onClick={handleGeneratePrompt}
                   >
-                    Start Congratulatory Letter
+                    Congratulate
                   </button>
                 </div>
               </div>

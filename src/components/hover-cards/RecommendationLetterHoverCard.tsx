@@ -20,24 +20,6 @@ const RecommendationLetterHoverCard = ({ children, onPromptGenerated }: Recommen
   const [from, setFrom] = useState("");
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    const saved = localStorage.getItem('recommendationLetter-form');
-    if (saved) {
-      const data = JSON.parse(saved);
-      setTo(data.to || "");
-      setSubject(data.subject || "");
-      setCoreMessage(data.coreMessage || "");
-      setFinalTouch(data.finalTouch || "");
-      setSignOff(data.signOff || "");
-      setFrom(data.from || "");
-    }
-  }, []);
-
-  useEffect(() => {
-    const formData = { to, subject, coreMessage, finalTouch, signOff, from };
-    localStorage.setItem('recommendationLetter-form', JSON.stringify(formData));
-  }, [to, subject, coreMessage, finalTouch, signOff, from]);
-
   const handleMouseEnter = () => {
     if (closeTimeout) {
       clearTimeout(closeTimeout);
@@ -106,6 +88,7 @@ const RecommendationLetterHoverCard = ({ children, onPromptGenerated }: Recommen
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Dear [Name], Employer, University, HR, Departments, Organisation etc..."
                       className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -117,6 +100,7 @@ const RecommendationLetterHoverCard = ({ children, onPromptGenerated }: Recommen
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Mention if this is an endorsement, support statement, referral or recommendation, etc..."
                       className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -128,6 +112,7 @@ const RecommendationLetterHoverCard = ({ children, onPromptGenerated }: Recommen
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Highlight strong skills, merits, abilities, endorsements, good behaviour and team spirit, etc..."
                        className="w-full min-h-[80px] resize-none"
+                       autoComplete="off"
                      />
                   </div>
                   
@@ -139,6 +124,7 @@ const RecommendationLetterHoverCard = ({ children, onPromptGenerated }: Recommen
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Mention achievements, strengths, qualities, reliability and dedication, etc..."
                        className="w-full min-h-[60px] resize-none"
+                       autoComplete="off"
                      />
                   </div>
                   
@@ -150,6 +136,7 @@ const RecommendationLetterHoverCard = ({ children, onPromptGenerated }: Recommen
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Strongly recommend, Best wishes, Regards, etc..."
                        className="w-full min-h-[60px] resize-none"
+                       autoComplete="off"
                      />
                   </div>
                   
@@ -161,6 +148,7 @@ const RecommendationLetterHoverCard = ({ children, onPromptGenerated }: Recommen
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Your Name"
                        className="w-full"
+                       autoComplete="off"
                      />
                   </div>
                   
@@ -184,7 +172,7 @@ const RecommendationLetterHoverCard = ({ children, onPromptGenerated }: Recommen
                       }
                     }}
                   >
-                    Start Recommendation Letter
+                    Write Recommendation
                   </button>
                 </div>
               </div>

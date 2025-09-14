@@ -90,6 +90,7 @@ const ComplaintLetterHoverCard = ({ children, onPromptGenerated }: ComplaintLett
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Dear Sir/Madam, Manager, Service Provider, HR, Authority, etc..."
                       className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -101,6 +102,7 @@ const ComplaintLetterHoverCard = ({ children, onPromptGenerated }: ComplaintLett
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Mention about complaint, issue, defect, concern, problem, etc..."
                       className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -112,6 +114,7 @@ const ComplaintLetterHoverCard = ({ children, onPromptGenerated }: ComplaintLett
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Details about issue, service lapses, saults, problems, fficers not paying attention, indiscipline, etc..."
                       className="w-full min-h-[80px] resize-none"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -123,6 +126,7 @@ const ComplaintLetterHoverCard = ({ children, onPromptGenerated }: ComplaintLett
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Mention evidence, dates, proof and your expectation of resolution, etc..."
                       className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -134,6 +138,7 @@ const ComplaintLetterHoverCard = ({ children, onPromptGenerated }: ComplaintLett
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Other details, if any. Expect resolution, Await response, Regards, etc..."
                       className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -145,6 +150,7 @@ const ComplaintLetterHoverCard = ({ children, onPromptGenerated }: ComplaintLett
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Your Name, Conerrned User"
                       className="w-full"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -168,7 +174,7 @@ const ComplaintLetterHoverCard = ({ children, onPromptGenerated }: ComplaintLett
                       }
                     }}
                   >
-                    Start Complaint Letter
+                    File Complaint
                   </button>
                 </div>
               </div>

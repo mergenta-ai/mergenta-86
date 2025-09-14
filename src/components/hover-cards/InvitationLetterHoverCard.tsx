@@ -20,24 +20,6 @@ const InvitationLetterHoverCard = ({ children, onPromptGenerated }: InvitationLe
   const [from, setFrom] = useState("");
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    const saved = localStorage.getItem('invitationLetter-form');
-    if (saved) {
-      const data = JSON.parse(saved);
-      setTo(data.to || "");
-      setSubject(data.subject || "");
-      setCoreMessage(data.coreMessage || "");
-      setFinalTouch(data.finalTouch || "");
-      setSignOff(data.signOff || "");
-      setFrom(data.from || "");
-    }
-  }, []);
-
-  useEffect(() => {
-    const formData = { to, subject, coreMessage, finalTouch, signOff, from };
-    localStorage.setItem('invitationLetter-form', JSON.stringify(formData));
-  }, [to, subject, coreMessage, finalTouch, signOff, from]);
-
   const handleMouseEnter = () => {
     if (closeTimeout) {
       clearTimeout(closeTimeout);
@@ -133,6 +115,7 @@ const InvitationLetterHoverCard = ({ children, onPromptGenerated }: InvitationLe
                         onClick={(e) => e.stopPropagation()}
                         placeholder="Dear [Name], Friend, Colleague, Guest, Relative, etc..."
                         className="w-full min-h-[60px] resize-none"
+                       autoComplete="off"
                       />
                   </div>
                   
@@ -144,6 +127,7 @@ const InvitationLetterHoverCard = ({ children, onPromptGenerated }: InvitationLe
                         onClick={(e) => e.stopPropagation()}
                         placeholder="Marriage Invitation, Birthday Invitation, Celebration, Gathering, Party, Event, etc..."
                         className="w-full min-h-[60px] resize-none"
+                       autoComplete="off"
                       />
                   </div>
                   
@@ -155,6 +139,7 @@ const InvitationLetterHoverCard = ({ children, onPromptGenerated }: InvitationLe
                        onClick={(e) => e.stopPropagation()}
                        placeholder="You are invited, Join us, Please attend, Be our guest, etc. to write message..."
                        className="w-full min-h-[80px] resize-none"
+                       autoComplete="off"
                      />
                   </div>
                   
@@ -166,6 +151,7 @@ const InvitationLetterHoverCard = ({ children, onPromptGenerated }: InvitationLe
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Mention Date, time, venue, occasion, RSVP details..."
                        className="w-full min-h-[60px] resize-none"
+                       autoComplete="off"
                      />
                   </div>
                   
@@ -177,6 +163,7 @@ const InvitationLetterHoverCard = ({ children, onPromptGenerated }: InvitationLe
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Use phrases like Looking forward, With regards, Warm wishes, Best wishes, You have to be there, etc..."
                        className="w-full min-h-[60px] resize-none"
+                       autoComplete="off"
                      />
                   </div>
                   
@@ -188,6 +175,7 @@ const InvitationLetterHoverCard = ({ children, onPromptGenerated }: InvitationLe
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Your Name, Host, Organiser, etc..."
                        className="w-full"
+                       autoComplete="off"
                      />
                   </div>
                   
@@ -195,7 +183,7 @@ const InvitationLetterHoverCard = ({ children, onPromptGenerated }: InvitationLe
                     className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
                     onClick={handleGeneratePrompt}
                   >
-                    Start Invitation Letter
+                    Send Invitation
                   </button>
                 </div>
               </div>

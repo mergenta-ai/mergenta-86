@@ -20,24 +20,6 @@ const ThankYouLetterHoverCard = ({ children, onPromptGenerated }: ThankYouLetter
   const [from, setFrom] = useState("");
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    const saved = localStorage.getItem('thankYouLetter-form');
-    if (saved) {
-      const data = JSON.parse(saved);
-      setTo(data.to || "");
-      setSubject(data.subject || "");
-      setCoreMessage(data.coreMessage || "");
-      setFinalTouch(data.finalTouch || "");
-      setSignOff(data.signOff || "");
-      setFrom(data.from || "");
-    }
-  }, []);
-
-  useEffect(() => {
-    const formData = { to, subject, coreMessage, finalTouch, signOff, from };
-    localStorage.setItem('thankYouLetter-form', JSON.stringify(formData));
-  }, [to, subject, coreMessage, finalTouch, signOff, from]);
-
   const handleMouseEnter = () => {
     if (closeTimeout) {
       clearTimeout(closeTimeout);
@@ -106,6 +88,7 @@ const ThankYouLetterHoverCard = ({ children, onPromptGenerated }: ThankYouLetter
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Dear [Name], Relative, Teacher, Colleague, Friend, etc..."
                        className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
                       />
                   </div>
                   
@@ -117,6 +100,7 @@ const ThankYouLetterHoverCard = ({ children, onPromptGenerated }: ThankYouLetter
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Add Gratitude, Appreciation, Recognition, Thankfullness, etc..."
                        className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
                       />
                   </div>
                   
@@ -128,6 +112,7 @@ const ThankYouLetterHoverCard = ({ children, onPromptGenerated }: ThankYouLetter
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Express Sincere thanks, Your support, Your guidance, Your kindness, etc. towards the help/support offered."
                       className="w-full min-h-[80px] resize-none"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -139,6 +124,7 @@ const ThankYouLetterHoverCard = ({ children, onPromptGenerated }: ThankYouLetter
                       onClick={(e) => e.stopPropagation()}
                       placeholder="How it helped me, lasting impact, warm wishes, etc..."
                       className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -149,6 +135,7 @@ const ThankYouLetterHoverCard = ({ children, onPromptGenerated }: ThankYouLetter
                       onChange={(e) => setSignOff(e.target.value)}
                       placeholder="With gratitude, Best regards, Warm thanks, etc..."
                       className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -159,6 +146,7 @@ const ThankYouLetterHoverCard = ({ children, onPromptGenerated }: ThankYouLetter
                       onChange={(e) => setFrom(e.target.value)}
                       placeholder="Your Name"
                       className="w-full"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -182,7 +170,7 @@ const ThankYouLetterHoverCard = ({ children, onPromptGenerated }: ThankYouLetter
                       }
                     }}
                   >
-                    Start Thank You Letter
+                    Send Thanks
                   </button>
                 </div>
               </div>

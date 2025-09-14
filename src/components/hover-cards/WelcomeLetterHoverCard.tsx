@@ -20,24 +20,6 @@ const WelcomeLetterHoverCard = ({ children, onPromptGenerated }: WelcomeLetterHo
   const [from, setFrom] = useState("");
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    const saved = localStorage.getItem('welcomeLetter-form');
-    if (saved) {
-      const data = JSON.parse(saved);
-      setTo(data.to || "");
-      setSubject(data.subject || "");
-      setCoreMessage(data.coreMessage || "");
-      setFinalTouch(data.finalTouch || "");
-      setSignOff(data.signOff || "");
-      setFrom(data.from || "");
-    }
-  }, []);
-
-  useEffect(() => {
-    const formData = { to, subject, coreMessage, finalTouch, signOff, from };
-    localStorage.setItem('welcomeLetter-form', JSON.stringify(formData));
-  }, [to, subject, coreMessage, finalTouch, signOff, from]);
-
   const handleMouseEnter = () => {
     if (closeTimeout) {
       clearTimeout(closeTimeout);
@@ -133,6 +115,7 @@ const WelcomeLetterHoverCard = ({ children, onPromptGenerated }: WelcomeLetterHo
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Dear [Name], New Member, Employee, Guest, Friend, etc..."
                        className="w-full min-h-[60px] resize-none"
+                       autoComplete="off"
                      />
                   </div>
                   
@@ -144,6 +127,7 @@ const WelcomeLetterHoverCard = ({ children, onPromptGenerated }: WelcomeLetterHo
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Use expressions like Greetings, onboarding, new start, arrival, etc...."
                        className="w-full min-h-[60px] resize-none"
+                       autoComplete="off"
                      />
                   </div>
                   
@@ -154,6 +138,7 @@ const WelcomeLetterHoverCard = ({ children, onPromptGenerated }: WelcomeLetterHo
                       onChange={(e) => setCoreMessage(e.target.value)}
                       placeholder="Begin your note with lines like “Warm welcome, excited to have you, greetings, etc..."
                       className="w-full min-h-[80px] resize-none"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -165,6 +150,7 @@ const WelcomeLetterHoverCard = ({ children, onPromptGenerated }: WelcomeLetterHo
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Use words like Support, Opportunities, Encouragement, etc..."
                        className="w-full min-h-[60px] resize-none"
+                       autoComplete="off"
                      />
                   </div>
                   
@@ -175,6 +161,7 @@ const WelcomeLetterHoverCard = ({ children, onPromptGenerated }: WelcomeLetterHo
                       onChange={(e) => setSignOff(e.target.value)}
                       placeholder="Use “Together ahead, With support, Regards, etc..."
                       className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -186,6 +173,7 @@ const WelcomeLetterHoverCard = ({ children, onPromptGenerated }: WelcomeLetterHo
                        onClick={(e) => e.stopPropagation()}
                        placeholder="Your Name, On behalf of team, Sincerely, etc..."
                        className="w-full"
+                       autoComplete="off"
                      />
                   </div>
                   
@@ -193,7 +181,7 @@ const WelcomeLetterHoverCard = ({ children, onPromptGenerated }: WelcomeLetterHo
                     className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
                     onClick={handleGeneratePrompt}
                   >
-                    Start Welcome Letter
+                    Extend Welcome
                   </button>
                 </div>
               </div>

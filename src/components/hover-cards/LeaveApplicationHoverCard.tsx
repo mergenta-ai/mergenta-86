@@ -20,20 +20,6 @@ const LeaveApplicationHoverCard = ({ children, onPromptGenerated }: LeaveApplica
   const [from, setFrom] = useState("");
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    const saved = localStorage.getItem('leaveApplication-form');
-    if (saved) {
-      const data = JSON.parse(saved);
-      setTo(data.to || ""); setSubject(data.subject || ""); setCoreMessage(data.coreMessage || "");
-      setFinalTouch(data.finalTouch || ""); setSignOff(data.signOff || ""); setFrom(data.from || "");
-    }
-  }, []);
-
-  useEffect(() => {
-    const formData = { to, subject, coreMessage, finalTouch, signOff, from };
-    localStorage.setItem('leaveApplication-form', JSON.stringify(formData));
-  }, [to, subject, coreMessage, finalTouch, signOff, from]);
-
   const handleMouseEnter = () => {
     if (closeTimeoutRef.current) {
       clearTimeout(closeTimeoutRef.current);

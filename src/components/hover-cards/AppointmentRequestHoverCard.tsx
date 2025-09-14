@@ -174,7 +174,7 @@ const AppointmentRequestHoverCard = ({ children, onPromptGenerated }: Appointmen
                       }
                     }}
                   >
-                    Start Appointment Request
+                    Request Appointment
                   </button>
                 </div>
               </div>

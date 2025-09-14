@@ -20,24 +20,6 @@ const RequestLetterHoverCard = ({ children, onPromptGenerated }: RequestLetterHo
   const [from, setFrom] = useState("");
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
   
-  useEffect(() => {
-    const saved = localStorage.getItem('requestLetter-form');
-    if (saved) {
-      const data = JSON.parse(saved);
-      setTo(data.to || "");
-      setSubject(data.subject || "");
-      setCoreMessage(data.coreMessage || "");
-      setFinalTouch(data.finalTouch || "");
-      setSignOff(data.signOff || "");
-      setFrom(data.from || "");
-    }
-  }, []);
-
-  useEffect(() => {
-    const formData = { to, subject, coreMessage, finalTouch, signOff, from };
-    localStorage.setItem('requestLetter-form', JSON.stringify(formData));
-  }, [to, subject, coreMessage, finalTouch, signOff, from]);
-
   const handleMouseEnter = () => {
     if (closeTimeout) {
       clearTimeout(closeTimeout);
@@ -106,6 +88,7 @@ const RequestLetterHoverCard = ({ children, onPromptGenerated }: RequestLetterHo
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Manager, Teacher, Official, Colleague, Minister, Friend, Relative, Principal, Vice Chancellor, etc..."
                       className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -117,6 +100,7 @@ const RequestLetterHoverCard = ({ children, onPromptGenerated }: RequestLetterHo
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Request for assistance, permission, inquiry, favour, guidance, approval, etc..."
                       className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -128,6 +112,7 @@ const RequestLetterHoverCard = ({ children, onPromptGenerated }: RequestLetterHo
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Request details, help needed, support required, access, decision review, reconsideration, etc..."
                       className="w-full min-h-[80px] resize-none"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -139,6 +124,7 @@ const RequestLetterHoverCard = ({ children, onPromptGenerated }: RequestLetterHo
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Reason, urgency, context, background, purpose importance, etc..."
                       className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -150,6 +136,7 @@ const RequestLetterHoverCard = ({ children, onPromptGenerated }: RequestLetterHo
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Hoping for your support, with thanks, early resolution, request assistance, kind consideration, positive response, etc..."
                       className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -161,6 +148,7 @@ const RequestLetterHoverCard = ({ children, onPromptGenerated }: RequestLetterHo
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Your Name, Your Organisation"
                       className="w-full"
+                      autoComplete="off"
                     />
                   </div>
                   
@@ -184,7 +172,7 @@ const RequestLetterHoverCard = ({ children, onPromptGenerated }: RequestLetterHo
                       }
                     }}
                   >
-                    Start Request Letter
+                    Make Request
                   </button>
                 </div>
               </div>

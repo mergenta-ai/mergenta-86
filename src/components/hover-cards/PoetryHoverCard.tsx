@@ -150,7 +150,7 @@ const PoetryHoverCard: React.FC<PoetryHoverCardProps> = ({ children, onPromptGen
                      value={form}
                      onChange={(e) => setForm(e.target.value)}
                      onClick={(e) => e.stopPropagation()}
-                     placeholder="Sonnet, Chhand, Haiku, Ghazal, Ode etc."
+                     placeholder="Sonnet, Rhymes, Chhand, Haiku, Ghazal, Ode etc."
                      className="text-sm placeholder:text-gray-500"
                      autoComplete="off"
                    />
