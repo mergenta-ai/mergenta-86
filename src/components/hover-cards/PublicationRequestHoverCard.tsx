@@ -29,7 +29,7 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
   };
 
   const handleMouseLeave = () => {
-    const timeout = setTimeout(() => {
+    closeTimeoutRef.current = setTimeout(() => {
       setShowCard(false);
     }, 250);
   };
