@@ -169,7 +169,7 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children, onPro
                     }
                   }}
                 >
-                  Give Prediction
+                  Reveal Insights
                 </Button>
               </div>
             </div>

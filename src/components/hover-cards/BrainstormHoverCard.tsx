@@ -160,7 +160,7 @@ const BrainstormHoverCard: React.FC<BrainstormHoverCardProps> = ({ children, onP
                   onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#7D4EFF')}
                   onClick={handleGeneratePrompt}
                 >
-                  Generate Prompt
+                  Start Brainstorming
                 </Button>
               </div>
             </div>

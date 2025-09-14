@@ -209,7 +209,7 @@ const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children, onPromp
                     }
                   }}
                 >
-                  Start Planning
+                  Plan Scenarios
                 </Button>
               </div>
             </div>

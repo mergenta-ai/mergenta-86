@@ -184,7 +184,7 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children, onPromptGen
                     }
                   }}
                 >
-                  Start Mentoring
+                  Be My Mentor
                 </Button>
               </div>
             </div>
