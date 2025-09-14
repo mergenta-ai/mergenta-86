@@ -172,6 +172,7 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
                     onClick={(e) => e.stopPropagation()}
                     placeholder="Identity, Revenge, Power, Love, etc."
                     className="text-sm placeholder-gray-400"
+                    autoComplete="off"
                   />
                 </div>
 
@@ -187,6 +188,7 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
                     onClick={(e) => e.stopPropagation()}
                     placeholder="Romantic, Eerie, Dark, Light, Suspense"
                     className="text-sm placeholder-gray-400"
+                    autoComplete="off"
                   />
                 </div>
 
@@ -202,6 +204,7 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
                     onClick={(e) => e.stopPropagation()}
                     placeholder="Screenplay, Radio, TV, Web Series"
                     className="text-sm placeholder-gray-400"
+                    autoComplete="off"
                   />
                 </div>
 
@@ -217,6 +220,7 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
                     onClick={(e) => e.stopPropagation()}
                     placeholder="Children, Teens, Young Adults, Mature"
                     className="text-sm placeholder-gray-400"
+                    autoComplete="off"
                   />
                 </div>
 

@@ -19,6 +19,7 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
   const [tone, setTone] = useState('');
   const [audience, setAudience] = useState('');
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+ 
   const handleMouseEnter = () => {
     if (closeTimeoutRef.current) {
       clearTimeout(closeTimeoutRef.current);
