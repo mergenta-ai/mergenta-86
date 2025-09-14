@@ -183,6 +183,7 @@ const PermissionLetterHoverCard = ({ children, onPromptGenerated }: PermissionLe
                     onClick={handleGeneratePrompt}
                   >
                     Request Permission
+                    </button>
                 </div>
               </div>
             </div>
