@@ -41,7 +41,7 @@ const InvitationLetterHoverCard = ({ children, onPromptGenerated }: InvitationLe
 
   const handleGeneratePrompt = async () => {
     try {
-      const { data, error } = await supabase.functions.invoke('prompt-engine-communication', {
+      const { data, error } = await supabase.functions.invoke('prompt-engine-consolidated', {
         body: { 
           contentType: 'invitation_letter', 
           formData: { 

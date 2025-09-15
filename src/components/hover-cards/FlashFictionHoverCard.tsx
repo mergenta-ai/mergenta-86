@@ -42,7 +42,7 @@ const FlashFictionHoverCard: React.FC<FlashFictionHoverCardProps> = ({ children,
 
   const handleGeneratePrompt = async () => {
     try {
-      const { data, error } = await supabase.functions.invoke('prompt-engine-creative', {
+      const { data, error } = await supabase.functions.invoke('prompt-engine-consolidated', {
         body: { 
           contentType: 'flash_fiction', 
           formData: { 

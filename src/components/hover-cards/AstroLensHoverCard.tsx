@@ -153,7 +153,7 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children, onPro
                   onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#6C3EB6')}
                   onClick={async () => {
                     try {
-                      const { data, error } = await supabase.functions.invoke('prompt-engine-strategic', {
+                      const { data, error } = await supabase.functions.invoke('prompt-engine-consolidated', {
                         body: { 
                           contentType: 'astro_lens', 
                           formData: { date, year, place, specific } 

@@ -41,7 +41,7 @@ const FarewellLetterHoverCard = ({ children, onPromptGenerated }: FarewellLetter
 
   const handleGeneratePrompt = async () => {
     try {
-      const { data, error } = await supabase.functions.invoke('prompt-engine-communication', {
+      const { data, error } = await supabase.functions.invoke('prompt-engine-consolidated', {
         body: { 
           contentType: 'farewell_letter', 
           formData: { 

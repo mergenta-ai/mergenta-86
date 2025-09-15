@@ -40,7 +40,7 @@ const PermissionLetterHoverCard = ({ children, onPromptGenerated }: PermissionLe
 
   const handleGeneratePrompt = async () => {
     try {
-      const { data, error } = await supabase.functions.invoke('prompt-engine-communication', {
+      const { data, error } = await supabase.functions.invoke('prompt-engine-consolidated', {
         body: { 
           contentType: 'permission_letter', 
           formData: { 

@@ -20,7 +20,7 @@ const BrainstormHoverCard: React.FC<BrainstormHoverCardProps> = ({ children, onP
 
   const handleGeneratePrompt = async () => {
     try {
-      const { data, error } = await supabase.functions.invoke('prompt-engine-strategic', {
+      const { data, error } = await supabase.functions.invoke('prompt-engine-consolidated', {
         body: { 
           contentType: 'brainstorm', 
           formData: { 

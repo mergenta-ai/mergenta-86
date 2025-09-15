@@ -43,7 +43,7 @@ const CongratulatoryLetterHoverCard = ({ children, onPromptGenerated }: Congratu
 
   const handleGeneratePrompt = async () => {
     try {
-      const { data, error } = await supabase.functions.invoke('prompt-engine-communication', {
+      const { data, error } = await supabase.functions.invoke('prompt-engine-consolidated', {
         body: { 
           contentType: 'congratulatory_letter', 
           formData: { 

@@ -156,7 +156,7 @@ const RequestLetterHoverCard = ({ children, onPromptGenerated }: RequestLetterHo
                     className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
                     onClick={async () => {
                       try {
-                        const { data, error } = await supabase.functions.invoke('prompt-engine-communication', {
+                        const { data, error } = await supabase.functions.invoke('prompt-engine-consolidated', {
                           body: { 
                             contentType: 'request_letter', 
                             formData: { to, subject, coreMessage, finalTouch, signOff, from } 

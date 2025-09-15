@@ -168,7 +168,7 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children, onPromptGen
                   onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#6C3EB6')}
                   onClick={async () => {
                     try {
-                      const { data, error } = await supabase.functions.invoke('prompt-engine-strategic', {
+                      const { data, error } = await supabase.functions.invoke('prompt-engine-consolidated', {
                         body: { 
                           contentType: 'mentor', 
                           formData: { mentorshipDomain, currentStage, challenges, desiredOutcome, preferredStyle } 
