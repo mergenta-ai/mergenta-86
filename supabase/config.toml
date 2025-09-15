@@ -11,3 +11,6 @@ verify_jwt = false
 
 [functions.prompt-engine-strategic]
 verify_jwt = false
+
+[functions.prompt-engine-consolidated]
+verify_jwt = false
