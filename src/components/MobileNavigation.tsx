@@ -47,7 +47,7 @@ const MobileNavigation = () => {
   return (
     <>
       {/* Mobile Menu Button */}
-      <div className="lg:hidden md:flex sm:flex fixed top-4 left-4 z-50">
+      <div className="flex lg:hidden fixed top-4 left-4 z-50">
         <Button
           variant="outline"
           size="icon"

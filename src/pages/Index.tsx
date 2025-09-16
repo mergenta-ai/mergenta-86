@@ -100,7 +100,7 @@ const Index = () => {
       <MergentaSidebar />
       
       {/* Main Content */}
-      <div className="flex-1 ml-20 lg:ml-20 md:ml-0 sm:ml-0 flex flex-col">
+      <div className="flex-1 lg:ml-20 ml-0 flex flex-col">
         {/* Logo (top-left) - Hidden on mobile */}
         <div className="p-6 lg:block md:hidden sm:hidden">
           <img 

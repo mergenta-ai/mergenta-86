@@ -64,7 +64,7 @@ const MergentaSidebar = () => {
         />
       )}
       
-      <div className="fixed left-0 top-0 h-full w-20 bg-gradient-to-b from-purple-50 to-purple-100 border-r border-purple-200 z-40 flex flex-col items-center shadow-lg lg:flex md:hidden sm:hidden">
+      <div className="fixed left-0 top-0 h-full w-20 bg-gradient-to-b from-purple-50 to-purple-100 border-r border-purple-200 z-40 hidden lg:flex flex-col items-center shadow-lg">
         {/* Logo Section */}
         <div className="pt-6 pb-8">
           <img 
