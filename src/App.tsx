@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Plans from "./pages/Plans";
 import Billing from "./pages/Billing";
+import MemoryGuide from "./pages/MemoryGuide";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/plans" element={<Plans />} />
               <Route path="/billing" element={<Billing />} />
+              <Route path="/memory-guide" element={<MemoryGuide />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

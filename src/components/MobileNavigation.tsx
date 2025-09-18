@@ -6,7 +6,7 @@ import { Drawer } from 'vaul';
 import HistoryPanel from './sidebar/HistoryPanel';
 import PoliciesPanel from './sidebar/PoliciesPanel';
 import HelpPanel from './sidebar/HelpPanel';
-import ProfilePanel from './sidebar/ProfilePanel';
+import { ProfilePanel } from './sidebar/ProfilePanel';
 import PlansPanel from './sidebar/PlansPanel';
 
 const MobileNavigation = () => {

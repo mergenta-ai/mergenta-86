@@ -85,24 +85,54 @@ export type Database = {
           bio: string | null
           created_at: string
           display_name: string | null
+          first_name: string | null
           id: string
+          last_name: string | null
+          location: string | null
+          middle_name: string | null
+          professional_title: string | null
+          profile_image_url: string | null
+          profile_visibility: string | null
+          social_links: Json | null
+          tagline: string | null
           updated_at: string
+          website_url: string | null
         }
         Insert: {
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
           display_name?: string | null
+          first_name?: string | null
           id: string
+          last_name?: string | null
+          location?: string | null
+          middle_name?: string | null
+          professional_title?: string | null
+          profile_image_url?: string | null
+          profile_visibility?: string | null
+          social_links?: Json | null
+          tagline?: string | null
           updated_at?: string
+          website_url?: string | null
         }
         Update: {
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
           display_name?: string | null
+          first_name?: string | null
           id?: string
+          last_name?: string | null
+          location?: string | null
+          middle_name?: string | null
+          professional_title?: string | null
+          profile_image_url?: string | null
+          profile_visibility?: string | null
+          social_links?: Json | null
+          tagline?: string | null
           updated_at?: string
+          website_url?: string | null
         }
         Relationships: []
       }
@@ -195,35 +225,71 @@ export type Database = {
       }
       user_preferences: {
         Row: {
+          ai_personality: string | null
+          analytics_enabled: boolean | null
           auto_save_conversations: boolean | null
+          auto_save_enabled: boolean | null
           created_at: string
+          data_sharing_enabled: boolean | null
+          email_notifications: boolean | null
+          font_size: string | null
+          high_contrast: boolean | null
           id: string
           language: string | null
+          marketing_notifications: boolean | null
+          memory_enabled: boolean | null
+          message_persistence: boolean | null
           notifications_enabled: boolean | null
           preferred_ai_model: string | null
+          push_notifications: boolean | null
           theme: string | null
+          theme_variant: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
+          ai_personality?: string | null
+          analytics_enabled?: boolean | null
           auto_save_conversations?: boolean | null
+          auto_save_enabled?: boolean | null
           created_at?: string
+          data_sharing_enabled?: boolean | null
+          email_notifications?: boolean | null
+          font_size?: string | null
+          high_contrast?: boolean | null
           id?: string
           language?: string | null
+          marketing_notifications?: boolean | null
+          memory_enabled?: boolean | null
+          message_persistence?: boolean | null
           notifications_enabled?: boolean | null
           preferred_ai_model?: string | null
+          push_notifications?: boolean | null
           theme?: string | null
+          theme_variant?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
+          ai_personality?: string | null
+          analytics_enabled?: boolean | null
           auto_save_conversations?: boolean | null
+          auto_save_enabled?: boolean | null
           created_at?: string
+          data_sharing_enabled?: boolean | null
+          email_notifications?: boolean | null
+          font_size?: string | null
+          high_contrast?: boolean | null
           id?: string
           language?: string | null
+          marketing_notifications?: boolean | null
+          memory_enabled?: boolean | null
+          message_persistence?: boolean | null
           notifications_enabled?: boolean | null
           preferred_ai_model?: string | null
+          push_notifications?: boolean | null
           theme?: string | null
+          theme_variant?: string | null
           updated_at?: string
           user_id?: string
         }
