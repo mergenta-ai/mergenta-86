@@ -3,18 +3,21 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { BioModal } from '@/components/modals/BioModal';
 import { PersonalPreferencesModal } from '@/components/modals/PersonalPreferencesModal';
+import { ProfileModal } from '@/components/modals/ProfileModal';
+import { DeleteAccountModal } from '@/components/modals/DeleteAccountModal';
+import { useAuth } from '@/contexts/AuthContext';
+import { toast } from '@/hooks/use-toast';
 import { 
   User, 
   Settings, 
   CreditCard, 
-  HelpCircle, 
-  FileText, 
-  Shield, 
   Trash2,
   LogOut,
   Brain,
   Palette,
-  ChevronRight
+  ChevronRight,
+  Info,
+  Building
 } from 'lucide-react';
 
 interface ProfileItem {
@@ -32,7 +35,27 @@ interface ProfilePanelProps {
 
 export const ProfilePanel = ({ isVisible, onClose, navigate }: ProfilePanelProps) => {
   const [bioModalOpen, setBioModalOpen] = useState(false);
+  const [profileModalOpen, setProfileModalOpen] = useState(false);
   const [preferencesModalOpen, setPreferencesModalOpen] = useState(false);
+  const [deleteAccountModalOpen, setDeleteAccountModalOpen] = useState(false);
+  const { signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      toast({
+        title: "Signed out successfully",
+        description: "You have been signed out of your account.",
+      });
+      onClose();
+    } catch (error) {
+      toast({
+        title: "Error signing out",
+        description: "There was an error signing out. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
 
   const profileItems: ProfileItem[] = [
     // Account Section
@@ -51,10 +74,16 @@ export const ProfilePanel = ({ isVisible, onClose, navigate }: ProfilePanelProps
     
     // Preferences Section
     {
-      id: 'bio-profile',
-      title: 'Bio & Profile',
+      id: 'bio',
+      title: 'Bio',
       section: 'preferences',
       action: () => setBioModalOpen(true)
+    },
+    {
+      id: 'profile',
+      title: 'Profile',
+      section: 'preferences',
+      action: () => setProfileModalOpen(true)
     },
     {
       id: 'personal-preferences',
@@ -71,22 +100,16 @@ export const ProfilePanel = ({ isVisible, onClose, navigate }: ProfilePanelProps
     
     // About Section
     {
-      id: 'help',
-      title: 'Help & Support',
+      id: 'about-mergenta',
+      title: 'About Mergenta',
       section: 'about',
-      action: () => console.log('Help & Support clicked')
+      action: () => console.log('About Mergenta clicked')
     },
     {
-      id: 'privacy',
-      title: 'Privacy Policy',
+      id: 'inside-mergenta',
+      title: 'Inside Mergenta',
       section: 'about',
-      action: () => console.log('Privacy Policy clicked')
-    },
-    {
-      id: 'terms',
-      title: 'Terms of Service',
-      section: 'about',
-      action: () => console.log('Terms of Service clicked')
+      action: () => console.log('Inside Mergenta clicked')
     },
     
     // Danger Zone
@@ -94,13 +117,13 @@ export const ProfilePanel = ({ isVisible, onClose, navigate }: ProfilePanelProps
       id: 'logout',
       title: 'Sign Out',
       section: 'danger',
-      action: () => console.log('Sign Out clicked')
+      action: handleSignOut
     },
     {
       id: 'delete-account',
       title: 'Delete Account',
       section: 'danger',
-      action: () => console.log('Delete Account clicked')
+      action: () => setDeleteAccountModalOpen(true)
     }
   ];
 
@@ -136,7 +159,9 @@ export const ProfilePanel = ({ isVisible, onClose, navigate }: ProfilePanelProps
 
   const getItemIcon = (itemId: string) => {
     switch (itemId) {
-      case 'bio-profile':
+      case 'bio':
+        return User;
+      case 'profile':
         return User;
       case 'personal-preferences':
         return Palette;
@@ -145,12 +170,10 @@ export const ProfilePanel = ({ isVisible, onClose, navigate }: ProfilePanelProps
       case 'current-plan':
       case 'billing':
         return CreditCard;
-      case 'help':
-        return HelpCircle;
-      case 'privacy':
-        return Shield;
-      case 'terms':
-        return FileText;
+      case 'about-mergenta':
+        return Info;
+      case 'inside-mergenta':
+        return Building;
       case 'delete-account':
         return Trash2;
       case 'logout':
@@ -214,9 +237,17 @@ export const ProfilePanel = ({ isVisible, onClose, navigate }: ProfilePanelProps
         isOpen={bioModalOpen} 
         onClose={() => setBioModalOpen(false)} 
       />
+      <ProfileModal 
+        isOpen={profileModalOpen} 
+        onClose={() => setProfileModalOpen(false)} 
+      />
       <PersonalPreferencesModal 
         isOpen={preferencesModalOpen} 
         onClose={() => setPreferencesModalOpen(false)} 
+      />
+      <DeleteAccountModal 
+        isOpen={deleteAccountModalOpen} 
+        onClose={() => setDeleteAccountModalOpen(false)} 
       />
     </div>
   );
