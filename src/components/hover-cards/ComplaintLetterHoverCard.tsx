@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { AlertTriangle } from "lucide-react";
@@ -18,22 +18,23 @@ const ComplaintLetterHoverCard = ({ children, onPromptGenerated }: ComplaintLett
   const [finalTouch, setFinalTouch] = useState("");
   const [signOff, setSignOff] = useState("");
   const [from, setFrom] = useState("");
-  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
 
   // No localStorage - forms always start empty
 
   const handleMouseEnter = () => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-      closeTimeoutRef.current = null;
+    if (closeTimeout) {
+      clearTimeout(closeTimeout);
+      setCloseTimeout(null);
     }
     setShowCard(true);
   };
 
   const handleMouseLeave = () => {
-    closeTimeoutRef.current = setTimeout(() => {
+    const timeout = setTimeout(() => {
       setShowCard(false);
     }, 250);
+    setCloseTimeout(timeout);
   };
 
   const handleCardClick = (e: React.MouseEvent) => {
@@ -49,7 +50,7 @@ const ComplaintLetterHoverCard = ({ children, onPromptGenerated }: ComplaintLett
   );
 
   return (
-   <div className="relative">
+    <>
       {/* Trigger Element */}
       <div 
         data-complaint-trigger
@@ -65,7 +66,7 @@ const ComplaintLetterHoverCard = ({ children, onPromptGenerated }: ComplaintLett
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-complaint-card
-            className="absolute left-[918px] top-[220px] w-80 pointer-events-auto"
+            className="absolute left-[918px] top-[214px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
@@ -181,7 +182,7 @@ const ComplaintLetterHoverCard = ({ children, onPromptGenerated }: ComplaintLett
           </div>
         </div>
       )}
-   </div>
+    </>
   );
 };
 
