@@ -94,7 +94,7 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
       textareas.forEach(textarea => {
         if (textarea.value === input || textarea.value === initialValue) {
           textarea.style.height = 'auto';
-          const newHeight = Math.min(Math.max(textarea.scrollHeight, 24), 240);
+          const newHeight = Math.min(Math.max(textarea.scrollHeight, 24), 120);
           textarea.style.height = newHeight + 'px';
           // Force reflow to ensure proper rendering
           textarea.offsetHeight;
@@ -145,7 +145,7 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                 style={{
                   height: 'auto',
                   minHeight: '24px',
-                  maxHeight: '240px',
+                  maxHeight: '120px',
                   overflowY: 'auto',
                   wordWrap: 'break-word',
                   whiteSpace: 'normal',
@@ -156,7 +156,7 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                 onInput={(e) => {
                   const target = e.target as HTMLTextAreaElement;
                   target.style.height = 'auto';
-                  const newHeight = Math.min(Math.max(target.scrollHeight, 24), 240);
+                  const newHeight = Math.min(Math.max(target.scrollHeight, 24), 120);
                   target.style.height = newHeight + 'px';
                 }}
               />
