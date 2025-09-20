@@ -131,7 +131,7 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
     <TooltipProvider>
       <div className="flex justify-center w-full px-4 mt-2 lg:mt-0">
         <form onSubmit={handleSubmit} className="w-full max-w-3xl mx-auto">
-          <div className="flex flex-col w-full rounded-xl shadow-sm bg-white px-4 pt-3 pb-3 min-h-[60px]">
+          <div className="flex flex-col w-full rounded-xl shadow-sm bg-white px-4 pt-3 pb-3 min-h-[94px]">
             {/* Input field at top */}
             <div className="flex-grow relative">
               <textarea
