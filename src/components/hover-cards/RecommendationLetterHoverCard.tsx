@@ -31,6 +31,7 @@ const RecommendationLetterHoverCard = ({ children, onPromptGenerated }: Recommen
   const handleMouseLeave = () => {
     closeTimeoutRef.current = setTimeout(() => {
       setShowCard(false);
+      closeTimeoutRef.current = null;
     }, 250);
   };
 
