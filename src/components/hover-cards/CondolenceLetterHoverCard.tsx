@@ -31,7 +31,7 @@ const CondolenceLetterHoverCard = ({ children, onPromptGenerated }: CondolenceLe
   };
 
   const handleMouseLeave = () => {
-    const timeout = setTimeout(() => {
+    closeTimeoutRef.current = setTimeout(() => {
       setShowCard(false);
     }, 250);
   };
