@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { HandHeart } from "lucide-react";
@@ -18,21 +18,20 @@ const ThankYouLetterHoverCard = ({ children, onPromptGenerated }: ThankYouLetter
   const [finalTouch, setFinalTouch] = useState("");
   const [signOff, setSignOff] = useState("");
   const [from, setFrom] = useState("");
-  const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
+  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleMouseEnter = () => {
-    if (closeTimeout) {
-      clearTimeout(closeTimeout);
-      setCloseTimeout(null);
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
     }
     setShowCard(true);
   };
 
   const handleMouseLeave = () => {
-    const timeout = setTimeout(() => {
+    closeTimeoutRef.current = setTimeout(() => {
       setShowCard(false);
     }, 250);
-    setCloseTimeout(timeout);
   };
 
   const handleCardClick = (e: React.MouseEvent) => {
@@ -48,7 +47,7 @@ const ThankYouLetterHoverCard = ({ children, onPromptGenerated }: ThankYouLetter
   );
 
   return (
-    <>
+   <div className="relative">
       {/* Trigger Element */}
       <div 
         data-thank-you-trigger
@@ -178,7 +177,7 @@ const ThankYouLetterHoverCard = ({ children, onPromptGenerated }: ThankYouLetter
           </div>
         </div>
       )}
-    </>
+   </div>
   );
 };
 
