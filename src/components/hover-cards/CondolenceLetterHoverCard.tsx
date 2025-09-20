@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Flower } from "lucide-react";
@@ -18,14 +18,14 @@ const CondolenceLetterHoverCard = ({ children, onPromptGenerated }: CondolenceLe
   const [finalTouch, setFinalTouch] = useState("");
   const [signOff, setSignOff] = useState("");
   const [from, setFrom] = useState("");
-  const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
+  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // No localStorage - forms always start empty
 
   const handleMouseEnter = () => {
-    if (closeTimeout) {
-      clearTimeout(closeTimeout);
-      setCloseTimeout(null);
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
     }
     setShowCard(true);
   };
@@ -34,7 +34,6 @@ const CondolenceLetterHoverCard = ({ children, onPromptGenerated }: CondolenceLe
     const timeout = setTimeout(() => {
       setShowCard(false);
     }, 250);
-    setCloseTimeout(timeout);
   };
 
   const handleCardClick = (e: React.MouseEvent) => {
@@ -50,7 +49,7 @@ const CondolenceLetterHoverCard = ({ children, onPromptGenerated }: CondolenceLe
   );
 
   return (
-    <>
+    <div className="relative">
       {/* Trigger Element */}
       <div 
         data-condolence-letter-trigger
@@ -182,7 +181,7 @@ const CondolenceLetterHoverCard = ({ children, onPromptGenerated }: CondolenceLe
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
