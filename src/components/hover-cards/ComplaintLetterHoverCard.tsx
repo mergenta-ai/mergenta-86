@@ -66,7 +66,7 @@ const ComplaintLetterHoverCard = ({ children, onPromptGenerated }: ComplaintLett
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-complaint-card
-            className="absolute left-[918px] top-[214px] w-80 pointer-events-auto"
+            className="absolute left-[918px] top-[205px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
