@@ -133,27 +133,36 @@ const Index = () => {
           </main>
         )}
 
-        {/* Empty state spacer - Takes space when no messages */}
-        {messages.length === 0 && (
-          <div className="flex-1"></div>
-        )}
-
-        {/* ChatInput container - Always at bottom with proper spacing */}
-        <div className="flex-shrink-0 pb-4 px-4">
-          <div className="max-w-4xl mx-auto">
-            <ChatInput 
-              onSendMessage={handleSendMessage} 
-              isLoading={isLoading} 
-              initialValue={generatedPrompt}
-            />
-            {/* Disclaimer */}
-            <div className="text-center mt-3 mb-2">
-              <p className="text-xs text-muted-foreground">
-                AI can make mistakes. Check important info.
-              </p>
+        {/* ChatInput container - Centered when no messages, fixed at bottom when messages exist */}
+        {messages.length === 0 ? (
+          /* Centered ChatInput for empty state */
+          <div className="flex-1 flex items-center justify-center pb-20">
+            <div className="w-full max-w-3xl px-4">
+              <ChatInput 
+                onSendMessage={handleSendMessage} 
+                isLoading={isLoading} 
+                initialValue={generatedPrompt}
+              />
             </div>
           </div>
-        </div>
+        ) : (
+          /* Fixed ChatInput at bottom for chat state */
+          <div className="flex-shrink-0 pb-4 px-4">
+            <div className="max-w-4xl mx-auto">
+              <ChatInput 
+                onSendMessage={handleSendMessage} 
+                isLoading={isLoading} 
+                initialValue={generatedPrompt}
+              />
+              {/* Disclaimer - Only show when messages exist */}
+              <div className="text-center mt-3 mb-2">
+                <p className="text-xs text-muted-foreground">
+                  AI can make mistakes. Check important info.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Touch-Friendly Workflow Tabs - Mobile - Only show when no messages */}
