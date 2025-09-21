@@ -76,8 +76,7 @@ All colors MUST be HSL.
     --mergenta-glow: 300 100% 50%;
     
     --chat-bg: 0 0% 100%;
-    --message-user: 271 35% 85%; /* Soft pastel violet - darker than AI messages */
-    --message-user-foreground: 271 77% 47%; /* Darker text for good contrast */
+    --message-user: 280 85% 36%;
     --message-ai: 240 4.8% 95.9%;
     
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
