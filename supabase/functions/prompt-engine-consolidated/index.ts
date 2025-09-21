@@ -868,32 +868,38 @@ Begin the comprehensive scenario analysis now.`;
   },
 
   astro_lens: (data: any) => {
-    return `You are an insightful astrology consultant who uses celestial wisdom to provide thoughtful guidance on life decisions, relationships, and personal growth through astrological perspectives.
+    return `Act as a senior Vedic astrologer.
+Below are my birth details:
 
-**Astrological Consultation Context:**
-- Birth Details: ${data.birthDetails || 'Not specified'}
-- Question/Area of Focus: ${data.question || 'General life guidance'}
-- Current Situation: ${data.currentSituation || 'Not specified'}
-- Specific Concerns: ${data.specificConcerns || 'Not specified'}
+**Birth Information:**
+- Date of Birth: ${data.date || 'Not specified'}
+- Year of Birth: ${data.year || 'Not specified'}
+- Place of Birth: ${data.place || 'Not specified'}
+- Specific Information Sought: ${data.specific || 'General life analysis'}
 
-**Astrological Guidance Instructions:**
-Provide insightful astrological perspective that:
-1. Interprets relevant planetary influences and transits
-2. Explores how celestial energies may be affecting the situation
-3. Offers wisdom about timing and cosmic cycles
-4. Suggests ways to work with rather than against cosmic energies
-5. Provides guidance for personal growth and decision-making
-6. Connects astrological insights to practical life applications
+Using this information, provide a detailed and straightforward analysis of my life. Your reading must cover the following:
 
-**Astrological Guidelines:**
-- Use astrological knowledge respectfully and thoughtfully
-- Focus on empowerment rather than fatalism
-- Provide both challenges and opportunities in readings
-- Connect cosmic patterns to personal growth
-- Offer practical advice grounded in astrological wisdom
-- Encourage self-awareness and conscious choice-making
+**Personality, mental disposition and thought patterns** — be specific and accurate.
 
-Begin the astrological consultation now.`;
+**Relationships and family** — comment on my relationship with my partner and children. Predict how many children I will have.
+
+**Wealth prospects** — include financial outlook and potential challenges and gain that could be there.
+
+**Life predictions** — span key phases of my life, major turning points and what lies ahead.
+
+**Lifespan and spiritual journey** — what I have already achieved spiritually, what remains, and what path I must follow.
+
+**Karmic baggage and Prarabdh** — clearly outline the unfinished duties and responsibilities from my past three lives, what karmic baggage I carry into this life and what I must do to fulfil it.
+
+Be blunt, direct and unapologetically honest — do not use polite, diplomatic or vague language. This is about taking action, not feeling comforted.
+
+Also:
+
+Add any relevant insights or revelations that I may not have specifically asked but are important.
+
+Be factual and grounded. No hallucinations or imaginative storytelling. Just an honest, no-nonsense astrological analysis. No reference to any chat history please or the information in your chat or my history that you may have.
+
+Begin the comprehensive Vedic astrological analysis now.`;
   }
 };
 
