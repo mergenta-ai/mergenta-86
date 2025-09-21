@@ -100,9 +100,9 @@ const Index = () => {
       <MergentaSidebar />
       
       {/* Main Content */}
-      <div className="flex-1 lg:ml-20 ml-0 flex flex-col">
+      <div className="flex-1 lg:ml-20 ml-0 flex flex-col h-screen">
         {/* Logo (top-left) - Hidden on mobile */}
-        <div className="p-6 lg:block md:hidden sm:hidden">
+        <div className="p-6 lg:block md:hidden sm:hidden flex-shrink-0">
           <img 
             src="/lovable-uploads/0ef37e7c-4020-4d43-b3cb-e900815b9635.png" 
             alt="Mergenta Logo" 
@@ -111,22 +111,30 @@ const Index = () => {
         </div>
 
         {/* Header section */}
-        <Header />
-
-        {/* Input bar */}
-        <ChatInput 
-          onSendMessage={handleSendMessage} 
-          isLoading={isLoading} 
-          initialValue={generatedPrompt}
-        />
+        <div className="flex-shrink-0">
+          <Header />
+        </div>
 
         {/* Workflow tabs - Desktop */}
-        {!isMobile && <WorkflowTabs onAddToChat={handleAddToChat} onPromptGenerated={handlePromptGenerated} />}
+        {!isMobile && (
+          <div className="flex-shrink-0">
+            <WorkflowTabs onAddToChat={handleAddToChat} onPromptGenerated={handlePromptGenerated} />
+          </div>
+        )}
 
-        {/* Chat messages */}
-        <main className="flex-1 flex flex-col">
+        {/* Chat messages - Takes remaining space */}
+        <main className="flex-1 flex flex-col overflow-hidden min-h-0">
           <ChatInterface messages={messages} isLoading={isLoading} />
         </main>
+
+        {/* Fixed Input bar at bottom */}
+        <div className="flex-shrink-0 sticky bottom-0 bg-background border-t border-border z-10">
+          <ChatInput 
+            onSendMessage={handleSendMessage} 
+            isLoading={isLoading} 
+            initialValue={generatedPrompt}
+          />
+        </div>
       </div>
 
       {/* Touch-Friendly Workflow Tabs - Mobile */}
