@@ -149,7 +149,7 @@ const Index = () => {
                 />
                 {/* Disclaimer */}
                 <p className="text-center text-sm text-gray-500 mt-2">
-                  AI-assisted results. Verify before relying on critical information.
+                  Mergenta can make mistakes. Verify important info.
                 </p>
               </div>
             </div>
