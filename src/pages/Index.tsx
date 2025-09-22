@@ -100,37 +100,65 @@ const Index = () => {
       <MergentaSidebar />
       
       {/* Main Content */}
-      <div className="flex-1 lg:ml-20 ml-0 flex flex-col">
-        {/* Logo (top-left) - Hidden on mobile */}
-        <div className="p-6 lg:block md:hidden sm:hidden">
-          <img 
-            src="/lovable-uploads/0ef37e7c-4020-4d43-b3cb-e900815b9635.png" 
-            alt="Mergenta Logo" 
-            className="h-26 w-auto md:h-34 lg:h-44 invisible" 
-          />
-        </div>
+      <div className="flex-1 lg:ml-20 ml-0 flex flex-col relative">
+        {messages.length === 0 ? (
+          <>
+            {/* Default State - No Messages */}
+            {/* Logo (top-left) - Hidden on mobile */}
+            <div className="p-6 lg:block md:hidden sm:hidden">
+              <img 
+                src="/lovable-uploads/0ef37e7c-4020-4d43-b3cb-e900815b9635.png" 
+                alt="Mergenta Logo" 
+                className="h-26 w-auto md:h-34 lg:h-44 invisible" 
+              />
+            </div>
 
-        {/* Header section */}
-        <Header />
+            {/* Header section */}
+            <Header />
 
-        {/* Input bar */}
-        <ChatInput 
-          onSendMessage={handleSendMessage} 
-          isLoading={isLoading} 
-          initialValue={generatedPrompt}
-        />
+            {/* Input bar */}
+            <ChatInput 
+              onSendMessage={handleSendMessage} 
+              isLoading={isLoading} 
+              initialValue={generatedPrompt}
+            />
 
-        {/* Workflow tabs - Desktop */}
-        {!isMobile && <WorkflowTabs onAddToChat={handleAddToChat} onPromptGenerated={handlePromptGenerated} />}
+            {/* Workflow tabs - Desktop */}
+            {!isMobile && <WorkflowTabs onAddToChat={handleAddToChat} onPromptGenerated={handlePromptGenerated} />}
 
-        {/* Chat messages */}
-        <main className="flex-1 flex flex-col">
-          <ChatInterface messages={messages} isLoading={isLoading} />
-        </main>
+            {/* Chat messages */}
+            <main className="flex-1 flex flex-col">
+              <ChatInterface messages={messages} isLoading={isLoading} />
+            </main>
+          </>
+        ) : (
+          <>
+            {/* Chat State - Messages Exist */}
+            {/* Chat messages take full space */}
+            <main className="flex-1 flex flex-col">
+              <ChatInterface messages={messages} isLoading={isLoading} />
+            </main>
+
+            {/* Fixed bottom search bar */}
+            <div className="fixed bottom-4 left-0 right-0 z-50 flex justify-center px-4">
+              <div className="w-full max-w-3xl">
+                <ChatInput 
+                  onSendMessage={handleSendMessage} 
+                  isLoading={isLoading} 
+                  initialValue={generatedPrompt}
+                />
+                {/* Disclaimer */}
+                <p className="text-center text-sm text-gray-500 mt-2">
+                  AI can make mistakes. Check important info.
+                </p>
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
-      {/* Touch-Friendly Workflow Tabs - Mobile */}
-      <TouchFriendlyWorkflowTabs onAddToChat={handleAddToChat} onPromptGenerated={handlePromptGenerated} />
+      {/* Touch-Friendly Workflow Tabs - Mobile (only when no messages) */}
+      {messages.length === 0 && <TouchFriendlyWorkflowTabs onAddToChat={handleAddToChat} onPromptGenerated={handlePromptGenerated} />}
     </div>
   );
 };
