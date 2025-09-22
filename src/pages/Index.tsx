@@ -149,7 +149,7 @@ const Index = () => {
                 />
                 {/* Disclaimer */}
                 <p className="text-center text-sm text-gray-500 mt-2">
-                  AI can make mistakes. Check important info.
+                  AI-assisted results. Verify before relying on critical information.
                 </p>
               </div>
             </div>
