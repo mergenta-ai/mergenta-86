@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { Clock, FileText, Crown, HelpCircle, User } from 'lucide-react';
+import { Clock, FileText, Crown, HelpCircle, User, Plus, TrendingUp, Mail } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import HistoryPanel from './sidebar/HistoryPanel';
 import PoliciesPanel from './sidebar/PoliciesPanel';
 import HelpPanel from './sidebar/HelpPanel';
 import { ProfilePanel } from './sidebar/ProfilePanel';
 import PlansPanel from './sidebar/PlansPanel';
+import TrendingPanel from './sidebar/TrendingPanel';
 import { Button } from './ui/button';
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 
 const MergentaSidebar = () => {
   const [showHistory, setShowHistory] = useState(false);
@@ -14,6 +16,7 @@ const MergentaSidebar = () => {
   const [showHelp, setShowHelp] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [showPlans, setShowPlans] = useState(false);
+  const [showTrending, setShowTrending] = useState(false);
   const navigate = useNavigate();
 
   // Handle mouse events
@@ -24,6 +27,7 @@ const MergentaSidebar = () => {
     setShowPlans(false);
     setShowHelp(false);
     setShowProfile(false);
+    setShowTrending(false);
     
     // Then open the requested panel
     switch(panel) {
@@ -32,6 +36,7 @@ const MergentaSidebar = () => {
       case 'plans': setShowPlans(true); break;
       case 'help': setShowHelp(true); break;
       case 'profile': setShowProfile(true); break;
+      case 'trending': setShowTrending(true); break;
     }
   };
 
@@ -42,6 +47,7 @@ const MergentaSidebar = () => {
     setShowPlans(false);
     setShowHelp(false);
     setShowProfile(false);
+    setShowTrending(false);
   };
 
   // Handle clicks outside sidebar to close panels
@@ -51,13 +57,26 @@ const MergentaSidebar = () => {
     setShowPlans(false);
     setShowHelp(false);
     setShowProfile(false);
+    setShowTrending(false);
+  };
+
+  // Handle new chat
+  const handleNewChat = () => {
+    // Reload the page to start a new chat
+    window.location.reload();
+  };
+
+  // Handle email
+  const handleEmail = () => {
+    // Open email client
+    window.location.href = 'mailto:';
   };
 
 
   return (
     <>
       {/* Click outside overlay to close panels */}
-      {(showHistory || showPolicies || showPlans || showHelp || showProfile) && (
+      {(showHistory || showPolicies || showPlans || showHelp || showProfile || showTrending) && (
         <div 
           className="fixed inset-0 z-20 bg-transparent"
           onClick={handleClickOutside}
@@ -74,32 +93,102 @@ const MergentaSidebar = () => {
           />
         </div>
 
+        {/* New Chat Icon */}
+        <div className="relative mb-4">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                className="h-16 w-16 rounded-xl hover:bg-pastel-mint hover:shadow-[0_0_8px_rgba(200,248,220,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-mint-hover"
+                onClick={handleNewChat}
+              >
+                <Plus className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="right" className="ml-2">
+              <p>Start new chat</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
+
+        {/* Trending Icon */}
+        <div 
+          className="relative mb-4"
+          onMouseEnter={() => handleMouseEnter('trending')}
+        >
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                className="h-16 w-16 rounded-xl hover:bg-pastel-orange hover:shadow-[0_0_8px_rgba(248,220,200,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-orange-hover"
+              >
+                <TrendingUp className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="right" className="ml-2">
+              <p>Trending</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
+
+        {/* Email Icon */}
+        <div className="relative mb-4">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                className="h-16 w-16 rounded-xl hover:bg-pastel-blue hover:shadow-[0_0_8px_rgba(200,220,248,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-blue-hover"
+                onClick={handleEmail}
+              >
+                <Mail className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="right" className="ml-2">
+              <p>Email</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
+
         {/* History Icon */}
         <div 
-          className="relative mb-12"
+          className="relative mb-4"
           onMouseEnter={() => handleMouseEnter('history')}
         >
-          <Button
-            variant="ghost"
-            className="h-16 w-16 rounded-xl hover:bg-pastel-magenta hover:shadow-[0_0_8px_rgba(248,200,220,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-magenta-hover"
-          >
-            <Clock className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                className="h-16 w-16 rounded-xl hover:bg-pastel-magenta hover:shadow-[0_0_8px_rgba(248,200,220,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-magenta-hover"
+              >
+                <Clock className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="right" className="ml-2">
+              <p>History</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
 
         {/* Middle Section - Main Icons */}
-        <div className="flex flex-col justify-start space-y-6">
+        <div className="flex flex-col justify-start space-y-4">
           {/* Policies */}
           <div 
             className="relative"
             onMouseEnter={() => handleMouseEnter('policies')}
           >
-            <Button
-              variant="ghost"
-              className="h-16 w-16 rounded-xl hover:bg-pastel-violet hover:shadow-[0_0_8px_rgba(209,196,233,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-violet-hover"
-            >
-              <FileText className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="h-16 w-16 rounded-xl hover:bg-pastel-violet hover:shadow-[0_0_8px_rgba(209,196,233,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-violet-hover"
+                >
+                  <FileText className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right" className="ml-2">
+                <p>Policies</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
 
           {/* Plans */}
@@ -107,12 +196,19 @@ const MergentaSidebar = () => {
             className="relative"
             onMouseEnter={() => handleMouseEnter('plans')}
           >
-            <Button
-              variant="ghost"
-              className="h-16 w-16 rounded-xl hover:bg-pastel-lavender hover:shadow-[0_0_8px_rgba(234,220,248,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-lavender-hover"
-            >
-              <Crown className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="h-16 w-16 rounded-xl hover:bg-pastel-lavender hover:shadow-[0_0_8px_rgba(234,220,248,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-lavender-hover"
+                >
+                  <Crown className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right" className="ml-2">
+                <p>Plans</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
 
           {/* Help & Support */}
@@ -120,12 +216,19 @@ const MergentaSidebar = () => {
             className="relative"
             onMouseEnter={() => handleMouseEnter('help')}
           >
-            <Button
-              variant="ghost"
-              className="h-16 w-16 rounded-xl hover:bg-pastel-magenta hover:shadow-[0_0_8px_rgba(248,200,220,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-magenta-hover"
-            >
-              <HelpCircle className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="h-16 w-16 rounded-xl hover:bg-pastel-magenta hover:shadow-[0_0_8px_rgba(248,200,220,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-magenta-hover"
+                >
+                  <HelpCircle className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right" className="ml-2">
+                <p>Help & Support</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
 
@@ -137,12 +240,19 @@ const MergentaSidebar = () => {
           className="relative pb-6"
           onMouseEnter={() => handleMouseEnter('profile')}
         >
-          <Button
-            variant="ghost"
-            className="h-16 w-16 rounded-xl hover:bg-pastel-violet hover:shadow-[0_0_8px_rgba(209,196,233,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-violet-hover"
-          >
-            <User className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                className="h-16 w-16 rounded-xl hover:bg-pastel-violet hover:shadow-[0_0_8px_rgba(209,196,233,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-violet-hover"
+              >
+                <User className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="right" className="ml-2">
+              <p>Profile</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </div>
 
@@ -211,6 +321,19 @@ const MergentaSidebar = () => {
             isVisible={showProfile} 
             onClose={() => setShowProfile(false)}
             navigate={navigate}
+          />
+        </div>
+      )}
+      
+      {showTrending && (
+        <div 
+          className="fixed left-0 top-0 h-full w-[400px] z-30"
+          onMouseEnter={() => setShowTrending(true)}
+          onMouseLeave={() => setShowTrending(false)}
+        >
+          <TrendingPanel 
+            isVisible={showTrending} 
+            onClose={() => setShowTrending(false)}
           />
         </div>
       )}
