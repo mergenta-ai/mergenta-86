@@ -92,7 +92,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen w-full flex">
       {/* Mobile Navigation */}
       <MobileNavigation />
       
@@ -104,51 +104,60 @@ const Index = () => {
         {messages.length === 0 ? (
           <>
             {/* Default State - No Messages */}
-            {/* Logo (top-left) - Hidden on mobile */}
-            <div className="p-6 lg:block md:hidden sm:hidden">
-              <img 
-                src="/lovable-uploads/0ef37e7c-4020-4d43-b3cb-e900815b9635.png" 
-                alt="Mergenta Logo" 
-                className="h-26 w-auto md:h-34 lg:h-44 invisible" 
-              />
+            <div className="flex-1 flex flex-col items-center justify-center px-4 py-8 text-center">
+              {/* Logo (top-center) - Always visible and centered */}
+              <div className="mb-8">
+                <img 
+                  src="/lovable-uploads/0ef37e7c-4020-4d43-b3cb-e900815b9635.png" 
+                  alt="Mergenta Logo" 
+                  className="h-20 w-auto mx-auto sm:h-24 md:h-28 lg:h-32" 
+                />
+              </div>
+
+              {/* Header section - Perfectly centered */}
+              <div className="w-full max-w-4xl mx-auto mb-8">
+                <Header />
+              </div>
+
+              {/* Input bar - Centered */}
+              <div className="w-full max-w-3xl mx-auto mb-8">
+                <ChatInput 
+                  onSendMessage={handleSendMessage} 
+                  isLoading={isLoading} 
+                  initialValue={generatedPrompt}
+                />
+              </div>
+
+              {/* Workflow tabs - Below search bar for mobile, traditional for desktop */}
+              {isMobile ? (
+                <div className="w-full max-w-md mx-auto">
+                  <TouchFriendlyWorkflowTabs onAddToChat={handleAddToChat} onPromptGenerated={handlePromptGenerated} />
+                </div>
+              ) : (
+                <div className="w-full">
+                  <WorkflowTabs onAddToChat={handleAddToChat} onPromptGenerated={handlePromptGenerated} />
+                </div>
+              )}
             </div>
-
-            {/* Header section */}
-            <Header />
-
-            {/* Input bar */}
-            <ChatInput 
-              onSendMessage={handleSendMessage} 
-              isLoading={isLoading} 
-              initialValue={generatedPrompt}
-            />
-
-            {/* Workflow tabs - Desktop */}
-            {!isMobile && <WorkflowTabs onAddToChat={handleAddToChat} onPromptGenerated={handlePromptGenerated} />}
-
-            {/* Chat messages */}
-            <main className="flex-1 flex flex-col">
-              <ChatInterface messages={messages} isLoading={isLoading} />
-            </main>
           </>
         ) : (
           <>
             {/* Chat State - Messages Exist */}
             {/* Chat messages take full space */}
-            <main className="flex-1 flex flex-col">
+            <main className="flex-1 flex flex-col pb-24">
               <ChatInterface messages={messages} isLoading={isLoading} />
             </main>
 
             {/* Fixed bottom search bar */}
             <div className="fixed bottom-4 left-0 right-0 z-50 flex justify-center px-4">
-              <div className="w-full max-w-3xl">
+              <div className={`w-full max-w-3xl ${isMobile ? 'lg:ml-0' : 'lg:ml-10'}`}>
                 <ChatInput 
                   onSendMessage={handleSendMessage} 
                   isLoading={isLoading} 
                   initialValue={generatedPrompt}
                 />
                 {/* Disclaimer */}
-                <p className="text-center text-sm text-gray-500 mt-2">
+                <p className="text-center text-sm text-muted-foreground mt-2">
                   Mergenta can make mistakes. Verify information.
                 </p>
               </div>
@@ -156,9 +165,6 @@ const Index = () => {
           </>
         )}
       </div>
-
-      {/* Touch-Friendly Workflow Tabs - Mobile (only when no messages) */}
-      {messages.length === 0 && <TouchFriendlyWorkflowTabs onAddToChat={handleAddToChat} onPromptGenerated={handlePromptGenerated} />}
     </div>
   );
 };

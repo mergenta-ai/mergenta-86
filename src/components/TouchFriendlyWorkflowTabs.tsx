@@ -250,14 +250,15 @@ const TouchFriendlyWorkflowTabs: React.FC<TouchFriendlyWorkflowTabsProps> = ({ o
   if (isMobile) {
     return (
       <>
-        {/* Mobile Workflow Navigation - Prominent placement */}
-        <div className="flex justify-center w-full px-4 mt-3">
+        {/* Mobile Workflow Navigation - Simple button */}
+        <div className="flex justify-center w-full px-4">
           <Button
             onClick={() => setIsOpen(true)}
-            className="w-full max-w-md h-12 bg-primary hover:bg-primary/90 shadow-lg font-medium text-lg"
+            variant="outline"
+            className="w-full max-w-sm h-12 font-medium text-base border-primary/30 hover:bg-primary/5"
           >
             Explore Workflows
-            <ChevronUp className="ml-2 h-5 w-5" />
+            <ChevronUp className="ml-2 h-4 w-4" />
           </Button>
         </div>
 

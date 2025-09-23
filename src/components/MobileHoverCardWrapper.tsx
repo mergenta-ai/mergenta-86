@@ -26,12 +26,12 @@ const MobileHoverCardWrapper: React.FC<MobileHoverCardWrapperProps> = ({
           </div>
         </Drawer.Trigger>
         <Drawer.Portal>
-          <Drawer.Overlay className="fixed inset-0 bg-black/40" />
-          <Drawer.Content className="bg-white flex flex-col rounded-t-[20px] h-[75%] mt-24 fixed bottom-0 left-0 right-0">
-            <div className="p-4 bg-white rounded-t-[20px] flex-1 overflow-y-auto">
-              <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mb-4" />
-              <h2 className="text-xl font-semibold mb-4 text-center">{title}</h2>
-              <div className="pb-6">
+          <Drawer.Overlay className="fixed inset-0 bg-black/40 z-50" />
+          <Drawer.Content className="bg-background flex flex-col rounded-t-[20px] h-[80vh] fixed bottom-0 left-0 right-0 z-50 border border-border">
+            <div className="p-4 bg-background rounded-t-[20px] flex-1 overflow-y-auto">
+              <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-muted mb-4" />
+              <h2 className="text-xl font-semibold mb-4 text-center text-foreground">{title}</h2>
+              <div className="pb-6 w-full max-w-lg mx-auto">
                 {content}
               </div>
             </div>
@@ -48,10 +48,12 @@ const MobileHoverCardWrapper: React.FC<MobileHoverCardWrapperProps> = ({
           {children}
         </div>
       </DialogTrigger>
-      <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto mx-4">
         <div className="p-2">
           <h2 className="text-xl font-semibold mb-4">{title}</h2>
-          {content}
+          <div className="w-full">
+            {content}
+          </div>
         </div>
       </DialogContent>
     </Dialog>
