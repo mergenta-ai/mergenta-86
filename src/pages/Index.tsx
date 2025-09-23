@@ -105,15 +105,6 @@ const Index = () => {
           <>
             {/* Default State - No Messages */}
             <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 text-center">
-              {/* Logo - Perfectly centered */}
-              <div className="mb-6 sm:mb-8">
-                <img 
-                  src="/lovable-uploads/0ef37e7c-4020-4d43-b3cb-e900815b9635.png" 
-                  alt="Mergenta Logo" 
-                  className="h-16 w-auto mx-auto sm:h-20 md:h-24 lg:h-28" 
-                />
-              </div>
-
               {/* Header section - Perfectly centered */}
               <div className="w-full max-w-4xl mx-auto mb-6 sm:mb-8">
                 <Header />
