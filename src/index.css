@@ -174,7 +174,26 @@ All colors MUST be HSL.
     
     body {
       -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+      -webkit-text-size-adjust: 100%;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
+    
+    /* Ensure proper touch targets on mobile */
+    button, [role="button"] {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
+
+  /* Fix for mobile layout centering */
+  .mobile-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 1rem;
   }
 
   /* Ensure proper viewport scaling */

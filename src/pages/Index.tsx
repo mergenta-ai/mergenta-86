@@ -5,7 +5,7 @@ import ChatInput from "@/components/ChatInput";
 import WorkflowTabs from "@/components/WorkflowTabs";
 import MergentaSidebar from "@/components/MergentaSidebar";
 import MobileNavigation from "@/components/MobileNavigation";
-import TouchFriendlyWorkflowTabs from "@/components/TouchFriendlyWorkflowTabs";
+
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -104,23 +104,23 @@ const Index = () => {
         {messages.length === 0 ? (
           <>
             {/* Default State - No Messages */}
-            <div className="flex-1 flex flex-col items-center justify-center px-4 py-8 text-center">
-              {/* Logo (top-center) - Always visible and centered */}
-              <div className="mb-8">
+            <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 text-center">
+              {/* Logo - Perfectly centered */}
+              <div className="mb-6 sm:mb-8">
                 <img 
                   src="/lovable-uploads/0ef37e7c-4020-4d43-b3cb-e900815b9635.png" 
                   alt="Mergenta Logo" 
-                  className="h-20 w-auto mx-auto sm:h-24 md:h-28 lg:h-32" 
+                  className="h-16 w-auto mx-auto sm:h-20 md:h-24 lg:h-28" 
                 />
               </div>
 
               {/* Header section - Perfectly centered */}
-              <div className="w-full max-w-4xl mx-auto mb-8">
+              <div className="w-full max-w-4xl mx-auto mb-6 sm:mb-8">
                 <Header />
               </div>
 
-              {/* Input bar - Centered */}
-              <div className="w-full max-w-3xl mx-auto mb-8">
+              {/* Input bar - Centered with consistent spacing */}
+              <div className="w-full max-w-3xl mx-auto mb-6 sm:mb-8">
                 <ChatInput 
                   onSendMessage={handleSendMessage} 
                   isLoading={isLoading} 
@@ -128,16 +128,10 @@ const Index = () => {
                 />
               </div>
 
-              {/* Workflow tabs - Below search bar for mobile, traditional for desktop */}
-              {isMobile ? (
-                <div className="w-full max-w-md mx-auto">
-                  <TouchFriendlyWorkflowTabs onAddToChat={handleAddToChat} onPromptGenerated={handlePromptGenerated} />
-                </div>
-              ) : (
-                <div className="w-full">
-                  <WorkflowTabs onAddToChat={handleAddToChat} onPromptGenerated={handlePromptGenerated} />
-                </div>
-              )}
+              {/* Workflow tabs - Unified responsive design */}
+              <div className="w-full max-w-5xl mx-auto">
+                <WorkflowTabs onAddToChat={handleAddToChat} onPromptGenerated={handlePromptGenerated} />
+              </div>
             </div>
           </>
         ) : (
