@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import * as React from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
+import MobileResponsiveHoverCard from "./MobileResponsiveHoverCard";
 import EssayHoverCard from "./hover-cards/EssayHoverCard";
 import StoryHoverCard from "./hover-cards/StoryHoverCard";
 import FlashFictionHoverCard from "./hover-cards/FlashFictionHoverCard";
@@ -204,7 +205,7 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
 
   return (
     <TooltipProvider delayDuration={300}>
-      <div className="flex justify-center w-full px-4 mt-5" ref={containerRef}>
+      <div className="flex justify-center w-full px-4 mt-2" ref={containerRef}>
         <div className="w-full max-w-5xl">
           <div className="flex justify-center gap-2 relative">
             {tabs.map((tab, index) => (
@@ -248,96 +249,110 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                     {activeTab === "beautiful-writing" && (
                       <div className="py-2">
                         {beautifulWritingItems.map((item, idx) => {
-                          if (item.text === "Essay") {
-                            return (
-                              <EssayHoverCard key={idx} onPromptGenerated={onPromptGenerated}>
-                                <button
-                                  className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
-                                  onClick={() => console.log(`Selected: ${item.text}`)}
-                                >
-                                  {item.text}
-                                </button>
-                              </EssayHoverCard>
-                            );
-                          }
+                           if (item.text === "Essay") {
+                             return (
+                               <MobileResponsiveHoverCard key={idx} title="Essay">
+                                 <EssayHoverCard onPromptGenerated={onPromptGenerated}>
+                                   <button
+                                     className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
+                                     onClick={() => console.log(`Selected: ${item.text}`)}
+                                   >
+                                     {item.text}
+                                   </button>
+                                 </EssayHoverCard>
+                               </MobileResponsiveHoverCard>
+                             );
+                           }
 
-                          if (item.text === "Story") {
-                            return (
-                              <StoryHoverCard key={idx} onPromptGenerated={onPromptGenerated}>
-                                <button
-                                  className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
-                                  onClick={() => console.log(`Selected: ${item.text}`)}
-                                >
-                                  {item.text}
-                                </button>
-                              </StoryHoverCard>
-                            );
-                          }
+                           if (item.text === "Story") {
+                             return (
+                               <MobileResponsiveHoverCard key={idx} title="Story">
+                                 <StoryHoverCard onPromptGenerated={onPromptGenerated}>
+                                   <button
+                                     className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
+                                     onClick={() => console.log(`Selected: ${item.text}`)}
+                                   >
+                                     {item.text}
+                                   </button>
+                                 </StoryHoverCard>
+                               </MobileResponsiveHoverCard>
+                             );
+                           }
 
-                          if (item.text === "Flash Fiction") {
-                            return (
-                              <FlashFictionHoverCard key={idx} onPromptGenerated={onPromptGenerated}>
-                                <button
-                                  className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
-                                  onClick={() => console.log(`Selected: ${item.text}`)}
-                                >
-                                  {item.text}
-                                </button>
-                              </FlashFictionHoverCard>
-                            );
-                          }
+                           if (item.text === "Flash Fiction") {
+                             return (
+                               <MobileResponsiveHoverCard key={idx} title="Flash Fiction">
+                                 <FlashFictionHoverCard onPromptGenerated={onPromptGenerated}>
+                                   <button
+                                     className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
+                                     onClick={() => console.log(`Selected: ${item.text}`)}
+                                   >
+                                     {item.text}
+                                   </button>
+                                 </FlashFictionHoverCard>
+                               </MobileResponsiveHoverCard>
+                             );
+                           }
 
-                          if (item.text === "Script") {
-                            return (
-                              <ScriptHoverCard key={idx} onPromptGenerated={onPromptGenerated}>
-                                <button
-                                  className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
-                                  onClick={() => console.log(`Selected: ${item.text}`)}
-                                >
-                                  {item.text}
-                                </button>
-                              </ScriptHoverCard>
-                            );
-                          }
+                           if (item.text === "Script") {
+                             return (
+                               <MobileResponsiveHoverCard key={idx} title="Script">
+                                 <ScriptHoverCard onPromptGenerated={onPromptGenerated}>
+                                   <button
+                                     className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
+                                     onClick={() => console.log(`Selected: ${item.text}`)}
+                                   >
+                                     {item.text}
+                                   </button>
+                                 </ScriptHoverCard>
+                               </MobileResponsiveHoverCard>
+                             );
+                           }
 
-                          if (item.text === "Blog") {
-                            return (
-                              <BlogHoverCard key={idx} onPromptGenerated={onPromptGenerated}>
-                                <button
-                                  className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
-                                  onClick={() => console.log(`Selected: ${item.text}`)}
-                                >
-                                  {item.text}
-                                </button>
-                              </BlogHoverCard>
-                            );
-                          }
+                           if (item.text === "Blog") {
+                             return (
+                               <MobileResponsiveHoverCard key={idx} title="Blog">
+                                 <BlogHoverCard onPromptGenerated={onPromptGenerated}>
+                                   <button
+                                     className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
+                                     onClick={() => console.log(`Selected: ${item.text}`)}
+                                   >
+                                     {item.text}
+                                   </button>
+                                 </BlogHoverCard>
+                               </MobileResponsiveHoverCard>
+                             );
+                           }
 
-                          if (item.text === "Poetry") {
-                            return (
-                              <PoetryHoverCard key={idx} onPromptGenerated={onPromptGenerated}>
-                                <button
-                                  className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
-                                  onClick={() => console.log(`Selected: ${item.text}`)}
-                                >
-                                  {item.text}
-                                </button>
-                              </PoetryHoverCard>
-                            );
-                          }
+                           if (item.text === "Poetry") {
+                             return (
+                               <MobileResponsiveHoverCard key={idx} title="Poetry">
+                                 <PoetryHoverCard onPromptGenerated={onPromptGenerated}>
+                                   <button
+                                     className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
+                                     onClick={() => console.log(`Selected: ${item.text}`)}
+                                   >
+                                     {item.text}
+                                   </button>
+                                 </PoetryHoverCard>
+                               </MobileResponsiveHoverCard>
+                             );
+                           }
 
-                          if (item.text === "Speech") {
-                            return (
-                              <SpeechHoverCard key={idx} onPromptGenerated={onPromptGenerated}>
-                                <button
-                                  className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
-                                  onClick={() => console.log(`Selected: ${item.text}`)}
-                                >
-                                  {item.text}
-                                </button>
-                              </SpeechHoverCard>
-                            );
-                          }
+                           if (item.text === "Speech") {
+                             return (
+                               <MobileResponsiveHoverCard key={idx} title="Speech">
+                                 <SpeechHoverCard onPromptGenerated={onPromptGenerated}>
+                                   <button
+                                     className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
+                                     onClick={() => console.log(`Selected: ${item.text}`)}
+                                   >
+                                     {item.text}
+                                   </button>
+                                 </SpeechHoverCard>
+                               </MobileResponsiveHoverCard>
+                             );
+                           }
                           
                           return (
                             <Tooltip key={idx}>
@@ -407,15 +422,19 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                                         ? "Publication request\nletter" 
                                         : item;
 
-                                     return getHoverCard(
-                                        item,
-                                        <button
-                                          className="w-full text-left px-4 py-2 text-sm text-[#666] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-pre-line"
-                                          onClick={() => console.log(`Selected: ${item}`)}
-                                        >
-                                          {displayText}
-                                        </button>
-                                      );
+                                       return (
+                                         <MobileResponsiveHoverCard key={itemIdx} title={item}>
+                                           {getHoverCard(
+                                             item,
+                                             <button
+                                               className="w-full text-left px-4 py-2 text-sm text-[#666] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-pre-line"
+                                               onClick={() => console.log(`Selected: ${item}`)}
+                                             >
+                                               {displayText}
+                                             </button>
+                                           )}
+                                         </MobileResponsiveHoverCard>
+                                       );
                                   })}
                                 </div>
                               </div>
@@ -427,73 +446,83 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                     {activeTab === "task-assistant" && (
                       <div className="py-2">
                         {taskAssistantItems.map((item, idx) => {
-                          if (item.text === "Brainstorm with me") {
-                            return (
-                              <BrainstormHoverCard key={idx}>
-                                <button
-                                         className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-pastel-lavender-hover hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
-                                  onClick={() => console.log(`Selected: ${item.text}`)}
-                                >
-                                  {item.text}
-                                </button>
-                              </BrainstormHoverCard>
-                            );
-                          }
+                           if (item.text === "Brainstorm with me") {
+                             return (
+                               <MobileResponsiveHoverCard key={idx} title="Brainstorm with me">
+                                 <BrainstormHoverCard>
+                                   <button
+                                            className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-pastel-lavender-hover hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
+                                     onClick={() => console.log(`Selected: ${item.text}`)}
+                                   >
+                                     {item.text}
+                                   </button>
+                                 </BrainstormHoverCard>
+                               </MobileResponsiveHoverCard>
+                             );
+                           }
 
-                          if (item.text === "Scenario Planning") {
-                            return (
-                              <ScenarioHoverCard key={idx}>
-                                <button
-                                  className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
-                                  onClick={() => console.log(`Selected: ${item.text}`)}
-                                >
-                                  {item.text}
-                                </button>
-                              </ScenarioHoverCard>
-                            );
-                          }
+                           if (item.text === "Scenario Planning") {
+                             return (
+                               <MobileResponsiveHoverCard key={idx} title="Scenario Planning">
+                                 <ScenarioHoverCard>
+                                   <button
+                                     className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
+                                     onClick={() => console.log(`Selected: ${item.text}`)}
+                                   >
+                                     {item.text}
+                                   </button>
+                                 </ScenarioHoverCard>
+                               </MobileResponsiveHoverCard>
+                             );
+                           }
 
-                          if (item.text === "Think like a mentor") {
-                            return (
-                              <MentorHoverCard key={idx}>
-                                <button
-                                  className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
-                                  onClick={() => console.log(`Selected: ${item.text}`)}
-                                >
-                                  {item.text}
-                                </button>
-                              </MentorHoverCard>
-                            );
-                          }
+                           if (item.text === "Think like a mentor") {
+                             return (
+                               <MobileResponsiveHoverCard key={idx} title="Think like a mentor">
+                                 <MentorHoverCard>
+                                   <button
+                                     className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
+                                     onClick={() => console.log(`Selected: ${item.text}`)}
+                                   >
+                                     {item.text}
+                                   </button>
+                                 </MentorHoverCard>
+                               </MobileResponsiveHoverCard>
+                             );
+                           }
 
-                          if (item.text === "Be a devil's advocate") {
-                            return (
-                              <DevilsAdvocateHoverCard key={idx}>
-                                <button
-                                  className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
-                                  onClick={() => console.log(`Selected: ${item.text}`)}
-                                >
-                                  {item.text}
-                                </button>
-                              </DevilsAdvocateHoverCard>
-                            );
-                          }
+                           if (item.text === "Be a devil's advocate") {
+                             return (
+                               <MobileResponsiveHoverCard key={idx} title="Be a devil's advocate">
+                                 <DevilsAdvocateHoverCard>
+                                   <button
+                                     className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
+                                     onClick={() => console.log(`Selected: ${item.text}`)}
+                                   >
+                                     {item.text}
+                                   </button>
+                                 </DevilsAdvocateHoverCard>
+                               </MobileResponsiveHoverCard>
+                             );
+                           }
 
-                          if (item.text === "Astro Lens") {
-                            return (
-                              <AstroLensHoverCard key={idx}>
-                                <button
-                                  className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
-                                  onClick={() => console.log(`Selected: ${item.text}`)}
-                                >
-                                  <div className="leading-tight">
-                                    <div>Astro</div>
-                                    <div>Lens</div>
-                                  </div>
-                                </button>
-                              </AstroLensHoverCard>
-                            );
-                          }
+                           if (item.text === "Astro Lens") {
+                             return (
+                               <MobileResponsiveHoverCard key={idx} title="Astro Lens">
+                                 <AstroLensHoverCard>
+                                   <button
+                                     className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
+                                     onClick={() => console.log(`Selected: ${item.text}`)}
+                                   >
+                                     <div className="leading-tight">
+                                       <div>Astro</div>
+                                       <div>Lens</div>
+                                     </div>
+                                   </button>
+                                 </AstroLensHoverCard>
+                               </MobileResponsiveHoverCard>
+                             );
+                           }
 
                           return (
                             <Tooltip key={idx}>

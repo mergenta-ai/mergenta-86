@@ -5,7 +5,7 @@ import ChatInput from "@/components/ChatInput";
 import WorkflowTabs from "@/components/WorkflowTabs";
 import MergentaSidebar from "@/components/MergentaSidebar";
 import MobileNavigation from "@/components/MobileNavigation";
-import TouchFriendlyWorkflowTabs from "@/components/TouchFriendlyWorkflowTabs";
+
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -123,8 +123,8 @@ const Index = () => {
               initialValue={generatedPrompt}
             />
 
-            {/* Workflow tabs - Desktop */}
-            {!isMobile && <WorkflowTabs onAddToChat={handleAddToChat} onPromptGenerated={handlePromptGenerated} />}
+            {/* Workflow tabs - All devices */}
+            <WorkflowTabs onAddToChat={handleAddToChat} onPromptGenerated={handlePromptGenerated} />
 
             {/* Chat messages */}
             <main className="flex-1 flex flex-col">
@@ -157,8 +157,6 @@ const Index = () => {
         )}
       </div>
 
-      {/* Touch-Friendly Workflow Tabs - Mobile (only when no messages) */}
-      {messages.length === 0 && <TouchFriendlyWorkflowTabs onAddToChat={handleAddToChat} onPromptGenerated={handlePromptGenerated} />}
     </div>
   );
 };
