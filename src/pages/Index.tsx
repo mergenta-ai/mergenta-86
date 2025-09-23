@@ -106,12 +106,12 @@ const Index = () => {
             {/* Default State - No Messages */}
             <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 text-center">
               {/* Header section - Perfectly centered */}
-              <div className="w-full max-w-4xl mx-auto mb-6 sm:mb-8">
+              <div className="w-full max-w-4xl mx-auto mb-8">
                 <Header />
               </div>
 
               {/* Input bar - Centered with consistent spacing */}
-              <div className="w-full max-w-3xl mx-auto mb-6 sm:mb-8">
+              <div className="w-full max-w-3xl mx-auto mb-4">
                 <ChatInput 
                   onSendMessage={handleSendMessage} 
                   isLoading={isLoading} 

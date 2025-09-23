@@ -205,7 +205,7 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
 
   return (
     <TooltipProvider delayDuration={300}>
-      <div className="flex justify-center w-full px-4 mt-3 sm:mt-5" ref={containerRef}>
+      <div className="flex justify-center w-full px-4 mt-2" ref={containerRef}>
         <div className="w-full max-w-5xl">
           <div className="flex justify-center gap-1 sm:gap-2 relative flex-wrap">
             {tabs.map((tab, index) => (
