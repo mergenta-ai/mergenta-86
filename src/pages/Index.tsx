@@ -8,6 +8,7 @@ import MobileNavigation from "@/components/MobileNavigation";
 
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { chatService } from "@/services/chatService";
 
 interface Message {
   id: string;
@@ -38,7 +39,8 @@ const Index = () => {
     return responses[Math.floor(Math.random() * responses.length)];
   };
 
-  const handleAddToChat = (message: string, response: string) => {
+  const handleAddToChat = async (message: string, response: string) => {
+    // For workflow cards, we get a response directly, so just add both messages
     const userMessage: Message = {
       id: Date.now().toString(),
       text: message,
@@ -69,17 +71,32 @@ const Index = () => {
     setGeneratedPrompt(""); // Clear the prompt after sending
 
     try {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
+      // Use the new chat service with LLM routing
+      const response = await chatService.handleDirectMessage(message);
+      
+      if (response.error) {
+        toast({
+          title: "Error",
+          description: response.message || "Failed to get response. Please try again.",
+          variant: "destructive",
+        });
+        return;
+      }
       
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
-        text: simulateAIResponse(message),
+        text: response.response,
         isUser: false,
         timestamp: new Date(),
       };
 
       setMessages(prev => [...prev, aiResponse]);
+      
+      // Show quota info if provided
+      if (response.quotaRemaining !== undefined) {
+        console.log(`Quota remaining: ${response.quotaRemaining}`);
+      }
+      
     } catch (error) {
       toast({
         title: "Error",

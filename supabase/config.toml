@@ -14,3 +14,15 @@ verify_jwt = false
 
 [functions.prompt-engine-consolidated]
 verify_jwt = false
+
+[functions.chat-router]
+verify_jwt = true
+
+[functions.model-gateway]
+verify_jwt = true
+
+[functions.websearch-edge]
+verify_jwt = true
+
+[functions.news-feeds-edge]
+verify_jwt = true
