@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_settings: {
+        Row: {
+          description: string | null
+          id: string
+          setting_key: string
+          setting_value: Json
+          updated_at: string | null
+        }
+        Insert: {
+          description?: string | null
+          id?: string
+          setting_key: string
+          setting_value: Json
+          updated_at?: string | null
+        }
+        Update: {
+          description?: string | null
+          id?: string
+          setting_key?: string
+          setting_value?: Json
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       conversations: {
         Row: {
           created_at: string
@@ -78,6 +102,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      plan_limits: {
+        Row: {
+          created_at: string | null
+          feature_name: string
+          id: string
+          limit_value: number
+          plan_type: Database["public"]["Enums"]["plan_type"]
+          quota_type: Database["public"]["Enums"]["quota_type"]
+          reset_period: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          feature_name: string
+          id?: string
+          limit_value: number
+          plan_type: Database["public"]["Enums"]["plan_type"]
+          quota_type: Database["public"]["Enums"]["quota_type"]
+          reset_period?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          feature_name?: string
+          id?: string
+          limit_value?: number
+          plan_type?: Database["public"]["Enums"]["plan_type"]
+          quota_type?: Database["public"]["Enums"]["quota_type"]
+          reset_period?: string | null
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
@@ -193,6 +247,84 @@ export type Database = {
         }
         Relationships: []
       }
+      rss_feeds: {
+        Row: {
+          category: string | null
+          content: string | null
+          id: string
+          is_active: boolean | null
+          published_at: string | null
+          scraped_at: string | null
+          source_name: string
+          source_url: string
+          summary: string | null
+          title: string
+          url: string
+        }
+        Insert: {
+          category?: string | null
+          content?: string | null
+          id?: string
+          is_active?: boolean | null
+          published_at?: string | null
+          scraped_at?: string | null
+          source_name: string
+          source_url: string
+          summary?: string | null
+          title: string
+          url: string
+        }
+        Update: {
+          category?: string | null
+          content?: string | null
+          id?: string
+          is_active?: boolean | null
+          published_at?: string | null
+          scraped_at?: string | null
+          source_name?: string
+          source_url?: string
+          summary?: string | null
+          title?: string
+          url?: string
+        }
+        Relationships: []
+      }
+      search_queries: {
+        Row: {
+          created_at: string | null
+          fallback_used: boolean | null
+          id: string
+          intent_type: string | null
+          query_text: string
+          search_results_count: number | null
+          sources_used: Json | null
+          tokens_consumed: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          fallback_used?: boolean | null
+          id?: string
+          intent_type?: string | null
+          query_text: string
+          search_results_count?: number | null
+          sources_used?: Json | null
+          tokens_consumed?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          fallback_used?: boolean | null
+          id?: string
+          intent_type?: string | null
+          query_text?: string
+          search_results_count?: number | null
+          sources_used?: Json | null
+          tokens_consumed?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       usage_analytics: {
         Row: {
           created_at: string
@@ -220,6 +352,39 @@ export type Database = {
           session_id?: string | null
           user_id?: string
           workflow_type?: string | null
+        }
+        Relationships: []
+      }
+      user_plans: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          plan_type: Database["public"]["Enums"]["plan_type"]
+          subscription_end: string | null
+          subscription_start: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          plan_type?: Database["public"]["Enums"]["plan_type"]
+          subscription_end?: string | null
+          subscription_start?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          plan_type?: Database["public"]["Enums"]["plan_type"]
+          subscription_end?: string | null
+          subscription_start?: string | null
+          updated_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -295,6 +460,105 @@ export type Database = {
         }
         Relationships: []
       }
+      user_quotas: {
+        Row: {
+          created_at: string | null
+          feature_name: string
+          id: string
+          last_reset: string | null
+          quota_type: Database["public"]["Enums"]["quota_type"]
+          updated_at: string | null
+          used_count: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          feature_name: string
+          id?: string
+          last_reset?: string | null
+          quota_type: Database["public"]["Enums"]["quota_type"]
+          updated_at?: string | null
+          used_count?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          feature_name?: string
+          id?: string
+          last_reset?: string | null
+          quota_type?: Database["public"]["Enums"]["quota_type"]
+          updated_at?: string | null
+          used_count?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      vendor_fallbacks: {
+        Row: {
+          created_at: string | null
+          error_message: string | null
+          fallback_vendor: Database["public"]["Enums"]["vendor_type"] | null
+          id: string
+          primary_vendor: Database["public"]["Enums"]["vendor_type"]
+          request_data: Json | null
+          success: boolean | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          error_message?: string | null
+          fallback_vendor?: Database["public"]["Enums"]["vendor_type"] | null
+          id?: string
+          primary_vendor: Database["public"]["Enums"]["vendor_type"]
+          request_data?: Json | null
+          success?: boolean | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          error_message?: string | null
+          fallback_vendor?: Database["public"]["Enums"]["vendor_type"] | null
+          id?: string
+          primary_vendor?: Database["public"]["Enums"]["vendor_type"]
+          request_data?: Json | null
+          success?: boolean | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      vendor_quotas: {
+        Row: {
+          created_at: string | null
+          id: string
+          last_reset: string | null
+          limit_value: number
+          quota_type: Database["public"]["Enums"]["quota_type"]
+          updated_at: string | null
+          used_count: number | null
+          vendor_type: Database["public"]["Enums"]["vendor_type"]
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          last_reset?: string | null
+          limit_value: number
+          quota_type: Database["public"]["Enums"]["quota_type"]
+          updated_at?: string | null
+          used_count?: number | null
+          vendor_type: Database["public"]["Enums"]["vendor_type"]
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          last_reset?: string | null
+          limit_value?: number
+          quota_type?: Database["public"]["Enums"]["quota_type"]
+          updated_at?: string | null
+          used_count?: number | null
+          vendor_type?: Database["public"]["Enums"]["vendor_type"]
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -303,7 +567,16 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      plan_type: "free" | "starter" | "professional" | "enterprise"
+      quota_type: "daily" | "monthly" | "per_card" | "per_vendor"
+      vendor_type:
+        | "openai"
+        | "anthropic"
+        | "google"
+        | "gemini"
+        | "mistral"
+        | "xai"
+        | "elevenlabs"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -430,6 +703,18 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      plan_type: ["free", "starter", "professional", "enterprise"],
+      quota_type: ["daily", "monthly", "per_card", "per_vendor"],
+      vendor_type: [
+        "openai",
+        "anthropic",
+        "google",
+        "gemini",
+        "mistral",
+        "xai",
+        "elevenlabs",
+      ],
+    },
   },
 } as const
