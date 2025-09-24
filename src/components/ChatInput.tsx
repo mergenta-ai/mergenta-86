@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
-import { Send, Loader2, Cpu, Paperclip, Globe, Mic, Share, Download, AudioWaveform, X } from "lucide-react";
+import { Send, Loader2, Cpu, Paperclip, Globe, Mic, Share, Download, AudioWaveform, X, Volume2 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
+import TTSPlayer from "./TTSPlayer";
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
@@ -8,12 +9,14 @@ interface ChatInputProps {
   initialValue?: string;
   placeholder?: string;
   onFocus?: () => void;
+  lastResponse?: string;
 }
 
-const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeholder = "Ask Mergenta...", onFocus }: ChatInputProps) => {
+const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeholder = "Ask Mergenta...", onFocus, lastResponse }: ChatInputProps) => {
   const [input, setInput] = useState(initialValue);
   const [isRecording, setIsRecording] = useState(false);
   const [showModelDropdown, setShowModelDropdown] = useState(false);
+  const [showTTS, setShowTTS] = useState(false);
   const modelDropdownRef = useRef<HTMLDivElement>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -129,6 +132,17 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
 
   return (
     <TooltipProvider>
+      {/* TTS Player - Shows above input when enabled */}
+      {showTTS && lastResponse && (
+        <div className="fixed bottom-32 left-1/2 transform -translate-x-1/2 z-[60] w-full max-w-md px-4">
+          <TTSPlayer 
+            text={lastResponse}
+            isVisible={showTTS}
+            onClose={() => setShowTTS(false)}
+          />
+        </div>
+      )}
+      
       <div className="flex justify-center w-full px-4 mt-2 lg:mt-0">
         <form onSubmit={handleSubmit} className="w-full max-w-3xl mx-auto">
           <div className="flex flex-col w-full rounded-xl shadow-sm bg-white px-4 pt-3 pb-3 min-h-[94px]">
@@ -336,6 +350,24 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                 </TooltipTrigger>
                 <TooltipContent>Voice input</TooltipContent>
               </Tooltip>
+
+              {/* TTS Button - Only show if we have a response */}
+              {lastResponse && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      onClick={() => setShowTTS(!showTTS)}
+                      className={`p-3 lg:p-2 rounded-md hover:bg-gray-100 transition-colors touch-manipulation min-h-[44px] min-w-[44px] lg:min-h-auto lg:min-w-auto flex items-center justify-center ${
+                        showTTS ? 'text-purple-600 bg-purple-50' : 'text-gray-500 hover:text-gray-700'
+                      }`}
+                    >
+                      <Volume2 className="h-5 w-5 lg:h-4 lg:w-4" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>Text to Speech</TooltipContent>
+                </Tooltip>
+              )}
 
               {/* Action button */}
               <Tooltip>

@@ -15,6 +15,8 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 const openAIKey = Deno.env.get('OPENAI_API_KEY');
 const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY');
 const geminiKey = Deno.env.get('GEMINI_API_KEY');
+const mistralKey = Deno.env.get('MISTRAL_API_KEY');
+const xaiKey = Deno.env.get('XAI_API_KEY');
 
 interface ModelRequest {
   prompt: string;
@@ -36,7 +38,7 @@ const VENDOR_CONFIGS = {
   openai: {
     url: 'https://api.openai.com/v1/chat/completions',
     models: {
-      primary: 'gpt-4o',
+      primary: 'gpt-5-2025-08-07',
       fallback: 'gpt-4o-mini'
     },
     headers: (key: string) => ({
@@ -47,8 +49,8 @@ const VENDOR_CONFIGS = {
   anthropic: {
     url: 'https://api.anthropic.com/v1/messages',
     models: {
-      primary: 'claude-3-5-sonnet-20241022',
-      fallback: 'claude-3-haiku-20240307'
+      primary: 'claude-opus-4-1-20250805',
+      fallback: 'claude-3-5-haiku-20241022'
     },
     headers: (key: string) => ({
       'x-api-key': key,
@@ -63,6 +65,28 @@ const VENDOR_CONFIGS = {
       fallback: 'gemini-pro'
     },
     headers: () => ({
+      'Content-Type': 'application/json'
+    })
+  },
+  mistral: {
+    url: 'https://api.mistral.ai/v1/chat/completions',
+    models: {
+      primary: 'mistral-large-latest',
+      fallback: 'mistral-small-latest'
+    },
+    headers: (key: string) => ({
+      'Authorization': `Bearer ${key}`,
+      'Content-Type': 'application/json'
+    })
+  },
+  xai: {
+    url: 'https://api.x.ai/v1/chat/completions',
+    models: {
+      primary: 'grok-beta',
+      fallback: 'grok-beta'
+    },
+    headers: (key: string) => ({
+      'Authorization': `Bearer ${key}`,
       'Content-Type': 'application/json'
     })
   }
@@ -86,12 +110,12 @@ serve(async (req) => {
 
     const vendorPriority = vendorSettings?.setting_value || {
       primary: ['openai', 'anthropic'],
-      fallback: ['google']
+      fallback: ['google', 'mistral', 'xai']
     };
 
     // Determine vendor order
     const primaryVendors = preferredVendor ? [preferredVendor] : vendorPriority.primary || ['openai'];
-    const fallbackVendors = vendorPriority.fallback || ['anthropic', 'google'];
+    const fallbackVendors = vendorPriority.fallback || ['anthropic', 'google', 'mistral', 'xai'];
     const allVendors = [...primaryVendors, ...fallbackVendors];
 
     let lastError: any = null;
@@ -215,6 +239,10 @@ async function callVendor(vendor: string, prompt: string, intentType?: string): 
       return await callAnthropic(prompt, intentType);
     case 'google':
       return await callGoogle(prompt, intentType);
+    case 'mistral':
+      return await callMistral(prompt, intentType);
+    case 'xai':
+      return await callXAI(prompt, intentType);
     default:
       throw new Error(`Vendor ${vendor} not implemented`);
   }
@@ -223,7 +251,26 @@ async function callVendor(vendor: string, prompt: string, intentType?: string): 
 async function callOpenAI(prompt: string, intentType?: string): Promise<ModelResponse | null> {
   if (!openAIKey) throw new Error('OpenAI API key not configured');
 
-  const model = intentType === 'research' ? 'gpt-4o' : 'gpt-4o-mini';
+  const model = intentType === 'research' ? 'gpt-5-2025-08-07' : 'gpt-4o-mini';
+  
+  const requestBody: any = {
+    model,
+    messages: [
+      {
+        role: 'system',
+        content: 'You are a helpful AI assistant. When provided with sources, always include inline citations like [G1], [RSS1] and provide a complete source list at the end.'
+      },
+      { role: 'user', content: prompt }
+    ]
+  };
+
+  // Use max_completion_tokens for newer models, max_tokens for legacy
+  if (model.startsWith('gpt-5') || model.startsWith('o3') || model.startsWith('o4')) {
+    requestBody.max_completion_tokens = 2000;
+  } else {
+    requestBody.max_tokens = 2000;
+    requestBody.temperature = 0.7;
+  }
   
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
@@ -231,18 +278,7 @@ async function callOpenAI(prompt: string, intentType?: string): Promise<ModelRes
       'Authorization': `Bearer ${openAIKey}`,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({
-      model,
-      messages: [
-        {
-          role: 'system',
-          content: 'You are a helpful AI assistant. When provided with sources, always include inline citations like [G1], [RSS1] and provide a complete source list at the end.'
-        },
-        { role: 'user', content: prompt }
-      ],
-      max_tokens: 2000,
-      temperature: 0.7
-    })
+    body: JSON.stringify(requestBody)
   });
 
   if (!response.ok) {
@@ -264,7 +300,7 @@ async function callOpenAI(prompt: string, intentType?: string): Promise<ModelRes
 async function callAnthropic(prompt: string, intentType?: string): Promise<ModelResponse | null> {
   if (!anthropicKey) throw new Error('Anthropic API key not configured');
 
-  const model = intentType === 'research' ? 'claude-3-5-sonnet-20241022' : 'claude-3-haiku-20240307';
+  const model = intentType === 'research' ? 'claude-opus-4-1-20250805' : 'claude-3-5-haiku-20241022';
   
   const response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -296,6 +332,88 @@ async function callAnthropic(prompt: string, intentType?: string): Promise<Model
     content: data.content[0].text,
     tokensUsed: data.usage?.input_tokens + data.usage?.output_tokens || 0,
     vendor: 'anthropic',
+    model,
+    fallbackUsed: false
+  };
+}
+
+async function callMistral(prompt: string, intentType?: string): Promise<ModelResponse | null> {
+  if (!mistralKey) throw new Error('Mistral API key not configured');
+
+  const model = intentType === 'research' ? 'mistral-large-latest' : 'mistral-small-latest';
+  
+  const response = await fetch('https://api.mistral.ai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${mistralKey}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      model,
+      messages: [
+        {
+          role: 'system',
+          content: 'You are a helpful AI assistant. When provided with sources, always include inline citations like [G1], [RSS1] and provide a complete source list at the end.'
+        },
+        { role: 'user', content: prompt }
+      ],
+      max_tokens: 2000,
+      temperature: 0.7
+    })
+  });
+
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(`Mistral API error: ${error}`);
+  }
+
+  const data = await response.json();
+  
+  return {
+    content: data.choices[0].message.content,
+    tokensUsed: data.usage?.total_tokens || 0,
+    vendor: 'mistral',
+    model,
+    fallbackUsed: false
+  };
+}
+
+async function callXAI(prompt: string, intentType?: string): Promise<ModelResponse | null> {
+  if (!xaiKey) throw new Error('xAI API key not configured');
+
+  const model = 'grok-beta';
+  
+  const response = await fetch('https://api.x.ai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${xaiKey}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      model,
+      messages: [
+        {
+          role: 'system',
+          content: 'You are a helpful AI assistant. When provided with sources, always include inline citations like [G1], [RSS1] and provide a complete source list at the end.'
+        },
+        { role: 'user', content: prompt }
+      ],
+      max_tokens: 2000,
+      temperature: 0.7
+    })
+  });
+
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(`xAI API error: ${error}`);
+  }
+
+  const data = await response.json();
+  
+  return {
+    content: data.choices[0].message.content,
+    tokensUsed: data.usage?.total_tokens || 0,
+    vendor: 'xai',
     model,
     fallbackUsed: false
   };

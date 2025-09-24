@@ -138,6 +138,7 @@ const Index = () => {
               onSendMessage={handleSendMessage} 
               isLoading={isLoading} 
               initialValue={generatedPrompt}
+              lastResponse={messages[messages.length - 1]?.isUser === false ? messages[messages.length - 1]?.text : undefined}
             />
 
             {/* Workflow tabs - All devices */}
@@ -163,6 +164,7 @@ const Index = () => {
                   onSendMessage={handleSendMessage} 
                   isLoading={isLoading} 
                   initialValue={generatedPrompt}
+                  lastResponse={messages[messages.length - 1]?.isUser === false ? messages[messages.length - 1]?.text : undefined}
                 />
                 {/* Disclaimer */}
                 <p className="text-center text-sm text-gray-500 mt-2">
