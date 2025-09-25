@@ -207,9 +207,9 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
     <TooltipProvider delayDuration={300}>
       <div className="flex justify-center w-full px-4 mt-2" ref={containerRef}>
         <div className="w-full max-w-5xl">
-          <div className="flex justify-center gap-2 relative">
+          <div className="flex justify-center gap-1 sm:gap-2 relative overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
             {tabs.map((tab, index) => (
-              <div key={index} className="relative">
+              <div key={index} className="relative flex-shrink-0">
                 <button
                   onMouseEnter={() => {
                     if (tab.id !== "power-playbook") {
@@ -224,7 +224,7 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                   onMouseLeave={handleTabLeave}
                   style={{ backgroundColor: activeTab === tab.id ? '#C7A8EA' : '#F3EAFE' }}
                   className={`
-                    w-[100px] py-2 rounded-xl font-inter font-medium text-sm tracking-tight text-center
+                    w-[85px] sm:w-[100px] py-2 rounded-xl font-inter font-medium text-xs sm:text-sm tracking-tight text-center
                     transition-all duration-300 ease-in-out
                     focus:outline-none focus:ring-2 focus:ring-purple-300 focus:ring-offset-2
                     flex items-center justify-center
@@ -242,7 +242,7 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                 {/* Dropdown - only for certain tabs */}
                 {activeTab === tab.id && !["think-hard", "deep-research", "power-playbook"].includes(tab.id) && (
                   <div 
-                    className="absolute top-full w-[100px] bg-[#F8F5FE] rounded-lg shadow-md border border-[#E5D9F2] z-50"
+                    className="absolute top-full w-[85px] sm:w-[100px] bg-[#F8F5FE] rounded-lg shadow-md border border-[#E5D9F2] z-50"
                     onMouseEnter={handleDropdownEnter}
                     onMouseLeave={handleDropdownLeave}
                   >
