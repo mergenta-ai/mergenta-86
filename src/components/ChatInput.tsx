@@ -192,15 +192,15 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
               )}
             </div>
 
-            {/* Icons row at bottom */}
+            {/* Icons row at bottom - responsive spacing */}
             <div className="flex justify-between items-center mt-auto">
-              {/* Left side icons */}
+              {/* Left side icons - responsive gap */}
               <div className="flex gap-1 sm:gap-2">
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <button
                       type="button"
-                      className="p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700 touch-manipulation min-h-[44px] min-w-[44px] flex items-center justify-center"
+                    className="p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700 touch-manipulation min-h-[44px] min-w-[44px] flex items-center justify-center sm:p-2.5"
                     >
                       <Share className="h-4 w-4" />
                     </button>
@@ -221,7 +221,7 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                 </Tooltip>
               </div>
 
-              {/* Right side icons */}
+              {/* Right side icons - responsive touch targets */}
               <div className="flex gap-1 sm:gap-2 flex-wrap">
               <div className="relative" ref={modelDropdownRef}>
                 <Tooltip>

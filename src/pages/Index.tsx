@@ -117,12 +117,11 @@ const Index = () => {
       {/* Desktop Sidebar - Only shown on desktop */}
       {isDesktop && <MergentaSidebar />}
       
-      {/* Main Content Grid - Responsive layout without fixed margins */}
+      {/* Main Content - CSS Grid-based responsive layout */}
       <div 
-        className="min-h-screen flex flex-col relative"
-        style={{
-          marginLeft: isDesktop ? '5rem' : '0', // 80px = 5rem, matches MergentaSidebar width
-        }}
+        className={`min-h-screen flex flex-col relative transition-all duration-300 ${
+          isDesktop ? 'ml-20' : 'ml-0'
+        }`}
       >
         {messages.length === 0 ? (
           <>

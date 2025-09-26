@@ -205,9 +205,9 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
 
   return (
     <TooltipProvider delayDuration={300}>
-      <div className="flex justify-center w-full px-4 mt-2" ref={containerRef}>
-        <div className="w-full max-w-5xl">
-          <div className="grid grid-cols-7 gap-1 sm:gap-2 relative max-w-fit mx-auto">
+      <div className="flex justify-center w-full px-2 sm:px-4 mt-2" ref={containerRef}>
+        <div className="w-full max-w-6xl">
+          <div className="flex flex-wrap justify-center gap-1 sm:gap-2 relative">
             {tabs.map((tab, index) => (
               <div key={index} className="relative">
                 <button
@@ -224,7 +224,8 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                   onMouseLeave={handleTabLeave}
                   style={{ backgroundColor: activeTab === tab.id ? '#C7A8EA' : '#F3EAFE' }}
                   className={`
-                    w-[85px] sm:w-[90px] md:w-[95px] lg:w-[100px] py-2 rounded-xl 
+                    w-[90px] xs:w-[95px] sm:w-[110px] md:w-[120px] lg:w-[130px] 
+                    py-2 px-2 rounded-xl 
                     font-inter font-medium text-xs sm:text-sm tracking-tight text-center
                     transition-all duration-300 ease-in-out
                     focus:outline-none focus:ring-2 focus:ring-purple-300 focus:ring-offset-2
@@ -241,16 +242,15 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                   <span className="whitespace-pre-line">{tab.text}</span>
                 </button>
                 
-                {/* Dropdown - only for certain tabs */}
+                {/* Dropdown - responsive positioning */}
                 {activeTab === tab.id && !["think-hard", "deep-research", "power-playbook"].includes(tab.id) && (
                   <div 
-                    className="absolute top-full left-1/2 transform -translate-x-1/2 
-                               w-[200px] sm:w-[220px] md:w-[240px] lg:w-[250px] 
-                               bg-[#F8F5FE] rounded-lg shadow-lg border border-[#E5D9F2] z-[100]
+                    className="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 
+                               w-[240px] sm:w-[260px] md:w-[280px] lg:w-[300px] 
+                               bg-[#F8F5FE] rounded-lg shadow-lg border border-[#E5D9F2] z-[150]
                                max-h-[70vh] overflow-y-auto"
                     style={{
-                      // Ensure dropdown stays within viewport
-                      left: `clamp(${-200/2}px, 50%, calc(100vw - 220px - 1rem))`
+                      left: 'clamp(1rem, 50%, calc(100vw - 280px - 1rem))'
                     }}
                     onMouseEnter={handleDropdownEnter}
                     onMouseLeave={handleDropdownLeave}
