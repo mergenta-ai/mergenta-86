@@ -207,9 +207,9 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
     <TooltipProvider delayDuration={300}>
       <div className="flex justify-center w-full px-4 mt-2" ref={containerRef}>
         <div className="w-full max-w-5xl">
-          <div className="flex justify-center gap-1 sm:gap-2 relative overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+          <div className="grid grid-cols-7 gap-1 sm:gap-2 relative max-w-fit mx-auto">
             {tabs.map((tab, index) => (
-              <div key={index} className="relative flex-shrink-0">
+              <div key={index} className="relative">
                 <button
                   onMouseEnter={() => {
                     if (tab.id !== "power-playbook") {
@@ -224,12 +224,14 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                   onMouseLeave={handleTabLeave}
                   style={{ backgroundColor: activeTab === tab.id ? '#C7A8EA' : '#F3EAFE' }}
                   className={`
-                    w-[85px] sm:w-[100px] py-2 rounded-xl font-inter font-medium text-xs sm:text-sm tracking-tight text-center
+                    w-[85px] sm:w-[90px] md:w-[95px] lg:w-[100px] py-2 rounded-xl 
+                    font-inter font-medium text-xs sm:text-sm tracking-tight text-center
                     transition-all duration-300 ease-in-out
                     focus:outline-none focus:ring-2 focus:ring-purple-300 focus:ring-offset-2
                     flex items-center justify-center
                     leading-tight
                     hover:shadow-md
+                    min-h-[44px] touch-manipulation
                     ${activeTab === tab.id
                       ? 'text-[#6F42C1]' 
                       : 'text-[#444] hover:bg-[#DCC8F2]'
@@ -242,7 +244,14 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                 {/* Dropdown - only for certain tabs */}
                 {activeTab === tab.id && !["think-hard", "deep-research", "power-playbook"].includes(tab.id) && (
                   <div 
-                    className="absolute top-full w-[85px] sm:w-[100px] bg-[#F8F5FE] rounded-lg shadow-md border border-[#E5D9F2] z-50"
+                    className="absolute top-full left-1/2 transform -translate-x-1/2 
+                               w-[200px] sm:w-[220px] md:w-[240px] lg:w-[250px] 
+                               bg-[#F8F5FE] rounded-lg shadow-lg border border-[#E5D9F2] z-[100]
+                               max-h-[70vh] overflow-y-auto"
+                    style={{
+                      // Ensure dropdown stays within viewport
+                      left: `clamp(${-200/2}px, 50%, calc(100vw - 220px - 1rem))`
+                    }}
                     onMouseEnter={handleDropdownEnter}
                     onMouseLeave={handleDropdownLeave}
                   >

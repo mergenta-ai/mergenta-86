@@ -200,9 +200,9 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                   <TooltipTrigger asChild>
                     <button
                       type="button"
-                      className="p-2 sm:p-3 lg:p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700 touch-manipulation min-h-[40px] min-w-[40px] sm:min-h-[44px] sm:min-w-[44px] lg:min-h-auto lg:min-w-auto flex items-center justify-center"
+                      className="p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700 touch-manipulation min-h-[44px] min-w-[44px] flex items-center justify-center"
                     >
-                      <Share className="h-4 w-4 sm:h-5 sm:w-5 lg:h-4 lg:w-4" />
+                      <Share className="h-4 w-4" />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent>Export</TooltipContent>
@@ -212,9 +212,9 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                   <TooltipTrigger asChild>
                     <button
                       type="button"
-                      className="p-2 sm:p-3 lg:p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700 touch-manipulation min-h-[40px] min-w-[40px] sm:min-h-[44px] sm:min-w-[44px] lg:min-h-auto lg:min-w-auto flex items-center justify-center"
+                      className="p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700 touch-manipulation min-h-[44px] min-w-[44px] flex items-center justify-center"
                     >
-                      <Download className="h-4 w-4 sm:h-5 sm:w-5 lg:h-4 lg:w-4" />
+                      <Download className="h-4 w-4" />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent>Download</TooltipContent>
@@ -229,9 +229,9 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                     <button
                       type="button"
                       onClick={() => setShowModelDropdown(!showModelDropdown)}
-                      className="p-2 sm:p-3 lg:p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700 touch-manipulation min-h-[40px] min-w-[40px] sm:min-h-[44px] sm:min-w-[44px] lg:min-h-auto lg:min-w-auto flex items-center justify-center"
+                      className="p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700 touch-manipulation min-h-[44px] min-w-[44px] flex items-center justify-center"
                     >
-                      <Cpu className="h-4 w-4 sm:h-5 sm:w-5 lg:h-4 lg:w-4" />
+                      <Cpu className="h-4 w-4" />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent>Select your model</TooltipContent>
@@ -319,9 +319,9 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    className="p-2 sm:p-3 lg:p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700 touch-manipulation min-h-[40px] min-w-[40px] sm:min-h-[44px] sm:min-w-[44px] lg:min-h-auto lg:min-w-auto flex items-center justify-center"
+                    className="p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700 touch-manipulation min-h-[44px] min-w-[44px] flex items-center justify-center"
                   >
-                    <Paperclip className="h-4 w-4 sm:h-5 sm:w-5 lg:h-4 lg:w-4" />
+                    <Paperclip className="h-4 w-4" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent>File upload</TooltipContent>
@@ -331,9 +331,9 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    className="p-2 sm:p-3 lg:p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700 touch-manipulation min-h-[40px] min-w-[40px] sm:min-h-[44px] sm:min-w-[44px] lg:min-h-auto lg:min-w-auto flex items-center justify-center"
+                    className="p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700 touch-manipulation min-h-[44px] min-w-[44px] flex items-center justify-center"
                   >
-                    <Globe className="h-4 w-4 sm:h-5 sm:w-5 lg:h-4 lg:w-4" />
+                    <Globe className="h-4 w-4" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent>Web references</TooltipContent>
@@ -343,9 +343,9 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    className="p-2 sm:p-3 lg:p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700 touch-manipulation min-h-[40px] min-w-[40px] sm:min-h-[44px] sm:min-w-[44px] lg:min-h-auto lg:min-w-auto flex items-center justify-center"
+                    className="p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700 touch-manipulation min-h-[44px] min-w-[44px] flex items-center justify-center"
                   >
-                    <Mic className="h-4 w-4 sm:h-5 sm:w-5 lg:h-4 lg:w-4" />
+                    <Mic className="h-4 w-4" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent>Voice input</TooltipContent>
@@ -358,11 +358,11 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                     <button
                       type="button"
                       onClick={() => setShowTTS(!showTTS)}
-                      className={`p-2 sm:p-3 lg:p-2 rounded-md hover:bg-gray-100 transition-colors touch-manipulation min-h-[40px] min-w-[40px] sm:min-h-[44px] sm:min-w-[44px] lg:min-h-auto lg:min-w-auto flex items-center justify-center ${
+                      className={`p-2 rounded-md hover:bg-gray-100 transition-colors touch-manipulation min-h-[44px] min-w-[44px] flex items-center justify-center ${
                         showTTS ? 'text-purple-600 bg-purple-50' : 'text-gray-500 hover:text-gray-700'
                       }`}
                     >
-                      <Volume2 className="h-4 w-4 sm:h-5 sm:w-5 lg:h-4 lg:w-4" />
+                      <Volume2 className="h-4 w-4" />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent>Text to Speech</TooltipContent>
@@ -376,7 +376,7 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                     type="button"
                     onClick={handleActionButtonClick}
                     disabled={isLoading}
-                    className="ml-2 w-10 h-10 sm:w-12 sm:h-12 lg:w-10 lg:h-10 rounded-full flex items-center justify-center
+                    className="ml-2 w-10 h-10 rounded-full flex items-center justify-center
                                bg-gradient-to-r from-[#6F42C1] to-[#7D55C7]
                                hover:scale-105 hover:shadow-[0_0_10px_#6F42C1]/50 transition-all
                                touch-manipulation"

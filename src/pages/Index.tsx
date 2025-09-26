@@ -110,15 +110,20 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen flex w-full">
+    <div className="min-h-screen w-full">
       {/* Mobile Navigation - Only shown on mobile */}
       {!isDesktop && <MobileNavigation />}
       
       {/* Desktop Sidebar - Only shown on desktop */}
       {isDesktop && <MergentaSidebar />}
       
-      {/* Main Content - Responsive margin based on sidebar visibility */}
-      <div className={`flex-1 flex flex-col relative w-full ${isDesktop ? 'lg:ml-20' : 'ml-0'}`}>
+      {/* Main Content Grid - Responsive layout without fixed margins */}
+      <div 
+        className="min-h-screen flex flex-col relative"
+        style={{
+          marginLeft: isDesktop ? '5rem' : '0', // 80px = 5rem, matches MergentaSidebar width
+        }}
+      >
         {messages.length === 0 ? (
           <>
             {/* Default State - No Messages */}
