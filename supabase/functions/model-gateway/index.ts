@@ -161,7 +161,7 @@ serve(async (req) => {
         lastError = error;
         
         // Log failed attempt
-        await logVendorFallback(userId, vendor, null, error.message, false);
+        await logVendorFallback(userId, vendor, null, (error as Error).message, false);
         continue;
       }
     }

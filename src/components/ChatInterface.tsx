@@ -6,6 +6,13 @@ interface Message {
   text: string;
   isUser: boolean;
   timestamp: Date;
+  sources?: Array<{
+    id: string;
+    type: 'google' | 'rss';
+    title: string;
+    url: string;
+    snippet: string;
+  }>;
 }
 
 interface ChatInterfaceProps {
@@ -40,6 +47,7 @@ const ChatInterface = ({ messages, isLoading }: ChatInterfaceProps) => {
                 message={message.text}
                 isUser={message.isUser}
                 timestamp={message.timestamp}
+                sources={message.sources}
               />
             ))
           )}

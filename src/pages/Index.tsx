@@ -15,6 +15,13 @@ interface Message {
   text: string;
   isUser: boolean;
   timestamp: Date;
+  sources?: Array<{
+    id: string;
+    type: 'google' | 'rss';
+    title: string;
+    url: string;
+    snippet: string;
+  }>;
 }
 
 const Index = () => {
@@ -71,10 +78,15 @@ const Index = () => {
     setGeneratedPrompt(""); // Clear the prompt after sending
 
     try {
+      console.log('Sending message:', message);
+      
       // Use the new chat service with LLM routing
       const response = await chatService.handleDirectMessage(message);
       
+      console.log('Chat response received:', response);
+      
       if (response.error) {
+        console.error('Chat service error:', response.error, response.message);
         toast({
           title: "Error",
           description: response.message || "Failed to get response. Please try again.",
@@ -88,13 +100,18 @@ const Index = () => {
         text: response.response,
         isUser: false,
         timestamp: new Date(),
+        sources: response.sources, // Include sources with snippets
       };
 
       setMessages(prev => [...prev, aiResponse]);
       
-      // Show quota info if provided
+      // Show quota info and sources info
       if (response.quotaRemaining !== undefined) {
         console.log(`Quota remaining: ${response.quotaRemaining}`);
+      }
+      
+      if (response.sources && response.sources.length > 0) {
+        console.log(`Found ${response.sources.length} sources with snippets`);
       }
       
     } catch (error) {
