@@ -289,39 +289,72 @@ export type Database = {
         }
         Relationships: []
       }
+      search_cache: {
+        Row: {
+          cache_key: string
+          created_at: string
+          id: string
+          results: Json
+        }
+        Insert: {
+          cache_key: string
+          created_at?: string
+          id?: string
+          results: Json
+        }
+        Update: {
+          cache_key?: string
+          created_at?: string
+          id?: string
+          results?: Json
+        }
+        Relationships: []
+      }
       search_queries: {
         Row: {
+          cache_hits: number | null
           created_at: string | null
           fallback_used: boolean | null
           id: string
           intent_type: string | null
           query_text: string
+          rss_sources_count: number | null
           search_results_count: number | null
           sources_used: Json | null
           tokens_consumed: number | null
+          updated_at: string | null
           user_id: string
+          web_sources_count: number | null
         }
         Insert: {
+          cache_hits?: number | null
           created_at?: string | null
           fallback_used?: boolean | null
           id?: string
           intent_type?: string | null
           query_text: string
+          rss_sources_count?: number | null
           search_results_count?: number | null
           sources_used?: Json | null
           tokens_consumed?: number | null
+          updated_at?: string | null
           user_id: string
+          web_sources_count?: number | null
         }
         Update: {
+          cache_hits?: number | null
           created_at?: string | null
           fallback_used?: boolean | null
           id?: string
           intent_type?: string | null
           query_text?: string
+          rss_sources_count?: number | null
           search_results_count?: number | null
           sources_used?: Json | null
           tokens_consumed?: number | null
+          updated_at?: string | null
           user_id?: string
+          web_sources_count?: number | null
         }
         Relationships: []
       }
@@ -564,7 +597,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      cleanup_expired_cache: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
     }
     Enums: {
       plan_type: "free" | "starter" | "professional" | "enterprise"
