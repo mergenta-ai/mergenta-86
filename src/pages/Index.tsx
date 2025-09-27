@@ -8,6 +8,7 @@ import MobileNavigation from "@/components/MobileNavigation";
 
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { chatService } from "@/services/chatService";
 
 interface Message {
   id: string;
@@ -38,7 +39,8 @@ const Index = () => {
     return responses[Math.floor(Math.random() * responses.length)];
   };
 
-  const handleAddToChat = (message: string, response: string) => {
+  const handleAddToChat = async (message: string, response: string) => {
+    // For workflow cards, we get a response directly, so just add both messages
     const userMessage: Message = {
       id: Date.now().toString(),
       text: message,
@@ -69,17 +71,32 @@ const Index = () => {
     setGeneratedPrompt(""); // Clear the prompt after sending
 
     try {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
+      // Use the new chat service with LLM routing
+      const response = await chatService.handleDirectMessage(message);
+      
+      if (response.error) {
+        toast({
+          title: "Error",
+          description: response.message || "Failed to get response. Please try again.",
+          variant: "destructive",
+        });
+        return;
+      }
       
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
-        text: simulateAIResponse(message),
+        text: response.response,
         isUser: false,
         timestamp: new Date(),
       };
 
       setMessages(prev => [...prev, aiResponse]);
+      
+      // Show quota info if provided
+      if (response.quotaRemaining !== undefined) {
+        console.log(`Quota remaining: ${response.quotaRemaining}`);
+      }
+      
     } catch (error) {
       toast({
         title: "Error",
@@ -92,7 +109,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex">
+    <div className="min-h-screen flex">
       {/* Mobile Navigation */}
       <MobileNavigation />
       
@@ -104,45 +121,53 @@ const Index = () => {
         {messages.length === 0 ? (
           <>
             {/* Default State - No Messages */}
-            <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 text-center">
-              {/* Header section - Perfectly centered */}
-              <div className="w-full max-w-4xl mx-auto mb-8">
-                <Header />
-              </div>
-
-              {/* Input bar - Centered with consistent spacing */}
-              <div className="w-full max-w-3xl mx-auto mb-4">
-                <ChatInput 
-                  onSendMessage={handleSendMessage} 
-                  isLoading={isLoading} 
-                  initialValue={generatedPrompt}
-                />
-              </div>
-
-              {/* Workflow tabs - Unified responsive design */}
-              <div className="w-full max-w-5xl mx-auto">
-                <WorkflowTabs onAddToChat={handleAddToChat} onPromptGenerated={handlePromptGenerated} />
-              </div>
+            {/* Logo (top-left) - Hidden on mobile */}
+            <div className="p-6 lg:block md:hidden sm:hidden">
+              <img 
+                src="/lovable-uploads/0ef37e7c-4020-4d43-b3cb-e900815b9635.png" 
+                alt="Mergenta Logo" 
+                className="h-26 w-auto md:h-34 lg:h-44 invisible" 
+              />
             </div>
+
+            {/* Header section */}
+            <Header />
+
+            {/* Input bar */}
+            <ChatInput 
+              onSendMessage={handleSendMessage} 
+              isLoading={isLoading} 
+              initialValue={generatedPrompt}
+              lastResponse={messages[messages.length - 1]?.isUser === false ? messages[messages.length - 1]?.text : undefined}
+            />
+
+            {/* Workflow tabs - All devices */}
+            <WorkflowTabs onAddToChat={handleAddToChat} onPromptGenerated={handlePromptGenerated} />
+
+            {/* Chat messages */}
+            <main className="flex-1 flex flex-col">
+              <ChatInterface messages={messages} isLoading={isLoading} />
+            </main>
           </>
         ) : (
           <>
             {/* Chat State - Messages Exist */}
             {/* Chat messages take full space */}
-            <main className="flex-1 flex flex-col pb-24">
+            <main className="flex-1 flex flex-col">
               <ChatInterface messages={messages} isLoading={isLoading} />
             </main>
 
             {/* Fixed bottom search bar */}
             <div className="fixed bottom-4 left-0 right-0 z-50 flex justify-center px-4">
-              <div className={`w-full max-w-3xl ${isMobile ? 'lg:ml-0' : 'lg:ml-10'}`}>
+              <div className="w-full max-w-3xl">
                 <ChatInput 
                   onSendMessage={handleSendMessage} 
                   isLoading={isLoading} 
                   initialValue={generatedPrompt}
+                  lastResponse={messages[messages.length - 1]?.isUser === false ? messages[messages.length - 1]?.text : undefined}
                 />
                 {/* Disclaimer */}
-                <p className="text-center text-sm text-muted-foreground mt-2">
+                <p className="text-center text-sm text-gray-500 mt-2">
                   Mergenta can make mistakes. Verify information.
                 </p>
               </div>
@@ -150,6 +175,7 @@ const Index = () => {
           </>
         )}
       </div>
+
     </div>
   );
 };

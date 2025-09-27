@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, Clock, FileText, Crown, HelpCircle, User, Plus, TrendingUp, Mail, ChevronRight } from 'lucide-react';
+import { Menu, Clock, FileText, Crown, HelpCircle, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
@@ -8,43 +8,19 @@ import PoliciesPanel from './sidebar/PoliciesPanel';
 import HelpPanel from './sidebar/HelpPanel';
 import { ProfilePanel } from './sidebar/ProfilePanel';
 import PlansPanel from './sidebar/PlansPanel';
-import TrendingPanel from './sidebar/TrendingPanel';
 
-interface MobileNavigationProps {}
+interface MobileNavigationProps {
+  onAddToChat?: (message: string, response: string) => void;
+  onPromptGenerated?: (prompt: string) => void;
+}
 
-const MobileNavigation: React.FC<MobileNavigationProps> = () => {
+const MobileNavigation: React.FC<MobileNavigationProps> = ({ onAddToChat, onPromptGenerated }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [activePanel, setActivePanel] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  // Sidebar menu items - matching desktop sidebar exactly
+  // Sidebar menu items - Only main sidebar functions
   const sidebarMenuItems = [
-    { 
-      id: 'new-chat', 
-      icon: Plus, 
-      label: 'Start new chat', 
-      color: 'text-primary',
-      action: () => {
-        setIsOpen(false);
-        window.location.reload(); // Same as desktop behavior
-      }
-    },
-    { 
-      id: 'trending', 
-      icon: TrendingUp, 
-      label: 'Trending', 
-      color: 'text-primary' 
-    },
-    { 
-      id: 'email', 
-      icon: Mail, 
-      label: 'Email', 
-      color: 'text-primary',
-      action: () => {
-        setIsOpen(false);
-        window.location.href = 'mailto:';
-      }
-    },
     { id: 'history', icon: Clock, label: 'History', color: 'text-primary' },
     { id: 'policies', icon: FileText, label: 'Policies', color: 'text-primary' },
     { id: 'plans', icon: Crown, label: 'Plans', color: 'text-primary' },
@@ -53,22 +29,12 @@ const MobileNavigation: React.FC<MobileNavigationProps> = () => {
   ];
 
   const handleItemClick = (itemId: string) => {
-    // Handle direct actions first
-    const item = sidebarMenuItems.find(item => item.id === itemId);
-    if (item?.action) {
-      item.action();
-      return;
-    }
-    
-    // Handle panel opening
     setActivePanel(itemId);
     setIsOpen(false);
   };
 
   const renderPanel = () => {
     switch (activePanel) {
-      case 'trending':
-        return <TrendingPanel isVisible={true} onClose={() => setActivePanel(null)} />;
       case 'history':
         return <HistoryPanel isVisible={true} onClose={() => setActivePanel(null)} />;
       case 'policies':
@@ -115,26 +81,28 @@ const MobileNavigation: React.FC<MobileNavigationProps> = () => {
               </div>
 
               <div className="flex-1 overflow-y-auto">
-                {/* Menu Section - Only sidebar items */}
+                {/* Sidebar Menu Items Only */}
                 <div className="p-4">
                   <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-                    <span className="text-xl">📋</span>
+                    <span className="text-xl">⚙️</span>
                     Menu
                   </h2>
                   
                   <div className="space-y-2">
-                    {sidebarMenuItems.map((item) => (
-                      <Button
-                        key={item.id}
-                        variant="ghost"
-                        className="w-full justify-start h-12 p-3 hover:bg-primary/10 rounded-lg"
-                        onClick={() => handleItemClick(item.id)}
-                      >
-                        <item.icon className={`h-5 w-5 mr-3 ${item.color}`} />
-                        <span className="flex-1 text-left font-medium">{item.label}</span>
-                        {!item.action && <ChevronRight className="h-4 w-4 opacity-50" />}
-                      </Button>
-                    ))}
+                    {sidebarMenuItems.map((item) => {
+                      const IconComponent = item.icon;
+                      return (
+                        <Button
+                          key={item.id}
+                          variant="ghost"
+                          className="w-full justify-start h-12 hover:bg-primary/10 rounded-lg"
+                          onClick={() => handleItemClick(item.id)}
+                        >
+                          <IconComponent className={`h-5 w-5 mr-3 ${item.color}`} />
+                          <span className="font-medium">{item.label}</span>
+                        </Button>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
@@ -143,12 +111,8 @@ const MobileNavigation: React.FC<MobileNavigationProps> = () => {
         </Sheet>
       </div>
 
-      {/* Panel rendering */}
-      {activePanel && (
-        <div className="fixed inset-0 z-50 bg-background">
-          {renderPanel()}
-        </div>
-      )}
+      {/* Active Panel */}
+      {activePanel && renderPanel()}
     </>
   );
 };
