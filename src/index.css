@@ -146,7 +146,7 @@ All colors MUST be HSL.
 
 @layer base {
   * {
-    @apply border-border;
+    border: 0 solid hsl(var(--border));
   }
 
   html {
@@ -156,9 +156,10 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply text-foreground;
+    color: hsl(var(--foreground));
     background: transparent;
     min-height: 100vh;
+    font-family: 'Inter', sans-serif;
   }
 
   #root {
