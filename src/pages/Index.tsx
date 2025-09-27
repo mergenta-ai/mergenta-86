@@ -1,11 +1,13 @@
 import { useState } from "react";
 import Header from "@/components/Header";
 import ChatInterface from "@/components/ChatInterface";
-import ChatInputNew from "@/components/ChatInputNew";
+import ChatInput from "@/components/ChatInput";
 import WorkflowTabs from "@/components/WorkflowTabs";
-import AppLayout from "@/components/layout/AppLayout";
+import MergentaSidebar from "@/components/MergentaSidebar";
+import MobileNavigation from "@/components/MobileNavigation";
 
 import { useToast } from "@/hooks/use-toast";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { chatService } from "@/services/chatService";
 
 interface Message {
@@ -20,6 +22,7 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [generatedPrompt, setGeneratedPrompt] = useState("");
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   const handlePromptGenerated = (prompt: string) => {
     setGeneratedPrompt(prompt);
@@ -105,69 +108,75 @@ const Index = () => {
     }
   };
 
-  const lastResponse = messages[messages.length - 1]?.isUser === false 
-    ? messages[messages.length - 1]?.text 
-    : undefined;
-
   return (
-    <AppLayout>
-      {messages.length === 0 ? (
-        <>
-          {/* Default State - No Messages */}
-          {/* Logo (top-left) - Hidden on mobile */}
-          <div className="p-6 lg:block md:hidden sm:hidden">
-            <img 
-              src="/lovable-uploads/0ef37e7c-4020-4d43-b3cb-e900815b9635.png" 
-              alt="Mergenta Logo" 
-              className="h-26 w-auto md:h-34 lg:h-44 invisible" 
-            />
-          </div>
-
-          {/* Header section */}
-          <Header />
-
-          {/* Input bar - Single source of truth */}
-          <ChatInputNew 
-            onSendMessage={handleSendMessage} 
-            isLoading={isLoading} 
-            initialValue={generatedPrompt}
-            lastResponse={lastResponse}
-          />
-
-          {/* Workflow tabs - All devices */}
-          <WorkflowTabs onAddToChat={handleAddToChat} onPromptGenerated={handlePromptGenerated} />
-
-          {/* Chat messages */}
-          <main className="flex-1 flex flex-col">
-            <ChatInterface messages={messages} isLoading={isLoading} />
-          </main>
-        </>
-      ) : (
-        <>
-          {/* Chat State - Messages Exist */}
-          {/* Chat messages take full space */}
-          <main className="flex-1 flex flex-col pb-32">
-            <ChatInterface messages={messages} isLoading={isLoading} />
-          </main>
-
-          {/* Fixed bottom search bar */}
-          <div className="fixed bottom-4 left-0 right-0 z-overlay flex justify-center px-4">
-            <div className="w-full max-w-3xl">
-              <ChatInputNew 
-                onSendMessage={handleSendMessage} 
-                isLoading={isLoading} 
-                initialValue={generatedPrompt}
-                lastResponse={lastResponse}
+    <div className="min-h-screen flex">
+      {/* Mobile Navigation */}
+      <MobileNavigation />
+      
+      {/* Desktop Sidebar */}
+      <MergentaSidebar />
+      
+      {/* Main Content */}
+      <div className="flex-1 lg:ml-20 ml-0 flex flex-col relative">
+        {messages.length === 0 ? (
+          <>
+            {/* Default State - No Messages */}
+            {/* Logo (top-left) - Hidden on mobile */}
+            <div className="p-6 lg:block md:hidden sm:hidden">
+              <img 
+                src="/lovable-uploads/0ef37e7c-4020-4d43-b3cb-e900815b9635.png" 
+                alt="Mergenta Logo" 
+                className="h-26 w-auto md:h-34 lg:h-44 invisible" 
               />
-              {/* Disclaimer */}
-              <p className="text-center text-sm text-text-secondary mt-2">
-                Mergenta can make mistakes. Verify information.
-              </p>
             </div>
-          </div>
-        </>
-      )}
-    </AppLayout>
+
+            {/* Header section */}
+            <Header />
+
+            {/* Input bar */}
+            <ChatInput 
+              onSendMessage={handleSendMessage} 
+              isLoading={isLoading} 
+              initialValue={generatedPrompt}
+              lastResponse={messages[messages.length - 1]?.isUser === false ? messages[messages.length - 1]?.text : undefined}
+            />
+
+            {/* Workflow tabs - All devices */}
+            <WorkflowTabs onAddToChat={handleAddToChat} onPromptGenerated={handlePromptGenerated} />
+
+            {/* Chat messages */}
+            <main className="flex-1 flex flex-col">
+              <ChatInterface messages={messages} isLoading={isLoading} />
+            </main>
+          </>
+        ) : (
+          <>
+            {/* Chat State - Messages Exist */}
+            {/* Chat messages take full space */}
+            <main className="flex-1 flex flex-col">
+              <ChatInterface messages={messages} isLoading={isLoading} />
+            </main>
+
+            {/* Fixed bottom search bar */}
+            <div className="fixed bottom-4 left-0 right-0 z-50 flex justify-center px-4">
+              <div className="w-full max-w-3xl">
+                <ChatInput 
+                  onSendMessage={handleSendMessage} 
+                  isLoading={isLoading} 
+                  initialValue={generatedPrompt}
+                  lastResponse={messages[messages.length - 1]?.isUser === false ? messages[messages.length - 1]?.text : undefined}
+                />
+                {/* Disclaimer */}
+                <p className="text-center text-sm text-gray-500 mt-2">
+                  Mergenta can make mistakes. Verify information.
+                </p>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+
+    </div>
   );
 };
 
