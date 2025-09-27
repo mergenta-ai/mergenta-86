@@ -5,6 +5,7 @@ import ChatInput from "@/components/ChatInput";
 import WorkflowTabs from "@/components/WorkflowTabs";
 import MergentaSidebar from "@/components/MergentaSidebar";
 import MobileNavigation from "@/components/MobileNavigation";
+import ModelDisplay from "@/components/ModelDisplay";
 
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -28,11 +29,16 @@ const Index = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [generatedPrompt, setGeneratedPrompt] = useState("");
+  const [selectedModel, setSelectedModel] = useState("Default");
   const { toast } = useToast();
   const isMobile = useIsMobile();
 
   const handlePromptGenerated = (prompt: string) => {
     setGeneratedPrompt(prompt);
+  };
+
+  const handleModelSelect = (model: string) => {
+    setSelectedModel(model);
   };
 
   const simulateAIResponse = (userMessage: string): string => {
@@ -135,6 +141,15 @@ const Index = () => {
       
       {/* Main Content */}
       <div className="flex-1 lg:ml-20 ml-0 flex flex-col relative">
+        {/* Model Display - Top Right Corner */}
+        <div className="absolute top-4 right-4 z-40">
+          <ModelDisplay 
+            selectedModel={selectedModel}
+            onClick={() => {
+              // Optional: Could trigger model dropdown when clicked
+            }}
+          />
+        </div>
         {messages.length === 0 ? (
           <>
             {/* Default State - No Messages */}
@@ -156,6 +171,7 @@ const Index = () => {
               isLoading={isLoading} 
               initialValue={generatedPrompt}
               lastResponse={messages[messages.length - 1]?.isUser === false ? messages[messages.length - 1]?.text : undefined}
+              onModelSelect={handleModelSelect}
             />
 
             {/* Workflow tabs - All devices */}
@@ -182,6 +198,7 @@ const Index = () => {
                   isLoading={isLoading} 
                   initialValue={generatedPrompt}
                   lastResponse={messages[messages.length - 1]?.isUser === false ? messages[messages.length - 1]?.text : undefined}
+                  onModelSelect={handleModelSelect}
                 />
                 {/* Disclaimer */}
                 <p className="text-center text-sm text-gray-500 mt-2">

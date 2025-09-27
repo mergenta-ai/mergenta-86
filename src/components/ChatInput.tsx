@@ -10,9 +10,10 @@ interface ChatInputProps {
   placeholder?: string;
   onFocus?: () => void;
   lastResponse?: string;
+  onModelSelect?: (model: string) => void;
 }
 
-const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeholder = "Ask Mergenta...", onFocus, lastResponse }: ChatInputProps) => {
+const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeholder = "Ask Mergenta...", onFocus, lastResponse, onModelSelect }: ChatInputProps) => {
   const [input, setInput] = useState(initialValue);
   const [isRecording, setIsRecording] = useState(false);
   const [showModelDropdown, setShowModelDropdown] = useState(false);
@@ -258,6 +259,7 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                               className="w-full text-left text-sm text-gray-700 hover:bg-gray-50 py-1 px-2 rounded transition-colors flex items-center justify-between"
                               onClick={() => {
                                 console.log(`Selected: ${model.name}`);
+                                onModelSelect?.(model.name);
                                 setShowModelDropdown(false);
                               }}
                             >
@@ -294,6 +296,7 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                               className="w-full text-left text-sm text-gray-700 hover:bg-gray-50 py-1 px-2 rounded transition-colors flex items-center justify-between"
                               onClick={() => {
                                 console.log(`Selected: ${model.name}`);
+                                onModelSelect?.(model.name);
                                 setShowModelDropdown(false);
                               }}
                             >
