@@ -205,9 +205,9 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
 
   return (
     <TooltipProvider delayDuration={300}>
-      <div className="flex justify-center w-full px-2 sm:px-4 mt-2" ref={containerRef}>
-        <div className="w-full max-w-6xl">
-          <div className="flex flex-wrap justify-center gap-1 sm:gap-2 relative">
+      <div className="flex justify-center w-full px-4 mt-2" ref={containerRef}>
+        <div className="w-full max-w-5xl">
+          <div className="flex justify-center gap-2 relative">
             {tabs.map((tab, index) => (
               <div key={index} className="relative">
                 <button
@@ -224,15 +224,12 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                   onMouseLeave={handleTabLeave}
                   style={{ backgroundColor: activeTab === tab.id ? '#C7A8EA' : '#F3EAFE' }}
                   className={`
-                    w-[90px] xs:w-[95px] sm:w-[110px] md:w-[120px] lg:w-[130px] 
-                    py-2 px-2 rounded-xl 
-                    font-inter font-medium text-xs sm:text-sm tracking-tight text-center
+                    w-[100px] py-2 rounded-xl font-inter font-medium text-sm tracking-tight text-center
                     transition-all duration-300 ease-in-out
                     focus:outline-none focus:ring-2 focus:ring-purple-300 focus:ring-offset-2
                     flex items-center justify-center
                     leading-tight
                     hover:shadow-md
-                    min-h-[44px] touch-manipulation
                     ${activeTab === tab.id
                       ? 'text-[#6F42C1]' 
                       : 'text-[#444] hover:bg-[#DCC8F2]'
@@ -242,16 +239,10 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                   <span className="whitespace-pre-line">{tab.text}</span>
                 </button>
                 
-                {/* Dropdown - responsive positioning */}
+                {/* Dropdown - only for certain tabs */}
                 {activeTab === tab.id && !["think-hard", "deep-research", "power-playbook"].includes(tab.id) && (
                   <div 
-                    className="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 
-                               w-[240px] sm:w-[260px] md:w-[280px] lg:w-[300px] 
-                               bg-[#F8F5FE] rounded-lg shadow-lg border border-[#E5D9F2] z-[150]
-                               max-h-[70vh] overflow-y-auto"
-                    style={{
-                      left: 'clamp(1rem, 50%, calc(100vw - 280px - 1rem))'
-                    }}
+                    className="absolute top-full w-[100px] bg-[#F8F5FE] rounded-lg shadow-md border border-[#E5D9F2] z-50"
                     onMouseEnter={handleDropdownEnter}
                     onMouseLeave={handleDropdownLeave}
                   >

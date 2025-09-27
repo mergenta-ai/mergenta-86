@@ -7,7 +7,7 @@ import MergentaSidebar from "@/components/MergentaSidebar";
 import MobileNavigation from "@/components/MobileNavigation";
 
 import { useToast } from "@/hooks/use-toast";
-import { useIsMobile, useIsDesktop } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { chatService } from "@/services/chatService";
 
 interface Message {
@@ -23,7 +23,6 @@ const Index = () => {
   const [generatedPrompt, setGeneratedPrompt] = useState("");
   const { toast } = useToast();
   const isMobile = useIsMobile();
-  const isDesktop = useIsDesktop();
 
   const handlePromptGenerated = (prompt: string) => {
     setGeneratedPrompt(prompt);
@@ -110,19 +109,15 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen w-full">
-      {/* Mobile Navigation - Only shown on mobile */}
-      {!isDesktop && <MobileNavigation />}
+    <div className="min-h-screen flex">
+      {/* Mobile Navigation */}
+      <MobileNavigation />
       
-      {/* Desktop Sidebar - Only shown on desktop */}
-      {isDesktop && <MergentaSidebar />}
+      {/* Desktop Sidebar */}
+      <MergentaSidebar />
       
-      {/* Main Content - CSS Grid-based responsive layout */}
-      <div 
-        className={`min-h-screen flex flex-col relative transition-all duration-300 ${
-          isDesktop ? 'ml-20' : 'ml-0'
-        }`}
-      >
+      {/* Main Content */}
+      <div className="flex-1 lg:ml-20 ml-0 flex flex-col relative">
         {messages.length === 0 ? (
           <>
             {/* Default State - No Messages */}
