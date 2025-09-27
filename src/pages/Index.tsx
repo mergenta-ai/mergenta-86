@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Header from "@/components/Header";
 import ChatInterface from "@/components/ChatInterface";
 import ChatInput from "@/components/ChatInput";
@@ -17,16 +17,13 @@ interface Message {
   timestamp: Date;
 }
 
-const Index: React.FC = () => {
+const Index = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [generatedPrompt, setGeneratedPrompt] = useState("");
   const { toast } = useToast();
   const isMobile = useIsMobile();
   const isDesktop = useIsDesktop();
-
-  // Height of ChatInput's textarea (px). Used to set bottom padding so last message is visible.
-  const [chatInputHeight, setChatInputHeight] = useState<number>(0);
 
   const handlePromptGenerated = (prompt: string) => {
     setGeneratedPrompt(prompt);
@@ -44,6 +41,7 @@ const Index: React.FC = () => {
   };
 
   const handleAddToChat = async (message: string, response: string) => {
+    // For workflow cards, we get a response directly, so just add both messages
     const userMessage: Message = {
       id: Date.now().toString(),
       text: message,
@@ -71,11 +69,12 @@ const Index: React.FC = () => {
 
     setMessages(prev => [...prev, userMessage]);
     setIsLoading(true);
-    setGeneratedPrompt("");
+    setGeneratedPrompt(""); // Clear the prompt after sending
 
     try {
+      // Use the new chat service with LLM routing
       const response = await chatService.handleDirectMessage(message);
-
+      
       if (response.error) {
         toast({
           title: "Error",
@@ -84,7 +83,7 @@ const Index: React.FC = () => {
         });
         return;
       }
-
+      
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
         text: response.response,
@@ -93,11 +92,12 @@ const Index: React.FC = () => {
       };
 
       setMessages(prev => [...prev, aiResponse]);
-
+      
+      // Show quota info if provided
       if (response.quotaRemaining !== undefined) {
         console.log(`Quota remaining: ${response.quotaRemaining}`);
       }
-
+      
     } catch (error) {
       toast({
         title: "Error",
@@ -109,79 +109,69 @@ const Index: React.FC = () => {
     }
   };
 
-  /**
-   * Layout notes:
-   * - We preserve original conditional placement of ChatInput visually.
-   * - There is only one ChatInput instance in the DOM, but it is positioned to match the original UI.
-   * - The chat area receives padding-bottom = chatInputHeight + 12 to keep last message visible.
-   */
-
   return (
     <div className="min-h-screen w-full">
+      {/* Mobile Navigation - Only shown on mobile */}
       {!isDesktop && <MobileNavigation />}
-
+      
+      {/* Desktop Sidebar - Only shown on desktop */}
       {isDesktop && <MergentaSidebar />}
-
-      <div
+      
+      {/* Main Content - CSS Grid-based responsive layout */}
+      <div 
         className={`min-h-screen flex flex-col relative transition-all duration-300 ${
-          isDesktop ? "ml-20" : "ml-0"
+          isDesktop ? 'ml-20' : 'ml-0'
         }`}
       >
-        {/* Shared header & workflow area */}
         {messages.length === 0 ? (
           <>
+            {/* Default State - No Messages */}
+            {/* Logo (top-left) - Hidden on mobile */}
             <div className="p-6 lg:block md:hidden sm:hidden">
-              <img
-                src="/lovable-uploads/0ef37e7c-4020-4d43-b3cb-e900815b9635.png"
-                alt="Mergenta Logo"
-                className="h-26 w-auto md:h-34 lg:h-44 invisible"
+              <img 
+                src="/lovable-uploads/0ef37e7c-4020-4d43-b3cb-e900815b9635.png" 
+                alt="Mergenta Logo" 
+                className="h-26 w-auto md:h-34 lg:h-44 invisible" 
               />
             </div>
 
+            {/* Header section */}
             <Header />
 
-            {/* Here the ChatInput visually appears in-flow (same look as before on Mac15") */}
-            <div className="w-full">
-              <ChatInput
-                onSendMessage={handleSendMessage}
-                isLoading={isLoading}
-                initialValue={generatedPrompt}
-                lastResponse={messages[messages.length - 1]?.isUser === false ? messages[messages.length - 1]?.text : undefined}
-                onHeightChange={(h) => setChatInputHeight(h)}
-              />
-            </div>
+            {/* Input bar */}
+            <ChatInput 
+              onSendMessage={handleSendMessage} 
+              isLoading={isLoading} 
+              initialValue={generatedPrompt}
+              lastResponse={messages[messages.length - 1]?.isUser === false ? messages[messages.length - 1]?.text : undefined}
+            />
 
+            {/* Workflow tabs - All devices */}
             <WorkflowTabs onAddToChat={handleAddToChat} onPromptGenerated={handlePromptGenerated} />
 
+            {/* Chat messages */}
             <main className="flex-1 flex flex-col">
-              <ChatInterface
-                messages={messages}
-                isLoading={isLoading}
-                // ensure the chat area always has room for the input (last message visible)
-                style={{ paddingBottom: `${chatInputHeight + 12}px` } as React.CSSProperties}
-              />
+              <ChatInterface messages={messages} isLoading={isLoading} />
             </main>
           </>
         ) : (
           <>
+            {/* Chat State - Messages Exist */}
+            {/* Chat messages take full space */}
             <main className="flex-1 flex flex-col">
-              <ChatInterface
-                messages={messages}
-                isLoading={isLoading}
-                style={{ paddingBottom: `${chatInputHeight + 12}px` } as React.CSSProperties}
-              />
+              <ChatInterface messages={messages} isLoading={isLoading} />
             </main>
 
-            {/* When messages exist, the ChatInput is visually fixed — same appearance as before */}
+            {/* Fixed bottom search bar */}
             <div className="fixed bottom-4 left-0 right-0 z-50 flex justify-center px-4">
               <div className="w-full max-w-3xl">
-                <ChatInput
-                  onSendMessage={handleSendMessage}
-                  isLoading={isLoading}
+                <ChatInput 
+                  onSendMessage={handleSendMessage} 
+                  isLoading={isLoading} 
                   initialValue={generatedPrompt}
                   lastResponse={messages[messages.length - 1]?.isUser === false ? messages[messages.length - 1]?.text : undefined}
-                  onHeightChange={(h) => setChatInputHeight(h)}
                 />
+                {/* Disclaimer */}
                 <p className="text-center text-sm text-gray-500 mt-2">
                   Mergenta can make mistakes. Verify information.
                 </p>
@@ -190,6 +180,7 @@ const Index: React.FC = () => {
           </>
         )}
       </div>
+
     </div>
   );
 };
