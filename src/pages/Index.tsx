@@ -139,17 +139,18 @@ const Index = () => {
       {/* Desktop Sidebar */}
       <MergentaSidebar />
       
+      {/* Model Display - Fixed Top Right Corner */}
+      <div className="fixed top-4 right-4 z-50 lg:right-6">
+        <ModelDisplay 
+          selectedModel={selectedModel}
+          onClick={() => {
+            // Optional: Could trigger model dropdown when clicked
+          }}
+        />
+      </div>
+
       {/* Main Content */}
       <div className="flex-1 lg:ml-20 ml-0 flex flex-col relative">
-        {/* Model Display - Top Right Corner */}
-        <div className="absolute top-4 right-4 z-40">
-          <ModelDisplay 
-            selectedModel={selectedModel}
-            onClick={() => {
-              // Optional: Could trigger model dropdown when clicked
-            }}
-          />
-        </div>
         {messages.length === 0 ? (
           <>
             {/* Default State - No Messages */}
