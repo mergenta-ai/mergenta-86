@@ -1,6 +1,6 @@
 import type { Config } from "tailwindcss";
 
-export default {
+const config: Config = {
 	darkMode: ["class"],
 	content: [
 		"./pages/**/*.{ts,tsx}",
@@ -18,6 +18,14 @@ export default {
 			}
 		},
 		extend: {
+			screens: {
+				'xs': '30rem',
+				'sm': '40rem', 
+				'md': '48rem',
+				'lg': '64rem',
+				'xl': '80rem',
+				'2xl': '96rem',
+			},
 			fontFamily: {
 				'inter': ['Inter', 'sans-serif'],
 				'poppins': ['Poppins', 'sans-serif'],
