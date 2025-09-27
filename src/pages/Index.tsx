@@ -35,6 +35,8 @@ const Index = () => {
 
   const handlePromptGenerated = (prompt: string) => {
     setGeneratedPrompt(prompt);
+    // Reset model to Default when workflow cards are used
+    setSelectedModel("Default");
   };
 
   const handleModelSelect = (model: string) => {
