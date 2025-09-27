@@ -30,6 +30,8 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const startTime = Date.now();
+
   try {
     const { prompt, contentType, formData, intentType, userId }: ChatRequest = await req.json();
     console.log('Chat router received request:', { intentType, userId, contentType });
@@ -69,52 +71,124 @@ serve(async (req) => {
 
     let searchContext = '';
     let sources: any[] = [];
+    let searchMetrics = { webSearchLatency: 0, rssSearchLatency: 0, totalSources: 0, cacheHits: 0 };
 
-    // Route to websearch if needed
+    // Route to websearch if needed with enhanced parallel processing
     if (needsWebsearch) {
+      const searchStart = Date.now();
       try {
-        const [webResults, rssResults] = await Promise.all([
-          callWebsearchEdge(prompt, intentType),
-          callNewsFeedsEdge(prompt, intentType)
+        // Enhanced parallel search with timeout handling
+        const searchPromises = [
+          callWebsearchEdge(prompt, intentType).catch(err => {
+            console.warn('Web search failed:', err.message);
+            return [];
+          }),
+          callNewsFeedsEdge(prompt, intentType).catch(err => {
+            console.warn('RSS search failed:', err.message);
+            return [];
+          })
+        ];
+
+        const [webResults, rssResults] = await Promise.race([
+          Promise.all(searchPromises),
+          new Promise<[any[], any[]]>((_, reject) => 
+            setTimeout(() => reject(new Error('Search timeout')), 5000)
+          )
         ]);
 
+        searchMetrics.webSearchLatency = Date.now() - searchStart;
+        searchMetrics.totalSources = webResults.length + rssResults.length;
+        
+        // Enhanced deduplication and ranking
         const combinedResults = deduplicateAndRank(webResults, rssResults);
         searchContext = formatSearchContext(combinedResults, intentType);
         sources = combinedResults;
 
-        // Log search query
+        // Count cache hits from results
+        searchMetrics.cacheHits = [...webResults, ...rssResults]
+          .filter(r => r.cached || r.metadata?.cached).length;
+
+        console.log('Search completed:', searchMetrics);
+
+        // Log search query with enhanced metrics
         await logSearchQuery(userId, prompt, intentType, sources, searchContext.length);
       } catch (searchError) {
-        console.error('Search failed, continuing with LLM-only:', searchError);
-        // Continue without search context - graceful degradation
+        console.error('Search failed, using fallback:', searchError);
+        
+        // Enhanced fallback - try RSS only if web search fails
+        try {
+          const rssResults = await callNewsFeedsEdge(prompt, intentType);
+          if (rssResults.length > 0) {
+            searchContext = formatSearchContext(rssResults, intentType);
+            sources = rssResults;
+            console.log('Fallback RSS search succeeded:', rssResults.length, 'results');
+          }
+        } catch (fallbackError) {
+          console.error('RSS fallback also failed:', fallbackError);
+        }
       }
     }
 
-    // Route to model gateway
+    // Route to model gateway with enhanced prompt
     const finalPrompt = searchContext ? 
-      `Context from recent sources:\n${searchContext}\n\nUser Request: ${prompt}\n\nPlease provide a comprehensive answer using the context above with inline citations [G1], [RSS1], etc. End with a complete source list.` :
-      prompt;
+      `Use only these search snippets to answer. Cite inline with [G1], [RSS1], etc:
+
+${searchContext}
+
+User Query: ${prompt}
+
+Instructions: Provide summary, evidence bullets with citations, complete source list, and 3 follow-up questions.` :
+      `${prompt}\n\nNote: Responding with model knowledge only (search unavailable).`;
 
     const modelResponse = await callModelGateway({
       prompt: finalPrompt,
       userId,
       intentType,
-      searchSources: sources
+      searchSources: sources,
+      hasSearchContext: searchContext.length > 0
     });
 
     // Update quota usage
     await updateQuotaUsage(userId, intentType || 'creative', contentType, modelResponse.tokensUsed || 0);
 
+    const totalLatency = Date.now() - startTime;
+    console.log('Chat router completed:', {
+      totalLatency,
+      searchContextLength: searchContext.length,
+      sourcesCount: sources.length,
+      modelTokens: modelResponse.tokensUsed || 0,
+      ...searchMetrics
+    });
+
     return new Response(JSON.stringify({
       response: modelResponse.content,
-      sources: sources.length > 0 ? sources : undefined,
+      sources: sources.length > 0 ? sources.map(s => ({
+        id: s.id,
+        title: s.title,
+        url: s.url,
+        domain: s.domain,
+        type: s.type,
+        publishedAt: s.publishedAt,
+        metadata: s.metadata
+      })) : undefined,
       quotaRemaining: quotaCheck.remaining - 1,
-      fallbackUsed: modelResponse.fallbackUsed || false
+      fallbackUsed: modelResponse.fallbackUsed || !searchContext,
+      metrics: {
+        totalLatency,
+        searchLatency: searchMetrics.webSearchLatency + searchMetrics.rssSearchLatency,
+        modelLatency: modelResponse.latency || 0,
+        sourcesUsed: sources.length,
+        cacheHitRate: searchMetrics.totalSources > 0 ? 
+          (searchMetrics.cacheHits / searchMetrics.totalSources) : 0,
+        tokensInjected: searchContext.length,
+        tokensReturned: modelResponse.tokensUsed || 0
+      }
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
 
   } catch (error) {
+    const totalLatency = Date.now() - startTime;
     console.error('Chat router error:', error);
     return new Response(JSON.stringify({ 
       error: 'Internal server error',
@@ -256,29 +330,59 @@ function deduplicateAndRank(webResults: any[], rssResults: any[]): any[] {
 }
 
 function formatSearchContext(results: any[], intentType?: string): string {
-  const tokenLimits = {
-    user_search: 500,
-    knowledge: 750,
-    research: 1000
+  // Enhanced context limits based on user requirements
+  const contextLimits = {
+    user_search: { sources: 5, tokensPerSource: 300, maxTokens: 1500 }, // Think Hard
+    knowledge: { sources: 7, tokensPerSource: 300, maxTokens: 2100 },   // Deep Research (partial)
+    research: { sources: 10, tokensPerSource: 300, maxTokens: 3000 },   // Deep Research (full)
+    creative: { sources: 3, tokensPerSource: 200, maxTokens: 600 },     // Minimal for creative
+    experience_studio: { sources: 5, tokensPerSource: 300, maxTokens: 1500 }
   };
 
-  const limit = tokenLimits[intentType as keyof typeof tokenLimits] || 500;
+  const limits = contextLimits[intentType as keyof typeof contextLimits] || contextLimits.user_search;
   let context = '';
-  let tokenCount = 0;
+  let totalTokens = 0;
+  let sourceCount = 0;
 
-  for (let i = 0; i < results.length && tokenCount < limit; i++) {
-    const result = results[i];
-    const id = result.type === 'rss' ? `[RSS${i + 1}]` : `[G${i + 1}]`;
-    const snippet = result.snippet || result.summary || '';
-    const addition = `${id} ${result.title}: ${snippet.substring(0, 200)}...\n\n`;
+  // Prioritize fresh RSS content
+  const sortedResults = results.sort((a, b) => {
+    // Fresh RSS gets highest priority
+    if (a.type === 'rss' && a.metadata?.freshness === 'fresh') return -1;
+    if (b.type === 'rss' && b.metadata?.freshness === 'fresh') return 1;
     
-    if (tokenCount + addition.length < limit) {
-      context += addition;
-      tokenCount += addition.length;
+    // Then by score
+    return (b.score || 0) - (a.score || 0);
+  });
+
+  for (const result of sortedResults) {
+    if (sourceCount >= limits.sources || totalTokens >= limits.maxTokens) break;
+
+    const id = result.type === 'rss' ? `[RSS${sourceCount + 1}]` : `[G${sourceCount + 1}]`;
+    const snippet = result.snippet || result.summary || '';
+    
+    // Create enhanced snippet with metadata
+    const publishedInfo = result.publishedAt ? 
+      ` (${new Date(result.publishedAt).toLocaleDateString()})` : '';
+    const domainInfo = result.domain ? ` - ${result.domain}` : '';
+    
+    // Clean and limit snippet to token budget
+    const cleanSnippet = snippet
+      .replace(/\s+/g, ' ')
+      .trim()
+      .substring(0, limits.tokensPerSource - 50); // Reserve 50 chars for metadata
+    
+    const formattedEntry = `${id} ${result.title}${publishedInfo}${domainInfo}: ${cleanSnippet}\n\n`;
+    
+    if (totalTokens + formattedEntry.length <= limits.maxTokens) {
+      context += formattedEntry;
+      totalTokens += formattedEntry.length;
+      sourceCount++;
       result.id = id; // Add ID for citation
     }
   }
 
+  console.log(`Context formatted: ${sourceCount} sources, ${totalTokens} tokens (limit: ${limits.maxTokens})`);
+  
   return context;
 }
 
@@ -347,6 +451,10 @@ async function updateQuotaUsage(userId: string, intentType: string, contentType?
 
 async function logSearchQuery(userId: string, query: string, intentType?: string, sources?: any[], tokensConsumed?: number) {
   try {
+    const webSources = sources?.filter(s => s.type === 'google') || [];
+    const rssSources = sources?.filter(s => s.type === 'rss') || [];
+    const cacheHits = sources?.filter(s => s.cached || s.metadata?.cached).length || 0;
+    
     await supabase
       .from('search_queries')
       .insert({
@@ -356,8 +464,19 @@ async function logSearchQuery(userId: string, query: string, intentType?: string
         sources_used: sources || [],
         tokens_consumed: tokensConsumed || 0,
         search_results_count: sources?.length || 0,
-        fallback_used: false
+        web_sources_count: webSources.length,
+        rss_sources_count: rssSources.length,
+        cache_hits: cacheHits,
+        fallback_used: sources?.length === 0
       });
+      
+    console.log('Search query logged:', {
+      query: query.substring(0, 50),
+      sourcesCount: sources?.length || 0,
+      webSources: webSources.length,
+      rssSources: rssSources.length,
+      cacheHits
+    });
   } catch (error) {
     console.error('Log search query error:', error);
   }
