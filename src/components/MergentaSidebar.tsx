@@ -7,6 +7,7 @@ import HelpPanel from './sidebar/HelpPanel';
 import { ProfilePanel } from './sidebar/ProfilePanel';
 import PlansPanel from './sidebar/PlansPanel';
 import TrendingPanel from './sidebar/TrendingPanel';
+import { RSSReaderModal } from './modals/RSSReaderModal';
 import { Button } from './ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 
@@ -17,6 +18,8 @@ const MergentaSidebar = () => {
   const [showProfile, setShowProfile] = useState(false);
   const [showPlans, setShowPlans] = useState(false);
   const [showTrending, setShowTrending] = useState(false);
+  const [showRSSReader, setShowRSSReader] = useState(false);
+  const [rssReaderCategory, setRSSReaderCategory] = useState<string>('');
   const navigate = useNavigate();
 
   // Handle mouse events
@@ -70,6 +73,13 @@ const MergentaSidebar = () => {
   const handleEmail = () => {
     // Open email client
     window.location.href = 'mailto:';
+  };
+
+  // Handle RSS Reader
+  const handleOpenRSSReader = (category?: string) => {
+    setRSSReaderCategory(category || '');
+    setShowRSSReader(true);
+    setShowTrending(false);
   };
 
 
@@ -334,9 +344,17 @@ const MergentaSidebar = () => {
           <TrendingPanel 
             isVisible={showTrending} 
             onClose={() => setShowTrending(false)}
+            onOpenRSSReader={handleOpenRSSReader}
           />
         </div>
       )}
+
+      {/* RSS Reader Modal */}
+      <RSSReaderModal
+        isOpen={showRSSReader}
+        onClose={() => setShowRSSReader(false)}
+        initialCategory={rssReaderCategory}
+      />
     </>
   );
 };

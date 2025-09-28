@@ -67,6 +67,16 @@ export class RSSService {
     }
   }
 
+  static async getAllCategories(): Promise<string[]> {
+    try {
+      const response = await this.fetchRSSFeeds({ maxResults: 1 });
+      return response.categories;
+    } catch (error) {
+      console.error('Error getting categories:', error);
+      return [];
+    }
+  }
+
   static async searchFeeds(query: string, category?: string, maxResults: number = 20): Promise<RSSFeedItem[]> {
     try {
       const response = await this.fetchRSSFeeds({ 
