@@ -6,7 +6,7 @@ import PoliciesPanel from './sidebar/PoliciesPanel';
 import HelpPanel from './sidebar/HelpPanel';
 import { ProfilePanel } from './sidebar/ProfilePanel';
 import PlansPanel from './sidebar/PlansPanel';
-import TrendingPanel from './sidebar/TrendingPanel';
+
 import { RSSReaderModal } from './modals/RSSReaderModal';
 import { Button } from './ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
@@ -17,7 +17,7 @@ const MergentaSidebar = () => {
   const [showHelp, setShowHelp] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [showPlans, setShowPlans] = useState(false);
-  const [showTrending, setShowTrending] = useState(false);
+  
   const [showRSSReader, setShowRSSReader] = useState(false);
   const [rssReaderCategory, setRSSReaderCategory] = useState<string>('');
   const navigate = useNavigate();
@@ -30,7 +30,6 @@ const MergentaSidebar = () => {
     setShowPlans(false);
     setShowHelp(false);
     setShowProfile(false);
-    setShowTrending(false);
     
     // Then open the requested panel
     switch(panel) {
@@ -39,7 +38,6 @@ const MergentaSidebar = () => {
       case 'plans': setShowPlans(true); break;
       case 'help': setShowHelp(true); break;
       case 'profile': setShowProfile(true); break;
-      case 'trending': setShowTrending(true); break;
     }
   };
 
@@ -50,7 +48,6 @@ const MergentaSidebar = () => {
     setShowPlans(false);
     setShowHelp(false);
     setShowProfile(false);
-    setShowTrending(false);
   };
 
   // Handle clicks outside sidebar to close panels
@@ -60,7 +57,6 @@ const MergentaSidebar = () => {
     setShowPlans(false);
     setShowHelp(false);
     setShowProfile(false);
-    setShowTrending(false);
   };
 
   // Handle new chat
@@ -79,14 +75,13 @@ const MergentaSidebar = () => {
   const handleOpenRSSReader = (category?: string) => {
     setRSSReaderCategory(category || '');
     setShowRSSReader(true);
-    setShowTrending(false);
   };
 
 
   return (
     <>
       {/* Click outside overlay to close panels */}
-      {(showHistory || showPolicies || showPlans || showHelp || showProfile || showTrending) && (
+      {(showHistory || showPolicies || showPlans || showHelp || showProfile) && (
         <div 
           className="fixed inset-0 z-20 bg-transparent"
           onClick={handleClickOutside}
@@ -122,15 +117,13 @@ const MergentaSidebar = () => {
         </div>
 
         {/* Trending Icon */}
-        <div 
-          className="relative mb-4"
-          onMouseEnter={() => handleMouseEnter('trending')}
-        >
+        <div className="relative mb-4">
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
                 variant="ghost"
                 className="h-16 w-16 rounded-xl hover:bg-pastel-orange hover:shadow-[0_0_8px_rgba(248,220,200,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-orange-hover"
+                onClick={() => handleOpenRSSReader()}
               >
                 <TrendingUp className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
               </Button>
@@ -335,19 +328,6 @@ const MergentaSidebar = () => {
         </div>
       )}
       
-      {showTrending && (
-        <div 
-          className="fixed left-0 top-0 h-full w-[400px] z-30"
-          onMouseEnter={() => setShowTrending(true)}
-          onMouseLeave={() => setShowTrending(false)}
-        >
-          <TrendingPanel 
-            isVisible={showTrending} 
-            onClose={() => setShowTrending(false)}
-            onOpenRSSReader={handleOpenRSSReader}
-          />
-        </div>
-      )}
 
       {/* RSS Reader Modal */}
       <RSSReaderModal
