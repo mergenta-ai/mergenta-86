@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { X, Search, Grid, List, RefreshCw, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { RSSService, RSSFeedItem } from '@/services/rssService';
 import { ArticleList } from '@/components/rss/ArticleList';
-import { CategoryHeader } from '@/components/rss/CategoryHeader';
 import { ArticleReader } from '@/components/rss/ArticleReader';
 
 interface RSSReaderModalProps {
@@ -111,79 +111,99 @@ export function RSSReaderModal({ isOpen, onClose, initialCategory = '' }: RSSRea
       <DialogContent className="max-w-8xl w-full h-[98vh] p-0 border-0 bg-background" hideCloseButton>
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b bg-gradient-to-r from-primary/5 to-accent/5">
-            <div className="flex items-center gap-4">
-              {selectedCategory && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={selectedArticle ? handleBackToList : handleBackToCategories}
-                  className="flex items-center gap-2"
-                >
-                  <ArrowLeft className="h-4 w-4" />
-                  {selectedArticle ? 'Back to Articles' : 'Back to Categories'}
-                </Button>
-              )}
-              <h1 className="text-2xl font-bold text-primary">
-                {selectedArticle ? 'Article Reader' : selectedCategory ? currentCategoryName : 'RSS News Reader'}
-              </h1>
-              {selectedCategory && !selectedArticle && (
-                <span className="text-2xl">{currentCategoryIcon}</span>
-              )}
-            </div>
-            
-            <div className="flex items-center gap-2">
-              {!selectedArticle && (
-                <>
+          <div className="flex flex-col border-b bg-gradient-to-r from-primary/5 to-accent/5">
+            <div className="flex items-center justify-between p-6">
+              <div className="flex items-center gap-4">
+                {selectedCategory && (
                   <Button
-                    variant="outline"
+                    variant="ghost"
                     size="sm"
-                    onClick={handleRefresh}
-                    disabled={refreshing}
+                    onClick={selectedArticle ? handleBackToList : handleBackToCategories}
                     className="flex items-center gap-2"
                   >
-                    <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
-                    Refresh
+                    <ArrowLeft className="h-4 w-4" />
+                    {selectedArticle ? 'Back to Articles' : 'Back to Categories'}
                   </Button>
-                  
-                  {selectedCategory && (
-                    <>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setViewMode(viewMode === 'grid' ? 'list' : 'grid')}
-                        className="flex items-center gap-2"
-                      >
-                        {viewMode === 'grid' ? <List className="h-4 w-4" /> : <Grid className="h-4 w-4" />}
-                        {viewMode === 'grid' ? 'List' : 'Grid'}
-                      </Button>
-                    </>
-                  )}
-                </>
-              )}
+                )}
+                <h1 className="text-2xl font-bold text-primary">
+                  {selectedArticle ? 'Article Reader' : selectedCategory ? currentCategoryName : 'RSS News Reader'}
+                </h1>
+                {selectedCategory && !selectedArticle && (
+                  <span className="text-2xl">{currentCategoryIcon}</span>
+                )}
+              </div>
               
-              <Button variant="ghost" size="sm" onClick={onClose}>
-                <X className="h-4 w-4" />
-              </Button>
+              <div className="flex items-center gap-2">
+                {!selectedArticle && (
+                  <>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleRefresh}
+                      disabled={refreshing}
+                      className="flex items-center gap-2"
+                    >
+                      <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
+                      Refresh
+                    </Button>
+                    
+                    {selectedCategory && (
+                      <>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setViewMode(viewMode === 'grid' ? 'list' : 'grid')}
+                          className="flex items-center gap-2"
+                        >
+                          {viewMode === 'grid' ? <List className="h-4 w-4" /> : <Grid className="h-4 w-4" />}
+                          {viewMode === 'grid' ? 'List' : 'Grid'}
+                        </Button>
+                      </>
+                    )}
+                  </>
+                )}
+                
+                <Button variant="ghost" size="sm" onClick={onClose}>
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
+            
+            {/* Search bar for category view */}
+            {selectedCategory && !selectedArticle && (
+              <div className="px-6 pb-4">
+                <div className="relative w-full md:w-80 ml-auto">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                  <Input
+                    placeholder="Search articles..."
+                    value={searchQuery}
+                    onChange={(e) => handleSearch(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Content with scrollbars */}
-          <div className="flex-1 min-h-0 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+          <div className="flex-1 min-h-0 overflow-y-auto scrollbar-thin">
             {selectedArticle ? (
-              <div className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+              <div className="h-full overflow-y-auto scrollbar-thin">
                 <ArticleReader article={selectedArticle} onBack={handleBackToList} />
               </div>
             ) : selectedCategory ? (
               <div className="flex flex-col h-full min-h-0">
-                <CategoryHeader 
-                  category={currentCategoryName}
-                  icon={currentCategoryIcon}
-                  articleCount={articles.length}
-                  onSearch={handleSearch}
-                  searchQuery={searchQuery}
-                />
-                <div className="flex-1 min-h-0 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+                <div className="p-6 border-b">
+                  <div className="max-w-6xl mx-auto">
+                    <div className="flex items-center gap-3">
+                      <Badge variant="outline" className="text-sm">
+                        {articles.length} articles
+                      </Badge>
+                      <span className="text-muted-foreground">Latest news and updates</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex-1 min-h-0 overflow-y-auto scrollbar-thin">
                   <ArticleList 
                     articles={articles}
                     loading={loading}
@@ -194,7 +214,7 @@ export function RSSReaderModal({ isOpen, onClose, initialCategory = '' }: RSSRea
               </div>
             ) : (
               // Category Selection with scrollbar
-              <div className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+              <div className="h-full overflow-y-auto scrollbar-thin">
                 <div className="p-8">
                   <div className="max-w-4xl mx-auto">
                     <div className="text-center mb-8">
