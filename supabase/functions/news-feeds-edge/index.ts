@@ -272,7 +272,15 @@ async function parseRSSFeed(xmlText: string, source: any): Promise<any[]> {
 function extractXMLTag(xml: string, tagName: string): string | null {
   const regex = new RegExp(`<${tagName}[^>]*>([\\s\\S]*?)<\\/${tagName}>`, 'i');
   const match = xml.match(regex);
-  return match ? match[1].trim() : null;
+  if (!match) return null;
+  
+  let content = match[1].trim();
+  
+  // Handle CDATA sections - remove CDATA wrapper and return clean content
+  const cdataRegex = /<!\[CDATA\[([\s\S]*?)\]\]>/g;
+  content = content.replace(cdataRegex, '$1');
+  
+  return content;
 }
 
 function parseDate(dateString: string): string | null {

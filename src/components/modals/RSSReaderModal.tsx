@@ -108,7 +108,7 @@ export function RSSReaderModal({ isOpen, onClose, initialCategory = '' }: RSSRea
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-7xl w-full h-[95vh] p-0 border-0 bg-background">
+      <DialogContent className="max-w-8xl w-full h-[98vh] p-0 border-0 bg-background">
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b bg-gradient-to-r from-primary/5 to-accent/5">
