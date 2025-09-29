@@ -108,7 +108,7 @@ export function RSSReaderModal({ isOpen, onClose, initialCategory = '' }: RSSRea
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-8xl w-full h-[98vh] p-0 border-0 bg-background">
+      <DialogContent className="max-w-8xl w-full h-[98vh] p-0 border-0 bg-background" hideCloseButton>
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b bg-gradient-to-r from-primary/5 to-accent/5">
@@ -168,10 +168,12 @@ export function RSSReaderModal({ isOpen, onClose, initialCategory = '' }: RSSRea
             </div>
           </div>
 
-          {/* Content */}
-          <div className="flex-1 overflow-hidden">
+          {/* Content with scrollbars */}
+          <div className="flex-1 overflow-auto">
             {selectedArticle ? (
-              <ArticleReader article={selectedArticle} onBack={handleBackToList} />
+              <div className="h-full overflow-auto">
+                <ArticleReader article={selectedArticle} onBack={handleBackToList} />
+              </div>
             ) : selectedCategory ? (
               <div className="flex flex-col h-full">
                 <CategoryHeader 
@@ -181,39 +183,43 @@ export function RSSReaderModal({ isOpen, onClose, initialCategory = '' }: RSSRea
                   onSearch={handleSearch}
                   searchQuery={searchQuery}
                 />
-                <ArticleList 
-                  articles={articles}
-                  loading={loading}
-                  viewMode={viewMode}
-                  onArticleClick={handleArticleClick}
-                />
+                <div className="flex-1 overflow-auto">
+                  <ArticleList 
+                    articles={articles}
+                    loading={loading}
+                    viewMode={viewMode}
+                    onArticleClick={handleArticleClick}
+                  />
+                </div>
               </div>
             ) : (
-              // Category Selection
-              <div className="p-8">
-                <div className="max-w-4xl mx-auto">
-                  <div className="text-center mb-8">
-                    <h2 className="text-3xl font-bold mb-4">Choose a News Category</h2>
-                    <p className="text-muted-foreground text-lg">
-                      Select a category to browse the latest articles and news
-                    </p>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                    {categories.map((category) => (
-                      <button
-                        key={category.value}
-                        onClick={() => handleCategorySelect(category.value)}
-                        className="flex flex-col items-center justify-center p-6 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/5 transition-all duration-200 group"
-                      >
-                        <span className="text-4xl mb-3 group-hover:scale-110 transition-transform">
-                          {category.icon}
-                        </span>
-                        <span className="font-semibold text-sm text-center group-hover:text-primary">
-                          {category.name}
-                        </span>
-                      </button>
-                    ))}
+              // Category Selection with scrollbar
+              <div className="h-full overflow-auto">
+                <div className="p-8">
+                  <div className="max-w-4xl mx-auto">
+                    <div className="text-center mb-8">
+                      <h2 className="text-3xl font-bold mb-4">Choose a News Category</h2>
+                      <p className="text-muted-foreground text-lg">
+                        Select a category to browse the latest articles and news
+                      </p>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                      {categories.map((category) => (
+                        <button
+                          key={category.value}
+                          onClick={() => handleCategorySelect(category.value)}
+                          className="flex flex-col items-center justify-center p-6 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/5 transition-all duration-200 group"
+                        >
+                          <span className="text-4xl mb-3 group-hover:scale-110 transition-transform">
+                            {category.icon}
+                          </span>
+                          <span className="font-semibold text-sm text-center group-hover:text-primary">
+                            {category.name}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
