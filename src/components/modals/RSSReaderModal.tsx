@@ -169,13 +169,13 @@ export function RSSReaderModal({ isOpen, onClose, initialCategory = '' }: RSSRea
           </div>
 
           {/* Content with scrollbars */}
-          <div className="flex-1 overflow-auto">
+          <div className="flex-1 min-h-0 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
             {selectedArticle ? (
-              <div className="h-full overflow-auto">
+              <div className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                 <ArticleReader article={selectedArticle} onBack={handleBackToList} />
               </div>
             ) : selectedCategory ? (
-              <div className="flex flex-col h-full">
+              <div className="flex flex-col h-full min-h-0">
                 <CategoryHeader 
                   category={currentCategoryName}
                   icon={currentCategoryIcon}
@@ -183,7 +183,7 @@ export function RSSReaderModal({ isOpen, onClose, initialCategory = '' }: RSSRea
                   onSearch={handleSearch}
                   searchQuery={searchQuery}
                 />
-                <div className="flex-1 overflow-auto">
+                <div className="flex-1 min-h-0 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                   <ArticleList 
                     articles={articles}
                     loading={loading}
@@ -194,7 +194,7 @@ export function RSSReaderModal({ isOpen, onClose, initialCategory = '' }: RSSRea
               </div>
             ) : (
               // Category Selection with scrollbar
-              <div className="h-full overflow-auto">
+              <div className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                 <div className="p-8">
                   <div className="max-w-4xl mx-auto">
                     <div className="text-center mb-8">
