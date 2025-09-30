@@ -185,10 +185,10 @@ export function RSSReaderModal({ isOpen, onClose, initialCategory = '' }: RSSRea
             )}
           </div>
 
-          {/* Content with scrollbars */}
-          <div className="flex-1 min-h-0 overflow-y-auto scrollbar-thin">
+          {/* Content with forced scrollbars */}
+          <div className="flex-1 min-h-0 overflow-y-scroll scrollbar-thin">
             {selectedArticle ? (
-              <div className="h-full overflow-y-auto scrollbar-thin">
+              <div className="h-full overflow-y-scroll scrollbar-thin">
                 <ArticleReader article={selectedArticle} onBack={handleBackToList} />
               </div>
             ) : selectedCategory ? (
@@ -203,7 +203,7 @@ export function RSSReaderModal({ isOpen, onClose, initialCategory = '' }: RSSRea
                     </div>
                   </div>
                 </div>
-                <div className="flex-1 min-h-0 overflow-y-auto scrollbar-thin">
+                <div className="flex-1 min-h-0 overflow-y-scroll scrollbar-thin">
                   <ArticleList 
                     articles={articles}
                     loading={loading}
@@ -213,8 +213,8 @@ export function RSSReaderModal({ isOpen, onClose, initialCategory = '' }: RSSRea
                 </div>
               </div>
             ) : (
-              // Category Selection with scrollbar
-              <div className="h-full overflow-y-auto scrollbar-thin">
+              // Category Selection with forced scrollbar
+              <div className="h-full overflow-y-scroll scrollbar-thin">
                 <div className="p-8">
                   <div className="max-w-4xl mx-auto">
                     <div className="text-center mb-8">
