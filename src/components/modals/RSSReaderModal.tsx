@@ -185,66 +185,64 @@ export function RSSReaderModal({ isOpen, onClose, initialCategory = '' }: RSSRea
             )}
           </div>
 
-          {/* Content with forced scrollbars */}
-          <div className="flex-1 min-h-0 overflow-y-scroll scrollbar-thin">
-            {selectedArticle ? (
-              <div className="h-full overflow-y-scroll scrollbar-thin">
-                <ArticleReader article={selectedArticle} onBack={handleBackToList} />
-              </div>
-            ) : selectedCategory ? (
-              <div className="flex flex-col h-full min-h-0">
-                <div className="p-6 border-b">
-                  <div className="max-w-6xl mx-auto">
-                    <div className="flex items-center gap-3">
-                      <Badge variant="outline" className="text-sm">
-                        {articles.length} articles
-                      </Badge>
-                      <span className="text-muted-foreground">Latest news and updates</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex-1 min-h-0 overflow-y-scroll scrollbar-thin">
-                  <ArticleList 
-                    articles={articles}
-                    loading={loading}
-                    viewMode={viewMode}
-                    onArticleClick={handleArticleClick}
-                  />
-                </div>
-              </div>
-            ) : (
-              // Category Selection with forced scrollbar
-              <div className="h-full overflow-y-scroll scrollbar-thin">
-                <div className="p-8">
-                  <div className="max-w-4xl mx-auto">
-                    <div className="text-center mb-8">
-                      <h2 className="text-3xl font-bold mb-4">Choose a News Category</h2>
-                      <p className="text-muted-foreground text-lg">
-                        Select a category to browse the latest articles and news
-                      </p>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                      {categories.map((category) => (
-                        <button
-                          key={category.value}
-                          onClick={() => handleCategorySelect(category.value)}
-                          className="flex flex-col items-center justify-center p-6 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/5 transition-all duration-200 group"
-                        >
-                          <span className="text-4xl mb-3 group-hover:scale-110 transition-transform">
-                            {category.icon}
-                          </span>
-                          <span className="font-semibold text-sm text-center group-hover:text-primary">
-                            {category.name}
-                          </span>
-                        </button>
-                      ))}
-                    </div>
+          {/* Content - Single scrollable container with explicit height */}
+          {selectedArticle ? (
+            <div className="overflow-y-scroll scrollbar-thin" style={{ maxHeight: 'calc(98vh - 140px)' }}>
+              <ArticleReader article={selectedArticle} onBack={handleBackToList} />
+            </div>
+          ) : selectedCategory ? (
+            <div className="flex flex-col">
+              <div className="p-6 border-b flex-shrink-0">
+                <div className="max-w-6xl mx-auto">
+                  <div className="flex items-center gap-3">
+                    <Badge variant="outline" className="text-sm">
+                      {articles.length} articles
+                    </Badge>
+                    <span className="text-muted-foreground">Latest news and updates</span>
                   </div>
                 </div>
               </div>
-            )}
-          </div>
+              <div className="overflow-y-scroll scrollbar-thin" style={{ maxHeight: 'calc(98vh - 220px)' }}>
+                <ArticleList 
+                  articles={articles}
+                  loading={loading}
+                  viewMode={viewMode}
+                  onArticleClick={handleArticleClick}
+                />
+              </div>
+            </div>
+          ) : (
+            // Category Selection with explicit height
+            <div className="overflow-y-scroll scrollbar-thin" style={{ maxHeight: 'calc(98vh - 140px)' }}>
+              <div className="p-8">
+                <div className="max-w-4xl mx-auto">
+                  <div className="text-center mb-8">
+                    <h2 className="text-3xl font-bold mb-4">Choose a News Category</h2>
+                    <p className="text-muted-foreground text-lg">
+                      Select a category to browse the latest articles and news
+                    </p>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                    {categories.map((category) => (
+                      <button
+                        key={category.value}
+                        onClick={() => handleCategorySelect(category.value)}
+                        className="flex flex-col items-center justify-center p-6 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/5 transition-all duration-200 group"
+                      >
+                        <span className="text-4xl mb-3 group-hover:scale-110 transition-transform">
+                          {category.icon}
+                        </span>
+                        <span className="font-semibold text-sm text-center group-hover:text-primary">
+                          {category.name}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>
