@@ -29,3 +29,18 @@ verify_jwt = true
 
 [functions.elevenlabs-tts]
 verify_jwt = true
+
+[functions.google-stt]
+verify_jwt = true
+
+[functions.openai-whisper-stt]
+verify_jwt = true
+
+[functions.google-tts]
+verify_jwt = true
+
+[functions.openai-tts]
+verify_jwt = true
+
+[functions.talk-mode-router]
+verify_jwt = true
