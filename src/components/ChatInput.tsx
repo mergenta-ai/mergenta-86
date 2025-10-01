@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import { Send, Loader2, Cpu, Paperclip, Globe, Mic, Share, Download, AudioWaveform, X, Volume2 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 import TTSPlayer from "./TTSPlayer";
+import { useVoiceRecording } from "@/hooks/useVoiceRecording";
+import { toast } from "sonner";
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
@@ -15,10 +17,11 @@ interface ChatInputProps {
 
 const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeholder = "Ask Mergenta...", onFocus, lastResponse, onModelSelect }: ChatInputProps) => {
   const [input, setInput] = useState(initialValue);
-  const [isRecording, setIsRecording] = useState(false);
   const [showModelDropdown, setShowModelDropdown] = useState(false);
   const [showTTS, setShowTTS] = useState(false);
   const modelDropdownRef = useRef<HTMLDivElement>(null);
+  
+  const { isRecording, isTranscribing, startRecording, stopRecording } = useVoiceRecording();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,11 +44,8 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
     }
   };
 
-  const handleActionButtonClick = () => {
-    if (isRecording) {
-      // Stop recording
-      setIsRecording(false);
-    } else if (input.trim()) {
+  const handleActionButtonClick = async () => {
+    if (input.trim()) {
       // Send message
       onSendMessage(input.trim());
       setInput("");
@@ -55,9 +55,21 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
         textarea.style.height = 'auto';
         textarea.style.height = '24px';
       }
+    } else if (isRecording) {
+      // Stop recording and transcribe
+      try {
+        const transcribedText = await stopRecording();
+        if (transcribedText) {
+          setInput(transcribedText);
+          toast.success('Audio transcribed successfully');
+        }
+      } catch (error) {
+        console.error('Recording error:', error);
+      }
     } else {
       // Start recording
-      setIsRecording(true);
+      await startRecording();
+      toast.info('Recording started - click again to stop');
     }
   };
 
@@ -75,14 +87,16 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
 
   const getActionButtonIcon = () => {
     if (isLoading) return <Loader2 className="h-4 w-4 animate-spin text-white" />;
-    if (isRecording) return <AudioWaveform className="h-4 w-4 text-white" />;
     if (input.trim()) return <Send className="h-4 w-4 text-white" />;
+    if (isTranscribing) return <AudioWaveform className="h-4 w-4 animate-pulse text-white" />;
+    if (isRecording) return <AudioWaveform className="h-4 w-4 animate-pulse text-white" />;
     return <AudioWaveform className="h-4 w-4 text-white" />;
   };
 
   const getActionButtonTooltip = () => {
-    if (isRecording) return "Stop recording";
     if (input.trim()) return "Send";
+    if (isTranscribing) return "Transcribing...";
+    if (isRecording) return "Stop recording";
     return "Voice input";
   };
 

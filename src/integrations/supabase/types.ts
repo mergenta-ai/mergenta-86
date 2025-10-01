@@ -358,6 +358,33 @@ export type Database = {
         }
         Relationships: []
       }
+      talk_mode_usage: {
+        Row: {
+          created_at: string
+          id: string
+          last_reset: string
+          updated_at: string
+          used_minutes: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_reset?: string
+          updated_at?: string
+          used_minutes?: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_reset?: string
+          updated_at?: string
+          used_minutes?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       usage_analytics: {
         Row: {
           created_at: string
