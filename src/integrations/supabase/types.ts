@@ -65,6 +65,120 @@ export type Database = {
         }
         Relationships: []
       }
+      email_limits: {
+        Row: {
+          created_at: string | null
+          daily_gmail_quota: number | null
+          daily_outlook_quota: number | null
+          id: string
+          monthly_gmail_quota: number | null
+          monthly_outlook_quota: number | null
+          plan_type: Database["public"]["Enums"]["plan_type"]
+        }
+        Insert: {
+          created_at?: string | null
+          daily_gmail_quota?: number | null
+          daily_outlook_quota?: number | null
+          id?: string
+          monthly_gmail_quota?: number | null
+          monthly_outlook_quota?: number | null
+          plan_type: Database["public"]["Enums"]["plan_type"]
+        }
+        Update: {
+          created_at?: string | null
+          daily_gmail_quota?: number | null
+          daily_outlook_quota?: number | null
+          id?: string
+          monthly_gmail_quota?: number | null
+          monthly_outlook_quota?: number | null
+          plan_type?: Database["public"]["Enums"]["plan_type"]
+        }
+        Relationships: []
+      }
+      export_limits: {
+        Row: {
+          created_at: string | null
+          daily_cloudconvert_quota: number | null
+          daily_document_upload: number | null
+          daily_google_docs_export: number | null
+          daily_google_sheets_export: number | null
+          daily_txt_download: number | null
+          id: string
+          max_document_pages: number | null
+          plan_type: Database["public"]["Enums"]["plan_type"]
+        }
+        Insert: {
+          created_at?: string | null
+          daily_cloudconvert_quota?: number | null
+          daily_document_upload?: number | null
+          daily_google_docs_export?: number | null
+          daily_google_sheets_export?: number | null
+          daily_txt_download?: number | null
+          id?: string
+          max_document_pages?: number | null
+          plan_type: Database["public"]["Enums"]["plan_type"]
+        }
+        Update: {
+          created_at?: string | null
+          daily_cloudconvert_quota?: number | null
+          daily_document_upload?: number | null
+          daily_google_docs_export?: number | null
+          daily_google_sheets_export?: number | null
+          daily_txt_download?: number | null
+          id?: string
+          max_document_pages?: number | null
+          plan_type?: Database["public"]["Enums"]["plan_type"]
+        }
+        Relationships: []
+      }
+      feature_limits: {
+        Row: {
+          allow_model_overwrite: boolean | null
+          allow_web_search: boolean | null
+          content_type: string | null
+          created_at: string | null
+          daily_quota: number
+          fallback_models: string[] | null
+          feature_name: string
+          id: string
+          intent_type: string | null
+          max_words: number
+          plan_type: Database["public"]["Enums"]["plan_type"]
+          primary_model: string
+          updated_at: string | null
+        }
+        Insert: {
+          allow_model_overwrite?: boolean | null
+          allow_web_search?: boolean | null
+          content_type?: string | null
+          created_at?: string | null
+          daily_quota?: number
+          fallback_models?: string[] | null
+          feature_name: string
+          id?: string
+          intent_type?: string | null
+          max_words?: number
+          plan_type: Database["public"]["Enums"]["plan_type"]
+          primary_model: string
+          updated_at?: string | null
+        }
+        Update: {
+          allow_model_overwrite?: boolean | null
+          allow_web_search?: boolean | null
+          content_type?: string | null
+          created_at?: string | null
+          daily_quota?: number
+          fallback_models?: string[] | null
+          feature_name?: string
+          id?: string
+          intent_type?: string | null
+          max_words?: number
+          plan_type?: Database["public"]["Enums"]["plan_type"]
+          primary_model?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       messages: {
         Row: {
           content: string
@@ -118,7 +232,7 @@ export type Database = {
           feature_name: string
           id?: string
           limit_value: number
-          plan_type: Database["public"]["Enums"]["plan_type"]
+          plan_type?: Database["public"]["Enums"]["plan_type"]
           quota_type: Database["public"]["Enums"]["quota_type"]
           reset_period?: string | null
         }
@@ -247,6 +361,51 @@ export type Database = {
         }
         Relationships: []
       }
+      router_config: {
+        Row: {
+          async_token_limit: number
+          created_at: string | null
+          daily_gen_quota: number
+          daily_web_search_quota: number
+          id: string
+          monthly_document_upload_quota: number
+          monthly_gen_quota: number
+          monthly_image_quota: number
+          monthly_video_quota: number
+          monthly_web_search_quota: number
+          plan_type: Database["public"]["Enums"]["plan_type"]
+          sync_token_limit: number
+        }
+        Insert: {
+          async_token_limit: number
+          created_at?: string | null
+          daily_gen_quota: number
+          daily_web_search_quota: number
+          id?: string
+          monthly_document_upload_quota: number
+          monthly_gen_quota: number
+          monthly_image_quota: number
+          monthly_video_quota: number
+          monthly_web_search_quota: number
+          plan_type: Database["public"]["Enums"]["plan_type"]
+          sync_token_limit: number
+        }
+        Update: {
+          async_token_limit?: number
+          created_at?: string | null
+          daily_gen_quota?: number
+          daily_web_search_quota?: number
+          id?: string
+          monthly_document_upload_quota?: number
+          monthly_gen_quota?: number
+          monthly_image_quota?: number
+          monthly_video_quota?: number
+          monthly_web_search_quota?: number
+          plan_type?: Database["public"]["Enums"]["plan_type"]
+          sync_token_limit?: number
+        }
+        Relationships: []
+      }
       rss_feeds: {
         Row: {
           category: string | null
@@ -361,6 +520,7 @@ export type Database = {
       talk_mode_usage: {
         Row: {
           created_at: string
+          daily_minutes_limit: number | null
           id: string
           last_reset: string
           updated_at: string
@@ -369,6 +529,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          daily_minutes_limit?: number | null
           id?: string
           last_reset?: string
           updated_at?: string
@@ -377,6 +538,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          daily_minutes_limit?: number | null
           id?: string
           last_reset?: string
           updated_at?: string
@@ -630,7 +792,7 @@ export type Database = {
       }
     }
     Enums: {
-      plan_type: "free" | "starter" | "professional" | "enterprise"
+      plan_type: "free" | "pro" | "zip" | "ace" | "max"
       quota_type: "daily" | "monthly" | "per_card" | "per_vendor"
       vendor_type:
         | "openai"
@@ -767,7 +929,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      plan_type: ["free", "starter", "professional", "enterprise"],
+      plan_type: ["free", "pro", "zip", "ace", "max"],
       quota_type: ["daily", "monthly", "per_card", "per_vendor"],
       vendor_type: [
         "openai",
