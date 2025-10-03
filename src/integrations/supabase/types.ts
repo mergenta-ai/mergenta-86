@@ -802,6 +802,10 @@ export type Database = {
         | "mistral"
         | "xai"
         | "elevenlabs"
+        | "cloudconvert"
+        | "local"
+        | "meta"
+        | "microsoft"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -939,6 +943,10 @@ export const Constants = {
         "mistral",
         "xai",
         "elevenlabs",
+        "cloudconvert",
+        "local",
+        "meta",
+        "microsoft",
       ],
     },
   },
