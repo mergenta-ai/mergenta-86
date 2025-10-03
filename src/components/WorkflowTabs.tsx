@@ -39,6 +39,9 @@ import { FuturePathwaysModal } from "./modals/FuturePathwaysModal";
 import RealityCheckModal from "./modals/RealityCheckModal";
 import RoleplayHubModal from "./modals/RoleplayHubModal";
 import { ProtoRunModal } from "./modals/ProtoRunModal";
+import ThinkHardHoverCard from "./hover-cards/ThinkHardHoverCard";
+import DeepResearchHoverCard from "./hover-cards/DeepResearchHoverCard";
+import { ImageGenerationModal } from "./modals/ImageGenerationModal";
 
 const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: { 
   onAddToChat?: (message: string, response: string) => void;
@@ -53,6 +56,7 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
   const [realityCheckModalOpen, setRealityCheckModalOpen] = useState(false);
   const [roleplayHubModalOpen, setRoleplayHubModalOpen] = useState(false);
   const [protoRunModalOpen, setProtoRunModalOpen] = useState(false);
+  const [imageGenModalOpen, setImageGenModalOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const tabs = [
@@ -212,13 +216,15 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
               <div key={index} className="relative">
                 <button
                   onMouseEnter={() => {
-                    if (tab.id !== "power-playbook") {
+                    if (!["power-playbook", "think-hard", "deep-research"].includes(tab.id)) {
                       handleTabHover(tab.id);
                     }
                   }}
                   onClick={() => {
                     if (tab.id === "power-playbook") {
                       setPowerPlaybookModalOpen(true);
+                    } else if (tab.id === "think-hard" || tab.id === "deep-research") {
+                      handleTabHover(tab.id);
                     }
                   }}
                   onMouseLeave={handleTabLeave}
@@ -240,7 +246,7 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                 </button>
                 
                 {/* Dropdown - only for certain tabs */}
-                {activeTab === tab.id && !["think-hard", "deep-research", "power-playbook"].includes(tab.id) && (
+                {activeTab === tab.id && !["power-playbook"].includes(tab.id) && (
                   <div 
                     className="absolute top-full w-[100px] bg-[#F8F5FE] rounded-lg shadow-md border border-[#E5D9F2] z-50"
                     onMouseEnter={handleDropdownEnter}
@@ -443,6 +449,35 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                         ))}
                       </div>
                     )}
+                    
+                    {activeTab === "think-hard" && (
+                      <div className="py-2">
+                        <MobileResponsiveHoverCard title="Think Hard">
+                          <ThinkHardHoverCard onPromptGenerated={onPromptGenerated}>
+                            <button
+                              className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
+                            >
+                              Start Deep Analysis
+                            </button>
+                          </ThinkHardHoverCard>
+                        </MobileResponsiveHoverCard>
+                      </div>
+                    )}
+                    
+                    {activeTab === "deep-research" && (
+                      <div className="py-2">
+                        <MobileResponsiveHoverCard title="Deep Research">
+                          <DeepResearchHoverCard onPromptGenerated={onPromptGenerated}>
+                            <button
+                              className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
+                            >
+                              Begin Research
+                            </button>
+                          </DeepResearchHoverCard>
+                        </MobileResponsiveHoverCard>
+                      </div>
+                    )}
+                    
                     {activeTab === "task-assistant" && (
                       <div className="py-2">
                         {taskAssistantItems.map((item, idx) => {
@@ -622,6 +657,11 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
         open={protoRunModalOpen} 
         onOpenChange={setProtoRunModalOpen}
         onAddToChat={onAddToChat}
+      />
+      
+      <ImageGenerationModal 
+        isOpen={imageGenModalOpen}
+        onClose={() => setImageGenModalOpen(false)}
       />
     </TooltipProvider>
   );

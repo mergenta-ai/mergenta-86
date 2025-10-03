@@ -89,7 +89,8 @@ const Index = () => {
       console.log('Sending message:', message);
       
       // Use the new chat service with LLM routing
-      const response = await chatService.handleDirectMessage(message);
+      const modelToUse = selectedModel !== "Default" ? selectedModel : undefined;
+      const response = await chatService.handleDirectMessage(message, modelToUse);
       
       console.log('Chat response received:', response);
       

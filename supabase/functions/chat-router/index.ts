@@ -16,6 +16,7 @@ interface ChatRequest {
   formData?: Record<string, any>;
   intentType?: 'creative' | 'knowledge' | 'research' | 'user_search' | 'experience_studio';
   userId: string;
+  preferredModel?: string;
 }
 
 interface QuotaCheck {
@@ -33,8 +34,8 @@ serve(async (req) => {
   const startTime = Date.now();
 
   try {
-    const { prompt, contentType, formData, intentType, userId }: ChatRequest = await req.json();
-    console.log('Chat router received request:', { intentType, userId, contentType });
+    const { prompt, contentType, formData, intentType, userId, preferredModel }: ChatRequest = await req.json();
+    console.log('Chat router received request:', { intentType, userId, contentType, preferredModel });
 
     // Validate user authentication
     const authHeader = req.headers.get('authorization');
@@ -145,7 +146,8 @@ Instructions: Provide summary, evidence bullets with citations, complete source 
       userId,
       intentType,
       searchSources: sources,
-      hasSearchContext: searchContext.length > 0
+      hasSearchContext: searchContext.length > 0,
+      preferredModel
     });
 
     // Update quota usage

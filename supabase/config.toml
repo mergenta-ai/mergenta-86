@@ -21,6 +21,9 @@ verify_jwt = true
 [functions.model-gateway]
 verify_jwt = true
 
+[functions.image-generation]
+verify_jwt = true
+
 [functions.websearch-edge]
 verify_jwt = true
 

@@ -6,6 +6,7 @@ export interface ChatRequest {
   formData?: Record<string, any>;
   intentType?: 'creative' | 'knowledge' | 'research' | 'user_search' | 'experience_studio';
   userId: string;
+  preferredModel?: string;
 }
 
 export interface ChatResponse {
@@ -59,7 +60,8 @@ export class ChatService {
           contentType: request.contentType,
           formData: request.formData,
           intentType: request.intentType,
-          userId: session.user.id
+          userId: session.user.id,
+          preferredModel: request.preferredModel
         }
       });
 
@@ -209,7 +211,7 @@ export class ChatService {
   /**
    * Handle direct user search or chat
    */
-  async handleDirectMessage(message: string): Promise<ChatResponse> {
+  async handleDirectMessage(message: string, preferredModel?: string): Promise<ChatResponse> {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       
@@ -224,7 +226,8 @@ export class ChatService {
       return await this.sendMessage({
         prompt: message,
         intentType,
-        userId: session.user.id
+        userId: session.user.id,
+        preferredModel
       });
 
     } catch (error) {
