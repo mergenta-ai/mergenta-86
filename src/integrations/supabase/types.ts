@@ -38,6 +38,39 @@ export type Database = {
         }
         Relationships: []
       }
+      cloudconvert_usage: {
+        Row: {
+          conversation_id: string | null
+          created_at: string | null
+          daily_count: number | null
+          export_date: string
+          export_type: string | null
+          id: string
+          last_reset: string | null
+          user_id: string
+        }
+        Insert: {
+          conversation_id?: string | null
+          created_at?: string | null
+          daily_count?: number | null
+          export_date?: string
+          export_type?: string | null
+          id?: string
+          last_reset?: string | null
+          user_id: string
+        }
+        Update: {
+          conversation_id?: string | null
+          created_at?: string | null
+          daily_count?: number | null
+          export_date?: string
+          export_type?: string | null
+          id?: string
+          last_reset?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       conversations: {
         Row: {
           created_at: string
@@ -62,6 +95,42 @@ export type Database = {
           updated_at?: string
           user_id?: string
           workflow_type?: string | null
+        }
+        Relationships: []
+      }
+      document_upload_usage: {
+        Row: {
+          created_at: string | null
+          daily_count: number | null
+          file_name: string | null
+          file_size: number | null
+          id: string
+          last_reset: string | null
+          pages_extracted: number | null
+          upload_date: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          daily_count?: number | null
+          file_name?: string | null
+          file_size?: number | null
+          id?: string
+          last_reset?: string | null
+          pages_extracted?: number | null
+          upload_date?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          daily_count?: number | null
+          file_name?: string | null
+          file_size?: number | null
+          id?: string
+          last_reset?: string | null
+          pages_extracted?: number | null
+          upload_date?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -92,6 +161,42 @@ export type Database = {
           monthly_gmail_quota?: number | null
           monthly_outlook_quota?: number | null
           plan_type?: Database["public"]["Enums"]["plan_type"]
+        }
+        Relationships: []
+      }
+      email_usage: {
+        Row: {
+          created_at: string | null
+          daily_count: number | null
+          id: string
+          last_daily_reset: string | null
+          last_monthly_reset: string | null
+          monthly_count: number | null
+          service_type: string
+          usage_date: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          daily_count?: number | null
+          id?: string
+          last_daily_reset?: string | null
+          last_monthly_reset?: string | null
+          monthly_count?: number | null
+          service_type: string
+          usage_date?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          daily_count?: number | null
+          id?: string
+          last_daily_reset?: string | null
+          last_monthly_reset?: string | null
+          monthly_count?: number | null
+          service_type?: string
+          usage_date?: string
+          user_id?: string
         }
         Relationships: []
       }
