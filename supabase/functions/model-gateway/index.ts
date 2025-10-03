@@ -24,6 +24,7 @@ interface ModelRequest {
   intentType?: string;
   searchSources?: any[];
   preferredVendor?: string;
+  preferredModel?: string;
 }
 
 interface ModelResponse {
@@ -98,8 +99,11 @@ serve(async (req) => {
   }
 
   try {
-    const { prompt, userId, intentType, searchSources, preferredVendor }: ModelRequest = await req.json();
-    console.log('Model gateway request:', { userId, intentType, vendor: preferredVendor });
+    const { prompt, userId, intentType, searchSources, preferredVendor, preferredModel }: ModelRequest = await req.json();
+    console.log('Model gateway request:', { userId, intentType, vendor: preferredVendor, model: preferredModel });
+
+    // Validate and resolve the model to use
+    const modelToUse = await validateAndResolveModel(userId, intentType, preferredModel);
 
     // Get vendor priority from admin settings
     const { data: vendorSettings } = await supabase
@@ -137,7 +141,7 @@ serve(async (req) => {
           continue;
         }
 
-        const response = await callVendor(vendor, prompt, intentType);
+        const response = await callVendor(vendor, prompt, intentType, modelToUse);
         
         if (response) {
           // Update vendor quota
@@ -226,7 +230,47 @@ async function checkVendorQuota(vendor: string): Promise<boolean> {
   }
 }
 
-async function callVendor(vendor: string, prompt: string, intentType?: string): Promise<ModelResponse | null> {
+async function validateAndResolveModel(userId: string, intentType?: string, preferredModel?: string): Promise<string | null> {
+  try {
+    // Get user's plan
+    const { data: userPlan } = await supabase
+      .from('user_plans')
+      .select('plan_type')
+      .eq('user_id', userId)
+      .eq('is_active', true)
+      .single();
+
+    const planType = userPlan?.plan_type || 'free';
+
+    // Get feature limits
+    const { data: featureLimits } = await supabase
+      .from('feature_limits')
+      .select('allow_model_overwrite, primary_model')
+      .eq('plan_type', planType)
+      .eq('intent_type', intentType || 'creative')
+      .single();
+
+    // If no preferred model or model override not allowed, return null to use default
+    if (!preferredModel || !featureLimits?.allow_model_overwrite) {
+      console.log('Using default model from feature limits');
+      return null;
+    }
+
+    // Validate model format (vendor/model)
+    if (!preferredModel.includes('/')) {
+      console.log('Invalid model format, must be vendor/model');
+      return null;
+    }
+
+    console.log('Using preferred model:', preferredModel);
+    return preferredModel;
+  } catch (error) {
+    console.error('Error validating model:', error);
+    return null;
+  }
+}
+
+async function callVendor(vendor: string, prompt: string, intentType?: string, modelOverride?: string | null): Promise<ModelResponse | null> {
   const config = VENDOR_CONFIGS[vendor as keyof typeof VENDOR_CONFIGS];
   if (!config) {
     throw new Error(`Unknown vendor: ${vendor}`);
@@ -234,24 +278,29 @@ async function callVendor(vendor: string, prompt: string, intentType?: string): 
 
   switch (vendor) {
     case 'openai':
-      return await callOpenAI(prompt, intentType);
+      return await callOpenAI(prompt, intentType, modelOverride);
     case 'anthropic':
-      return await callAnthropic(prompt, intentType);
+      return await callAnthropic(prompt, intentType, modelOverride);
     case 'google':
-      return await callGoogle(prompt, intentType);
+      return await callGoogle(prompt, intentType, modelOverride);
     case 'mistral':
-      return await callMistral(prompt, intentType);
+      return await callMistral(prompt, intentType, modelOverride);
     case 'xai':
-      return await callXAI(prompt, intentType);
+      return await callXAI(prompt, intentType, modelOverride);
     default:
       throw new Error(`Vendor ${vendor} not implemented`);
   }
 }
 
-async function callOpenAI(prompt: string, intentType?: string): Promise<ModelResponse | null> {
+async function callOpenAI(prompt: string, intentType?: string, modelOverride?: string | null): Promise<ModelResponse | null> {
   if (!openAIKey) throw new Error('OpenAI API key not configured');
 
-  const model = intentType === 'research' ? 'gpt-5-2025-08-07' : 'gpt-4o-mini';
+  let model = intentType === 'research' ? 'gpt-5-2025-08-07' : 'gpt-4o-mini';
+  
+  // Use model override if provided and it's an OpenAI model
+  if (modelOverride && modelOverride.startsWith('openai/')) {
+    model = modelOverride.split('/')[1];
+  }
   
   const requestBody: any = {
     model,
@@ -297,10 +346,15 @@ async function callOpenAI(prompt: string, intentType?: string): Promise<ModelRes
   };
 }
 
-async function callAnthropic(prompt: string, intentType?: string): Promise<ModelResponse | null> {
+async function callAnthropic(prompt: string, intentType?: string, modelOverride?: string | null): Promise<ModelResponse | null> {
   if (!anthropicKey) throw new Error('Anthropic API key not configured');
 
-  const model = intentType === 'research' ? 'claude-opus-4-1-20250805' : 'claude-3-5-haiku-20241022';
+  let model = intentType === 'research' ? 'claude-opus-4-1-20250805' : 'claude-3-5-haiku-20241022';
+  
+  // Use model override if provided and it's an Anthropic model
+  if (modelOverride && modelOverride.startsWith('anthropic/')) {
+    model = modelOverride.split('/')[1];
+  }
   
   const response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -337,10 +391,15 @@ async function callAnthropic(prompt: string, intentType?: string): Promise<Model
   };
 }
 
-async function callMistral(prompt: string, intentType?: string): Promise<ModelResponse | null> {
+async function callMistral(prompt: string, intentType?: string, modelOverride?: string | null): Promise<ModelResponse | null> {
   if (!mistralKey) throw new Error('Mistral API key not configured');
 
-  const model = intentType === 'research' ? 'mistral-large-latest' : 'mistral-small-latest';
+  let model = intentType === 'research' ? 'mistral-large-latest' : 'mistral-small-latest';
+  
+  // Use model override if provided and it's a Mistral model
+  if (modelOverride && modelOverride.startsWith('mistral/')) {
+    model = modelOverride.split('/')[1];
+  }
   
   const response = await fetch('https://api.mistral.ai/v1/chat/completions', {
     method: 'POST',
@@ -378,10 +437,15 @@ async function callMistral(prompt: string, intentType?: string): Promise<ModelRe
   };
 }
 
-async function callXAI(prompt: string, intentType?: string): Promise<ModelResponse | null> {
+async function callXAI(prompt: string, intentType?: string, modelOverride?: string | null): Promise<ModelResponse | null> {
   if (!xaiKey) throw new Error('xAI API key not configured');
 
-  const model = 'grok-beta';
+  let model = 'grok-beta';
+  
+  // Use model override if provided and it's an xAI model
+  if (modelOverride && modelOverride.startsWith('xai/')) {
+    model = modelOverride.split('/')[1];
+  }
   
   const response = await fetch('https://api.x.ai/v1/chat/completions', {
     method: 'POST',
@@ -419,10 +483,17 @@ async function callXAI(prompt: string, intentType?: string): Promise<ModelRespon
   };
 }
 
-async function callGoogle(prompt: string, intentType?: string): Promise<ModelResponse | null> {
+async function callGoogle(prompt: string, intentType?: string, modelOverride?: string | null): Promise<ModelResponse | null> {
   if (!geminiKey) throw new Error('Google Gemini API key not configured');
 
-  const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${geminiKey}`, {
+  let model = 'gemini-pro';
+  
+  // Use model override if provided and it's a Google model
+  if (modelOverride && modelOverride.startsWith('google/')) {
+    model = modelOverride.split('/')[1];
+  }
+
+  const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -455,7 +526,7 @@ async function callGoogle(prompt: string, intentType?: string): Promise<ModelRes
     content: data.candidates[0].content.parts[0].text,
     tokensUsed: data.usageMetadata?.totalTokenCount || 0,
     vendor: 'google',
-    model: 'gemini-pro',
+    model,
     fallbackUsed: false
   };
 }
