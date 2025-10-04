@@ -225,27 +225,76 @@ async function processFeed(source: any) {
 }
 
 function extractImageFromRSS(itemXml: string, description: string): string | null {
-  // Priority 1: media:thumbnail
-  const mediaThumbnail = extractXMLTag(itemXml, 'media:thumbnail');
-  if (mediaThumbnail) {
-    const urlMatch = mediaThumbnail.match(/url=["']([^"']+)["']/);
-    if (urlMatch) return urlMatch[1];
+  try {
+    // Priority 1: media:thumbnail or media:content (with url attribute)
+    const mediaThumbnailMatch = itemXml.match(/<media:thumbnail[^>]*url=["']([^"']+)["']/i);
+    if (mediaThumbnailMatch) {
+      console.log('Found media:thumbnail:', mediaThumbnailMatch[1]);
+      return mediaThumbnailMatch[1];
+    }
+
+    const mediaContentMatch = itemXml.match(/<media:content[^>]*url=["']([^"']+)["'][^>]*(?:type=["']image\/[^"']*["']|medium=["']image["'])/i);
+    if (mediaContentMatch) {
+      console.log('Found media:content:', mediaContentMatch[1]);
+      return mediaContentMatch[1];
+    }
+
+    // Priority 2: enclosure with image type (check both url then type, and type then url)
+    const enclosureMatch1 = itemXml.match(/<enclosure[^>]*url=["']([^"']+)["'][^>]*type=["']image\/[^"']*["']/i);
+    if (enclosureMatch1) {
+      console.log('Found enclosure (url first):', enclosureMatch1[1]);
+      return enclosureMatch1[1];
+    }
+
+    const enclosureMatch2 = itemXml.match(/<enclosure[^>]*type=["']image\/[^"']*["'][^>]*url=["']([^"']+)["']/i);
+    if (enclosureMatch2) {
+      console.log('Found enclosure (type first):', enclosureMatch2[1]);
+      return enclosureMatch2[1];
+    }
+
+    // Priority 3: image tag with url child
+    const imageTag = extractXMLTag(itemXml, 'image');
+    if (imageTag) {
+      const imageUrl = extractXMLTag(imageTag, 'url');
+      if (imageUrl) {
+        console.log('Found image tag url:', imageUrl);
+        return imageUrl;
+      }
+    }
+
+    // Priority 4: Look for img tags in description/content
+    // Clean HTML entities first
+    const cleanDesc = description
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&amp;/g, '&');
+
+    const imgMatch = cleanDesc.match(/<img[^>]*src=["']([^"']+)["']/i);
+    if (imgMatch) {
+      console.log('Found img in description:', imgMatch[1]);
+      return imgMatch[1];
+    }
+
+    // Priority 5: Check content:encoded for images
+    const contentEncoded = extractXMLTag(itemXml, 'content:encoded');
+    if (contentEncoded) {
+      const cleanContent = contentEncoded
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&amp;/g, '&');
+      
+      const contentImgMatch = cleanContent.match(/<img[^>]*src=["']([^"']+)["']/i);
+      if (contentImgMatch) {
+        console.log('Found img in content:encoded:', contentImgMatch[1]);
+        return contentImgMatch[1];
+      }
+    }
+
+  } catch (error) {
+    console.error('Error extracting image:', error);
   }
-
-  // Priority 2: enclosure with image type
-  const enclosureMatch = itemXml.match(/<enclosure[^>]*type=["']image\/[^"']*["'][^>]*url=["']([^"']+)["']/i);
-  if (enclosureMatch) return enclosureMatch[1];
-
-  // Priority 3: image tag
-  const imageTag = extractXMLTag(itemXml, 'image');
-  if (imageTag) {
-    const imageUrl = extractXMLTag(imageTag, 'url');
-    if (imageUrl) return imageUrl;
-  }
-
-  // Priority 4: img tag in description
-  const imgMatch = description.match(/<img[^>]*src=["']([^"']+)["']/i);
-  if (imgMatch) return imgMatch[1];
 
   return null;
 }
