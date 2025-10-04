@@ -3,7 +3,10 @@ import { Send, Loader2, Cpu, Paperclip, Globe, Mic, Share, Download, AudioWavefo
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 import TTSPlayer from "./TTSPlayer";
 import { useVoiceRecording } from "@/hooks/useVoiceRecording";
+import { useDocumentUpload } from "@/hooks/useDocumentUpload";
 import { toast } from "sonner";
+import ExportModal from "./modals/ExportModal";
+import EmailSettingsModal from "./modals/EmailSettingsModal";
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
@@ -19,9 +22,13 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
   const [input, setInput] = useState(initialValue);
   const [showModelDropdown, setShowModelDropdown] = useState(false);
   const [showTTS, setShowTTS] = useState(false);
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [showEmailSettings, setShowEmailSettings] = useState(false);
   const modelDropdownRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const { isRecording, isTranscribing, startRecording, stopRecording } = useVoiceRecording();
+  const { uploadDocument, isUploading } = useDocumentUpload();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -145,8 +152,46 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
     };
   }, []);
 
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const result = await uploadDocument(file);
+    if (result?.extractedText) {
+      setInput((prev) => prev + '\n\n' + result.extractedText);
+      toast.success('Document content added to prompt');
+    }
+
+    // Reset file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   return (
     <TooltipProvider>
+      {/* Hidden file input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".pdf,.docx,.txt,.xls,.xlsx"
+        onChange={handleFileUpload}
+        className="hidden"
+      />
+
+      {/* Export Modal */}
+      <ExportModal
+        isOpen={showExportModal}
+        onClose={() => setShowExportModal(false)}
+        content={lastResponse || input}
+      />
+
+      {/* Email Settings Modal */}
+      <EmailSettingsModal
+        isOpen={showEmailSettings}
+        onClose={() => setShowEmailSettings(false)}
+      />
+
       {/* TTS Player - Shows above input when enabled */}
       {showTTS && lastResponse && (
         <div className="fixed bottom-32 left-1/2 transform -translate-x-1/2 z-[60] w-full max-w-md px-4">
@@ -215,24 +260,27 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                   <TooltipTrigger asChild>
                     <button
                       type="button"
+                      onClick={() => setShowEmailSettings(true)}
                       className="p-3 lg:p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700 touch-manipulation min-h-[44px] min-w-[44px] lg:min-h-auto lg:min-w-auto flex items-center justify-center"
                     >
                       <Share className="h-5 w-5 lg:h-4 lg:w-4" />
                     </button>
                   </TooltipTrigger>
-                  <TooltipContent>Export</TooltipContent>
+                  <TooltipContent>Email automation</TooltipContent>
                 </Tooltip>
                 
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <button
                       type="button"
-                      className="p-3 lg:p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700 touch-manipulation min-h-[44px] min-w-[44px] lg:min-h-auto lg:min-w-auto flex items-center justify-center"
+                      onClick={() => setShowExportModal(true)}
+                      disabled={!lastResponse && !input}
+                      className="p-3 lg:p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700 touch-manipulation min-h-[44px] min-w-[44px] lg:min-h-auto lg:min-w-auto flex items-center justify-center disabled:opacity-50"
                     >
                       <Download className="h-5 w-5 lg:h-4 lg:w-4" />
                     </button>
                   </TooltipTrigger>
-                  <TooltipContent>Download</TooltipContent>
+                  <TooltipContent>Export & Download</TooltipContent>
                 </Tooltip>
               </div>
 
@@ -332,17 +380,23 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                 )}
               </div>
 
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    className="p-3 lg:p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700 touch-manipulation min-h-[44px] min-w-[44px] lg:min-h-auto lg:min-w-auto flex items-center justify-center"
-                  >
-                    <Paperclip className="h-5 w-5 lg:h-4 lg:w-4" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent>File upload</TooltipContent>
-              </Tooltip>
+               <Tooltip>
+                 <TooltipTrigger asChild>
+                   <button
+                     type="button"
+                     onClick={() => fileInputRef.current?.click()}
+                     disabled={isUploading}
+                     className="p-3 lg:p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700 touch-manipulation min-h-[44px] min-w-[44px] lg:min-h-auto lg:min-w-auto flex items-center justify-center disabled:opacity-50"
+                   >
+                     {isUploading ? (
+                       <Loader2 className="h-5 w-5 lg:h-4 lg:w-4 animate-spin" />
+                     ) : (
+                       <Paperclip className="h-5 w-5 lg:h-4 lg:w-4" />
+                     )}
+                   </button>
+                 </TooltipTrigger>
+                 <TooltipContent>Upload document (PDF, DOCX, TXT, Excel)</TooltipContent>
+               </Tooltip>
 
               <Tooltip>
                 <TooltipTrigger asChild>

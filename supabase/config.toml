@@ -47,3 +47,18 @@ verify_jwt = true
 
 [functions.talk-mode-router]
 verify_jwt = true
+
+[functions.document-upload]
+verify_jwt = true
+
+[functions.export-google]
+verify_jwt = true
+
+[functions.export-cloudconvert]
+verify_jwt = true
+
+[functions.gmail-automation]
+verify_jwt = true
+
+[functions.outlook-automation]
+verify_jwt = true
