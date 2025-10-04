@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Send, Loader2, Cpu, Paperclip, Globe, Mic, Share, Download, AudioWaveform, X, Volume2 } from "lucide-react";
+import { Send, Loader2, Cpu, Paperclip, Globe, Mic, Share, Download, AudioWaveform, X, Volume2, Lock } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 import TTSPlayer from "./TTSPlayer";
 import { useVoiceRecording } from "@/hooks/useVoiceRecording";
@@ -7,6 +7,9 @@ import { useDocumentUpload } from "@/hooks/useDocumentUpload";
 import { toast } from "sonner";
 import ExportModal from "./modals/ExportModal";
 import EmailSettingsModal from "./modals/EmailSettingsModal";
+import UpgradePromptModal from "./modals/UpgradePromptModal";
+import { useUserPlan } from "@/hooks/useUserPlan";
+import { getAvailableModels, getLockedModels } from "@/config/modelConfig";
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
@@ -24,11 +27,14 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
   const [showTTS, setShowTTS] = useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
   const [showEmailSettings, setShowEmailSettings] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [selectedLockedModel, setSelectedLockedModel] = useState<{ name: string; requiredPlan: string } | null>(null);
   const modelDropdownRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   const { isRecording, isTranscribing, startRecording, stopRecording } = useVoiceRecording();
   const { uploadDocument, isUploading } = useDocumentUpload();
+  const { planType } = useUserPlan();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -302,80 +308,76 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
 
                 {/* Model Selection Dropdown */}
                 {showModelDropdown && (
-                  <div className="absolute bottom-full mb-2 right-0 bg-white rounded-lg shadow-lg border border-gray-100 z-50 min-w-max">
-                    <div className="flex">
-                      {/* Creativity Column */}
-                      <div className="p-4 min-w-[140px]">
-                        <h3 className="font-semibold text-sm text-gray-800 mb-1">Creativity</h3>
-                        <p className="text-xs text-gray-500 mb-3">Inventive & Expressive</p>
+                  <div className="absolute bottom-full mb-2 right-0 bg-white rounded-lg shadow-lg border border-gray-100 z-50 max-w-md max-h-96 overflow-y-auto">
+                    {/* Available Models */}
+                    {getAvailableModels(planType).length > 0 && (
+                      <div className="p-4">
+                        <h3 className="font-semibold text-sm text-gray-800 mb-3">Available Models</h3>
                         <div className="space-y-2">
-                          {[
-                            { name: "GPT-5", badge: "New" },
-                            { name: "GPT-4.1", badge: null },
-                            { name: "Gemini 2.5 Flash", badge: null },
-                            { name: "Grok 3", badge: null },
-                            { name: "Claude Haiku 3.5", badge: null }
-                          ].map((model, idx) => (
+                          {getAvailableModels(planType).map((model) => (
                             <button
-                              key={idx}
-                              className="w-full text-left text-sm text-gray-700 hover:bg-gray-50 py-1 px-2 rounded transition-colors flex items-center justify-between"
+                              key={model.id}
+                              className="w-full text-left text-sm text-gray-700 hover:bg-gray-50 py-2 px-3 rounded transition-colors"
                               onClick={() => {
-                                console.log(`Selected: ${model.name}`);
-                                onModelSelect?.(model.name);
+                                onModelSelect?.(model.id);
                                 setShowModelDropdown(false);
                               }}
                             >
-                              <span>{model.name}</span>
-                              {model.badge && (
-                                <span className="text-xs bg-green-100 text-green-800 px-1.5 py-0.5 rounded">
-                                  {model.badge}
-                                </span>
-                              )}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Dividing Line */}
-                      <div className="w-px bg-gray-200 my-4"></div>
-
-                      {/* Research Column */}
-                      <div className="p-4 min-w-[140px]">
-                        <h3 className="font-semibold text-sm text-gray-800 mb-1">Research</h3>
-                        <p className="text-xs text-gray-500 mb-3">Reasoning & Thinking</p>
-                        <div className="space-y-2">
-                          {[
-                            { name: "Gemini 2.5 Pro", badge: null },
-                            { name: "Claude Sonet 4", badge: null },
-                            { name: "Grok 4", badge: null },
-                            { name: "o3", badge: null },
-                            { name: "o4-mini", badge: null },
-                            { name: "Claude Opus 4.1", badge: "Ace" },
-                            { name: "o3-pro", badge: "Ace" }
-                          ].map((model, idx) => (
-                            <button
-                              key={idx}
-                              className="w-full text-left text-sm text-gray-700 hover:bg-gray-50 py-1 px-2 rounded transition-colors flex items-center justify-between"
-                              onClick={() => {
-                                console.log(`Selected: ${model.name}`);
-                                onModelSelect?.(model.name);
-                                setShowModelDropdown(false);
-                              }}
-                            >
-                              <span>{model.name}</span>
-                              {model.badge && (
-                                <div className="flex items-center gap-1 ml-2">
+                              <div className="flex items-center justify-between">
+                                <span className="font-medium">{model.displayName}</span>
+                                {model.badge && (
                                   <span className="text-xs bg-purple-100 text-purple-800 px-1.5 py-0.5 rounded">
                                     {model.badge}
                                   </span>
-                                  <span className="text-xs text-gray-500">onwards</span>
-                                </div>
-                              )}
+                                )}
+                              </div>
+                              <p className="text-xs text-gray-500 mt-1">{model.description}</p>
                             </button>
                           ))}
                         </div>
                       </div>
-                    </div>
+                    )}
+
+                    {/* Locked Models */}
+                    {getLockedModels(planType).length > 0 && (
+                      <div className="p-4 bg-gray-50 border-t border-gray-100">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Lock className="h-4 w-4 text-gray-400" />
+                          <h3 className="font-semibold text-sm text-gray-600">Locked Models</h3>
+                        </div>
+                        <div className="space-y-2">
+                          {getLockedModels(planType).map((model) => (
+                            <button
+                              key={model.id}
+                              className="w-full text-left text-sm text-gray-600 hover:bg-gray-100 py-2 px-3 rounded transition-colors opacity-75"
+                              onClick={() => {
+                                setSelectedLockedModel({ 
+                                  name: model.displayName, 
+                                  requiredPlan: model.requiredPlan 
+                                });
+                                setShowUpgradeModal(true);
+                                setShowModelDropdown(false);
+                              }}
+                            >
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                  <Lock className="h-3 w-3" />
+                                  <span className="font-medium">{model.displayName}</span>
+                                </div>
+                                {model.badge && (
+                                  <span className="text-xs bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded">
+                                    {model.badge}
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-xs text-gray-500 mt-1 ml-5">
+                                {model.description} • Requires {model.requiredPlan.charAt(0).toUpperCase() + model.requiredPlan.slice(1)}
+                              </p>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -462,6 +464,15 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
           </div>
         </form>
       </div>
+
+      {/* Upgrade Prompt Modal */}
+      <UpgradePromptModal 
+        open={showUpgradeModal}
+        onOpenChange={setShowUpgradeModal}
+        modelName={selectedLockedModel?.name || ''}
+        requiredPlan={selectedLockedModel?.requiredPlan as any || 'pro'}
+        currentPlan={planType}
+      />
     </TooltipProvider>
   );
 };

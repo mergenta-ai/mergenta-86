@@ -230,7 +230,11 @@ async function checkVendorQuota(vendor: string): Promise<boolean> {
   }
 }
 
-async function validateAndResolveModel(userId: string, intentType?: string, preferredModel?: string): Promise<string | null> {
+async function validateAndResolveModel(
+  userId: string, 
+  intentType?: string,
+  preferredModel?: string
+): Promise<string | null> {
   try {
     // Get user's plan
     const { data: userPlan } = await supabase
@@ -238,35 +242,65 @@ async function validateAndResolveModel(userId: string, intentType?: string, pref
       .select('plan_type')
       .eq('user_id', userId)
       .eq('is_active', true)
-      .single();
+      .maybeSingle();
 
     const planType = userPlan?.plan_type || 'free';
 
-    // Get feature limits
-    const { data: featureLimits } = await supabase
-      .from('feature_limits')
-      .select('allow_model_overwrite, primary_model')
-      .eq('plan_type', planType)
-      .eq('intent_type', intentType || 'creative')
-      .single();
+    // Model tier requirements
+    const modelTiers: Record<string, string> = {
+      'gpt-5-nano': 'free',
+      'gemini-2.5-flash': 'free',
+      'gemini-2.5-flash-lite': 'free',
+      'gpt-5-mini': 'pro',
+      'gemini-2.5-pro': 'pro',
+      'gpt-5': 'zip',
+      'claude-sonnet-4': 'zip',
+      'claude-opus-4.1': 'ace',
+      'o3-pro': 'ace',
+      'o4-mini': 'max',
+    };
 
-    // If no preferred model or model override not allowed, return null to use default
-    if (!preferredModel || !featureLimits?.allow_model_overwrite) {
-      console.log('Using default model from feature limits');
-      return null;
+    const planHierarchy: Record<string, number> = {
+      free: 0,
+      pro: 1,
+      zip: 2,
+      ace: 3,
+      max: 4,
+    };
+
+    // If a preferred model is provided, validate against plan
+    if (preferredModel) {
+      const requiredPlan = modelTiers[preferredModel] || 'free';
+      const userPlanLevel = planHierarchy[planType] || 0;
+      const requiredLevel = planHierarchy[requiredPlan] || 0;
+
+      if (userPlanLevel < requiredLevel) {
+        throw new Error(JSON.stringify({
+          error: 'model_locked',
+          message: `This model requires a ${requiredPlan.charAt(0).toUpperCase() + requiredPlan.slice(1)} plan or higher.`,
+          requiredPlan,
+          currentPlan: planType,
+        }));
+      }
+
+      // Check if user's plan allows model overwrite
+      const { data: featureLimits } = await supabase
+        .from('feature_limits')
+        .select('allow_model_overwrite')
+        .eq('plan_type', planType)
+        .limit(1)
+        .maybeSingle();
+
+      if (featureLimits?.allow_model_overwrite) {
+        return preferredModel;
+      }
     }
 
-    // Validate model format (vendor/model)
-    if (!preferredModel.includes('/')) {
-      console.log('Invalid model format, must be vendor/model');
-      return null;
-    }
-
-    console.log('Using preferred model:', preferredModel);
-    return preferredModel;
+    // Otherwise, use intent-based model selection from feature_limits
+    return null;
   } catch (error) {
     console.error('Error validating model:', error);
-    return null;
+    throw error;
   }
 }
 
