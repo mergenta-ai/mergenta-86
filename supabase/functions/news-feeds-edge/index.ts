@@ -29,6 +29,7 @@ interface FeedResult {
   category: string;
   publishedAt: string;
   domain: string;
+  image_url?: string;
   score?: number;
   metadata?: {
     freshness: 'fresh' | 'recent' | 'older';
@@ -204,6 +205,7 @@ async function processFeed(source: any) {
             content: item.content,
             summary: item.summary,
             url: item.url,
+            image_url: item.imageUrl,
             published_at: item.publishedAt,
             scraped_at: new Date().toISOString(),
             is_active: true
@@ -220,6 +222,32 @@ async function processFeed(source: any) {
   } catch (error) {
     console.error(`Error processing feed ${source.name}:`, error);
   }
+}
+
+function extractImageFromRSS(itemXml: string, description: string): string | null {
+  // Priority 1: media:thumbnail
+  const mediaThumbnail = extractXMLTag(itemXml, 'media:thumbnail');
+  if (mediaThumbnail) {
+    const urlMatch = mediaThumbnail.match(/url=["']([^"']+)["']/);
+    if (urlMatch) return urlMatch[1];
+  }
+
+  // Priority 2: enclosure with image type
+  const enclosureMatch = itemXml.match(/<enclosure[^>]*type=["']image\/[^"']*["'][^>]*url=["']([^"']+)["']/i);
+  if (enclosureMatch) return enclosureMatch[1];
+
+  // Priority 3: image tag
+  const imageTag = extractXMLTag(itemXml, 'image');
+  if (imageTag) {
+    const imageUrl = extractXMLTag(imageTag, 'url');
+    if (imageUrl) return imageUrl;
+  }
+
+  // Priority 4: img tag in description
+  const imgMatch = description.match(/<img[^>]*src=["']([^"']+)["']/i);
+  if (imgMatch) return imgMatch[1];
+
+  return null;
 }
 
 async function parseRSSFeed(xmlText: string, source: any): Promise<any[]> {
@@ -243,6 +271,9 @@ async function parseRSSFeed(xmlText: string, source: any): Promise<any[]> {
                      extractXMLTag(itemXml, 'updated') || '';
 
       if (title && link) {
+        // Extract image
+        const imageUrl = extractImageFromRSS(itemXml, description);
+
         // Clean content
         const cleanContent = description
           .replace(/<[^>]+>/g, ' ')
@@ -257,6 +288,7 @@ async function parseRSSFeed(xmlText: string, source: any): Promise<any[]> {
           content: cleanContent,
           summary,
           url: link.trim(),
+          imageUrl: imageUrl,
           publishedAt: parseDate(pubDate) || new Date().toISOString()
         });
       }

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Calendar, Clock, ExternalLink } from 'lucide-react';
+import React, { useState } from 'react';
+import { Calendar, Clock, ExternalLink, Newspaper } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { RSSFeedItem, RSSService } from '@/services/rssService';
@@ -13,6 +13,7 @@ interface ArticleCardProps {
 export function ArticleCard({ article, viewMode, onClick }: ArticleCardProps) {
   const categoryIcon = RSSService.getCategoryIcon(article.category);
   const timeAgo = RSSService.formatTimeAgo(article.published_at);
+  const [imageError, setImageError] = useState(false);
   
   if (viewMode === 'list') {
     return (
@@ -21,7 +22,23 @@ export function ArticleCard({ article, viewMode, onClick }: ArticleCardProps) {
         onClick={() => onClick(article)}
       >
         <CardContent className="p-4">
-          <div className="flex items-start justify-between gap-4">
+          <div className="flex items-start gap-4">
+            {article.image_url && !imageError ? (
+              <div className="flex-shrink-0 w-32 h-24 rounded-lg overflow-hidden bg-muted">
+                <img
+                  src={article.image_url}
+                  alt={article.title}
+                  className="w-full h-full object-cover"
+                  onError={() => setImageError(true)}
+                  loading="lazy"
+                />
+              </div>
+            ) : (
+              <div className="flex-shrink-0 w-32 h-24 rounded-lg overflow-hidden bg-muted flex items-center justify-center">
+                <Newspaper className="h-8 w-8 text-muted-foreground" />
+              </div>
+            )}
+            
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-lg">{categoryIcon}</span>
@@ -62,9 +79,25 @@ export function ArticleCard({ article, viewMode, onClick }: ArticleCardProps) {
 
   return (
     <Card 
-      className="cursor-pointer hover:shadow-lg transition-all duration-200 hover:border-primary/50 hover:-translate-y-1 h-full"
+      className="cursor-pointer hover:shadow-lg transition-all duration-200 hover:border-primary/50 hover:-translate-y-1 h-full flex flex-col"
       onClick={() => onClick(article)}
     >
+      {article.image_url && !imageError ? (
+        <div className="w-full h-48 overflow-hidden rounded-t-lg bg-muted">
+          <img
+            src={article.image_url}
+            alt={article.title}
+            className="w-full h-full object-cover"
+            onError={() => setImageError(true)}
+            loading="lazy"
+          />
+        </div>
+      ) : (
+        <div className="w-full h-48 overflow-hidden rounded-t-lg bg-muted flex items-center justify-center">
+          <Newspaper className="h-12 w-12 text-muted-foreground" />
+        </div>
+      )}
+      
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
@@ -85,7 +118,7 @@ export function ArticleCard({ article, viewMode, onClick }: ArticleCardProps) {
         </CardDescription>
       </CardHeader>
       
-      <CardContent className="pt-0">
+      <CardContent className="pt-0 flex-1">
         <p className="text-sm text-muted-foreground line-clamp-3 mb-4">
           {article.summary}
         </p>

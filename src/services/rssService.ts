@@ -6,6 +6,7 @@ export interface RSSFeedItem {
   content: string;
   summary: string;
   url: string;
+  image_url?: string;
   source_name: string;
   category: string;
   published_at: string;

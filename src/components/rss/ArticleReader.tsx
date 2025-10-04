@@ -1,5 +1,5 @@
-import React from 'react';
-import { Calendar, Clock, ExternalLink, Share2 } from 'lucide-react';
+import React, { useState } from 'react';
+import { Calendar, Clock, ExternalLink, Share2, Newspaper } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -15,6 +15,7 @@ export function ArticleReader({ article }: ArticleReaderProps) {
   const categoryIcon = RSSService.getCategoryIcon(article.category);
   const timeAgo = RSSService.formatTimeAgo(article.published_at);
   const readingTime = Math.ceil(article.content.split(' ').length / 200);
+  const [imageError, setImageError] = useState(false);
 
   const handleOpenOriginal = () => {
     window.open(article.url, '_blank');
@@ -55,6 +56,24 @@ export function ArticleReader({ article }: ArticleReaderProps) {
   return (
     <div className="h-full overflow-auto bg-background">
       <div className="max-w-4xl mx-auto p-8">
+        {/* Hero Image */}
+        {article.image_url && !imageError && (
+          <div className="w-full h-64 md:h-96 overflow-hidden rounded-lg mb-8 bg-muted">
+            <img
+              src={article.image_url}
+              alt={article.title}
+              className="w-full h-full object-cover"
+              onError={() => setImageError(true)}
+            />
+          </div>
+        )}
+        
+        {!article.image_url || imageError ? (
+          <div className="w-full h-64 md:h-96 overflow-hidden rounded-lg mb-8 bg-muted flex items-center justify-center">
+            <Newspaper className="h-24 w-24 text-muted-foreground" />
+          </div>
+        ) : null}
+        
         <Card className="mb-8">
           <CardHeader className="space-y-4">
             {/* Article Meta */}
