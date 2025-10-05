@@ -75,5 +75,8 @@ verify_jwt = false
 [functions.gmail-disconnect]
 verify_jwt = true
 
+[functions.gmail-pull-test]
+verify_jwt = true
+
 [functions.test-gmail-pull]
 verify_jwt = false

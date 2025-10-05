@@ -5,8 +5,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
-import { Database, Globe, Zap, BarChart3, Settings, Upload } from 'lucide-react';
+import { Database, Globe, Zap, BarChart3, Settings, Mail, RefreshCw, Copy, CheckCircle, XCircle, AlertCircle, Loader2 } from 'lucide-react';
 
 interface RSSFeed {
   id: string;
@@ -35,16 +36,62 @@ interface AdminSettings {
   description: string;
 }
 
+interface TestLog {
+  timestamp: string;
+  level: "info" | "success" | "error" | "warning";
+  message: string;
+}
+
+interface QueueEntry {
+  id: string;
+  email_address: string;
+  history_id: string;
+  status: string;
+  created_at: string;
+  processed_at: string | null;
+  error_message: string | null;
+}
+
+interface GmailConnection {
+  id: string;
+  gmail_email: string;
+  connected_at: string;
+  last_synced_at: string | null;
+  history_id: string | null;
+}
+
 const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [rssFeeds, setRSSFeeds] = useState<RSSFeed[]>([]);
   const [vendorQuotas, setVendorQuotas] = useState<VendorQuota[]>([]);
   const [adminSettings, setAdminSettings] = useState<AdminSettings[]>([]);
   const [loading, setLoading] = useState(true);
+  
+  // Gmail testing state
+  const [testLogs, setTestLogs] = useState<TestLog[]>([]);
+  const [queueEntries, setQueueEntries] = useState<QueueEntry[]>([]);
+  const [gmailConnections, setGmailConnections] = useState<GmailConnection[]>([]);
+  const [testStatus, setTestStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
+  const [autoRefresh, setAutoRefresh] = useState(false);
 
   useEffect(() => {
     loadDashboardData();
   }, []);
+
+  useEffect(() => {
+    if (activeTab === 'gmail-test') {
+      loadGmailTestData();
+    }
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (autoRefresh && activeTab === 'gmail-test') {
+      const interval = setInterval(() => {
+        loadQueueEntries();
+      }, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [autoRefresh, activeTab]);
 
   const loadDashboardData = async () => {
     try {
@@ -95,6 +142,119 @@ const AdminDashboard: React.FC = () => {
     return 'text-green-500';
   };
 
+  const loadGmailTestData = async () => {
+    await Promise.all([loadQueueEntries(), loadGmailConnections()]);
+  };
+
+  const loadQueueEntries = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('gmail_processing_queue')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(20);
+
+      if (error) throw error;
+      setQueueEntries(data || []);
+    } catch (error: any) {
+      console.error('Error loading queue entries:', error);
+    }
+  };
+
+  const loadGmailConnections = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('gmail_connections')
+        .select('id, gmail_email, connected_at, last_synced_at, history_id')
+        .order('connected_at', { ascending: false });
+
+      if (error) throw error;
+      setGmailConnections(data || []);
+    } catch (error: any) {
+      console.error('Error loading Gmail connections:', error);
+    }
+  };
+
+  const runGmailPullTest = async () => {
+    try {
+      setTestStatus('testing');
+      setTestLogs([]);
+      setAutoRefresh(true);
+
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error('Authentication required');
+        setTestStatus('error');
+        return;
+      }
+
+      const response = await supabase.functions.invoke('gmail-pull-test', {
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
+      });
+
+      if (response.error) {
+        throw response.error;
+      }
+
+      const { logs, success, result } = response.data;
+      setTestLogs(logs || []);
+
+      if (success) {
+        setTestStatus('success');
+        toast.success('Test completed successfully!');
+        await loadQueueEntries();
+      } else {
+        setTestStatus('error');
+        toast.error('Test failed - check logs for details');
+      }
+
+    } catch (error: any) {
+      console.error('Error running test:', error);
+      setTestStatus('error');
+      setTestLogs(prev => [...prev, {
+        timestamp: new Date().toISOString(),
+        level: 'error',
+        message: error.message || 'Unknown error occurred'
+      }]);
+      toast.error('Test failed');
+    } finally {
+      setTimeout(() => setAutoRefresh(false), 10000);
+    }
+  };
+
+  const copyLogs = () => {
+    const logsText = testLogs.map(log => 
+      `[${new Date(log.timestamp).toLocaleTimeString()}] ${log.level.toUpperCase()}: ${log.message}`
+    ).join('\n');
+    navigator.clipboard.writeText(logsText);
+    toast.success('Logs copied to clipboard');
+  };
+
+  const clearLogs = () => {
+    setTestLogs([]);
+    setTestStatus('idle');
+  };
+
+  const getLogColor = (level: TestLog['level']) => {
+    switch (level) {
+      case 'info': return 'text-blue-600 dark:text-blue-400';
+      case 'success': return 'text-green-600 dark:text-green-400';
+      case 'error': return 'text-red-600 dark:text-red-400';
+      case 'warning': return 'text-orange-600 dark:text-orange-400';
+    }
+  };
+
+  const getStatusIcon = () => {
+    switch (testStatus) {
+      case 'testing': return <Loader2 className="h-4 w-4 animate-spin" />;
+      case 'success': return <CheckCircle className="h-4 w-4 text-green-500" />;
+      case 'error': return <XCircle className="h-4 w-4 text-red-500" />;
+      default: return <AlertCircle className="h-4 w-4 text-muted-foreground" />;
+    }
+  };
+
   const categoryStats = rssFeeds.reduce((acc, feed) => {
     const category = feed.category || 'Uncategorized';
     acc[category] = (acc[category] || 0) + 1;
@@ -127,7 +287,7 @@ const AdminDashboard: React.FC = () => {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="overview" className="flex items-center gap-2">
             <BarChart3 className="h-4 w-4" />
             Overview
@@ -139,6 +299,10 @@ const AdminDashboard: React.FC = () => {
           <TabsTrigger value="vendors" className="flex items-center gap-2">
             <Zap className="h-4 w-4" />
             Vendors
+          </TabsTrigger>
+          <TabsTrigger value="gmail-test" className="flex items-center gap-2">
+            <Mail className="h-4 w-4" />
+            Gmail Testing
           </TabsTrigger>
           <TabsTrigger value="settings" className="flex items-center gap-2">
             <Database className="h-4 w-4" />
@@ -353,6 +517,178 @@ const AdminDashboard: React.FC = () => {
                 </Card>
               );
             })}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="gmail-test" className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Quick Test Panel */}
+            <Card className="lg:col-span-3">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Mail className="h-5 w-5" />
+                  Gmail Pull Test
+                </CardTitle>
+                <CardDescription>
+                  Test the Gmail Pub/Sub PULL flow without using gcloud CLI
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center gap-4">
+                  <Button 
+                    onClick={runGmailPullTest} 
+                    disabled={testStatus === 'testing'}
+                    size="lg"
+                  >
+                    {testStatus === 'testing' ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Testing...
+                      </>
+                    ) : (
+                      <>
+                        📩 Pull Test Message
+                      </>
+                    )}
+                  </Button>
+                  <div className="flex items-center gap-2">
+                    {getStatusIcon()}
+                    <span className="text-sm text-muted-foreground capitalize">
+                      {testStatus}
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Test Console */}
+            <Card className="lg:col-span-2">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle>Test Console</CardTitle>
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="sm" onClick={copyLogs} disabled={testLogs.length === 0}>
+                      <Copy className="h-4 w-4 mr-2" />
+                      Copy
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={clearLogs} disabled={testLogs.length === 0}>
+                      Clear
+                    </Button>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <ScrollArea className="h-[300px] w-full rounded-md border bg-muted/50 p-4">
+                  {testLogs.length === 0 ? (
+                    <p className="text-sm text-muted-foreground text-center py-8">
+                      No logs yet. Click "Pull Test Message" to start testing.
+                    </p>
+                  ) : (
+                    <div className="space-y-1 font-mono text-xs">
+                      {testLogs.map((log, idx) => (
+                        <div key={idx} className={getLogColor(log.level)}>
+                          <span className="text-muted-foreground">
+                            [{new Date(log.timestamp).toLocaleTimeString()}]
+                          </span>{' '}
+                          <span className="font-bold">{log.level.toUpperCase()}:</span> {log.message}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </ScrollArea>
+              </CardContent>
+            </Card>
+
+            {/* Gmail Connections */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Gmail Connections</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {gmailConnections.length === 0 ? (
+                    <p className="text-sm text-muted-foreground text-center py-4">
+                      No Gmail connections found
+                    </p>
+                  ) : (
+                    gmailConnections.slice(0, 5).map((conn) => (
+                      <div key={conn.id} className="text-sm space-y-1 pb-3 border-b last:border-0">
+                        <div className="font-medium truncate">{conn.gmail_email}</div>
+                        <div className="text-xs text-muted-foreground">
+                          Connected: {new Date(conn.connected_at).toLocaleDateString()}
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Processing Queue Monitor */}
+            <Card className="lg:col-span-3">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle>Processing Queue Monitor</CardTitle>
+                  <div className="flex items-center gap-2">
+                    {autoRefresh && (
+                      <Badge variant="secondary" className="flex items-center gap-1">
+                        <RefreshCw className="h-3 w-3 animate-spin" />
+                        Auto-refresh
+                      </Badge>
+                    )}
+                    <Button variant="outline" size="sm" onClick={loadQueueEntries}>
+                      <RefreshCw className="h-4 w-4 mr-2" />
+                      Refresh
+                    </Button>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Email</TableHead>
+                      <TableHead>History ID</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Created</TableHead>
+                      <TableHead>Processed</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {queueEntries.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={5} className="text-center text-muted-foreground">
+                          No queue entries found
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      queueEntries.map((entry) => (
+                        <TableRow key={entry.id}>
+                          <TableCell className="font-medium">{entry.email_address}</TableCell>
+                          <TableCell className="font-mono text-xs">{entry.history_id}</TableCell>
+                          <TableCell>
+                            <Badge variant={
+                              entry.status === 'completed' ? 'default' :
+                              entry.status === 'failed' ? 'destructive' :
+                              entry.status === 'processing' ? 'secondary' :
+                              'outline'
+                            }>
+                              {entry.status}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-sm text-muted-foreground">
+                            {new Date(entry.created_at).toLocaleString()}
+                          </TableCell>
+                          <TableCell className="text-sm text-muted-foreground">
+                            {entry.processed_at ? new Date(entry.processed_at).toLocaleString() : '-'}
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
           </div>
         </TabsContent>
 
