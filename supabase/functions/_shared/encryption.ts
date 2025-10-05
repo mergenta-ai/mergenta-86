@@ -1,4 +1,5 @@
 import { createCipheriv, createDecipheriv, randomBytes } from "node:crypto";
+import { Buffer } from "node:buffer";
 
 const ALGORITHM = "aes-256-cbc";
 const IV_LENGTH = 16;
