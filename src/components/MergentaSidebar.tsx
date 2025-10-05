@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Clock, FileText, Crown, HelpCircle, User, Plus, TrendingUp, Mail } from 'lucide-react';
+import { Clock, FileText, Crown, HelpCircle, User, Plus, TrendingUp, Mail, Shield } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useUserRole } from '@/hooks/useUserRole';
 import HistoryPanel from './sidebar/HistoryPanel';
 import PoliciesPanel from './sidebar/PoliciesPanel';
 import HelpPanel from './sidebar/HelpPanel';
@@ -23,6 +24,7 @@ const MergentaSidebar = () => {
   const [rssReaderCategory, setRSSReaderCategory] = useState<string>('');
   const [showEmailSettings, setShowEmailSettings] = useState(false);
   const navigate = useNavigate();
+  const { canAccessAdmin } = useUserRole();
 
   // Handle mouse events
   const handleMouseEnter = (panel: string) => {
@@ -152,6 +154,26 @@ const MergentaSidebar = () => {
             </TooltipContent>
           </Tooltip>
         </div>
+
+        {/* Admin Panel Icon - Only visible to admin/moderator */}
+        {canAccessAdmin && (
+          <div className="relative mb-4">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="h-16 w-16 rounded-xl hover:bg-pastel-orange hover:shadow-[0_0_8px_rgba(248,220,200,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-orange-hover"
+                  onClick={() => navigate('/admin')}
+                >
+                  <Shield className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right" className="ml-2">
+                <p>Admin Panel</p>
+              </TooltipContent>
+            </Tooltip>
+          </div>
+        )}
 
         {/* History Icon */}
         <div 

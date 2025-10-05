@@ -940,6 +940,33 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          assigned_at: string | null
+          assigned_by: string | null
+          id: string
+          notes: string | null
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          assigned_at?: string | null
+          assigned_by?: string | null
+          id?: string
+          notes?: string | null
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          assigned_at?: string | null
+          assigned_by?: string | null
+          id?: string
+          notes?: string | null
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
       vendor_fallbacks: {
         Row: {
           created_at: string | null
@@ -1019,8 +1046,24 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_admin_or_moderator: {
+        Args: { _user_id: string }
+        Returns: boolean
+      }
+      is_super_admin: {
+        Args: { _user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
+      app_role: "admin" | "moderator" | "user"
       plan_type: "free" | "pro" | "zip" | "ace" | "max"
       processing_status: "pending" | "processing" | "completed" | "failed"
       quota_type: "daily" | "monthly" | "per_card" | "per_vendor"
@@ -1163,6 +1206,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_role: ["admin", "moderator", "user"],
       plan_type: ["free", "pro", "zip", "ace", "max"],
       processing_status: ["pending", "processing", "completed", "failed"],
       quota_type: ["daily", "monthly", "per_card", "per_vendor"],
