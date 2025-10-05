@@ -284,6 +284,87 @@ export type Database = {
         }
         Relationships: []
       }
+      gmail_connections: {
+        Row: {
+          auto_reply_enabled: boolean | null
+          connected_at: string | null
+          created_at: string | null
+          default_reply_mode: string | null
+          encrypted_access_token: string
+          encrypted_refresh_token: string
+          gmail_email: string
+          history_id: string | null
+          id: string
+          last_synced_at: string | null
+          token_expires_at: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          auto_reply_enabled?: boolean | null
+          connected_at?: string | null
+          created_at?: string | null
+          default_reply_mode?: string | null
+          encrypted_access_token: string
+          encrypted_refresh_token: string
+          gmail_email: string
+          history_id?: string | null
+          id?: string
+          last_synced_at?: string | null
+          token_expires_at: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          auto_reply_enabled?: boolean | null
+          connected_at?: string | null
+          created_at?: string | null
+          default_reply_mode?: string | null
+          encrypted_access_token?: string
+          encrypted_refresh_token?: string
+          gmail_email?: string
+          history_id?: string | null
+          id?: string
+          last_synced_at?: string | null
+          token_expires_at?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      gmail_quota_usage: {
+        Row: {
+          created_at: string | null
+          daily_count: number | null
+          id: string
+          last_daily_reset: string | null
+          last_monthly_reset: string | null
+          monthly_count: number | null
+          usage_date: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          daily_count?: number | null
+          id?: string
+          last_daily_reset?: string | null
+          last_monthly_reset?: string | null
+          monthly_count?: number | null
+          usage_date?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          daily_count?: number | null
+          id?: string
+          last_daily_reset?: string | null
+          last_monthly_reset?: string | null
+          monthly_count?: number | null
+          usage_date?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       messages: {
         Row: {
           content: string

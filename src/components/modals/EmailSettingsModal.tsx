@@ -1,15 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as React from "react";
 import { Dialog, DialogOverlay, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Mail, Lock, X, Upload } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Separator } from "@/components/ui/separator";
+import { Mail, X, CheckCircle2, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useUserPlan } from "@/hooks/useUserPlan";
+import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
 // Custom DialogContent without automatic close button - styled like SnapshotModal
@@ -38,46 +39,175 @@ interface EmailSettingsModalProps {
 }
 
 const EmailSettingsModal = ({ isOpen, onClose }: EmailSettingsModalProps) => {
-  const [gmailConnected, setGmailConnected] = useState(false);
-  const [outlookConnected, setOutlookConnected] = useState(false);
-  const [autoReplyEnabled, setAutoReplyEnabled] = useState(false);
-  const [autoReplyTemplate, setAutoReplyTemplate] = useState("");
+  const navigate = useNavigate();
+  const { planType, loading: planLoading } = useUserPlan();
+  
+  const [gmailConnection, setGmailConnection] = useState<any>(null);
+  const [loadingConnection, setLoadingConnection] = useState(false);
+  const [connectingGmail, setConnectingGmail] = useState(false);
+  const [disconnectingGmail, setDisconnectingGmail] = useState(false);
+  const [defaultReplyMode, setDefaultReplyMode] = useState<"send" | "draft">("draft");
 
-  const handleGmailConnect = async () => {
+  useEffect(() => {
+    if (isOpen) {
+      fetchGmailConnection();
+    }
+  }, [isOpen]);
+
+  const fetchGmailConnection = async () => {
     try {
-      // TODO: Implement actual Google OAuth flow
-      toast.info("Redirecting to Google OAuth...");
-      setGmailConnected(true);
-      toast.success("Gmail connected successfully");
+      setLoadingConnection(true);
+      const { data, error } = await supabase
+        .from("gmail_connections")
+        .select("*")
+        .single();
+
+      if (error && error.code !== "PGRST116") {
+        console.error("Error fetching connection:", error);
+        return;
+      }
+
+      if (data) {
+        setGmailConnection(data);
+        const mode = data.default_reply_mode === "send" ? "send" : "draft";
+        setDefaultReplyMode(mode);
+      } else {
+        setGmailConnection(null);
+      }
     } catch (error) {
-      console.error("Gmail connection error:", error);
-      toast.error("Failed to connect Gmail");
+      console.error("Error:", error);
+    } finally {
+      setLoadingConnection(false);
     }
   };
 
-  const handleOutlookConnect = () => {
-    toast.info("Outlook integration coming soon");
-  };
+  const handleGmailConnect = async () => {
+    if (!planType || planLoading) {
+      toast.info("Loading", { description: "Checking your plan..." });
+      return;
+    }
 
-  const handleSaveAutoReply = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
+    if (!["zip", "max"].includes(planType)) {
+      const upgradeMessage =
+        planType === "ace"
+          ? "Upgrade to the Max plan to unlock Gmail automation."
+          : "Gmail automation is available from the Zip plan. Please upgrade to connect Gmail.";
 
-      // Call gmail-automation edge function
-      const { data, error } = await supabase.functions.invoke('gmail-automation', {
-        body: {
-          action: 'auto_reply',
-          body: autoReplyTemplate,
+      toast.warning("Upgrade Required", {
+        description: upgradeMessage,
+        action: {
+          label: "View Plans",
+          onClick: () => {
+            onClose();
+            navigate("/plans");
+          },
         },
       });
+      return;
+    }
+
+    try {
+      setConnectingGmail(true);
+
+      const { data, error } = await supabase.functions.invoke("gmail-oauth-authorize");
 
       if (error) throw error;
 
-      toast.success("Auto-reply settings saved");
-    } catch (error) {
-      console.error("Save auto-reply error:", error);
-      toast.error("Failed to save auto-reply settings");
+      if (data.error === "plan_upgrade_required") {
+        toast.warning("Upgrade Required", {
+          description: data.message,
+          action: {
+            label: "View Plans",
+            onClick: () => {
+              onClose();
+              navigate("/plans");
+            },
+          },
+        });
+        return;
+      }
+
+      const popup = window.open(
+        data.authUrl,
+        "Gmail OAuth",
+        "width=600,height=700,left=200,top=100"
+      );
+
+      const messageHandler = (event: MessageEvent) => {
+        if (event.data.type === "gmail-oauth-success") {
+          toast.success("Gmail Connected", {
+            description: `Connected to ${event.data.email}`,
+          });
+          fetchGmailConnection();
+          window.removeEventListener("message", messageHandler);
+        } else if (event.data.type === "gmail-oauth-error") {
+          toast.error("Connection Failed", {
+            description: event.data.error || "Failed to connect Gmail",
+          });
+          window.removeEventListener("message", messageHandler);
+        }
+      };
+
+      window.addEventListener("message", messageHandler);
+
+      const checkPopup = setInterval(() => {
+        if (popup?.closed) {
+          clearInterval(checkPopup);
+          setConnectingGmail(false);
+          window.removeEventListener("message", messageHandler);
+        }
+      }, 500);
+    } catch (error: any) {
+      console.error("Error connecting Gmail:", error);
+      toast.error("Error", {
+        description: error.message || "Failed to initiate Gmail connection",
+      });
+    } finally {
+      setConnectingGmail(false);
+    }
+  };
+
+  const handleGmailDisconnect = async () => {
+    try {
+      setDisconnectingGmail(true);
+
+      const { error } = await supabase.functions.invoke("gmail-disconnect");
+
+      if (error) throw error;
+
+      toast.success("Gmail Disconnected", {
+        description: "Your Gmail account has been disconnected",
+      });
+
+      setGmailConnection(null);
+    } catch (error: any) {
+      console.error("Error disconnecting Gmail:", error);
+      toast.error("Error", {
+        description: error.message || "Failed to disconnect Gmail",
+      });
+    } finally {
+      setDisconnectingGmail(false);
+    }
+  };
+
+  const handleUpdateReplyMode = async (mode: "send" | "draft") => {
+    if (!gmailConnection) return;
+
+    try {
+      const { error } = await supabase
+        .from("gmail_connections")
+        .update({ default_reply_mode: mode })
+        .eq("user_id", gmailConnection.user_id);
+
+      if (error) throw error;
+
+      setDefaultReplyMode(mode);
+      toast.success("Settings Updated", {
+        description: `Default reply mode set to ${mode === "send" ? "Send Automatically" : "Save as Draft"}`,
+      });
+    } catch (error: any) {
+      console.error("Error updating reply mode:", error);
+      toast.error("Error", { description: "Failed to update settings" });
     }
   };
 
@@ -99,95 +229,167 @@ const EmailSettingsModal = ({ isOpen, onClose }: EmailSettingsModalProps) => {
               <Mail className="h-8 w-8 text-mergenta-violet" />
             </div>
           </div>
-          <DialogTitle className="text-3xl font-bold text-mergenta-deep-violet">Email Automation Settings</DialogTitle>
-          <p className="text-sm text-gray-600 mt-2">Connect your email accounts and configure automation</p>
+          <DialogTitle className="text-3xl font-bold text-mergenta-deep-violet">Connect your Gmail</DialogTitle>
+          <p className="text-sm text-gray-600 mt-2">Configure Gmail automation settings</p>
         </DialogHeader>
 
         <div className="space-y-6 mt-4">
-          {/* Gmail Connection */}
-          <div className="border rounded-lg p-4 space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Mail className="h-6 w-6 text-red-500" />
-                <div>
-                  <h3 className="font-semibold">Gmail</h3>
-                  <p className="text-sm text-muted-foreground">
-                    {gmailConnected ? "Connected" : "Not connected"}
-                  </p>
-                </div>
-              </div>
-              <Button
-                onClick={handleGmailConnect}
-                variant={gmailConnected ? "outline" : "default"}
-              >
-                {gmailConnected ? "Disconnect" : "Connect Gmail"}
-              </Button>
+          {loadingConnection ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
             </div>
-          </div>
-
-          {/* Outlook Connection */}
-          <div className="border rounded-lg p-4 space-y-3 opacity-60">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Mail className="h-6 w-6 text-blue-500" />
-                <div>
-                  <h3 className="font-semibold">Outlook</h3>
-                  <p className="text-sm text-muted-foreground">Coming soon</p>
+          ) : (
+            <>
+              {/* Gmail Section */}
+              <div className="space-y-4">
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0">
+                    <Mail className="h-6 w-6 text-primary" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold mb-2">Gmail Connection</h3>
+                    {gmailConnection ? (
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2 text-sm">
+                          <CheckCircle2 className="h-4 w-4 text-green-600" />
+                          <span className="font-medium">Connected to:</span>
+                          <span className="text-muted-foreground">
+                            {gmailConnection.gmail_email}
+                          </span>
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          Connected on {new Date(gmailConnection.connected_at).toLocaleDateString()}
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-sm text-muted-foreground">
+                        To let Mergenta read and reply to your emails we need your permission from Google. 
+                        Click Connect with Google and follow the secure sign-in. Mergenta will not see your password.
+                      </p>
+                    )}
+                  </div>
                 </div>
-              </div>
-              <Button onClick={handleOutlookConnect} disabled variant="outline">
-                <Lock className="h-4 w-4 mr-2" />
-                Coming Soon
-              </Button>
-            </div>
-          </div>
 
-          {/* Auto-Reply Settings */}
-          {gmailConnected && (
-            <div className="border rounded-lg p-4 space-y-4">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="auto-reply">Auto-Reply</Label>
-                <Switch
-                  id="auto-reply"
-                  checked={autoReplyEnabled}
-                  onCheckedChange={setAutoReplyEnabled}
-                />
-              </div>
-
-              {autoReplyEnabled && (
-                <div className="space-y-3">
-                  <Label htmlFor="auto-reply-subject">Subject</Label>
-                  <Input
-                    id="auto-reply-subject"
-                    placeholder="Re: Your message"
-                    defaultValue="Re: Your message"
-                  />
-
-                  <Label htmlFor="auto-reply-template">Template</Label>
-                  <Textarea
-                    id="auto-reply-template"
-                    placeholder="Enter your auto-reply message..."
-                    value={autoReplyTemplate}
-                    onChange={(e) => setAutoReplyTemplate(e.target.value)}
-                    rows={5}
-                  />
-
-                  <Button onClick={handleSaveAutoReply} className="w-full">
-                    Save Auto-Reply Settings
+                <div className="flex gap-3">
+                  {gmailConnection ? (
+                    <Button
+                      onClick={handleGmailDisconnect}
+                      variant="outline"
+                      disabled={disconnectingGmail}
+                    >
+                      {disconnectingGmail ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Disconnecting...
+                        </>
+                      ) : (
+                        "Disconnect Gmail"
+                      )}
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={handleGmailConnect}
+                      disabled={connectingGmail || planLoading}
+                    >
+                      {connectingGmail ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Connecting...
+                        </>
+                      ) : (
+                        "Connect Gmail"
+                      )}
+                    </Button>
+                  )}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      toast.info("Required Permissions", {
+                        description: "Mergenta requires: Read emails, Send emails, and Modify labels. These permissions allow us to read incoming emails, draft replies, and organize your inbox.",
+                      });
+                    }}
+                  >
+                    Why we need this
                   </Button>
                 </div>
-              )}
-            </div>
-          )}
+              </div>
 
-          {/* Usage Stats */}
-          <div className="border rounded-lg p-4 space-y-2">
-            <h3 className="font-semibold mb-2">Usage Limits</h3>
-            <div className="text-sm space-y-1">
-              <p className="text-muted-foreground">Daily Gmail: 0 / 10</p>
-              <p className="text-muted-foreground">Monthly Gmail: 0 / 100</p>
-            </div>
-          </div>
+              {/* Default Reply Mode */}
+              {gmailConnection && (
+                <>
+                  <Separator />
+                  <div className="space-y-4">
+                    <div>
+                      <h3 className="text-lg font-semibold mb-2">Default Reply Mode</h3>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Choose how Mergenta should handle drafted replies by default
+                      </p>
+                    </div>
+
+                    <RadioGroup
+                      value={defaultReplyMode}
+                      onValueChange={(value) => handleUpdateReplyMode(value as "send" | "draft")}
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="send" id="send" />
+                        <Label htmlFor="send" className="font-normal cursor-pointer">
+                          Send automatically
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="draft" id="draft" />
+                        <Label htmlFor="draft" className="font-normal cursor-pointer">
+                          Save as draft
+                        </Label>
+                      </div>
+                    </RadioGroup>
+
+                    <div className="text-xs text-muted-foreground bg-muted/50 p-3 rounded-md">
+                      <strong>Automation Status:</strong>{" "}
+                      {gmailConnection.auto_reply_enabled ? "ON" : "OFF"}
+                      {" • "}
+                      <strong>Mode:</strong>{" "}
+                      {defaultReplyMode === "send" ? "Send" : "Draft"}
+                    </div>
+                  </div>
+                </>
+              )}
+
+              <Separator />
+
+              {/* Outlook Section */}
+              <div className="space-y-4">
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0">
+                    <Mail className="h-6 w-6 text-muted-foreground" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold mb-2">
+                      Outlook <span className="text-sm font-normal text-muted-foreground">(Coming Soon)</span>
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      Microsoft Outlook integration will be available soon
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Usage Limits */}
+              <Separator />
+              <div className="space-y-2">
+                <h3 className="text-lg font-semibold">Usage Limits</h3>
+                <p className="text-sm text-muted-foreground">
+                  <strong>Zip Plan:</strong> 150 emails/day, 1,500/month
+                  <br />
+                  <strong>Max Plan:</strong> 300 emails/day, 3,000/month
+                  <br />
+                  <br />
+                  Check your account page for current usage. Automation pauses when limits are reached.
+                </p>
+              </div>
+            </>
+          )}
         </div>
       </CustomDialogContent>
     </Dialog>
