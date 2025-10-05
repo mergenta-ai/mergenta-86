@@ -332,6 +332,42 @@ export type Database = {
         }
         Relationships: []
       }
+      gmail_processing_queue: {
+        Row: {
+          created_at: string | null
+          email_address: string
+          error_message: string | null
+          history_id: string
+          id: string
+          processed_at: string | null
+          retry_count: number | null
+          status: Database["public"]["Enums"]["processing_status"] | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          email_address: string
+          error_message?: string | null
+          history_id: string
+          id?: string
+          processed_at?: string | null
+          retry_count?: number | null
+          status?: Database["public"]["Enums"]["processing_status"] | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          email_address?: string
+          error_message?: string | null
+          history_id?: string
+          id?: string
+          processed_at?: string | null
+          retry_count?: number | null
+          status?: Database["public"]["Enums"]["processing_status"] | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       gmail_quota_usage: {
         Row: {
           created_at: string | null
@@ -979,9 +1015,14 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      cleanup_old_gmail_queue_entries: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
     }
     Enums: {
       plan_type: "free" | "pro" | "zip" | "ace" | "max"
+      processing_status: "pending" | "processing" | "completed" | "failed"
       quota_type: "daily" | "monthly" | "per_card" | "per_vendor"
       vendor_type:
         | "openai"
@@ -1123,6 +1164,7 @@ export const Constants = {
   public: {
     Enums: {
       plan_type: ["free", "pro", "zip", "ace", "max"],
+      processing_status: ["pending", "processing", "completed", "failed"],
       quota_type: ["daily", "monthly", "per_card", "per_vendor"],
       vendor_type: [
         "openai",

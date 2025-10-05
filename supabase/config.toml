@@ -1,5 +1,8 @@
 project_id = "sqpiuquzcejtyuqykvxn"
 
+[functions.pubsub-gmail]
+verify_jwt = false
+
 [functions.prompt-engine]
 verify_jwt = false
 
