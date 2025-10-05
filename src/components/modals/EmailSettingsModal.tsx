@@ -1,13 +1,36 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import * as React from "react";
+import { Dialog, DialogOverlay, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, Lock } from "lucide-react";
+import { Mail, Lock, X, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { cn } from "@/lib/utils";
+
+// Custom DialogContent without automatic close button - styled like SnapshotModal
+const CustomDialogContent = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
+>(({ className, children, ...props }, ref) => (
+  <DialogPrimitive.Portal>
+    <DialogPrimitive.Content
+      ref={ref}
+      className={cn(
+        "fixed left-[50%] top-[50%] z-50 grid w-full max-w-2xl translate-x-[-50%] translate-y-[-50%] gap-4 bg-white p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg border-4 border-mergenta-violet/30",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </DialogPrimitive.Content>
+  </DialogPrimitive.Portal>
+));
+CustomDialogContent.displayName = "CustomDialogContent";
 
 interface EmailSettingsModalProps {
   isOpen: boolean;
@@ -60,9 +83,24 @@ const EmailSettingsModal = ({ isOpen, onClose }: EmailSettingsModalProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-bold">Email Automation Settings</DialogTitle>
+      <DialogOverlay className="bg-gradient-to-br from-mergenta-deep-violet/80 via-mergenta-violet/70 to-mergenta-magenta/60 backdrop-blur-lg" />
+      <CustomDialogContent className="max-h-[85vh] overflow-y-auto">
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          className="absolute right-4 top-4 z-50 p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+        >
+          <X className="h-5 w-5 text-gray-600" />
+        </button>
+
+        <DialogHeader className="text-center mb-4">
+          <div className="flex items-center justify-center mb-4">
+            <div className="p-3 rounded-full bg-mergenta-violet/10">
+              <Mail className="h-8 w-8 text-mergenta-violet" />
+            </div>
+          </div>
+          <DialogTitle className="text-3xl font-bold text-mergenta-deep-violet">Email Automation Settings</DialogTitle>
+          <p className="text-sm text-gray-600 mt-2">Connect your email accounts and configure automation</p>
         </DialogHeader>
 
         <div className="space-y-6 mt-4">
@@ -151,7 +189,7 @@ const EmailSettingsModal = ({ isOpen, onClose }: EmailSettingsModalProps) => {
             </div>
           </div>
         </div>
-      </DialogContent>
+      </CustomDialogContent>
     </Dialog>
   );
 };

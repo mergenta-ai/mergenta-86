@@ -1,12 +1,11 @@
 import { useState, useRef, useEffect } from "react";
-import { Send, Loader2, Cpu, Paperclip, Globe, Mic, Share, Download, AudioWaveform, X, Volume2, Lock } from "lucide-react";
+import { Send, Loader2, Cpu, Paperclip, Globe, Mic, Download, AudioWaveform, X, Volume2, Lock } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 import TTSPlayer from "./TTSPlayer";
 import { useVoiceRecording } from "@/hooks/useVoiceRecording";
 import { useDocumentUpload } from "@/hooks/useDocumentUpload";
 import { toast } from "sonner";
 import ExportModal from "./modals/ExportModal";
-import EmailSettingsModal from "./modals/EmailSettingsModal";
 import UpgradePromptModal from "./modals/UpgradePromptModal";
 import { useUserPlan } from "@/hooks/useUserPlan";
 import { getAvailableModels, getLockedModels } from "@/config/modelConfig";
@@ -26,7 +25,6 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
   const [showModelDropdown, setShowModelDropdown] = useState(false);
   const [showTTS, setShowTTS] = useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
-  const [showEmailSettings, setShowEmailSettings] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [selectedLockedModel, setSelectedLockedModel] = useState<{ name: string; requiredPlan: string } | null>(null);
   const modelDropdownRef = useRef<HTMLDivElement>(null);
@@ -192,12 +190,6 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
         content={lastResponse || input}
       />
 
-      {/* Email Settings Modal */}
-      <EmailSettingsModal
-        isOpen={showEmailSettings}
-        onClose={() => setShowEmailSettings(false)}
-      />
-
       {/* TTS Player - Shows above input when enabled */}
       {showTTS && lastResponse && (
         <div className="fixed bottom-32 left-1/2 transform -translate-x-1/2 z-[60] w-full max-w-md px-4">
@@ -262,19 +254,6 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
             <div className="flex justify-between items-center mt-auto">
               {/* Left side icons */}
               <div className="flex gap-1 lg:gap-2">
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <button
-                      type="button"
-                      onClick={() => setShowEmailSettings(true)}
-                      className="p-3 lg:p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700 touch-manipulation min-h-[44px] min-w-[44px] lg:min-h-auto lg:min-w-auto flex items-center justify-center"
-                    >
-                      <Share className="h-5 w-5 lg:h-4 lg:w-4" />
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent>Email automation</TooltipContent>
-                </Tooltip>
-                
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <button

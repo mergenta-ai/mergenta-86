@@ -8,6 +8,7 @@ import { ProfilePanel } from './sidebar/ProfilePanel';
 import PlansPanel from './sidebar/PlansPanel';
 
 import { RSSReaderModal } from './modals/RSSReaderModal';
+import EmailSettingsModal from './modals/EmailSettingsModal';
 import { Button } from './ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 
@@ -20,6 +21,7 @@ const MergentaSidebar = () => {
   
   const [showRSSReader, setShowRSSReader] = useState(false);
   const [rssReaderCategory, setRSSReaderCategory] = useState<string>('');
+  const [showEmailSettings, setShowEmailSettings] = useState(false);
   const navigate = useNavigate();
 
   // Handle mouse events
@@ -67,8 +69,7 @@ const MergentaSidebar = () => {
 
   // Handle email
   const handleEmail = () => {
-    // Open email client
-    window.location.href = 'mailto:';
+    setShowEmailSettings(true);
   };
 
   // Handle RSS Reader
@@ -334,6 +335,12 @@ const MergentaSidebar = () => {
         isOpen={showRSSReader}
         onClose={() => setShowRSSReader(false)}
         initialCategory={rssReaderCategory}
+      />
+
+      {/* Email Settings Modal */}
+      <EmailSettingsModal
+        isOpen={showEmailSettings}
+        onClose={() => setShowEmailSettings(false)}
       />
     </>
   );
