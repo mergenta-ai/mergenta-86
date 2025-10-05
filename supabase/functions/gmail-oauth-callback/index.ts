@@ -101,6 +101,11 @@ Deno.serve(async (req) => {
     console.log("Gmail connection stored successfully");
 
     // Call users.watch to set up Pub/Sub
+    console.log("=== Setting up Gmail watch ===");
+    console.log("User ID:", userId);
+    console.log("Gmail email:", gmailEmail);
+    console.log("Pub/Sub topic: projects/august-clover-471917-i6/topics/gmail-events");
+    
     try {
       const watchResponse = await fetch(
         "https://gmail.googleapis.com/gmail/v1/users/me/watch",
@@ -116,22 +121,39 @@ Deno.serve(async (req) => {
         }
       );
 
+      console.log("Watch API response status:", watchResponse.status);
+
       if (watchResponse.ok) {
         const watchData = await watchResponse.json();
-        console.log("Watch set up successfully:", watchData);
+        console.log("✓ Watch set up successfully!");
+        console.log("Watch data:", JSON.stringify(watchData, null, 2));
+        console.log("History ID:", watchData.historyId);
+        console.log("Expiration:", watchData.expiration);
 
         // Store history_id
-        await supabase
+        const { error: updateError } = await supabase
           .from("gmail_connections")
           .update({ history_id: watchData.historyId })
           .eq("user_id", userId);
+
+        if (updateError) {
+          console.error("Failed to update history_id:", updateError);
+        } else {
+          console.log("✓ History ID stored in database");
+        }
       } else {
-        console.error("Failed to set up watch:", await watchResponse.text());
+        const errorText = await watchResponse.text();
+        console.error("✗ Failed to set up watch");
+        console.error("Status:", watchResponse.status);
+        console.error("Error response:", errorText);
       }
     } catch (watchError) {
-      console.error("Error setting up watch:", watchError);
+      console.error("✗ Exception during watch setup:", watchError);
+      console.error("Error details:", watchError instanceof Error ? watchError.message : String(watchError));
       // Don't fail the whole flow if watch fails
     }
+    
+    console.log("=== Watch setup complete ===");
 
     // Success - close popup
     return new Response(
