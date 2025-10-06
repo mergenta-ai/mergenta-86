@@ -12,6 +12,7 @@ import Plans from "./pages/Plans";
 import Billing from "./pages/Billing";
 import MemoryGuide from "./pages/MemoryGuide";
 import AdminDashboard from "./pages/AdminDashboard";
+import EmailDashboard from "./pages/EmailDashboard";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const App = () => (
               <Route path="/plans" element={<Plans />} />
               <Route path="/billing" element={<Billing />} />
               <Route path="/memory-guide" element={<MemoryGuide />} />
+              <Route path="/emails" element={<EmailDashboard />} />
               <Route 
                 path="/admin" 
                 element={

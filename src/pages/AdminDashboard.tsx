@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
-import { Database, Globe, Zap, BarChart3, Settings, Mail, RefreshCw, Copy, CheckCircle, XCircle, Loader2, ArrowLeft } from 'lucide-react';
+import { Database, Globe, Zap, BarChart3, Settings, ArrowLeft } from 'lucide-react';
 
 interface RSSFeed {
   id: string;
@@ -37,64 +37,16 @@ interface AdminSettings {
   description: string;
 }
 
-interface TestLog {
-  timestamp: string;
-  level: "info" | "success" | "error" | "warning";
-  message: string;
-}
-
-interface QueueEntry {
-  id: string;
-  email_address: string;
-  history_id: string;
-  status: string;
-  created_at: string;
-  processed_at: string | null;
-  error_message: string | null;
-}
-
-interface GmailConnection {
-  id: string;
-  gmail_email: string;
-  connected_at: string;
-  last_synced_at: string | null;
-  history_id: string | null;
-}
-
 const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [rssFeeds, setRSSFeeds] = useState<RSSFeed[]>([]);
   const [vendorQuotas, setVendorQuotas] = useState<VendorQuota[]>([]);
   const [adminSettings, setAdminSettings] = useState<AdminSettings[]>([]);
   const [loading, setLoading] = useState(true);
-  
-  // Gmail testing state
-  const [queueEntries, setQueueEntries] = useState<QueueEntry[]>([]);
-  const [gmailConnections, setGmailConnections] = useState<GmailConnection[]>([]);
-  const [autoRefresh, setAutoRefresh] = useState(false);
-  const [processingStatus, setProcessingStatus] = useState<'idle' | 'processing' | 'success' | 'error'>('idle');
-  const [processLogs, setProcessLogs] = useState<TestLog[]>([]);
-  const [pullStatus, setPullStatus] = useState<'idle' | 'pulling' | 'success' | 'error'>('idle');
-  const [pullResults, setPullResults] = useState<any>(null);
 
   useEffect(() => {
     loadDashboardData();
   }, []);
-
-  useEffect(() => {
-    if (activeTab === 'gmail-test') {
-      loadGmailTestData();
-    }
-  }, [activeTab]);
-
-  useEffect(() => {
-    if (autoRefresh && activeTab === 'gmail-test') {
-      const interval = setInterval(() => {
-        loadQueueEntries();
-      }, 5000);
-      return () => clearInterval(interval);
-    }
-  }, [autoRefresh, activeTab]);
 
   const loadDashboardData = async () => {
     try {
@@ -145,137 +97,6 @@ const AdminDashboard: React.FC = () => {
     return 'text-green-500';
   };
 
-  const loadGmailTestData = async () => {
-    await Promise.all([loadQueueEntries(), loadGmailConnections()]);
-  };
-
-  const loadQueueEntries = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('gmail_processing_queue')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(20);
-
-      if (error) throw error;
-      setQueueEntries(data || []);
-    } catch (error: any) {
-      console.error('Error loading queue entries:', error);
-    }
-  };
-
-  const loadGmailConnections = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('gmail_connections')
-        .select('id, gmail_email, connected_at, last_synced_at, history_id')
-        .order('connected_at', { ascending: false });
-
-      if (error) throw error;
-      setGmailConnections(data || []);
-    } catch (error: any) {
-      console.error('Error loading Gmail connections:', error);
-    }
-  };
-
-
-  const runManualProcessing = async (queueId?: string) => {
-    try {
-      setProcessingStatus('processing');
-      setProcessLogs([]);
-      setAutoRefresh(true);
-
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        toast.error('Authentication required');
-        setProcessingStatus('error');
-        return;
-      }
-
-      const body = queueId ? { queue_id: queueId } : {};
-      const response = await supabase.functions.invoke('gmail-process-manual', {
-        headers: {
-          Authorization: `Bearer ${session.access_token}`,
-        },
-        body,
-      });
-
-      if (response.error) {
-        throw response.error;
-      }
-
-      const { logs, success, processed, successful } = response.data;
-      setProcessLogs(logs || []);
-
-      if (success) {
-        setProcessingStatus('success');
-        toast.success(`Processing complete: ${successful}/${processed} successful`);
-        await loadQueueEntries();
-      } else {
-        setProcessingStatus('error');
-        toast.error('Processing failed - check logs for details');
-      }
-
-    } catch (error: any) {
-      console.error('Error running manual processing:', error);
-      setProcessingStatus('error');
-      setProcessLogs(prev => [...prev, {
-        timestamp: new Date().toISOString(),
-        level: 'error',
-        message: error.message || 'Unknown error occurred'
-      }]);
-      toast.error('Processing failed');
-    } finally {
-      setTimeout(() => setAutoRefresh(false), 10000);
-    }
-  };
-
-  const clearProcessLogs = () => {
-    setProcessLogs([]);
-    setProcessingStatus('idle');
-  };
-
-  const pullNewEmails = async () => {
-    try {
-      setPullStatus('pulling');
-      setPullResults(null);
-
-      const { data, error } = await supabase.functions.invoke('gmail-pull-manual', {
-        headers: {
-          Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
-        },
-      });
-
-      if (error) throw error;
-
-      if (data.success) {
-        setPullResults(data);
-        setPullStatus('success');
-        const totalMessages = data.total_messages || 0;
-        const successfulAccounts = data.successful_accounts || 0;
-        const totalAccounts = data.total_accounts || 0;
-        toast.success(`Processed ${totalMessages} messages from ${successfulAccounts}/${totalAccounts} accounts`);
-        await loadQueueEntries();
-        await loadGmailConnections();
-      } else {
-        throw new Error(data.error || 'Failed to pull emails');
-      }
-    } catch (error: any) {
-      console.error('Failed to pull emails:', error);
-      setPullStatus('error');
-      toast.error(error.message || 'Failed to pull emails');
-    }
-  };
-
-  const getLogColor = (level: TestLog['level']) => {
-    switch (level) {
-      case 'info': return 'text-blue-600 dark:text-blue-400';
-      case 'success': return 'text-green-600 dark:text-green-400';
-      case 'error': return 'text-red-600 dark:text-red-400';
-      case 'warning': return 'text-orange-600 dark:text-orange-400';
-    }
-  };
-
 
   const categoryStats = rssFeeds.reduce((acc, feed) => {
     const category = feed.category || 'Uncategorized';
@@ -320,7 +141,7 @@ const AdminDashboard: React.FC = () => {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="overview" className="flex items-center gap-2">
             <BarChart3 className="h-4 w-4" />
             Overview
@@ -332,10 +153,6 @@ const AdminDashboard: React.FC = () => {
           <TabsTrigger value="vendors" className="flex items-center gap-2">
             <Zap className="h-4 w-4" />
             Vendors
-          </TabsTrigger>
-          <TabsTrigger value="gmail-test" className="flex items-center gap-2">
-            <Mail className="h-4 w-4" />
-            Gmail Testing
           </TabsTrigger>
           <TabsTrigger value="settings" className="flex items-center gap-2">
             <Database className="h-4 w-4" />
@@ -550,291 +367,6 @@ const AdminDashboard: React.FC = () => {
                 </Card>
               );
             })}
-          </div>
-        </TabsContent>
-
-        <TabsContent value="gmail-test" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Pull New Emails - Main Action */}
-            <Card className="lg:col-span-3">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <RefreshCw className="h-5 w-5" />
-                  Pull New Emails
-                </CardTitle>
-                <CardDescription>
-                  Fetch new emails from Gmail, generate AI responses, and create drafts
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center gap-4">
-                  <Button
-                    onClick={pullNewEmails}
-                    disabled={pullStatus === 'pulling'}
-                    variant="default"
-                    size="lg"
-                  >
-                    {pullStatus === 'pulling' && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    <RefreshCw className="mr-2 h-4 w-4" />
-                    Pull New Emails
-                  </Button>
-                  {pullStatus === 'success' && (
-                    <Badge variant="default" className="bg-green-500">
-                      <CheckCircle className="mr-1 h-3 w-3" />
-                      Pull Complete
-                    </Badge>
-                  )}
-                  {pullStatus === 'error' && (
-                    <Badge variant="destructive">
-                      <XCircle className="mr-1 h-3 w-3" />
-                      Failed
-                    </Badge>
-                  )}
-                </div>
-                {pullResults && (
-                  <div className="space-y-4">
-                    {/* Summary Card */}
-                    <div className="bg-muted p-4 rounded-lg">
-                      <div className="grid grid-cols-3 gap-4 text-center">
-                        <div>
-                          <div className="text-2xl font-bold text-primary">
-                            {pullResults.total_accounts || 0}
-                          </div>
-                          <div className="text-xs text-muted-foreground">Total Accounts</div>
-                        </div>
-                        <div>
-                          <div className="text-2xl font-bold text-green-600">
-                            {pullResults.successful_accounts || 0}
-                          </div>
-                          <div className="text-xs text-muted-foreground">Successful</div>
-                        </div>
-                        <div>
-                          <div className="text-2xl font-bold text-blue-600">
-                            {pullResults.total_messages || 0}
-                          </div>
-                          <div className="text-xs text-muted-foreground">Messages Found</div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Individual Account Results */}
-                    {pullResults.accounts_processed && pullResults.accounts_processed.map((account: any, idx: number) => (
-                      <div key={idx} className="bg-background border rounded-lg p-4 space-y-3">
-                        <div className="flex items-center justify-between">
-                          <div className="font-medium">{account.email}</div>
-                          <Badge 
-                            variant={
-                              account.status === 'success' ? 'default' :
-                              account.status === 'error' ? 'destructive' :
-                              account.status === 'baseline_established' ? 'secondary' :
-                              'outline'
-                            }
-                          >
-                            {account.status.replace(/_/g, ' ')}
-                          </Badge>
-                        </div>
-                        
-                        <div className="grid grid-cols-2 gap-2 text-sm">
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Messages Found:</span>
-                            <Badge variant="outline">{account.messages_found || 0}</Badge>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Drafts Created:</span>
-                            <Badge variant="outline">{account.drafts_created || 0}</Badge>
-                          </div>
-                        </div>
-
-                        {account.error && (
-                          <div className="text-xs text-destructive bg-destructive/10 p-2 rounded">
-                            Error: {account.error}
-                          </div>
-                        )}
-
-                        {account.logs && account.logs.length > 0 && (
-                          <details className="text-xs">
-                            <summary className="cursor-pointer text-muted-foreground hover:text-foreground">
-                              View Logs ({account.logs.length})
-                            </summary>
-                            <div className="mt-2 bg-muted p-2 rounded max-h-40 overflow-auto space-y-1 font-mono">
-                              {account.logs.map((log: string, logIdx: number) => (
-                                <div key={logIdx}>{log}</div>
-                              ))}
-                            </div>
-                          </details>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Gmail Connections */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Gmail Connections</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {gmailConnections.length === 0 ? (
-                    <p className="text-sm text-muted-foreground text-center py-4">
-                      No Gmail connections found
-                    </p>
-                  ) : (
-                    gmailConnections.slice(0, 5).map((conn) => (
-                      <div key={conn.id} className="text-sm space-y-1 pb-3 border-b last:border-0">
-                        <div className="font-medium truncate">{conn.gmail_email}</div>
-                        <div className="text-xs text-muted-foreground">
-                          Connected: {new Date(conn.connected_at).toLocaleDateString()}
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-
-          {/* Processing Queue Monitor */}
-            <Card className="lg:col-span-3">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle>Processing Queue Monitor</CardTitle>
-                  <div className="flex items-center gap-2">
-                    {autoRefresh && (
-                      <Badge variant="secondary" className="flex items-center gap-1">
-                        <RefreshCw className="h-3 w-3 animate-spin" />
-                        Auto-refresh
-                      </Badge>
-                    )}
-                    <Button 
-                      variant="default" 
-                      size="sm" 
-                      onClick={() => runManualProcessing()}
-                      disabled={processingStatus === 'processing'}
-                    >
-                      {processingStatus === 'processing' ? (
-                        <>
-                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          Processing...
-                        </>
-                      ) : (
-                        <>
-                          <Zap className="h-4 w-4 mr-2" />
-                          Process Pending
-                        </>
-                      )}
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={loadQueueEntries}>
-                      <RefreshCw className="h-4 w-4 mr-2" />
-                      Refresh
-                    </Button>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Email</TableHead>
-                      <TableHead>History ID</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Created</TableHead>
-                      <TableHead>Processed</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {queueEntries.length === 0 ? (
-                      <TableRow>
-                        <TableCell colSpan={6} className="text-center text-muted-foreground">
-                          No queue entries found
-                        </TableCell>
-                      </TableRow>
-                    ) : (
-                      queueEntries.map((entry) => (
-                        <TableRow key={entry.id}>
-                          <TableCell className="font-medium">{entry.email_address}</TableCell>
-                          <TableCell className="font-mono text-xs">{entry.history_id}</TableCell>
-                          <TableCell>
-                            <Badge variant={
-                              entry.status === 'completed' ? 'default' :
-                              entry.status === 'failed' ? 'destructive' :
-                              entry.status === 'processing' ? 'secondary' :
-                              'outline'
-                            }>
-                              {entry.status}
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="text-sm text-muted-foreground">
-                            {new Date(entry.created_at).toLocaleString()}
-                          </TableCell>
-                          <TableCell className="text-sm text-muted-foreground">
-                            {entry.processed_at ? new Date(entry.processed_at).toLocaleString() : '-'}
-                          </TableCell>
-                          <TableCell>
-                            {entry.status === 'pending' && (
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                onClick={() => runManualProcessing(entry.id)}
-                                disabled={processingStatus === 'processing'}
-                              >
-                                <Zap className="h-3 w-3" />
-                              </Button>
-                            )}
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    )}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-
-            {/* Processing Logs Console */}
-            {processLogs.length > 0 && (
-              <Card className="lg:col-span-3">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <CardTitle>Processing Logs</CardTitle>
-                    <div className="flex gap-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={() => {
-                          const logsText = processLogs.map(log => 
-                            `[${new Date(log.timestamp).toLocaleTimeString()}] ${log.level.toUpperCase()}: ${log.message}`
-                          ).join('\n');
-                          navigator.clipboard.writeText(logsText);
-                          toast.success('Logs copied to clipboard');
-                        }}
-                      >
-                        <Copy className="h-4 w-4 mr-2" />
-                        Copy
-                      </Button>
-                      <Button variant="outline" size="sm" onClick={clearProcessLogs}>
-                        Clear
-                      </Button>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <ScrollArea className="h-[300px] w-full rounded-md border bg-muted/50 p-4">
-                    <div className="space-y-1 font-mono text-xs">
-                      {processLogs.map((log, idx) => (
-                        <div key={idx} className={getLogColor(log.level)}>
-                          <span className="text-muted-foreground">
-                            [{new Date(log.timestamp).toLocaleTimeString()}]
-                          </span>{' '}
-                          <span className="font-bold">{log.level.toUpperCase()}:</span> {log.message}
-                        </div>
-                      ))}
-                    </div>
-                  </ScrollArea>
-                </CardContent>
-              </Card>
-            )}
           </div>
         </TabsContent>
 
