@@ -52,32 +52,39 @@ serve(async (req) => {
       )
     }
 
-    // Get all users with plans
-    const { data: userPlans, error: plansError } = await supabaseAdmin
-      .from('user_plans')
-      .select('user_id, plan_type, is_active, subscription_start, created_at')
-      .order('created_at', { ascending: false })
-
-    if (plansError) {
-      throw plansError
-    }
-
-    // Get auth users
+    // Get ALL auth users first
     const { data: authData, error: usersError } = await supabaseAdmin.auth.admin.listUsers()
     
     if (usersError) {
       throw usersError
     }
 
-    // Combine the data
-    const usersWithEmails = (userPlans || []).map(plan => {
-      const authUser = authData.users.find(u => u.id === plan.user_id)
+    // Get all user plans
+    const { data: userPlans, error: plansError } = await supabaseAdmin
+      .from('user_plans')
+      .select('user_id, plan_type, is_active, subscription_start, created_at')
+
+    if (plansError) {
+      throw plansError
+    }
+
+    // Combine the data - include ALL auth users, even those without plan entries
+    const usersWithEmails = authData.users.map(authUser => {
+      const plan = (userPlans || []).find(p => p.user_id === authUser.id)
+      
       return {
-        ...plan,
-        email: authUser?.email || 'Unknown',
-        email_confirmed: authUser?.email_confirmed_at ? true : false
+        user_id: authUser.id,
+        email: authUser.email || 'Unknown',
+        plan_type: plan?.plan_type || 'free', // Default to 'free' if no plan entry
+        is_active: plan?.is_active ?? true,
+        subscription_start: plan?.subscription_start || authUser.created_at,
+        created_at: authUser.created_at,
+        email_confirmed: authUser.email_confirmed_at ? true : false
       }
     })
+    
+    // Sort by created_at descending
+    usersWithEmails.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
 
     return new Response(
       JSON.stringify({ users: usersWithEmails }),
