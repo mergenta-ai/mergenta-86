@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -62,7 +62,6 @@ interface GmailConnection {
 }
 
 const AdminDashboard: React.FC = () => {
-  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
   const [rssFeeds, setRSSFeeds] = useState<RSSFeed[]>([]);
   const [vendorQuotas, setVendorQuotas] = useState<VendorQuota[]>([]);
@@ -306,9 +305,11 @@ const AdminDashboard: React.FC = () => {
               Monitor and manage your LLM routing system
             </p>
           </div>
-          <Button onClick={() => navigate('/')} variant="outline" size="lg">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Home
+          <Button asChild variant="outline" size="lg">
+            <Link to="/">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Home
+            </Link>
           </Button>
         </div>
       </div>
