@@ -276,7 +276,7 @@ const MergentaSidebar = () => {
         </div>
 
         {/* Plan Badge */}
-        <div className="pt-2 pb-12 flex justify-center">
+        <div className="pt-4 pb-6 flex justify-center">
           <span
             className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold ring-1 shadow-md ${getPlanBadgeColor(planType)}`}
           >
