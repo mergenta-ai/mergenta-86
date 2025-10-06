@@ -446,7 +446,11 @@ async function createDraft(
     replyBody,
   ].join("\n");
 
-  const encodedMessage = btoa(rawMessage).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  // Properly encode UTF-8 to base64
+  const encoder = new TextEncoder();
+  const data = encoder.encode(rawMessage);
+  const binaryString = Array.from(data, byte => String.fromCharCode(byte)).join('');
+  const encodedMessage = btoa(binaryString).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 
   const draftResponse = await fetch("https://gmail.googleapis.com/gmail/v1/users/me/drafts", {
     method: "POST",
@@ -487,7 +491,11 @@ async function sendReply(
     replyBody,
   ].join("\n");
 
-  const encodedMessage = btoa(rawMessage).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  // Properly encode UTF-8 to base64
+  const encoder = new TextEncoder();
+  const data = encoder.encode(rawMessage);
+  const binaryString = Array.from(data, byte => String.fromCharCode(byte)).join('');
+  const encodedMessage = btoa(binaryString).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 
   const sendResponse = await fetch("https://gmail.googleapis.com/gmail/v1/users/me/messages/send", {
     method: "POST",

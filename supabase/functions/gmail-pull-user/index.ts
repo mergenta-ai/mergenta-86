@@ -305,7 +305,11 @@ async function createDraft(
     body,
   ].join("\r\n");
 
-  const encodedEmail = btoa(emailContent)
+  // Properly encode UTF-8 to base64
+  const encoder = new TextEncoder();
+  const data = encoder.encode(emailContent);
+  const binaryString = Array.from(data, byte => String.fromCharCode(byte)).join('');
+  const encodedEmail = btoa(binaryString)
     .replace(/\+/g, "-")
     .replace(/\//g, "_")
     .replace(/=+$/, "");
