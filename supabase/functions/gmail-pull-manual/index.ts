@@ -394,12 +394,12 @@ Generate a concise, professional response (max 500 words):`;
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "gpt-5-mini",
+      model: "gpt-5-mini-2025-08-07",
       messages: [
         { role: "system", content: "You are a professional email assistant." },
         { role: "user", content: prompt }
       ],
-      max_completion_tokens: 500,
+      max_completion_tokens: 1500,  // Increased to accommodate reasoning tokens + output
     }),
   });
 
