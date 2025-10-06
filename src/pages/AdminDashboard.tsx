@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -7,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
-import { Database, Globe, Zap, BarChart3, Settings, Mail, RefreshCw, Copy, CheckCircle, XCircle, Loader2 } from 'lucide-react';
+import { Database, Globe, Zap, BarChart3, Settings, Mail, RefreshCw, Copy, CheckCircle, XCircle, Loader2, ArrowLeft } from 'lucide-react';
 
 interface RSSFeed {
   id: string;
@@ -61,6 +62,7 @@ interface GmailConnection {
 }
 
 const AdminDashboard: React.FC = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
   const [rssFeeds, setRSSFeeds] = useState<RSSFeed[]>([]);
   const [vendorQuotas, setVendorQuotas] = useState<VendorQuota[]>([]);
@@ -294,13 +296,21 @@ const AdminDashboard: React.FC = () => {
   return (
     <div className="container mx-auto py-8 px-4 max-w-6xl">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold flex items-center gap-2">
-          <Settings className="h-8 w-8" />
-          Admin Dashboard
-        </h1>
-        <p className="text-muted-foreground mt-2">
-          Monitor and manage your LLM routing system
-        </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold flex items-center gap-2">
+              <Settings className="h-8 w-8" />
+              Admin Dashboard
+            </h1>
+            <p className="text-muted-foreground mt-2">
+              Monitor and manage your LLM routing system
+            </p>
+          </div>
+          <Button onClick={() => navigate('/')} variant="outline" size="lg">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Home
+          </Button>
+        </div>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
