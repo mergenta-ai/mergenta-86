@@ -73,6 +73,8 @@ const AdminDashboard: React.FC = () => {
   const [gmailConnections, setGmailConnections] = useState<GmailConnection[]>([]);
   const [testStatus, setTestStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
   const [autoRefresh, setAutoRefresh] = useState(false);
+  const [processingStatus, setProcessingStatus] = useState<'idle' | 'processing' | 'success' | 'error'>('idle');
+  const [processLogs, setProcessLogs] = useState<TestLog[]>([]);
 
   useEffect(() => {
     loadDashboardData();
@@ -235,6 +237,62 @@ const AdminDashboard: React.FC = () => {
   const clearLogs = () => {
     setTestLogs([]);
     setTestStatus('idle');
+  };
+
+  const runManualProcessing = async (queueId?: string) => {
+    try {
+      setProcessingStatus('processing');
+      setProcessLogs([]);
+      setAutoRefresh(true);
+
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error('Authentication required');
+        setProcessingStatus('error');
+        return;
+      }
+
+      const body = queueId ? { queue_id: queueId } : {};
+      const response = await supabase.functions.invoke('gmail-process-manual', {
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
+        body,
+      });
+
+      if (response.error) {
+        throw response.error;
+      }
+
+      const { logs, success, processed, successful } = response.data;
+      setProcessLogs(logs || []);
+
+      if (success) {
+        setProcessingStatus('success');
+        toast.success(`Processing complete: ${successful}/${processed} successful`);
+        await loadQueueEntries();
+      } else {
+        setProcessingStatus('error');
+        toast.error('Processing failed - check logs for details');
+      }
+
+    } catch (error: any) {
+      console.error('Error running manual processing:', error);
+      setProcessingStatus('error');
+      setProcessLogs(prev => [...prev, {
+        timestamp: new Date().toISOString(),
+        level: 'error',
+        message: error.message || 'Unknown error occurred'
+      }]);
+      toast.error('Processing failed');
+    } finally {
+      setTimeout(() => setAutoRefresh(false), 10000);
+    }
+  };
+
+  const clearProcessLogs = () => {
+    setProcessLogs([]);
+    setProcessingStatus('idle');
   };
 
   const getLogColor = (level: TestLog['level']) => {
@@ -624,7 +682,7 @@ const AdminDashboard: React.FC = () => {
               </CardContent>
             </Card>
 
-            {/* Processing Queue Monitor */}
+          {/* Processing Queue Monitor */}
             <Card className="lg:col-span-3">
               <CardHeader>
                 <div className="flex items-center justify-between">
@@ -636,6 +694,24 @@ const AdminDashboard: React.FC = () => {
                         Auto-refresh
                       </Badge>
                     )}
+                    <Button 
+                      variant="default" 
+                      size="sm" 
+                      onClick={() => runManualProcessing()}
+                      disabled={processingStatus === 'processing'}
+                    >
+                      {processingStatus === 'processing' ? (
+                        <>
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          Processing...
+                        </>
+                      ) : (
+                        <>
+                          <Zap className="h-4 w-4 mr-2" />
+                          Process Pending
+                        </>
+                      )}
+                    </Button>
                     <Button variant="outline" size="sm" onClick={loadQueueEntries}>
                       <RefreshCw className="h-4 w-4 mr-2" />
                       Refresh
@@ -652,12 +728,13 @@ const AdminDashboard: React.FC = () => {
                       <TableHead>Status</TableHead>
                       <TableHead>Created</TableHead>
                       <TableHead>Processed</TableHead>
+                      <TableHead>Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {queueEntries.length === 0 ? (
                       <TableRow>
-                        <TableCell colSpan={5} className="text-center text-muted-foreground">
+                        <TableCell colSpan={6} className="text-center text-muted-foreground">
                           No queue entries found
                         </TableCell>
                       </TableRow>
@@ -682,6 +759,18 @@ const AdminDashboard: React.FC = () => {
                           <TableCell className="text-sm text-muted-foreground">
                             {entry.processed_at ? new Date(entry.processed_at).toLocaleString() : '-'}
                           </TableCell>
+                          <TableCell>
+                            {entry.status === 'pending' && (
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => runManualProcessing(entry.id)}
+                                disabled={processingStatus === 'processing'}
+                              >
+                                <Zap className="h-3 w-3" />
+                              </Button>
+                            )}
+                          </TableCell>
                         </TableRow>
                       ))
                     )}
@@ -689,6 +778,50 @@ const AdminDashboard: React.FC = () => {
                 </Table>
               </CardContent>
             </Card>
+
+            {/* Processing Logs Console */}
+            {processLogs.length > 0 && (
+              <Card className="lg:col-span-3">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle>Processing Logs</CardTitle>
+                    <div className="flex gap-2">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => {
+                          const logsText = processLogs.map(log => 
+                            `[${new Date(log.timestamp).toLocaleTimeString()}] ${log.level.toUpperCase()}: ${log.message}`
+                          ).join('\n');
+                          navigator.clipboard.writeText(logsText);
+                          toast.success('Logs copied to clipboard');
+                        }}
+                      >
+                        <Copy className="h-4 w-4 mr-2" />
+                        Copy
+                      </Button>
+                      <Button variant="outline" size="sm" onClick={clearProcessLogs}>
+                        Clear
+                      </Button>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <ScrollArea className="h-[300px] w-full rounded-md border bg-muted/50 p-4">
+                    <div className="space-y-1 font-mono text-xs">
+                      {processLogs.map((log, idx) => (
+                        <div key={idx} className={getLogColor(log.level)}>
+                          <span className="text-muted-foreground">
+                            [{new Date(log.timestamp).toLocaleTimeString()}]
+                          </span>{' '}
+                          <span className="font-bold">{log.level.toUpperCase()}:</span> {log.message}
+                        </div>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </TabsContent>
 

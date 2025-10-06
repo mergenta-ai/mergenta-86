@@ -48,51 +48,54 @@ function checkRateLimit(userId: string): boolean {
 }
 
 /**
- * Process Gmail notification in background
+ * Background processing - invokes the gmail-worker function
+ * This runs asynchronously after we've acknowledged the Pub/Sub message
  */
 async function processNotification(
   supabase: any,
   queueId: string,
   userId: string,
-  historyId: string,
   emailAddress: string
 ) {
   try {
-    console.log(`[Background] Processing notification for user ${userId}, historyId: ${historyId}`);
+    console.log(`[BG] Starting background processing for queue ID: ${queueId}`);
+    console.log(`[BG] User: ${userId}, Email: ${emailAddress}`);
 
-    // Update status to processing
-    await supabase
-      .from('gmail_processing_queue')
-      .update({ 
-        status: 'processing',
-        processed_at: new Date().toISOString()
-      })
-      .eq('id', queueId);
+    // Invoke the gmail-worker function to process this queue entry
+    console.log(`[BG] Invoking gmail-worker function...`);
+    
+    const { data: workerResult, error: workerError } = await supabase.functions.invoke(
+      "gmail-worker",
+      {
+        body: { queue_id: queueId },
+      }
+    );
 
-    // TODO: Phase 3 will implement actual email fetching and processing
-    // For now, just mark as completed
-    console.log(`[Background] Notification processed successfully for user ${userId}`);
+    if (workerError) {
+      console.error(`[BG] Worker invocation failed:`, workerError);
+      throw workerError;
+    }
 
-    await supabase
-      .from('gmail_processing_queue')
-      .update({ 
-        status: 'completed',
-        processed_at: new Date().toISOString()
-      })
-      .eq('id', queueId);
+    console.log(`[BG] ✓ Worker completed successfully:`, workerResult);
+    console.log(`[BG] Messages processed: ${workerResult?.messages_processed || 0}`);
 
-  } catch (error) {
-    console.error(`[Background] Error processing notification:`, error);
+  } catch (error: any) {
+    console.error(`[BG] ✗ Background processing failed for queue ID: ${queueId}`, error);
 
-    // Update status to failed and increment retry count
-    await supabase
-      .from('gmail_processing_queue')
-      .update({ 
-        status: 'failed',
-        error_message: error instanceof Error ? error.message : 'Unknown error',
-        retry_count: supabase.rpc('increment', { x: 1 })
-      })
-      .eq('id', queueId);
+    // The worker function handles status updates, but if invocation itself fails,
+    // we need to mark it as failed here
+    try {
+      await supabase
+        .from("gmail_processing_queue")
+        .update({
+          status: "failed",
+          processed_at: new Date().toISOString(),
+          error_message: `Worker invocation failed: ${error.message}`,
+        })
+        .eq("id", queueId);
+    } catch (updateError) {
+      console.error(`[BG] Failed to update queue status:`, updateError);
+    }
   }
 }
 
@@ -233,7 +236,6 @@ Deno.serve(async (req) => {
           supabase,
           queueEntry.id,
           userId,
-          notification.historyId,
           notification.emailAddress
         )
       );
@@ -243,7 +245,6 @@ Deno.serve(async (req) => {
         supabase,
         queueEntry.id,
         userId,
-        notification.historyId,
         notification.emailAddress
       ).catch(err => console.error('Background processing error:', err));
     }
