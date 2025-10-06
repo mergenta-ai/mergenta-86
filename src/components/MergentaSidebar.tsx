@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Clock, FileText, Crown, HelpCircle, User, Plus, TrendingUp, Mail, Shield } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useUserRole } from '@/hooks/useUserRole';
+import { useUserPlan } from '@/hooks/useUserPlan';
+import { getPlanBadgeColor } from '@/config/modelConfig';
 import HistoryPanel from './sidebar/HistoryPanel';
 import PoliciesPanel from './sidebar/PoliciesPanel';
 import HelpPanel from './sidebar/HelpPanel';
@@ -23,6 +25,9 @@ const MergentaSidebar = () => {
   const [rssReaderCategory, setRSSReaderCategory] = useState<string>('');
   const navigate = useNavigate();
   const { canAccessAdmin } = useUserRole();
+  const { planType } = useUserPlan();
+  
+  const planDisplay = planType.charAt(0).toUpperCase() + planType.slice(1);
 
   // Handle mouse events
   const handleMouseEnter = (panel: string) => {
@@ -261,7 +266,7 @@ const MergentaSidebar = () => {
 
         {/* Profile Section */}
         <div 
-          className="relative pb-6"
+          className="relative pb-2"
           onMouseEnter={() => handleMouseEnter('profile')}
         >
           <Tooltip>
@@ -277,6 +282,13 @@ const MergentaSidebar = () => {
               <p>Profile</p>
             </TooltipContent>
           </Tooltip>
+        </div>
+        
+        {/* Plan Badge */}
+        <div className="pb-4 flex justify-center">
+          <span className={`inline-flex items-center px-2 py-1 rounded-full text-[10px] font-medium ring-1 shadow-sm ${getPlanBadgeColor(planType)}`}>
+            {planDisplay}
+          </span>
         </div>
       </div>
 
