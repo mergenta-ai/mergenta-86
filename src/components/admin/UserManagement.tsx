@@ -35,38 +35,14 @@ const UserManagement: React.FC = () => {
     try {
       setLoading(true);
 
-      // Get all users with their plans
-      const { data: usersData, error: usersError } = await supabase
-        .from('user_plans')
-        .select('user_id, plan_type, is_active, subscription_start, created_at')
-        .order('created_at', { ascending: false });
+      // Call edge function to get users with emails
+      const { data, error } = await supabase.functions.invoke('admin-list-users');
 
-      if (usersError) throw usersError;
-
-      // Get email addresses from auth.users
-      const userIds = usersData?.map(u => u.user_id) || [];
-      
-      // We can't directly query auth.users, so we'll need to get emails from profiles or another approach
-      // For now, let's use a service role query through an edge function or just show user IDs
-      // Alternative: Store emails in profiles table
-      
-      const { data: authUsers, error: authError } = await supabase.auth.admin.listUsers();
-      
-      if (authError) {
-        console.error('Error fetching auth users:', authError);
-        toast.error('Failed to load user emails');
+      if (error) {
+        throw error;
       }
 
-      const usersWithEmails = usersData?.map(user => {
-        const authUsersList = authUsers?.users || [];
-        const authUser = authUsersList.find((au: any) => au.id === user.user_id);
-        return {
-          ...user,
-          email: authUser?.email || 'Unknown'
-        } as UserWithPlan;
-      }) || [];
-
-      setUsers(usersWithEmails);
+      setUsers(data.users || []);
     } catch (error: any) {
       console.error('Error loading users:', error);
       toast.error('Failed to load users');
@@ -120,8 +96,7 @@ const UserManagement: React.FC = () => {
       <Alert>
         <AlertCircle className="h-4 w-4" />
         <AlertDescription>
-          Note: User email fetching requires admin privileges. If emails show as "Unknown", 
-          ensure you have the necessary permissions or use an edge function with service role access.
+          User management requires admin or moderator privileges. All registered users are displayed here.
         </AlertDescription>
       </Alert>
 
