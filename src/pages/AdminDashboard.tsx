@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
-import { Database, Globe, Zap, BarChart3, Settings, Mail, RefreshCw, Copy, CheckCircle, XCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { Database, Globe, Zap, BarChart3, Settings, Mail, RefreshCw, Copy, CheckCircle, XCircle, AlertCircle, Loader2, CheckCircle2 } from 'lucide-react';
 
 interface RSSFeed {
   id: string;
@@ -75,6 +75,8 @@ const AdminDashboard: React.FC = () => {
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [processingStatus, setProcessingStatus] = useState<'idle' | 'processing' | 'success' | 'error'>('idle');
   const [processLogs, setProcessLogs] = useState<TestLog[]>([]);
+  const [watchRefreshStatus, setWatchRefreshStatus] = useState<'idle' | 'refreshing' | 'success' | 'error'>('idle');
+  const [watchInfo, setWatchInfo] = useState<any>(null);
 
   useEffect(() => {
     loadDashboardData();
@@ -293,6 +295,33 @@ const AdminDashboard: React.FC = () => {
   const clearProcessLogs = () => {
     setProcessLogs([]);
     setProcessingStatus('idle');
+  };
+
+  const refreshGmailWatch = async () => {
+    try {
+      setWatchRefreshStatus('refreshing');
+      setWatchInfo(null);
+
+      const { data, error } = await supabase.functions.invoke('gmail-refresh-watch', {
+        headers: {
+          Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
+        },
+      });
+
+      if (error) throw error;
+
+      if (data.success) {
+        setWatchInfo(data);
+        setWatchRefreshStatus('success');
+        toast.success(`Gmail watch refreshed for ${data.email}`);
+      } else {
+        throw new Error(data.error || 'Failed to refresh watch');
+      }
+    } catch (error: any) {
+      console.error('Failed to refresh Gmail watch:', error);
+      setWatchRefreshStatus('error');
+      toast.error(error.message || 'Failed to refresh Gmail watch');
+    }
   };
 
   const getLogColor = (level: TestLog['level']) => {
@@ -580,6 +609,47 @@ const AdminDashboard: React.FC = () => {
 
         <TabsContent value="gmail-test" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Gmail Watch Status */}
+            <Card className="lg:col-span-3">
+              <CardHeader>
+                <CardTitle>Gmail Watch Status</CardTitle>
+                <CardDescription>
+                  Refresh Gmail watch to enable push notifications for new emails
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center gap-4">
+                  <Button
+                    onClick={refreshGmailWatch}
+                    disabled={watchRefreshStatus === 'refreshing'}
+                    variant="default"
+                  >
+                    {watchRefreshStatus === 'refreshing' && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    Refresh Gmail Watch
+                  </Button>
+                  {watchRefreshStatus === 'success' && (
+                    <Badge variant="default" className="bg-green-500">
+                      <CheckCircle className="mr-1 h-3 w-3" />
+                      Watch Active
+                    </Badge>
+                  )}
+                  {watchRefreshStatus === 'error' && (
+                    <Badge variant="destructive">
+                      <XCircle className="mr-1 h-3 w-3" />
+                      Failed
+                    </Badge>
+                  )}
+                </div>
+                {watchInfo && (
+                  <div className="bg-muted p-4 rounded-lg space-y-2 text-sm">
+                    <div><strong>Email:</strong> {watchInfo.email}</div>
+                    <div><strong>History ID:</strong> {watchInfo.historyId}</div>
+                    <div><strong>Expires:</strong> {new Date(parseInt(watchInfo.expiration)).toLocaleString()}</div>
+                    <div className="text-green-600 dark:text-green-400">{watchInfo.message}</div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
             {/* Quick Test Panel */}
             <Card className="lg:col-span-3">
               <CardHeader>

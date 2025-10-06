@@ -86,3 +86,6 @@ verify_jwt = false
 
 [functions.gmail-process-manual]
 verify_jwt = true
+
+[functions.gmail-refresh-watch]
+verify_jwt = true
