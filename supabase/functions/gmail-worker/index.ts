@@ -88,12 +88,67 @@ Deno.serve(async (req) => {
 
     // Fetch Gmail history changes
     console.log(`[WORKER] Fetching history from: ${queueEntry.history_id}`);
-    const historyResponse = await fetch(
+    let historyResponse = await fetch(
       `https://gmail.googleapis.com/gmail/v1/users/me/history?startHistoryId=${queueEntry.history_id}&historyTypes=messageAdded`,
       {
         headers: { Authorization: `Bearer ${accessToken}` },
       }
     );
+
+    // If history ID is invalid (404), use the stored history_id from connection or get current one
+    if (historyResponse.status === 404) {
+      console.log("[WORKER] History ID not found (likely test data), using connection's history_id");
+      
+      if (connection.history_id && connection.history_id !== queueEntry.history_id) {
+        console.log(`[WORKER] Trying with connection's history_id: ${connection.history_id}`);
+        historyResponse = await fetch(
+          `https://gmail.googleapis.com/gmail/v1/users/me/history?startHistoryId=${connection.history_id}&historyTypes=messageAdded`,
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          }
+        );
+      }
+      
+      // If still 404, get the current profile to establish a baseline
+      if (historyResponse.status === 404) {
+        console.log("[WORKER] Fetching current profile to get valid history ID");
+        const profileResponse = await fetch(
+          "https://gmail.googleapis.com/gmail/v1/users/me/profile",
+          { headers: { Authorization: `Bearer ${accessToken}` } }
+        );
+        
+        if (profileResponse.ok) {
+          const profile = await profileResponse.json();
+          console.log(`[WORKER] Current history ID from profile: ${profile.historyId}`);
+          
+          // Update the connection with the current history ID
+          await supabase
+            .from("gmail_connections")
+            .update({ history_id: profile.historyId })
+            .eq("id", connection.id);
+          
+          console.log("[WORKER] No new messages to process (established baseline)");
+          
+          // Mark as completed since we've established a baseline
+          await supabase
+            .from("gmail_processing_queue")
+            .update({
+              status: "completed",
+              processed_at: new Date().toISOString(),
+            })
+            .eq("id", queue_id);
+          
+          return new Response(
+            JSON.stringify({
+              success: true,
+              messages_processed: 0,
+              note: "Baseline established, no messages to process",
+            }),
+            { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+      }
+    }
 
     if (!historyResponse.ok) {
       const errorText = await historyResponse.text();
