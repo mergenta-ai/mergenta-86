@@ -400,7 +400,6 @@ Generate a concise, professional response (max 500 words):`;
         { role: "user", content: prompt }
       ],
       max_completion_tokens: 500,
-      temperature: 0.7,
     }),
   });
 

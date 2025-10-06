@@ -263,7 +263,6 @@ async function generateEmailResponse(emailSnippet: string, fromEmail: string): P
         { role: "user", content: prompt }
       ],
       max_completion_tokens: 500,
-      temperature: 0.7,
     }),
   });
 
