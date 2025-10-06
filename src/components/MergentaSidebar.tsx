@@ -266,7 +266,7 @@ const MergentaSidebar = () => {
 
         {/* Profile Section */}
         <div 
-          className="relative pb-2"
+          className="relative pb-3"
           onMouseEnter={() => handleMouseEnter('profile')}
         >
           <Tooltip>
@@ -285,8 +285,8 @@ const MergentaSidebar = () => {
         </div>
         
         {/* Plan Badge */}
-        <div className="pb-6 flex justify-center">
-          <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold ring-1 shadow-md ${getPlanBadgeColor(planType)}`}>
+        <div className="pt-2 pb-6 flex justify-center">
+          <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold ring-1 shadow-md ${getPlanBadgeColor(planType)}`}>
             {planDisplay}
           </span>
         </div>
