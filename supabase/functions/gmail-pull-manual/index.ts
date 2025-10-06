@@ -347,6 +347,7 @@ async function processMessage(
 
   // Generate AI response
   const aiResponse = await generateEmailResponse(subject, from, body);
+  console.log(`[INFO] Generated AI response length: ${aiResponse.length} chars`);
 
   // Create draft or send based on settings
   if (connection.auto_reply_enabled && connection.default_reply_mode === "send") {
@@ -425,6 +426,8 @@ async function createDraft(
     `Subject: Re: ${subject}`,
     `In-Reply-To: ${messageId}`,
     `References: ${messageId}`,
+    `Content-Type: text/plain; charset="UTF-8"`,
+    `MIME-Version: 1.0`,
     "",
     replyBody,
   ].join("\n");
@@ -464,6 +467,8 @@ async function sendReply(
     `Subject: Re: ${subject}`,
     `In-Reply-To: ${messageId}`,
     `References: ${messageId}`,
+    `Content-Type: text/plain; charset="UTF-8"`,
+    `MIME-Version: 1.0`,
     "",
     replyBody,
   ].join("\n");
