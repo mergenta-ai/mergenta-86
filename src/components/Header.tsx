@@ -32,12 +32,16 @@ const Header = () => {
       </h1>
 
       {/* Sleek tagline pill */}
-      <div className="mt-2 mb-2 flex items-center gap-2">
+      <div className="mt-2 mb-1 flex items-center justify-center">
         <span className="inline-flex items-center px-4 py-1 rounded-full
                          bg-white/95 text-[#444] shadow-sm
                          ring-1 ring-[#6A0DAD]/15 text-sm md:text-base">
           {currentTagline}
         </span>
+      </div>
+      
+      {/* Plan badge below */}
+      <div className="mb-2">
         <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ring-1 shadow-sm ${getPlanBadgeColor(planType)}`}>
           {planDisplay} Plan
         </span>
