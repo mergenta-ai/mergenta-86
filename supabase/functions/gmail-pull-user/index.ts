@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { decrypt } from "../_shared/encryption.ts";
+import { processEmail } from "../_shared/email-processor.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -67,7 +68,7 @@ serve(async (req) => {
     const emails = await fetchEmails(currentAccessToken);
     console.log(`[INFO] Fetched ${emails.length} emails`);
 
-    // Process each email
+    // Process each email with shared processor
     let processed = 0;
     let skipped = 0;
     const results = [];
@@ -87,41 +88,62 @@ serve(async (req) => {
           continue;
         }
 
-        // Generate AI response
-        const aiResponse = await generateEmailResponse(email.snippet, email.from);
+        console.log(`[INFO] Processing email from ${email.from}: ${email.subject}`);
 
-        // Create draft in Gmail
-        const draft = await createDraft(
+        // Use shared processor with sender rules
+        const result = await processEmail(
+          supabaseClient,
+          user.id,
+          {
+            id: email.id,
+            threadId: email.threadId,
+            sender: email.from,
+            senderName: email.from.split('<')[0].trim(),
+            subject: email.subject,
+            body: email.snippet,
+            snippet: email.snippet,
+          },
           currentAccessToken,
-          email.id,
-          email.from,
-          email.subject,
-          aiResponse
+          connection.default_reply_mode || 'draft',
+          'pull_user'
         );
 
-        // Save to database
+        // Save to messages table for backward compatibility
         await supabaseClient.from("messages").insert({
           user_id: user.id,
           conversation_id: email.threadId || email.id,
-          content: aiResponse,
+          content: email.snippet,
           is_user: false,
           metadata: {
             gmail_message_id: email.id,
             gmail_thread_id: email.threadId,
-            draft_id: draft.id,
+            draft_id: result.draftId,
+            message_sent_id: result.messageSentId,
             original_from: email.from,
             original_subject: email.subject,
+            action: result.action,
+            rule_applied: result.ruleApplied?.sender_name,
           },
         });
 
-        processed++;
+        if (result.action !== 'ignored') {
+          processed++;
+        } else {
+          skipped++;
+        }
+
         results.push({
           from: email.from,
           subject: email.subject,
-          status: "processed",
+          status: result.action === 'failed' ? 'failed' : 'processed',
+          action: result.action,
+          rule: result.ruleApplied?.sender_name,
+          draft_id: result.draftId,
+          message_sent_id: result.messageSentId,
+          error: result.error,
         });
 
-        console.log(`[INFO] Processed email from ${email.from}`);
+        console.log(`[INFO] Processed email: ${result.action}`);
       } catch (error) {
         console.error(`[ERROR] Failed to process email:`, error);
         results.push({
@@ -238,102 +260,4 @@ async function fetchEmails(accessToken: string) {
   }
 
   return emails;
-}
-
-async function generateEmailResponse(emailSnippet: string, fromEmail: string): Promise<string> {
-  const openaiApiKey = Deno.env.get("OPENAI_API_KEY");
-  if (!openaiApiKey) {
-    throw new Error("OpenAI API key not configured");
-  }
-
-  const prompt = `You received an email from ${fromEmail}. Email content: "${emailSnippet}". Write a professional, concise reply.`;
-
-  console.log(`[INFO] Generating AI response for email from ${fromEmail}`);
-
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${openaiApiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model: "gpt-5-mini-2025-08-07",
-      messages: [
-        { role: "system", content: "You are a professional email assistant." },
-        { role: "user", content: prompt }
-      ],
-      max_completion_tokens: 3000,  // Increased for high-volume usage with multiple users
-    }),
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error(`[ERROR] OpenAI API failed: ${response.status}`);
-    console.error(`[ERROR] Response body: ${errorText}`);
-    throw new Error(`OpenAI API error: ${response.status} - ${errorText}`);
-  }
-
-  const data = await response.json();
-  console.log(`[DEBUG] OpenAI response:`, JSON.stringify(data));
-  
-  if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-    console.error(`[ERROR] Invalid OpenAI response structure`);
-    throw new Error("Invalid OpenAI response structure");
-  }
-  
-  const content = data.choices[0].message.content?.trim() || "";
-  if (content.length === 0) {
-    console.warn(`[WARNING] OpenAI returned empty content`);
-  }
-  
-  console.log(`[INFO] Generated AI response length: ${content.length} chars`);
-  return content;
-}
-
-async function createDraft(
-  accessToken: string,
-  messageId: string,
-  to: string,
-  subject: string,
-  body: string
-) {
-  const emailContent = [
-    `To: ${to}`,
-    `Subject: Re: ${subject}`,
-    `Content-Type: text/plain; charset=utf-8`,
-    "",
-    body,
-  ].join("\r\n");
-
-  // Properly encode UTF-8 to base64
-  const encoder = new TextEncoder();
-  const data = encoder.encode(emailContent);
-  const binaryString = Array.from(data, byte => String.fromCharCode(byte)).join('');
-  const encodedEmail = btoa(binaryString)
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=+$/, "");
-
-  const response = await fetch(
-    "https://gmail.googleapis.com/gmail/v1/users/me/drafts",
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        message: {
-          raw: encodedEmail,
-          threadId: messageId,
-        },
-      }),
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error("Failed to create draft");
-  }
-
-  return await response.json();
 }

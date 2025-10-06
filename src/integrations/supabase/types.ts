@@ -164,6 +164,164 @@ export type Database = {
         }
         Relationships: []
       }
+      email_processing_log: {
+        Row: {
+          action_taken: Database["public"]["Enums"]["action_taken"]
+          ai_tokens_used: number | null
+          created_at: string
+          error_message: string | null
+          gmail_draft_id: string | null
+          gmail_message_id: string
+          gmail_message_sent_id: string | null
+          id: string
+          processing_mode: Database["public"]["Enums"]["processing_trigger_mode"]
+          processing_time_ms: number | null
+          rule_applied_id: string | null
+          rule_applied_name: string | null
+          sender_email: string
+          sender_name: string | null
+          subject: string | null
+          user_id: string
+        }
+        Insert: {
+          action_taken: Database["public"]["Enums"]["action_taken"]
+          ai_tokens_used?: number | null
+          created_at?: string
+          error_message?: string | null
+          gmail_draft_id?: string | null
+          gmail_message_id: string
+          gmail_message_sent_id?: string | null
+          id?: string
+          processing_mode: Database["public"]["Enums"]["processing_trigger_mode"]
+          processing_time_ms?: number | null
+          rule_applied_id?: string | null
+          rule_applied_name?: string | null
+          sender_email: string
+          sender_name?: string | null
+          subject?: string | null
+          user_id: string
+        }
+        Update: {
+          action_taken?: Database["public"]["Enums"]["action_taken"]
+          ai_tokens_used?: number | null
+          created_at?: string
+          error_message?: string | null
+          gmail_draft_id?: string | null
+          gmail_message_id?: string
+          gmail_message_sent_id?: string | null
+          id?: string
+          processing_mode?: Database["public"]["Enums"]["processing_trigger_mode"]
+          processing_time_ms?: number | null
+          rule_applied_id?: string | null
+          rule_applied_name?: string | null
+          sender_email?: string
+          sender_name?: string | null
+          subject?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_processing_log_rule_applied_id_fkey"
+            columns: ["rule_applied_id"]
+            isOneToOne: false
+            referencedRelation: "email_sender_rules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      email_processing_stats: {
+        Row: {
+          avg_processing_time_ms: number
+          created_at: string
+          date: string
+          drafts_created: number
+          emails_sent: number
+          id: string
+          total_failed: number
+          total_ignored: number
+          total_processed: number
+          total_tokens_used: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avg_processing_time_ms?: number
+          created_at?: string
+          date?: string
+          drafts_created?: number
+          emails_sent?: number
+          id?: string
+          total_failed?: number
+          total_ignored?: number
+          total_processed?: number
+          total_tokens_used?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avg_processing_time_ms?: number
+          created_at?: string
+          date?: string
+          drafts_created?: number
+          emails_sent?: number
+          id?: string
+          total_failed?: number
+          total_ignored?: number
+          total_processed?: number
+          total_tokens_used?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      email_sender_rules: {
+        Row: {
+          action: Database["public"]["Enums"]["email_action"]
+          apply_to_mode: Database["public"]["Enums"]["apply_to_mode"]
+          created_at: string
+          custom_prompt: string | null
+          id: string
+          is_active: boolean
+          priority: number
+          reply_mode: string | null
+          sender_email: string
+          sender_name: string | null
+          sender_pattern_type: Database["public"]["Enums"]["sender_pattern_type"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          action?: Database["public"]["Enums"]["email_action"]
+          apply_to_mode?: Database["public"]["Enums"]["apply_to_mode"]
+          created_at?: string
+          custom_prompt?: string | null
+          id?: string
+          is_active?: boolean
+          priority?: number
+          reply_mode?: string | null
+          sender_email: string
+          sender_name?: string | null
+          sender_pattern_type?: Database["public"]["Enums"]["sender_pattern_type"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          action?: Database["public"]["Enums"]["email_action"]
+          apply_to_mode?: Database["public"]["Enums"]["apply_to_mode"]
+          created_at?: string
+          custom_prompt?: string | null
+          id?: string
+          is_active?: boolean
+          priority?: number
+          reply_mode?: string | null
+          sender_email?: string
+          sender_name?: string | null
+          sender_pattern_type?: Database["public"]["Enums"]["sender_pattern_type"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       email_usage: {
         Row: {
           created_at: string | null
@@ -296,6 +454,7 @@ export type Database = {
           history_id: string | null
           id: string
           last_synced_at: string | null
+          processing_mode: Database["public"]["Enums"]["processing_mode"]
           token_expires_at: string
           updated_at: string | null
           user_id: string
@@ -311,6 +470,7 @@ export type Database = {
           history_id?: string | null
           id?: string
           last_synced_at?: string | null
+          processing_mode?: Database["public"]["Enums"]["processing_mode"]
           token_expires_at: string
           updated_at?: string | null
           user_id: string
@@ -326,6 +486,7 @@ export type Database = {
           history_id?: string | null
           id?: string
           last_synced_at?: string | null
+          processing_mode?: Database["public"]["Enums"]["processing_mode"]
           token_expires_at?: string
           updated_at?: string | null
           user_id?: string
@@ -1063,10 +1224,16 @@ export type Database = {
       }
     }
     Enums: {
+      action_taken: "replied_draft" | "replied_sent" | "ignored" | "failed"
       app_role: "admin" | "moderator" | "user"
+      apply_to_mode: "both" | "pull" | "push"
+      email_action: "reply" | "ignore" | "forward" | "flag"
       plan_type: "free" | "pro" | "zip" | "ace" | "max"
+      processing_mode: "pull" | "push" | "hybrid"
       processing_status: "pending" | "processing" | "completed" | "failed"
+      processing_trigger_mode: "pull_manual" | "pull_user" | "push_worker"
       quota_type: "daily" | "monthly" | "per_card" | "per_vendor"
+      sender_pattern_type: "exact" | "domain" | "wildcard"
       vendor_type:
         | "openai"
         | "anthropic"
@@ -1206,10 +1373,16 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      action_taken: ["replied_draft", "replied_sent", "ignored", "failed"],
       app_role: ["admin", "moderator", "user"],
+      apply_to_mode: ["both", "pull", "push"],
+      email_action: ["reply", "ignore", "forward", "flag"],
       plan_type: ["free", "pro", "zip", "ace", "max"],
+      processing_mode: ["pull", "push", "hybrid"],
       processing_status: ["pending", "processing", "completed", "failed"],
+      processing_trigger_mode: ["pull_manual", "pull_user", "push_worker"],
       quota_type: ["daily", "monthly", "per_card", "per_vendor"],
+      sender_pattern_type: ["exact", "domain", "wildcard"],
       vendor_type: [
         "openai",
         "anthropic",

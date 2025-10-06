@@ -9,6 +9,9 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Mail, RefreshCw, CheckCircle, AlertCircle, ArrowLeft, Settings } from "lucide-react";
+import { SenderRulesPanel } from "@/components/email/SenderRulesPanel";
+import { ProcessingHistory } from "@/components/email/ProcessingHistory";
+import { ProcessingStats } from "@/components/email/ProcessingStats";
 
 export default function EmailDashboard() {
   const navigate = useNavigate();
@@ -196,6 +199,9 @@ export default function EmailDashboard() {
 
           {connection && (
             <>
+              {/* Sender Rules */}
+              <SenderRulesPanel />
+
               {/* Pull Emails */}
               <Card>
                 <CardHeader>
@@ -301,6 +307,12 @@ export default function EmailDashboard() {
                   </div>
                 </CardContent>
               </Card>
+
+              {/* Processing History */}
+              <ProcessingHistory />
+
+              {/* Statistics */}
+              <ProcessingStats />
             </>
           )}
         </div>
