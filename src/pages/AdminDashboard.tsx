@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
-import { Database, Globe, Zap, BarChart3, Settings, Mail, RefreshCw, Copy, CheckCircle, XCircle, AlertCircle, Loader2, CheckCircle2 } from 'lucide-react';
+import { Database, Globe, Zap, BarChart3, Settings, Mail, RefreshCw, Copy, CheckCircle, XCircle, Loader2 } from 'lucide-react';
 
 interface RSSFeed {
   id: string;
@@ -68,10 +68,8 @@ const AdminDashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   
   // Gmail testing state
-  const [testLogs, setTestLogs] = useState<TestLog[]>([]);
   const [queueEntries, setQueueEntries] = useState<QueueEntry[]>([]);
   const [gmailConnections, setGmailConnections] = useState<GmailConnection[]>([]);
-  const [testStatus, setTestStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [processingStatus, setProcessingStatus] = useState<'idle' | 'processing' | 'success' | 'error'>('idle');
   const [processLogs, setProcessLogs] = useState<TestLog[]>([]);
@@ -179,67 +177,6 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  const runGmailPullTest = async () => {
-    try {
-      setTestStatus('testing');
-      setTestLogs([]);
-      setAutoRefresh(true);
-
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        toast.error('Authentication required');
-        setTestStatus('error');
-        return;
-      }
-
-      const response = await supabase.functions.invoke('gmail-pull-test', {
-        headers: {
-          Authorization: `Bearer ${session.access_token}`,
-        },
-      });
-
-      if (response.error) {
-        throw response.error;
-      }
-
-      const { logs, success, result } = response.data;
-      setTestLogs(logs || []);
-
-      if (success) {
-        setTestStatus('success');
-        toast.success('Test completed successfully!');
-        await loadQueueEntries();
-      } else {
-        setTestStatus('error');
-        toast.error('Test failed - check logs for details');
-      }
-
-    } catch (error: any) {
-      console.error('Error running test:', error);
-      setTestStatus('error');
-      setTestLogs(prev => [...prev, {
-        timestamp: new Date().toISOString(),
-        level: 'error',
-        message: error.message || 'Unknown error occurred'
-      }]);
-      toast.error('Test failed');
-    } finally {
-      setTimeout(() => setAutoRefresh(false), 10000);
-    }
-  };
-
-  const copyLogs = () => {
-    const logsText = testLogs.map(log => 
-      `[${new Date(log.timestamp).toLocaleTimeString()}] ${log.level.toUpperCase()}: ${log.message}`
-    ).join('\n');
-    navigator.clipboard.writeText(logsText);
-    toast.success('Logs copied to clipboard');
-  };
-
-  const clearLogs = () => {
-    setTestLogs([]);
-    setTestStatus('idle');
-  };
 
   const runManualProcessing = async (queueId?: string) => {
     try {
@@ -334,14 +271,6 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  const getStatusIcon = () => {
-    switch (testStatus) {
-      case 'testing': return <Loader2 className="h-4 w-4 animate-spin" />;
-      case 'success': return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 'error': return <XCircle className="h-4 w-4 text-red-500" />;
-      default: return <AlertCircle className="h-4 w-4 text-muted-foreground" />;
-    }
-  };
 
   const categoryStats = rssFeeds.reduce((acc, feed) => {
     const category = feed.category || 'Uncategorized';
@@ -610,12 +539,15 @@ const AdminDashboard: React.FC = () => {
 
         <TabsContent value="gmail-test" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Pull New Emails */}
+            {/* Pull New Emails - Main Action */}
             <Card className="lg:col-span-3">
               <CardHeader>
-                <CardTitle>Pull New Emails (Manual Mode)</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <RefreshCw className="h-5 w-5" />
+                  Pull New Emails
+                </CardTitle>
                 <CardDescription>
-                  Manually fetch and process new emails from Gmail
+                  Fetch new emails from Gmail, generate AI responses, and create drafts
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -624,6 +556,7 @@ const AdminDashboard: React.FC = () => {
                     onClick={pullNewEmails}
                     disabled={pullStatus === 'pulling'}
                     variant="default"
+                    size="lg"
                   >
                     {pullStatus === 'pulling' && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     <RefreshCw className="mr-2 h-4 w-4" />
@@ -660,82 +593,6 @@ const AdminDashboard: React.FC = () => {
                     )}
                   </div>
                 )}
-              </CardContent>
-            </Card>
-            {/* Quick Test Panel */}
-            <Card className="lg:col-span-3">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Mail className="h-5 w-5" />
-                  Gmail Pull Test
-                </CardTitle>
-                <CardDescription>
-                  Test the Gmail Pub/Sub PULL flow without using gcloud CLI
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center gap-4">
-                  <Button 
-                    onClick={runGmailPullTest} 
-                    disabled={testStatus === 'testing'}
-                    size="lg"
-                  >
-                    {testStatus === 'testing' ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Testing...
-                      </>
-                    ) : (
-                      <>
-                        📩 Pull Test Message
-                      </>
-                    )}
-                  </Button>
-                  <div className="flex items-center gap-2">
-                    {getStatusIcon()}
-                    <span className="text-sm text-muted-foreground capitalize">
-                      {testStatus}
-                    </span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Test Console */}
-            <Card className="lg:col-span-2">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle>Test Console</CardTitle>
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm" onClick={copyLogs} disabled={testLogs.length === 0}>
-                      <Copy className="h-4 w-4 mr-2" />
-                      Copy
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={clearLogs} disabled={testLogs.length === 0}>
-                      Clear
-                    </Button>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <ScrollArea className="h-[300px] w-full rounded-md border bg-muted/50 p-4">
-                  {testLogs.length === 0 ? (
-                    <p className="text-sm text-muted-foreground text-center py-8">
-                      No logs yet. Click "Pull Test Message" to start testing.
-                    </p>
-                  ) : (
-                    <div className="space-y-1 font-mono text-xs">
-                      {testLogs.map((log, idx) => (
-                        <div key={idx} className={getLogColor(log.level)}>
-                          <span className="text-muted-foreground">
-                            [{new Date(log.timestamp).toLocaleTimeString()}]
-                          </span>{' '}
-                          <span className="font-bold">{log.level.toUpperCase()}:</span> {log.message}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </ScrollArea>
               </CardContent>
             </Card>
 
