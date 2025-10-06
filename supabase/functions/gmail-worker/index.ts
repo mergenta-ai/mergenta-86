@@ -312,9 +312,9 @@ async function generateEmailResponse(
   from: string,
   body: string
 ): Promise<string> {
-  const geminiKey = Deno.env.get("GEMINI_API_KEY");
-  if (!geminiKey) {
-    throw new Error("GEMINI_API_KEY not configured");
+  const openaiKey = Deno.env.get("OPENAI_API_KEY");
+  if (!openaiKey) {
+    throw new Error("OPENAI_API_KEY not configured");
   }
 
   const prompt = `You are an AI email assistant. Generate a professional, concise reply to the following email.
@@ -328,24 +328,32 @@ ${body.substring(0, 1000)}
 Generate a polite, professional response that acknowledges the email and provides a helpful reply. Keep it under 200 words.`;
 
   const response = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${geminiKey}`,
+    "https://api.openai.com/v1/chat/completions",
     {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Authorization": `Bearer ${openaiKey}`,
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
+        model: "gpt-5-2025-08-07",
+        messages: [
+          { role: "system", content: "You are a professional email assistant." },
+          { role: "user", content: prompt }
+        ],
+        max_completion_tokens: 500
       }),
     }
   );
 
   if (!response.ok) {
     const errorText = await response.text();
-    console.error("[WORKER] Gemini API error:", errorText);
+    console.error("[WORKER] OpenAI API error:", errorText);
     throw new Error("Failed to generate AI response");
   }
 
   const data = await response.json();
-  return data.candidates[0].content.parts[0].text;
+  return data.choices[0].message.content;
 }
 
 async function createDraft(
