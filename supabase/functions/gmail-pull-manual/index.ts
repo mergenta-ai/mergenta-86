@@ -399,7 +399,7 @@ Generate a concise, professional response (max 500 words):`;
         { role: "system", content: "You are a professional email assistant." },
         { role: "user", content: prompt }
       ],
-      max_completion_tokens: 1500,  // Increased to accommodate reasoning tokens + output
+      max_completion_tokens: 3000,  // Increased for high-volume usage with multiple users
     }),
   });
 
