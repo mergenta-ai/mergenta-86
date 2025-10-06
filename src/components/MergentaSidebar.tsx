@@ -111,7 +111,7 @@ const MergentaSidebar = () => {
         </div>
 
         {/* New Chat Icon */}
-        <div className="relative mb-4">
+        <div className="relative mb-2">
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -129,7 +129,7 @@ const MergentaSidebar = () => {
         </div>
 
         {/* Trending Icon */}
-        <div className="relative mb-4">
+        <div className="relative mb-2">
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -147,7 +147,7 @@ const MergentaSidebar = () => {
         </div>
 
         {/* Email Icon */}
-        <div className="relative mb-4">
+        <div className="relative mb-2">
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -166,7 +166,7 @@ const MergentaSidebar = () => {
 
         {/* Admin Panel Icon - Only visible to admin/moderator */}
         {canAccessAdmin && (
-          <div className="relative mb-4">
+          <div className="relative mb-2">
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
@@ -185,7 +185,7 @@ const MergentaSidebar = () => {
         )}
 
         {/* History Icon */}
-        <div className="relative mb-4" onMouseEnter={() => handleMouseEnter("history")}>
+        <div className="relative mb-2" onMouseEnter={() => handleMouseEnter("history")}>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -202,7 +202,7 @@ const MergentaSidebar = () => {
         </div>
 
         {/* Middle Section - Main Icons */}
-        <div className="flex flex-col justify-start space-y-4">
+        <div className="flex flex-col justify-start space-y-2">
           {/* Policies */}
           <div className="relative" onMouseEnter={() => handleMouseEnter("policies")}>
             <Tooltip>
@@ -259,7 +259,7 @@ const MergentaSidebar = () => {
         <div className="flex-1"></div>
 
         {/* Profile Section */}
-        <div className="relative pb-3" onMouseEnter={() => handleMouseEnter("profile")}>
+        <div className="relative pb-1" onMouseEnter={() => handleMouseEnter("profile")}>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -276,7 +276,7 @@ const MergentaSidebar = () => {
         </div>
 
         {/* Plan Badge */}
-        <div className="pt-4 pb-6 flex justify-center">
+        <div className="pb-6 flex justify-center">
           <span
             className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold ring-1 shadow-md ${getPlanBadgeColor(planType)}`}
           >
