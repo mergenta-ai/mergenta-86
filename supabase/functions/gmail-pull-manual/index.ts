@@ -394,22 +394,37 @@ Generate a concise, professional response (max 500 words):`;
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "gpt-5-2025-08-07",
+      model: "gpt-5-mini",
       messages: [
         { role: "system", content: "You are a professional email assistant." },
         { role: "user", content: prompt }
       ],
       max_completion_tokens: 500,
+      temperature: 0.7,
     }),
   });
 
   if (!response.ok) {
     const errorText = await response.text();
+    console.error(`[ERROR] OpenAI API failed: ${response.status}`);
+    console.error(`[ERROR] Response body: ${errorText}`);
     throw new Error(`OpenAI API error: ${response.status} - ${errorText}`);
   }
 
   const data = await response.json();
-  return data.choices[0].message.content.trim();
+  console.log(`[DEBUG] OpenAI response:`, JSON.stringify(data));
+  
+  if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+    console.error(`[ERROR] Invalid OpenAI response structure`);
+    throw new Error("Invalid OpenAI response structure");
+  }
+  
+  const content = data.choices[0].message.content?.trim() || "";
+  if (content.length === 0) {
+    console.warn(`[WARNING] OpenAI returned empty content`);
+  }
+  
+  return content;
 }
 
 async function createDraft(
