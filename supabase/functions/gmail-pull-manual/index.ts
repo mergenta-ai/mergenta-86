@@ -68,135 +68,199 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
-    // Get active Gmail connection
-    const { data: connection, error: connError } = await adminSupabase
+    // Get ALL active Gmail connections
+    const { data: connections, error: connError } = await adminSupabase
       .from("gmail_connections")
-      .select("*")
-      .eq("user_id", user.id)
-      .single();
+      .select("*");
 
-    if (connError || !connection) {
-      throw new Error("No active Gmail connection found");
+    if (connError || !connections || connections.length === 0) {
+      throw new Error("No Gmail connections found in the system");
     }
 
-    log("info", `Found Gmail connection for: ${connection.gmail_email}`);
+    log("info", `Found ${connections.length} Gmail connection(s) to process`);
 
-    // Decrypt and refresh access token if needed
-    let accessToken = decrypt(connection.encrypted_access_token);
-    const expiresAt = new Date(connection.token_expires_at);
+    const accountsProcessed = [];
+    let totalMessagesProcessed = 0;
 
-    if (expiresAt <= new Date()) {
-      log("info", "Access token expired, refreshing...");
-      accessToken = await refreshAccessToken(adminSupabase, connection);
-      log("success", "Access token refreshed");
-    }
+    // Process each Gmail connection
+    for (const connection of connections) {
+      const accountLog: string[] = [];
+      const accountLogger = (level: string, message: string) => {
+        accountLog.push(`[${level.toUpperCase()}] ${message}`);
+        log(level, `[${connection.gmail_email}] ${message}`);
+      };
 
-    // Fetch email history from Gmail - initialize if needed
-    let startHistoryId = connection.history_id;
-    
-    // If no history_id, establish baseline
-    if (!startHistoryId) {
-      log("info", "No history_id found, establishing baseline...");
-      const profileUrl = `https://gmail.googleapis.com/gmail/v1/users/me/profile`;
-      const profileResponse = await fetch(profileUrl, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
-
-      if (!profileResponse.ok) {
-        throw new Error(`Failed to fetch Gmail profile: ${profileResponse.status}`);
-      }
-
-      const profileData = await profileResponse.json();
-      startHistoryId = profileData.historyId;
-
-      // Update connection with baseline history_id
-      await adminSupabase
-        .from("gmail_connections")
-        .update({
-          history_id: startHistoryId,
-          last_synced_at: new Date().toISOString(),
-        })
-        .eq("id", connection.id);
-
-      log("success", `Baseline established with history_id: ${startHistoryId}`);
-      
-      return new Response(
-        JSON.stringify({
-          success: true,
-          logs,
-          message: "Baseline established. No messages to process yet. Send a new email and try again.",
-          baselineHistoryId: startHistoryId,
-        }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    log("info", `Fetching history starting from: ${startHistoryId}`);
-
-    const historyUrl = `https://gmail.googleapis.com/gmail/v1/users/me/history?startHistoryId=${startHistoryId}&historyTypes=messageAdded`;
-    const historyResponse = await fetch(historyUrl, {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-
-    if (!historyResponse.ok) {
-      const errorText = await historyResponse.text();
-      log("error", `Gmail history API error: ${historyResponse.status} - ${errorText}`);
-      throw new Error(`Failed to fetch Gmail history: ${historyResponse.status}`);
-    }
-
-    const historyData = await historyResponse.json();
-    log("info", `History response received. New historyId: ${historyData.historyId}`);
-
-    const history = historyData.history || [];
-    const messages: GmailMessage[] = [];
-
-    // Extract new messages from history
-    for (const item of history) {
-      if (item.messagesAdded) {
-        for (const added of item.messagesAdded) {
-          messages.push(added.message);
-        }
-      }
-    }
-
-    log("info", `Found ${messages.length} new messages`);
-
-    const processedMessages = [];
-    for (const message of messages) {
       try {
-        log("info", `Processing message: ${message.id}`);
-        const result = await processMessage(message.id, accessToken, connection, adminSupabase);
-        processedMessages.push(result);
-        log("success", `Processed message ${message.id}: ${result.action}`);
+        accountLogger("info", `Processing account: ${connection.gmail_email}`);
+
+        // Decrypt and refresh access token if needed
+        let accessToken = decrypt(connection.encrypted_access_token);
+        const expiresAt = new Date(connection.token_expires_at);
+
+        if (expiresAt <= new Date()) {
+          accountLogger("info", "Access token expired, refreshing...");
+          accessToken = await refreshAccessToken(adminSupabase, connection);
+          accountLogger("success", "Access token refreshed");
+        }
+
+        // Fetch email history from Gmail - initialize if needed
+        let startHistoryId = connection.history_id;
+        
+        // If no history_id, establish baseline
+        if (!startHistoryId) {
+          accountLogger("info", "No history_id found, establishing baseline...");
+          const profileUrl = `https://gmail.googleapis.com/gmail/v1/users/me/profile`;
+          const profileResponse = await fetch(profileUrl, {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          });
+
+          if (!profileResponse.ok) {
+            throw new Error(`Failed to fetch Gmail profile: ${profileResponse.status}`);
+          }
+
+          const profileData = await profileResponse.json();
+          startHistoryId = profileData.historyId;
+
+          // Update connection with baseline history_id
+          await adminSupabase
+            .from("gmail_connections")
+            .update({
+              history_id: startHistoryId,
+              last_synced_at: new Date().toISOString(),
+            })
+            .eq("id", connection.id);
+
+          accountLogger("success", `Baseline established with history_id: ${startHistoryId}`);
+          
+          accountsProcessed.push({
+            email: connection.gmail_email,
+            user_id: connection.user_id,
+            status: "baseline_established",
+            messages_found: 0,
+            drafts_created: 0,
+            logs: accountLog,
+          });
+          continue;
+        }
+
+        accountLogger("info", `Fetching history starting from: ${startHistoryId}`);
+
+        const historyUrl = `https://gmail.googleapis.com/gmail/v1/users/me/history?startHistoryId=${startHistoryId}&historyTypes=messageAdded`;
+        const historyResponse = await fetch(historyUrl, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+
+        if (!historyResponse.ok) {
+          const errorText = await historyResponse.text();
+          accountLogger("error", `Gmail history API error: ${historyResponse.status} - ${errorText}`);
+          throw new Error(`Failed to fetch Gmail history: ${historyResponse.status}`);
+        }
+
+        const historyData = await historyResponse.json();
+        accountLogger("info", `History response received. New historyId: ${historyData.historyId}`);
+
+        const history = historyData.history || [];
+        const messages: GmailMessage[] = [];
+
+        // Extract new messages from history
+        for (const item of history) {
+          if (item.messagesAdded) {
+            for (const added of item.messagesAdded) {
+              messages.push(added.message);
+            }
+          }
+        }
+
+        accountLogger("info", `Found ${messages.length} new messages`);
+
+        if (messages.length === 0) {
+          // Update history_id even if no messages
+          await adminSupabase
+            .from("gmail_connections")
+            .update({
+              history_id: historyData.historyId,
+              last_synced_at: new Date().toISOString(),
+            })
+            .eq("id", connection.id);
+
+          accountLogger("info", "No new messages to process");
+          accountsProcessed.push({
+            email: connection.gmail_email,
+            user_id: connection.user_id,
+            status: "no_new_messages",
+            messages_found: 0,
+            drafts_created: 0,
+            logs: accountLog,
+          });
+          continue;
+        }
+
+        const processedMessages = [];
+        for (const message of messages) {
+          try {
+            accountLogger("info", `Processing message: ${message.id}`);
+            const result = await processMessage(message.id, accessToken, connection, adminSupabase);
+            processedMessages.push(result);
+            accountLogger("success", `Processed message ${message.id}: ${result.action}`);
+          } catch (error: any) {
+            accountLogger("error", `Failed to process message ${message.id}: ${error.message}`);
+            processedMessages.push({
+              messageId: message.id,
+              success: false,
+              error: error.message,
+            });
+          }
+        }
+
+        // Update history_id
+        await adminSupabase
+          .from("gmail_connections")
+          .update({
+            history_id: historyData.historyId,
+            last_synced_at: new Date().toISOString(),
+          })
+          .eq("id", connection.id);
+
+        const successfulMessages = processedMessages.filter(m => m.success !== false).length;
+        accountLogger("success", `Updated history_id to: ${historyData.historyId}`);
+        accountLogger("success", `Processing complete: ${successfulMessages}/${messages.length} successful`);
+
+        totalMessagesProcessed += messages.length;
+
+        accountsProcessed.push({
+          email: connection.gmail_email,
+          user_id: connection.user_id,
+          status: "success",
+          messages_found: messages.length,
+          drafts_created: successfulMessages,
+          results: processedMessages,
+          logs: accountLog,
+        });
+
       } catch (error: any) {
-        log("error", `Failed to process message ${message.id}: ${error.message}`);
-        processedMessages.push({
-          messageId: message.id,
-          success: false,
+        accountLogger("error", `Account processing failed: ${error.message}`);
+        accountsProcessed.push({
+          email: connection.gmail_email,
+          user_id: connection.user_id,
+          status: "error",
+          messages_found: 0,
+          drafts_created: 0,
           error: error.message,
+          logs: accountLog,
         });
       }
     }
 
-    // Update history_id
-    await adminSupabase
-      .from("gmail_connections")
-      .update({
-        history_id: historyData.historyId,
-        last_synced_at: new Date().toISOString(),
-      })
-      .eq("id", connection.id);
-
-    log("success", `Updated history_id to: ${historyData.historyId}`);
-    log("success", `Processing complete: ${processedMessages.filter(m => m.success !== false).length}/${messages.length} successful`);
+    const successfulAccounts = accountsProcessed.filter(a => a.status === "success" || a.status === "baseline_established" || a.status === "no_new_messages").length;
 
     return new Response(
       JSON.stringify({
         success: true,
         logs,
-        messagesProcessed: messages.length,
-        results: processedMessages,
-        newHistoryId: historyData.historyId,
+        accounts_processed: accountsProcessed,
+        total_accounts: connections.length,
+        successful_accounts: successfulAccounts,
+        total_messages: totalMessagesProcessed,
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );

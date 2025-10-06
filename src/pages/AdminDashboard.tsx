@@ -251,8 +251,12 @@ const AdminDashboard: React.FC = () => {
       if (data.success) {
         setPullResults(data);
         setPullStatus('success');
-        toast.success(`Successfully pulled ${data.messagesProcessed} new emails!`);
+        const totalMessages = data.total_messages || 0;
+        const successfulAccounts = data.successful_accounts || 0;
+        const totalAccounts = data.total_accounts || 0;
+        toast.success(`Processed ${totalMessages} messages from ${successfulAccounts}/${totalAccounts} accounts`);
         await loadQueueEntries();
+        await loadGmailConnections();
       } else {
         throw new Error(data.error || 'Failed to pull emails');
       }
@@ -588,21 +592,79 @@ const AdminDashboard: React.FC = () => {
                   )}
                 </div>
                 {pullResults && (
-                  <div className="bg-muted p-4 rounded-lg space-y-3 text-sm">
-                    <div><strong>Messages Processed:</strong> {pullResults.messagesProcessed}</div>
-                    <div><strong>New History ID:</strong> {pullResults.newHistoryId}</div>
-                    {pullResults.results && pullResults.results.length > 0 && (
-                      <div className="space-y-2 mt-3 max-h-40 overflow-y-auto">
-                        <strong>Processed Messages:</strong>
-                        {pullResults.results.map((result: any, idx: number) => (
-                          <div key={idx} className="p-2 bg-background rounded border">
-                            <div><strong>From:</strong> {result.from}</div>
-                            <div><strong>Subject:</strong> {result.subject}</div>
-                            <div><strong>Action:</strong> <Badge variant="outline">{result.action}</Badge></div>
+                  <div className="space-y-4">
+                    {/* Summary Card */}
+                    <div className="bg-muted p-4 rounded-lg">
+                      <div className="grid grid-cols-3 gap-4 text-center">
+                        <div>
+                          <div className="text-2xl font-bold text-primary">
+                            {pullResults.total_accounts || 0}
                           </div>
-                        ))}
+                          <div className="text-xs text-muted-foreground">Total Accounts</div>
+                        </div>
+                        <div>
+                          <div className="text-2xl font-bold text-green-600">
+                            {pullResults.successful_accounts || 0}
+                          </div>
+                          <div className="text-xs text-muted-foreground">Successful</div>
+                        </div>
+                        <div>
+                          <div className="text-2xl font-bold text-blue-600">
+                            {pullResults.total_messages || 0}
+                          </div>
+                          <div className="text-xs text-muted-foreground">Messages Found</div>
+                        </div>
                       </div>
-                    )}
+                    </div>
+
+                    {/* Individual Account Results */}
+                    {pullResults.accounts_processed && pullResults.accounts_processed.map((account: any, idx: number) => (
+                      <div key={idx} className="bg-background border rounded-lg p-4 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div className="font-medium">{account.email}</div>
+                          <Badge 
+                            variant={
+                              account.status === 'success' ? 'default' :
+                              account.status === 'error' ? 'destructive' :
+                              account.status === 'baseline_established' ? 'secondary' :
+                              'outline'
+                            }
+                          >
+                            {account.status.replace(/_/g, ' ')}
+                          </Badge>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-2 text-sm">
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Messages Found:</span>
+                            <Badge variant="outline">{account.messages_found || 0}</Badge>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Drafts Created:</span>
+                            <Badge variant="outline">{account.drafts_created || 0}</Badge>
+                          </div>
+                        </div>
+
+                        {account.error && (
+                          <div className="text-xs text-destructive bg-destructive/10 p-2 rounded">
+                            Error: {account.error}
+                          </div>
+                        )}
+
+                        {account.logs && account.logs.length > 0 && (
+                          <details className="text-xs">
+                            <summary className="cursor-pointer text-muted-foreground hover:text-foreground">
+                              View Logs ({account.logs.length})
+                            </summary>
+                            <div className="mt-2 bg-muted p-2 rounded max-h-40 overflow-auto space-y-1 font-mono">
+                              {account.logs.map((log: string, logIdx: number) => (
+                                <div key={logIdx}>{log}</div>
+                              ))}
+                            </div>
+                          </details>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 )}
               </CardContent>
