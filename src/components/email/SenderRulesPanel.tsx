@@ -162,10 +162,10 @@ export function SenderRulesPanel() {
     setEditingRule(rule);
     setFormData({
       sender_email: rule.sender_email,
-      sender_pattern_type: rule.sender_pattern_type,
+      sender_pattern_type: rule.sender_pattern_type as "exact" | "domain" | "wildcard",
       sender_name: rule.sender_name || "",
-      action: rule.action,
-      reply_mode: rule.reply_mode || "draft",
+      action: rule.action as "reply" | "ignore" | "forward" | "flag",
+      reply_mode: (rule.reply_mode as "draft" | "send") || "draft",
       custom_prompt: rule.custom_prompt || "",
       priority: rule.priority,
     });
@@ -234,7 +234,7 @@ export function SenderRulesPanel() {
                   <Label htmlFor="pattern_type">Pattern Type</Label>
                   <Select
                     value={formData.sender_pattern_type}
-                    onValueChange={(value) => setFormData({ ...formData, sender_pattern_type: value })}
+                    onValueChange={(value) => setFormData({ ...formData, sender_pattern_type: value as "exact" | "domain" | "wildcard" })}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -251,7 +251,7 @@ export function SenderRulesPanel() {
                   <Label htmlFor="action">Action</Label>
                   <Select
                     value={formData.action}
-                    onValueChange={(value) => setFormData({ ...formData, action: value })}
+                    onValueChange={(value) => setFormData({ ...formData, action: value as "reply" | "ignore" | "forward" | "flag" })}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -270,7 +270,7 @@ export function SenderRulesPanel() {
                       <Label htmlFor="reply_mode">Reply Mode</Label>
                       <Select
                         value={formData.reply_mode}
-                        onValueChange={(value) => setFormData({ ...formData, reply_mode: value })}
+                        onValueChange={(value) => setFormData({ ...formData, reply_mode: value as "draft" | "send" })}
                       >
                         <SelectTrigger>
                           <SelectValue />

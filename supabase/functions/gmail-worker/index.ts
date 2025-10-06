@@ -172,22 +172,76 @@ Deno.serve(async (req) => {
 
     console.log(`[WORKER] Found ${messages.length} new messages`);
 
-    // Process each message
+    // Process each message using shared processor
+    const { processEmail } = await import("../_shared/email-processor.ts");
     const processedMessages = [];
+    
     for (const messageId of messages) {
       try {
-        const processed = await processMessage(
-          supabase,
-          accessToken,
-          messageId,
-          connection.user_id,
-          connection.gmail_email,
-          connection.auto_reply_enabled,
-          connection.default_reply_mode
+        // Fetch message details
+        const msgResponse = await fetch(
+          `https://gmail.googleapis.com/gmail/v1/users/me/messages/${messageId}`,
+          { headers: { Authorization: `Bearer ${accessToken}` } }
         );
-        processedMessages.push(processed);
+
+        if (!msgResponse.ok) {
+          throw new Error(`Failed to fetch message ${messageId}`);
+        }
+
+        const message: GmailMessage = await msgResponse.json();
+        
+        // Extract email details
+        const headers = message.payload?.headers || [];
+        const subject = headers.find(h => h.name === "Subject")?.value || "(No Subject)";
+        const from = headers.find(h => h.name === "From")?.value || "Unknown";
+        const senderName = from.split('<')[0].trim() || undefined;
+        const senderEmail = from.match(/<(.+)>/)?.[1] || from;
+        
+        // Get email body
+        let body = message.snippet || "";
+        if (message.payload?.parts) {
+          const textPart = message.payload.parts.find(p => p.body?.data);
+          if (textPart?.body?.data) {
+            body = atob(textPart.body.data.replace(/-/g, '+').replace(/_/g, '/'));
+          }
+        } else if (message.payload?.body?.data) {
+          body = atob(message.payload.body.data.replace(/-/g, '+').replace(/_/g, '/'));
+        }
+
+        const emailData = {
+          id: messageId,
+          threadId: message.threadId,
+          sender: senderEmail,
+          senderName,
+          subject,
+          body,
+          snippet: message.snippet
+        };
+
+        const result = await processEmail(
+          supabase,
+          connection.user_id,
+          emailData,
+          accessToken,
+          connection.default_reply_mode || 'draft',
+          'push_worker'
+        );
+
+        processedMessages.push({
+          messageId,
+          from: senderEmail,
+          subject,
+          action: result.action,
+          rule: result.ruleApplied?.sender_name || result.ruleApplied?.sender_email
+        });
+        
+        console.log(`[WORKER] ✓ Processed ${messageId}: ${result.action}`);
       } catch (msgError) {
         console.error(`[WORKER] Failed to process message ${messageId}:`, msgError);
+        processedMessages.push({
+          messageId,
+          error: msgError instanceof Error ? msgError.message : 'Unknown error'
+        });
       }
     }
 
@@ -293,206 +347,4 @@ async function refreshAccessToken(
 
   console.log("[WORKER] ✓ Token refreshed");
   return tokens.access_token;
-}
-
-async function processMessage(
-  supabase: any,
-  accessToken: string,
-  messageId: string,
-  userId: string,
-  userEmail: string,
-  autoReplyEnabled: boolean,
-  defaultReplyMode: string
-): Promise<any> {
-  console.log(`[WORKER] Processing message: ${messageId}`);
-
-  // Fetch full message
-  const msgResponse = await fetch(
-    `https://gmail.googleapis.com/gmail/v1/users/me/messages/${messageId}`,
-    { headers: { Authorization: `Bearer ${accessToken}` } }
-  );
-
-  if (!msgResponse.ok) {
-    throw new Error(`Failed to fetch message ${messageId}`);
-  }
-
-  const message: GmailMessage = await msgResponse.json();
-  
-  // Extract email details
-  const headers = message.payload?.headers || [];
-  const subject = headers.find(h => h.name === "Subject")?.value || "(No Subject)";
-  const from = headers.find(h => h.name === "From")?.value || "Unknown";
-  const to = headers.find(h => h.name === "To")?.value || "";
-  
-  // Get email body
-  let body = message.snippet || "";
-  if (message.payload?.parts) {
-    const textPart = message.payload.parts.find(p => p.body?.data);
-    if (textPart?.body?.data) {
-      body = atob(textPart.body.data.replace(/-/g, '+').replace(/_/g, '/'));
-    }
-  } else if (message.payload?.body?.data) {
-    body = atob(message.payload.body.data.replace(/-/g, '+').replace(/_/g, '/'));
-  }
-
-  console.log(`[WORKER] Email from: ${from}`);
-  console.log(`[WORKER] Subject: ${subject}`);
-
-  // Generate LLM response
-  const aiResponse = await generateEmailResponse(subject, from, body);
-  console.log(`[WORKER] ✓ AI response generated (${aiResponse.length} chars)`);
-
-  // Create draft or send reply
-  let actionTaken = "draft_created";
-  if (autoReplyEnabled && defaultReplyMode === "send") {
-    await sendReply(accessToken, message.threadId, to, from, subject, aiResponse);
-    actionTaken = "reply_sent";
-    console.log(`[WORKER] ✓ Reply sent`);
-  } else {
-    await createDraft(accessToken, message.threadId, to, from, subject, aiResponse);
-    console.log(`[WORKER] ✓ Draft created`);
-  }
-
-  return {
-    message_id: messageId,
-    from,
-    subject,
-    action: actionTaken,
-    ai_response_length: aiResponse.length,
-  };
-}
-
-async function generateEmailResponse(
-  subject: string,
-  from: string,
-  body: string
-): Promise<string> {
-  const openaiKey = Deno.env.get("OPENAI_API_KEY");
-  if (!openaiKey) {
-    throw new Error("OPENAI_API_KEY not configured");
-  }
-
-  const prompt = `You are an AI email assistant. Generate a professional, concise reply to the following email.
-
-From: ${from}
-Subject: ${subject}
-
-Email Body:
-${body.substring(0, 1000)}
-
-Generate a polite, professional response that acknowledges the email and provides a helpful reply. Keep it under 200 words.`;
-
-  const response = await fetch(
-    "https://api.openai.com/v1/chat/completions",
-    {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${openaiKey}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "gpt-5-2025-08-07",
-        messages: [
-          { role: "system", content: "You are a professional email assistant." },
-          { role: "user", content: prompt }
-        ],
-        max_completion_tokens: 500
-      }),
-    }
-  );
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error("[WORKER] OpenAI API error:", errorText);
-    throw new Error("Failed to generate AI response");
-  }
-
-  const data = await response.json();
-  return data.choices[0].message.content;
-}
-
-async function createDraft(
-  accessToken: string,
-  threadId: string,
-  to: string,
-  replyTo: string,
-  originalSubject: string,
-  body: string
-): Promise<void> {
-  const subject = originalSubject.startsWith("Re:") ? originalSubject : `Re: ${originalSubject}`;
-  
-  const rawMessage = [
-    `To: ${replyTo}`,
-    `Subject: ${subject}`,
-    `In-Reply-To: ${threadId}`,
-    `References: ${threadId}`,
-    "",
-    body,
-  ].join("\r\n");
-
-  const encodedMessage = btoa(rawMessage).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-
-  const response = await fetch(
-    "https://gmail.googleapis.com/gmail/v1/users/me/drafts",
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        message: {
-          threadId,
-          raw: encodedMessage,
-        },
-      }),
-    }
-  );
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Failed to create draft: ${errorText}`);
-  }
-}
-
-async function sendReply(
-  accessToken: string,
-  threadId: string,
-  to: string,
-  replyTo: string,
-  originalSubject: string,
-  body: string
-): Promise<void> {
-  const subject = originalSubject.startsWith("Re:") ? originalSubject : `Re: ${originalSubject}`;
-  
-  const rawMessage = [
-    `To: ${replyTo}`,
-    `Subject: ${subject}`,
-    `In-Reply-To: ${threadId}`,
-    `References: ${threadId}`,
-    "",
-    body,
-  ].join("\r\n");
-
-  const encodedMessage = btoa(rawMessage).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-
-  const response = await fetch(
-    "https://gmail.googleapis.com/gmail/v1/users/me/messages/send",
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        threadId,
-        raw: encodedMessage,
-      }),
-    }
-  );
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Failed to send reply: ${errorText}`);
-  }
 }
