@@ -75,8 +75,8 @@ const AdminDashboard: React.FC = () => {
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [processingStatus, setProcessingStatus] = useState<'idle' | 'processing' | 'success' | 'error'>('idle');
   const [processLogs, setProcessLogs] = useState<TestLog[]>([]);
-  const [watchRefreshStatus, setWatchRefreshStatus] = useState<'idle' | 'refreshing' | 'success' | 'error'>('idle');
-  const [watchInfo, setWatchInfo] = useState<any>(null);
+  const [pullStatus, setPullStatus] = useState<'idle' | 'pulling' | 'success' | 'error'>('idle');
+  const [pullResults, setPullResults] = useState<any>(null);
 
   useEffect(() => {
     loadDashboardData();
@@ -297,12 +297,12 @@ const AdminDashboard: React.FC = () => {
     setProcessingStatus('idle');
   };
 
-  const refreshGmailWatch = async () => {
+  const pullNewEmails = async () => {
     try {
-      setWatchRefreshStatus('refreshing');
-      setWatchInfo(null);
+      setPullStatus('pulling');
+      setPullResults(null);
 
-      const { data, error } = await supabase.functions.invoke('gmail-refresh-watch', {
+      const { data, error } = await supabase.functions.invoke('gmail-pull-manual', {
         headers: {
           Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
         },
@@ -311,16 +311,17 @@ const AdminDashboard: React.FC = () => {
       if (error) throw error;
 
       if (data.success) {
-        setWatchInfo(data);
-        setWatchRefreshStatus('success');
-        toast.success(`Gmail watch refreshed for ${data.email}`);
+        setPullResults(data);
+        setPullStatus('success');
+        toast.success(`Successfully pulled ${data.messagesProcessed} new emails!`);
+        await loadQueueEntries();
       } else {
-        throw new Error(data.error || 'Failed to refresh watch');
+        throw new Error(data.error || 'Failed to pull emails');
       }
     } catch (error: any) {
-      console.error('Failed to refresh Gmail watch:', error);
-      setWatchRefreshStatus('error');
-      toast.error(error.message || 'Failed to refresh Gmail watch');
+      console.error('Failed to pull emails:', error);
+      setPullStatus('error');
+      toast.error(error.message || 'Failed to pull emails');
     }
   };
 
@@ -609,43 +610,54 @@ const AdminDashboard: React.FC = () => {
 
         <TabsContent value="gmail-test" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Gmail Watch Status */}
+            {/* Pull New Emails */}
             <Card className="lg:col-span-3">
               <CardHeader>
-                <CardTitle>Gmail Watch Status</CardTitle>
+                <CardTitle>Pull New Emails (Manual Mode)</CardTitle>
                 <CardDescription>
-                  Refresh Gmail watch to enable push notifications for new emails
+                  Manually fetch and process new emails from Gmail
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center gap-4">
                   <Button
-                    onClick={refreshGmailWatch}
-                    disabled={watchRefreshStatus === 'refreshing'}
+                    onClick={pullNewEmails}
+                    disabled={pullStatus === 'pulling'}
                     variant="default"
                   >
-                    {watchRefreshStatus === 'refreshing' && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    Refresh Gmail Watch
+                    {pullStatus === 'pulling' && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    <RefreshCw className="mr-2 h-4 w-4" />
+                    Pull New Emails
                   </Button>
-                  {watchRefreshStatus === 'success' && (
+                  {pullStatus === 'success' && (
                     <Badge variant="default" className="bg-green-500">
                       <CheckCircle className="mr-1 h-3 w-3" />
-                      Watch Active
+                      Pull Complete
                     </Badge>
                   )}
-                  {watchRefreshStatus === 'error' && (
+                  {pullStatus === 'error' && (
                     <Badge variant="destructive">
                       <XCircle className="mr-1 h-3 w-3" />
                       Failed
                     </Badge>
                   )}
                 </div>
-                {watchInfo && (
-                  <div className="bg-muted p-4 rounded-lg space-y-2 text-sm">
-                    <div><strong>Email:</strong> {watchInfo.email}</div>
-                    <div><strong>History ID:</strong> {watchInfo.historyId}</div>
-                    <div><strong>Expires:</strong> {new Date(parseInt(watchInfo.expiration)).toLocaleString()}</div>
-                    <div className="text-green-600 dark:text-green-400">{watchInfo.message}</div>
+                {pullResults && (
+                  <div className="bg-muted p-4 rounded-lg space-y-3 text-sm">
+                    <div><strong>Messages Processed:</strong> {pullResults.messagesProcessed}</div>
+                    <div><strong>New History ID:</strong> {pullResults.newHistoryId}</div>
+                    {pullResults.results && pullResults.results.length > 0 && (
+                      <div className="space-y-2 mt-3 max-h-40 overflow-y-auto">
+                        <strong>Processed Messages:</strong>
+                        {pullResults.results.map((result: any, idx: number) => (
+                          <div key={idx} className="p-2 bg-background rounded border">
+                            <div><strong>From:</strong> {result.from}</div>
+                            <div><strong>Subject:</strong> {result.subject}</div>
+                            <div><strong>Action:</strong> <Badge variant="outline">{result.action}</Badge></div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 )}
               </CardContent>
