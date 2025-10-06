@@ -91,10 +91,44 @@ Deno.serve(async (req) => {
       log("success", "Access token refreshed");
     }
 
-    // Fetch email history from Gmail
-    const startHistoryId = connection.history_id;
+    // Fetch email history from Gmail - initialize if needed
+    let startHistoryId = connection.history_id;
+    
+    // If no history_id, establish baseline
     if (!startHistoryId) {
-      throw new Error("No history_id found. Please set up initial sync first.");
+      log("info", "No history_id found, establishing baseline...");
+      const profileUrl = `https://gmail.googleapis.com/gmail/v1/users/me/profile`;
+      const profileResponse = await fetch(profileUrl, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+
+      if (!profileResponse.ok) {
+        throw new Error(`Failed to fetch Gmail profile: ${profileResponse.status}`);
+      }
+
+      const profileData = await profileResponse.json();
+      startHistoryId = profileData.historyId;
+
+      // Update connection with baseline history_id
+      await adminSupabase
+        .from("gmail_connections")
+        .update({
+          history_id: startHistoryId,
+          last_synced_at: new Date().toISOString(),
+        })
+        .eq("id", connection.id);
+
+      log("success", `Baseline established with history_id: ${startHistoryId}`);
+      
+      return new Response(
+        JSON.stringify({
+          success: true,
+          logs,
+          message: "Baseline established. No messages to process yet. Send a new email and try again.",
+          baselineHistoryId: startHistoryId,
+        }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     log("info", `Fetching history starting from: ${startHistoryId}`);
