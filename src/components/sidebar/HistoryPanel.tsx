@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScrollArea } from '../ui/scroll-area';
 import { Button } from '../ui/button';
-import { MoreHorizontal, Edit, Share, Archive, Trash2 } from 'lucide-react';
+import { MoreHorizontal, Edit, Share, Archive, Trash2, Loader2 } from 'lucide-react';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '../ui/popover';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 interface HistoryItem {
   id: string;
@@ -19,102 +21,135 @@ interface HistoryItem {
 interface HistoryPanelProps {
   isVisible: boolean;
   onClose: () => void;
+  onSelectConversation?: (conversationId: string) => void;
 }
 
-const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose }) => {
+const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose, onSelectConversation }) => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [historyItems, setHistoryItems] = useState<HistoryItem[]>([]);
+  const [loading, setLoading] = useState(true);
   
-  const handleAction = (action: string, itemId: string) => {
+  useEffect(() => {
+    if (isVisible) {
+      loadHistory();
+    }
+  }, [isVisible]);
+
+  const loadHistory = async () => {
+    try {
+      setLoading(true);
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        console.log('No authenticated user');
+        setHistoryItems([]);
+        return;
+      }
+
+      // Fetch conversations with their first message
+      const { data: conversations, error: convError } = await supabase
+        .from('conversations')
+        .select(`
+          id,
+          title,
+          created_at,
+          updated_at,
+          workflow_type
+        `)
+        .eq('user_id', user.id)
+        .order('updated_at', { ascending: false })
+        .limit(50);
+
+      if (convError) {
+        console.error('Error loading conversations:', convError);
+        throw convError;
+      }
+
+      if (!conversations || conversations.length === 0) {
+        setHistoryItems([]);
+        return;
+      }
+
+      // Get first message for each conversation
+      const conversationsWithMessages = await Promise.all(
+        conversations.map(async (conv) => {
+          const { data: firstMessage } = await supabase
+            .from('messages')
+            .select('content')
+            .eq('conversation_id', conv.id)
+            .eq('is_user', true)
+            .order('created_at', { ascending: true })
+            .limit(1)
+            .single();
+
+          const preview = firstMessage?.content || conv.title || 'Untitled conversation';
+          const createdDate = new Date(conv.created_at);
+          const updatedDate = new Date(conv.updated_at);
+
+          return {
+            id: conv.id,
+            preview: preview,
+            timestamp: getRelativeTime(updatedDate),
+            createdOn: createdDate.toLocaleDateString('en-GB'),
+            lastModified: updatedDate.toLocaleDateString('en-GB')
+          };
+        })
+      );
+
+      setHistoryItems(conversationsWithMessages);
+    } catch (error) {
+      console.error('Error loading history:', error);
+      toast.error('Failed to load chat history');
+      setHistoryItems([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getRelativeTime = (date: Date): string => {
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHours / 24);
+    const diffWeeks = Math.floor(diffDays / 7);
+    const diffMonths = Math.floor(diffDays / 30);
+
+    if (diffMins < 60) return `${diffMins} ${diffMins === 1 ? 'minute' : 'minutes'} ago`;
+    if (diffHours < 24) return `${diffHours} ${diffHours === 1 ? 'hour' : 'hours'} ago`;
+    if (diffDays < 7) return `${diffDays} ${diffDays === 1 ? 'day' : 'days'} ago`;
+    if (diffWeeks < 4) return `${diffWeeks} ${diffWeeks === 1 ? 'week' : 'weeks'} ago`;
+    return `${diffMonths} ${diffMonths === 1 ? 'month' : 'months'} ago`;
+  };
+  
+  const handleAction = async (action: string, itemId: string) => {
     console.log(`Clicked ${action} for item:`, itemId);
+    
+    if (action === 'delete') {
+      try {
+        const { error } = await supabase
+          .from('conversations')
+          .delete()
+          .eq('id', itemId);
+
+        if (error) throw error;
+
+        toast.success('Conversation deleted');
+        loadHistory();
+      } catch (error) {
+        console.error('Error deleting conversation:', error);
+        toast.error('Failed to delete conversation');
+      }
+    }
+    
     setOpenDropdown(null);
   };
-  // Mock data - replace with actual chat history
-  const historyItems: HistoryItem[] = [
-    {
-      id: '1',
-      preview: 'How to create a React component with TypeScript?',
-      timestamp: '2 hours ago',
-      createdOn: '06/01/25',
-      lastModified: '06/01/25'
-    },
-    {
-      id: '2',
-      preview: 'Explain the benefits of using Tailwind CSS for modern web development',
-      timestamp: '1 day ago',
-      createdOn: '05/01/25',
-      lastModified: '05/01/25'
-    },
-    {
-      id: '3',
-      preview: 'Best practices for state management in React applications',
-      timestamp: '3 days ago',
-      createdOn: '03/01/25',
-      lastModified: '04/01/25'
-    },
-    {
-      id: '4',
-      preview: 'How to implement authentication in a web app',
-      timestamp: '1 week ago',
-      createdOn: '30/12/24',
-      lastModified: '30/12/24'
-    },
-    {
-      id: '5',
-      preview: 'Database design principles and normalization techniques',
-      timestamp: '2 weeks ago',
-      createdOn: '23/12/24',
-      lastModified: '25/12/24'
-    },
-    {
-      id: '6',
-      preview: 'Advanced CSS Grid layouts and responsive design patterns',
-      timestamp: '2 weeks ago',
-      createdOn: '22/12/24',
-      lastModified: '22/12/24'
-    },
-    {
-      id: '7',
-      preview: 'JavaScript async/await vs promises performance comparison',
-      timestamp: '3 weeks ago',
-      createdOn: '16/12/24',
-      lastModified: '18/12/24'
-    },
-    {
-      id: '8',
-      preview: 'API design best practices for RESTful services',
-      timestamp: '3 weeks ago',
-      createdOn: '15/12/24',
-      lastModified: '15/12/24'
-    },
-    {
-      id: '9',
-      preview: 'Modern deployment strategies with Docker and Kubernetes',
-      timestamp: '1 month ago',
-      createdOn: '06/12/24',
-      lastModified: '08/12/24'
-    },
-    {
-      id: '10',
-      preview: 'Security considerations for web applications',
-      timestamp: '1 month ago',
-      createdOn: '05/12/24',
-      lastModified: '05/12/24'
-    },
-    {
-      id: '11',
-      preview: 'Progressive Web Apps implementation guide',
-      timestamp: '1 month ago',
-      createdOn: '03/12/24',
-      lastModified: '04/12/24'
-    },
-    {
-      id: '12',
-      preview: 'GraphQL vs REST API comparison and use cases',
-      timestamp: '2 months ago',
-      createdOn: '06/11/24',
-      lastModified: '07/11/24'
-    },
-  ];
+
+  const handleConversationClick = (itemId: string) => {
+    if (onSelectConversation) {
+      onSelectConversation(itemId);
+    }
+  };
 
   return (
     <div 
@@ -128,80 +163,73 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose }) => {
       
       <ScrollArea className="h-[calc(100%-140px)] pr-3">
         <div className="px-2 py-1">
-          {historyItems.map((item) => {
-            const shortTitle = item.preview.split(' ').slice(0, 4).join(' ');
-            
-            return (
-              <div
-                key={item.id}
-                className="group relative mx-1 mb-0.5 rounded-lg hover:bg-purple-200/60 transition-colors cursor-pointer"
-              >
-                <div className="flex items-center justify-between px-3 py-2.5">
-                  <span className="text-sm text-sidebar-text-dark flex-1 min-w-0 truncate pr-2">
-                    {shortTitle}
-                  </span>
-                  
-                  <Popover 
-                    open={openDropdown === item.id} 
-                    onOpenChange={(open) => {
-                      console.log('Popover open change:', open, item.id);
-                      setOpenDropdown(open ? item.id : null);
-                    }}
-                  >
-                    <PopoverTrigger asChild>
-                      <button 
-                        className="h-6 w-6 flex items-center justify-center rounded hover:bg-purple-300/50 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          console.log('Button clicked for item:', item.id);
-                          setOpenDropdown(openDropdown === item.id ? null : item.id);
-                        }}
-                      >
-                        <MoreHorizontal className="h-3.5 w-3.5 text-sidebar-text-violet" />
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent 
-                      className="w-40 p-1 z-[9999]" 
-                      align="end"
-                      side="bottom"
-                      sideOffset={5}
+          {loading ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="h-6 w-6 animate-spin text-purple-600" />
+            </div>
+          ) : historyItems.length === 0 ? (
+            <div className="text-center py-8 px-4 text-muted-foreground text-sm">
+              No chat history yet. Start a conversation to see it here!
+            </div>
+          ) : (
+            historyItems.map((item) => {
+              const shortTitle = item.preview.split(' ').slice(0, 4).join(' ');
+              
+              return (
+                <div
+                  key={item.id}
+                  className="group relative mx-1 mb-0.5 rounded-lg hover:bg-purple-200/60 transition-colors cursor-pointer"
+                  onClick={() => handleConversationClick(item.id)}
+                >
+                  <div className="flex items-center justify-between px-3 py-2.5">
+                    <span className="text-sm text-sidebar-text-dark flex-1 min-w-0 truncate pr-2">
+                      {shortTitle}
+                    </span>
+                    
+                    <Popover 
+                      open={openDropdown === item.id} 
+                      onOpenChange={(open) => {
+                        console.log('Popover open change:', open, item.id);
+                        setOpenDropdown(open ? item.id : null);
+                      }}
                     >
-                      <div className="space-y-1">
+                      <PopoverTrigger asChild>
                         <button 
-                          className="w-full flex items-center gap-2 px-2 py-1.5 text-sm rounded hover:bg-accent hover:text-accent-foreground cursor-pointer"
-                          onClick={() => handleAction('rename', item.id)}
+                          className="h-6 w-6 flex items-center justify-center rounded hover:bg-purple-300/50 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            console.log('Button clicked for item:', item.id);
+                            setOpenDropdown(openDropdown === item.id ? null : item.id);
+                          }}
                         >
-                          <Edit className="h-4 w-4" />
-                          Rename
+                          <MoreHorizontal className="h-3.5 w-3.5 text-sidebar-text-violet" />
                         </button>
-                        <button 
-                          className="w-full flex items-center gap-2 px-2 py-1.5 text-sm rounded hover:bg-accent hover:text-accent-foreground cursor-pointer"
-                          onClick={() => handleAction('share', item.id)}
-                        >
-                          <Share className="h-4 w-4" />
-                          Share
-                        </button>
-                        <button 
-                          className="w-full flex items-center gap-2 px-2 py-1.5 text-sm rounded hover:bg-accent hover:text-accent-foreground cursor-pointer"
-                          onClick={() => handleAction('archive', item.id)}
-                        >
-                          <Archive className="h-4 w-4" />
-                          Archive
-                        </button>
-                        <button 
-                          className="w-full flex items-center gap-2 px-2 py-1.5 text-sm rounded text-red-600 hover:bg-red-50 hover:text-red-600 cursor-pointer"
-                          onClick={() => handleAction('delete', item.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                          Delete
-                        </button>
-                      </div>
-                    </PopoverContent>
-                  </Popover>
+                      </PopoverTrigger>
+                      <PopoverContent 
+                        className="w-40 p-1 z-[9999]" 
+                        align="end"
+                        side="bottom"
+                        sideOffset={5}
+                      >
+                        <div className="space-y-1">
+                          <button 
+                            className="w-full flex items-center gap-2 px-2 py-1.5 text-sm rounded text-red-600 hover:bg-red-50 hover:text-red-600 cursor-pointer"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleAction('delete', item.id);
+                            }}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                            Delete
+                          </button>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          )}
         </div>
       </ScrollArea>
       
@@ -209,9 +237,9 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose }) => {
         <Button 
           variant="outline" 
           className="w-full border-purple-300 text-purple-700 hover:bg-purple-200"
-          onClick={() => console.log('View all chats')}
+          onClick={loadHistory}
         >
-          View all chats
+          Refresh History
         </Button>
       </div>
     </div>

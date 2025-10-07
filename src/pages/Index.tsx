@@ -10,6 +10,7 @@ import ModelDisplay from "@/components/ModelDisplay";
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { chatService } from "@/services/chatService";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Message {
   id: string;
@@ -31,6 +32,7 @@ const Index = () => {
   const [generatedPrompt, setGeneratedPrompt] = useState("");
   const [selectedModel, setSelectedModel] = useState("Default");
   const [turnCount, setTurnCount] = useState(0);
+  const [currentConversationId, setCurrentConversationId] = useState<string | null>(null);
   const { toast } = useToast();
   const isMobile = useIsMobile();
 
@@ -56,38 +58,127 @@ const Index = () => {
   };
 
   const handleAddToChat = async (message: string, response: string) => {
-    // For workflow cards, we get a response directly, so just add both messages
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      text: message,
-      isUser: true,
-      timestamp: new Date(),
-    };
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
 
-    const aiMessage: Message = {
-      id: (Date.now() + 1).toString(),
-      text: response,
-      isUser: false,
-      timestamp: new Date(),
-    };
+      // Create or get conversation
+      let conversationId = currentConversationId;
+      if (!conversationId) {
+        const { data: newConv, error: convError } = await supabase
+          .from('conversations')
+          .insert({
+            user_id: user.id,
+            title: message.slice(0, 50),
+            workflow_type: 'workflow'
+          })
+          .select()
+          .single();
 
-    setMessages(prev => [...prev, userMessage, aiMessage]);
+        if (convError) {
+          console.error('Error creating conversation:', convError);
+          throw convError;
+        }
+        conversationId = newConv.id;
+        setCurrentConversationId(conversationId);
+      }
+
+      // For workflow cards, we get a response directly, so just add both messages
+      const userMessage: Message = {
+        id: Date.now().toString(),
+        text: message,
+        isUser: true,
+        timestamp: new Date(),
+      };
+
+      const aiMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: response,
+        isUser: false,
+        timestamp: new Date(),
+      };
+
+      // Save to database
+      await supabase.from('messages').insert([
+        {
+          conversation_id: conversationId,
+          user_id: user.id,
+          content: message,
+          is_user: true
+        },
+        {
+          conversation_id: conversationId,
+          user_id: user.id,
+          content: response,
+          is_user: false
+        }
+      ]);
+
+      // Update conversation timestamp
+      await supabase
+        .from('conversations')
+        .update({ updated_at: new Date().toISOString() })
+        .eq('id', conversationId);
+
+      setMessages(prev => [...prev, userMessage, aiMessage]);
+    } catch (error) {
+      console.error('Error saving chat:', error);
+    }
   };
 
   const handleSendMessage = async (message: string) => {
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      text: message,
-      isUser: true,
-      timestamp: new Date(),
-    };
-
-    setMessages(prev => [...prev, userMessage]);
-    setTurnCount(prev => prev + 1);
-    setIsLoading(true);
-    setGeneratedPrompt(""); // Clear the prompt after sending
-
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast({
+          title: "Authentication Required",
+          description: "Please log in to chat.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Create or get conversation
+      let conversationId = currentConversationId;
+      if (!conversationId) {
+        const { data: newConv, error: convError } = await supabase
+          .from('conversations')
+          .insert({
+            user_id: user.id,
+            title: message.slice(0, 50),
+            workflow_type: null
+          })
+          .select()
+          .single();
+
+        if (convError) {
+          console.error('Error creating conversation:', convError);
+          throw convError;
+        }
+        conversationId = newConv.id;
+        setCurrentConversationId(conversationId);
+      }
+
+      const userMessage: Message = {
+        id: Date.now().toString(),
+        text: message,
+        isUser: true,
+        timestamp: new Date(),
+      };
+
+      // Save user message to database
+      await supabase.from('messages').insert({
+        conversation_id: conversationId,
+        user_id: user.id,
+        content: message,
+        is_user: true
+      });
+
+      setMessages(prev => [...prev, userMessage]);
+      setTurnCount(prev => prev + 1);
+      setIsLoading(true);
+      setGeneratedPrompt(""); // Clear the prompt after sending
+
       console.log('Sending message:', message);
       
       // Use the new chat service with LLM routing
@@ -115,6 +206,21 @@ const Index = () => {
         sources: response.sources, // Include sources with snippets
       };
 
+      // Save AI response to database
+      await supabase.from('messages').insert({
+        conversation_id: conversationId,
+        user_id: user.id,
+        content: response.response,
+        is_user: false,
+        metadata: response.sources ? { sources: response.sources } : null
+      });
+
+      // Update conversation timestamp
+      await supabase
+        .from('conversations')
+        .update({ updated_at: new Date().toISOString() })
+        .eq('id', conversationId);
+
       setMessages(prev => [...prev, aiResponse]);
       
       // Show quota info and sources info
@@ -127,6 +233,7 @@ const Index = () => {
       }
       
     } catch (error) {
+      console.error('Error in handleSendMessage:', error);
       toast({
         title: "Error",
         description: "Failed to get response. Please try again.",
