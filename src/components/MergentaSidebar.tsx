@@ -8,7 +8,7 @@ import HistoryPanel from "./sidebar/HistoryPanel";
 import PoliciesPanel from "./sidebar/PoliciesPanel";
 import HelpPanel from "./sidebar/HelpPanel";
 import { ProfilePanel } from "./sidebar/ProfilePanel";
-import PlansPanel from "./sidebar/PlansPanel";
+
 
 import { RSSReaderModal } from "./modals/RSSReaderModal";
 import { Button } from "./ui/button";
@@ -19,7 +19,6 @@ const MergentaSidebar = () => {
   const [showPolicies, setShowPolicies] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
-  const [showPlans, setShowPlans] = useState(false);
 
   const [showRSSReader, setShowRSSReader] = useState(false);
   const [rssReaderCategory, setRSSReaderCategory] = useState<string>("");
@@ -34,7 +33,6 @@ const MergentaSidebar = () => {
     // Close all panels first
     setShowHistory(false);
     setShowPolicies(false);
-    setShowPlans(false);
     setShowHelp(false);
     setShowProfile(false);
 
@@ -45,9 +43,6 @@ const MergentaSidebar = () => {
         break;
       case "policies":
         setShowPolicies(true);
-        break;
-      case "plans":
-        setShowPlans(true);
         break;
       case "help":
         setShowHelp(true);
@@ -62,7 +57,6 @@ const MergentaSidebar = () => {
     // Close all panels when leaving an icon
     setShowHistory(false);
     setShowPolicies(false);
-    setShowPlans(false);
     setShowHelp(false);
     setShowProfile(false);
   };
@@ -71,7 +65,6 @@ const MergentaSidebar = () => {
   const handleClickOutside = () => {
     setShowHistory(false);
     setShowPolicies(false);
-    setShowPlans(false);
     setShowHelp(false);
     setShowProfile(false);
   };
@@ -96,7 +89,7 @@ const MergentaSidebar = () => {
   return (
     <>
       {/* Click outside overlay to close panels */}
-      {(showHistory || showPolicies || showPlans || showHelp || showProfile) && (
+      {(showHistory || showPolicies || showHelp || showProfile) && (
         <div className="fixed inset-0 z-20 bg-transparent" onClick={handleClickOutside} />
       )}
 
@@ -221,12 +214,13 @@ const MergentaSidebar = () => {
           </div>
 
           {/* Plans */}
-          <div className="relative" onMouseEnter={() => handleMouseEnter("plans")}>
+          <div className="relative">
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
                   variant="ghost"
                   className="h-16 w-16 rounded-xl hover:bg-pastel-lavender hover:shadow-[0_0_8px_rgba(234,220,248,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-lavender-hover"
+                  onClick={() => navigate("/plans")}
                 >
                   <Crown className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
                 </Button>
@@ -303,16 +297,6 @@ const MergentaSidebar = () => {
           onMouseLeave={() => setShowPolicies(false)}
         >
           <PoliciesPanel isVisible={showPolicies} onClose={() => setShowPolicies(false)} navigate={navigate} />
-        </div>
-      )}
-
-      {showPlans && (
-        <div
-          className="fixed left-0 top-0 h-full w-[400px] z-30"
-          onMouseEnter={() => setShowPlans(true)}
-          onMouseLeave={() => setShowPlans(false)}
-        >
-          <PlansPanel isVisible={showPlans} onClose={() => setShowPlans(false)} navigate={navigate} />
         </div>
       )}
 

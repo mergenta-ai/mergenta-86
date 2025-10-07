@@ -41,7 +41,7 @@ const Plans = () => {
         'Saved chats & basic history'
       ],
       callout: 'Think Faster',
-      popular: true,
+      popular: false,
       highlight: false
     },
     {
@@ -60,7 +60,7 @@ const Plans = () => {
         'Mail-based support'
       ],
       callout: 'Speed and Ease',
-      popular: false,
+      popular: true,
       highlight: false
     },
     {
@@ -232,7 +232,7 @@ const Plans = () => {
                 </div>
                 <p className="text-xs text-muted-foreground mt-3">{plan.seats}</p>
                 {getTeamPricing(plan) && (
-                  <p className="text-xs text-primary font-medium mt-1">{getTeamPricing(plan)}</p>
+                  <p className="text-xs text-primary font-medium mt-2 border-t border-border pt-2">{getTeamPricing(plan)}</p>
                 )}
               </CardHeader>
               
