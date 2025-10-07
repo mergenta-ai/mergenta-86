@@ -55,21 +55,25 @@ const UserManagement: React.FC = () => {
     try {
       setUpdating(userId);
 
-      const { error } = await supabase
-        .from('user_plans')
-        .update({
-          plan_type: newPlan as 'free' | 'pro' | 'zip' | 'ace' | 'max',
-          updated_at: new Date().toISOString()
-        })
-        .eq('user_id', userId);
+      // Call edge function to update user plan (bypasses RLS)
+      const { data, error } = await supabase.functions.invoke('admin-update-user-plan', {
+        body: {
+          userId: userId,
+          planType: newPlan
+        }
+      });
 
       if (error) throw error;
 
-      toast.success('User plan updated successfully');
+      if (!data?.success) {
+        throw new Error(data?.error || 'Failed to update user plan');
+      }
+
+      toast.success(`User plan updated to ${newPlan.toUpperCase()} successfully`);
       loadUsers();
     } catch (error: any) {
       console.error('Error updating user plan:', error);
-      toast.error('Failed to update user plan');
+      toast.error(error.message || 'Failed to update user plan');
     } finally {
       setUpdating(null);
     }

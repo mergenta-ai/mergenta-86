@@ -86,3 +86,9 @@ verify_jwt = true
 
 [functions.gmail-pull-user]
 verify_jwt = true
+
+[functions.admin-list-users]
+verify_jwt = true
+
+[functions.admin-update-user-plan]
+verify_jwt = true
