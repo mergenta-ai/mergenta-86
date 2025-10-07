@@ -32,9 +32,9 @@ const ChatInterface = ({ messages, isLoading }: ChatInterfaceProps) => {
   }, [messages]);
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full min-h-0">
       {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto px-4 md:px-6" style={{ paddingBottom: "120px" }}>
+      <div className="flex-1 overflow-y-auto px-4 md:px-6 min-h-0" style={{ paddingBottom: "120px" }}>
         <div className="max-w-3xl mx-auto py-6">
           {messages.length === 0 ? (
             <div className="text-center py-8">{/* Empty state - clean and minimal */}</div>
