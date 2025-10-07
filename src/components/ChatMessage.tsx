@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import ReactMarkdown from 'react-markdown';
 
 interface ChatMessageProps {
   message: string;
@@ -23,9 +24,19 @@ const ChatMessage = ({ message, isUser, timestamp, sources }: ChatMessageProps) 
             ? "bg-blue-100 text-blue-900 border border-blue-200 dark:bg-blue-900/20 dark:text-blue-100 dark:border-blue-800/30" 
             : "bg-gray-50 text-gray-900 border border-gray-200 dark:bg-gray-900/50 dark:text-gray-100 dark:border-gray-800"
         )}>
-          <p className="text-sm md:text-base leading-relaxed whitespace-pre-wrap">
-            {message}
-          </p>
+          <div className="text-sm md:text-base leading-relaxed prose prose-sm dark:prose-invert max-w-none">
+            <ReactMarkdown
+              components={{
+                p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+                strong: ({ children }) => <strong className="font-semibold text-blue-800 dark:text-blue-300">{children}</strong>,
+                ul: ({ children }) => <ul className="my-2 ml-4 list-disc">{children}</ul>,
+                ol: ({ children }) => <ol className="my-2 ml-4 list-decimal">{children}</ol>,
+                li: ({ children }) => <li className="mb-1">{children}</li>,
+              }}
+            >
+              {message}
+            </ReactMarkdown>
+          </div>
         
           {/* Show sources if available */}
           {sources && sources.length > 0 && !isUser && (
