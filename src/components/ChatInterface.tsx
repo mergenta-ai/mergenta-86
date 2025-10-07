@@ -156,8 +156,8 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
   }, [isLoading, selectedThinkingMessages]);
 
   return (
-    <div className="flex-1 overflow-y-auto px-4 md:px-6">
-      <div className={`max-w-3xl mx-auto py-6 ${messages.length > 0 ? "pb-40" : ""}`}>
+    <div className="flex-1 overflow-y-auto px-4 md:px-6 relative">
+      <div className={`max-w-3xl mx-auto py-6 ${messages.length > 0 ? "pb-48" : ""}`}>
           {messages.length === 0 ? (
             <div className="text-center py-8">{/* Empty state - clean and minimal */}</div>
           ) : (
@@ -202,6 +202,11 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
           )}
           <div ref={messagesEndRef} />
         </div>
+        
+        {/* Gradient fade overlay to seal bottom */}
+        {messages.length > 0 && (
+          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background via-background/95 to-transparent pointer-events-none z-20" />
+        )}
     </div>
   );
 };

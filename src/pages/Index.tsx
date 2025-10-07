@@ -193,12 +193,12 @@ const Index = () => {
           <>
             {/* Chat State - Messages Exist */}
             {/* Chat messages take full space */}
-            <main className="flex-1 flex flex-col">
+            <main className="flex-1 flex flex-col overflow-hidden">
               <ChatInterface messages={messages} isLoading={isLoading} turnCount={turnCount} />
             </main>
 
             {/* Fixed bottom search bar */}
-            <div className="fixed bottom-4 left-0 right-0 z-50 flex justify-center px-4">
+            <div className="fixed bottom-4 left-0 right-0 z-50 flex justify-center px-4 shadow-lg">
               <div className="w-full max-w-3xl">
                 <ChatInput 
                   onSendMessage={handleSendMessage} 
@@ -208,7 +208,7 @@ const Index = () => {
                   onModelSelect={handleModelSelect}
                 />
                 {/* Disclaimer */}
-                <p className="text-center text-sm text-gray-500 mt-2">
+                <p className="text-center text-sm text-muted-foreground mt-2">
                   Mergenta can make mistakes. Verify information.
                 </p>
               </div>
