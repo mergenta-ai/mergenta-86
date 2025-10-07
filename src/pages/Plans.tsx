@@ -142,10 +142,8 @@ const Plans = () => {
     if (isAnnual) {
       return `Team: $${plan.teamPricing.annual}/year + $${plan.teamPricing.perSeat}/seat/year (min ${plan.teamPricing.minSeats} seats)`;
     } else {
-      // Calculate monthly team pricing
-      const monthlyBase = Math.round(plan.teamPricing.annual / 12);
-      const monthlySeat = Math.round(plan.teamPricing.perSeat);
-      return `Team: $${monthlyBase}/month + $${monthlySeat}/seat/month (min ${plan.teamPricing.minSeats} seats)`;
+      // Use the actual monthly price as base for team pricing
+      return `Team: $${plan.monthlyPrice}/month + $${plan.teamPricing.perSeat}/seat/month (min ${plan.teamPricing.minSeats} seats)`;
     }
   };
 
@@ -239,9 +237,6 @@ const Plans = () => {
                   )}
                 </div>
                 <p className="text-xs text-muted-foreground mt-3">{plan.seats}</p>
-                {getTeamPricing(plan) && (
-                  <p className="text-xs text-primary font-medium mt-2 border-t border-border pt-2">{getTeamPricing(plan)}</p>
-                )}
               </CardHeader>
               
               <CardContent className="flex flex-col flex-grow pt-0">
@@ -253,6 +248,12 @@ const Plans = () => {
                     </li>
                   ))}
                 </ul>
+
+                {getTeamPricing(plan) && (
+                  <div className="mb-4 p-3 bg-primary/5 border border-primary/20 rounded-lg">
+                    <p className="text-xs text-primary font-medium">{getTeamPricing(plan)}</p>
+                  </div>
+                )}
 
                 <div className="mt-auto space-y-3">
                   <p className="text-xs font-semibold text-center text-primary italic">
