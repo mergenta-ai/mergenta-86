@@ -137,8 +137,16 @@ const Plans = () => {
   };
 
   const getTeamPricing = (plan: typeof plans[0]) => {
-    if (!plan.teamPricing || !isAnnual) return null;
-    return `Team: $${plan.teamPricing.annual} + $${plan.teamPricing.perSeat}/seat (min ${plan.teamPricing.minSeats} seats)`;
+    if (!plan.teamPricing) return null;
+    
+    if (isAnnual) {
+      return `Team: $${plan.teamPricing.annual}/year + $${plan.teamPricing.perSeat}/seat/year (min ${plan.teamPricing.minSeats} seats)`;
+    } else {
+      // Calculate monthly team pricing
+      const monthlyBase = Math.round(plan.teamPricing.annual / 12);
+      const monthlySeat = Math.round(plan.teamPricing.perSeat);
+      return `Team: $${monthlyBase}/month + $${monthlySeat}/seat/month (min ${plan.teamPricing.minSeats} seats)`;
+    }
   };
 
   return (
