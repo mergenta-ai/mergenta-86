@@ -30,6 +30,7 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [generatedPrompt, setGeneratedPrompt] = useState("");
   const [selectedModel, setSelectedModel] = useState("Default");
+  const [turnCount, setTurnCount] = useState(0);
   const { toast } = useToast();
   const isMobile = useIsMobile();
 
@@ -82,6 +83,7 @@ const Index = () => {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    setTurnCount(prev => prev + 1);
     setIsLoading(true);
     setGeneratedPrompt(""); // Clear the prompt after sending
 
@@ -90,7 +92,8 @@ const Index = () => {
       
       // Use the new chat service with LLM routing
       const modelToUse = selectedModel !== "Default" ? selectedModel : undefined;
-      const response = await chatService.handleDirectMessage(message, modelToUse);
+      const isFollowUp = messages.length > 0;
+      const response = await chatService.handleDirectMessage(message, modelToUse, isFollowUp);
       
       console.log('Chat response received:', response);
       
@@ -183,7 +186,7 @@ const Index = () => {
 
             {/* Chat messages */}
             <main className="flex-1 flex flex-col">
-              <ChatInterface messages={messages} isLoading={isLoading} />
+              <ChatInterface messages={messages} isLoading={isLoading} turnCount={turnCount} />
             </main>
           </>
         ) : (
@@ -191,7 +194,7 @@ const Index = () => {
             {/* Chat State - Messages Exist */}
             {/* Chat messages take full space */}
             <main className="flex-1 flex flex-col">
-              <ChatInterface messages={messages} isLoading={isLoading} />
+              <ChatInterface messages={messages} isLoading={isLoading} turnCount={turnCount} />
             </main>
 
             {/* Fixed bottom search bar */}

@@ -211,7 +211,7 @@ export class ChatService {
   /**
    * Handle direct user search or chat
    */
-  async handleDirectMessage(message: string, preferredModel?: string): Promise<ChatResponse> {
+  async handleDirectMessage(message: string, preferredModel?: string, isFollowUp: boolean = false): Promise<ChatResponse> {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       
@@ -219,8 +219,8 @@ export class ChatService {
         throw new Error('Authentication required');
       }
 
-      // Determine if this looks like a search query vs a chat message
-      const isSearch = this.looksLikeSearch(message);
+      // Only trigger search for new queries, not follow-ups
+      const isSearch = !isFollowUp && this.looksLikeSearch(message);
       const intentType = isSearch ? 'user_search' : 'creative';
 
       return await this.sendMessage({
