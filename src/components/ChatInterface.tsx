@@ -27,6 +27,9 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
   const [fade, setFade] = useState(true);
   const [selectedThinkingMessages, setSelectedThinkingMessages] = useState<string[]>([]);
   const [warmthLine, setWarmthLine] = useState<string>("");
+  const [currentWarmthIndex, setCurrentWarmthIndex] = useState(0);
+  const [selectedWarmthMessages, setSelectedWarmthMessages] = useState<string[]>([]);
+  const [warmthFade, setWarmthFade] = useState(true);
 
   const allThinkingMessages = [
     "Mergenta is thinking…",
@@ -128,18 +131,24 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
       setCurrentMessageIndex(0);
       setFade(true);
 
-      // Select warmth line for turns >= 2
+      // Select 3-4 random warmth messages for turns >= 2
       if (turnCount >= 2) {
         const allCategories = Object.values(warmthCategories).flat();
-        const randomWarmth = allCategories[Math.floor(Math.random() * allCategories.length)];
-        setWarmthLine(randomWarmth);
+        const numWarmthMessages = Math.floor(Math.random() * 2) + 3; // 3 or 4
+        const shuffledWarmth = [...allCategories].sort(() => Math.random() - 0.5);
+        const selectedWarmth = shuffledWarmth.slice(0, numWarmthMessages);
+        setSelectedWarmthMessages(selectedWarmth);
+        setCurrentWarmthIndex(0);
+        setWarmthFade(true);
+        setWarmthLine(selectedWarmth[0]);
       } else {
         setWarmthLine("");
+        setSelectedWarmthMessages([]);
       }
     }
   }, [isLoading, turnCount]);
 
-  // Cycle through selected thinking messages
+  // Cycle through selected thinking messages with 2-2.5s intervals
   useEffect(() => {
     if (!isLoading || selectedThinkingMessages.length === 0) {
       return;
@@ -151,14 +160,35 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
         setCurrentMessageIndex((prev) => (prev + 1) % selectedThinkingMessages.length);
         setFade(true);
       }, 300);
-    }, 1500);
+    }, Math.floor(Math.random() * 500) + 2000); // 2000-2500ms
 
     return () => clearInterval(interval);
   }, [isLoading, selectedThinkingMessages]);
 
+  // Cycle through selected warmth messages with 2-2.5s intervals
+  useEffect(() => {
+    if (!isLoading || turnCount < 2 || selectedWarmthMessages.length === 0) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setWarmthFade(false);
+      setTimeout(() => {
+        setCurrentWarmthIndex((prev) => {
+          const newIndex = (prev + 1) % selectedWarmthMessages.length;
+          setWarmthLine(selectedWarmthMessages[newIndex]);
+          return newIndex;
+        });
+        setWarmthFade(true);
+      }, 300);
+    }, Math.floor(Math.random() * 500) + 2000); // 2000-2500ms
+
+    return () => clearInterval(interval);
+  }, [isLoading, turnCount, selectedWarmthMessages]);
+
   return (
     <div className="flex-1 overflow-y-auto px-4 md:px-6 relative">
-      <div className={`max-w-3xl mx-auto py-6 ${messages.length > 0 ? "pb-40" : ""}`}>
+      <div className={`max-w-3xl mx-auto py-6 ${messages.length > 0 ? "pb-52" : ""}`}>
           {messages.length === 0 ? (
             <div className="text-center py-8">{/* Empty state - clean and minimal */}</div>
           ) : (
@@ -195,9 +225,12 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
                     </p>
                   )}
                   
-                  {/* Turn 2+: Show only warmth line (no thinking messages) */}
+                  {/* Turn 2+: Show rotating warmth line (no thinking messages) */}
                   {turnCount >= 2 && warmthLine && (
-                    <p className="text-sm text-muted-foreground animate-fade-in">
+                    <p 
+                      className="text-sm text-muted-foreground transition-opacity duration-300"
+                      style={{ opacity: warmthFade ? 1 : 0 }}
+                    >
                       {warmthLine}
                     </p>
                   )}
@@ -208,10 +241,10 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
           <div ref={messagesEndRef} />
         </div>
         
-        {/* Gradient fade overlay to seal bottom */}
-        {messages.length > 0 && (
-          <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-background via-background/98 to-transparent pointer-events-none z-20" />
-        )}
+      {/* Gradient fade overlay - positioned as sibling of scroll container */}
+      {messages.length > 0 && (
+        <div className="absolute bottom-0 left-0 right-0 h-52 bg-gradient-to-t from-background via-background/98 to-transparent pointer-events-none z-20" />
+      )}
     </div>
   );
 };
