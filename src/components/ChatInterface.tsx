@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import ChatMessage from "./ChatMessage";
 
 interface Message {
@@ -22,6 +22,25 @@ interface ChatInterfaceProps {
 
 const ChatInterface = ({ messages, isLoading }: ChatInterfaceProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+  const [fade, setFade] = useState(true);
+
+  const thinkingMessages = [
+    "Mergenta is thinking…",
+    "Analysing your query thoughtfully…",
+    "Generating insights — just a moment…",
+    "Connecting ideas to craft the best response…",
+    "Exploring the most relevant information…",
+    "Evaluating context for an accurate answer…",
+    "Piecing together key insights…",
+    "Thinking through your question carefully…",
+    "Synthesising knowledge across sources…",
+    "Reflecting before responding…",
+    "Gathering precise details for clarity…",
+    "Composing your answer elegantly…",
+    "Understanding intent before replying…",
+    "Refining the response to ensure precision…"
+  ];
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -30,6 +49,24 @@ const ChatInterface = ({ messages, isLoading }: ChatInterfaceProps) => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      setCurrentMessageIndex(0);
+      setFade(true);
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setFade(false);
+      setTimeout(() => {
+        setCurrentMessageIndex((prev) => (prev + 1) % thinkingMessages.length);
+        setFade(true);
+      }, 300);
+    }, 1500);
+
+    return () => clearInterval(interval);
+  }, [isLoading]);
 
   return (
     <div className="flex-1 overflow-y-auto px-4 md:px-6">
@@ -59,8 +96,11 @@ const ChatInterface = ({ messages, isLoading }: ChatInterfaceProps) => {
                       style={{ animationDuration: '2s' }}
                     />
                   </div>
-                  <p className="text-sm text-muted-foreground animate-pulse">
-                    Mergenta is thinking…
+                  <p 
+                    className="text-sm text-muted-foreground transition-opacity duration-300"
+                    style={{ opacity: fade ? 1 : 0 }}
+                  >
+                    {thinkingMessages[currentMessageIndex]}
                   </p>
                 </div>
               )}
