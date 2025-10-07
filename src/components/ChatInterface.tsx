@@ -32,10 +32,8 @@ const ChatInterface = ({ messages, isLoading }: ChatInterfaceProps) => {
   }, [messages]);
 
   return (
-    <div className="flex flex-col h-screen min-h-0">
-      {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto px-4 md:px-6">
-        <div className={`max-w-3xl mx-auto py-6 ${messages.length > 0 ? "pb-40" : ""}`}>
+    <div className="flex-1 overflow-y-auto px-4 md:px-6">
+      <div className={`max-w-3xl mx-auto py-6 ${messages.length > 0 ? "pb-40" : ""}`}>
           {messages.length === 0 ? (
             <div className="text-center py-8">{/* Empty state - clean and minimal */}</div>
           ) : (
@@ -51,7 +49,6 @@ const ChatInterface = ({ messages, isLoading }: ChatInterfaceProps) => {
           )}
           <div ref={messagesEndRef} />
         </div>
-      </div>
     </div>
   );
 };
