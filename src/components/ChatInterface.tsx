@@ -119,10 +119,11 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
   // Select 3-4 random thinking messages when loading starts
   useEffect(() => {
     if (isLoading) {
-      // Randomly select 3-4 unique messages
+      // Always include "Mergenta is thinking…" as first, then select 3-4 from remaining
       const numMessages = Math.floor(Math.random() * 2) + 3; // 3 or 4
-      const shuffled = [...allThinkingMessages].sort(() => Math.random() - 0.5);
-      const selected = shuffled.slice(0, numMessages);
+      const otherMessages = allThinkingMessages.slice(1); // Exclude first message
+      const shuffled = [...otherMessages].sort(() => Math.random() - 0.5);
+      const selected = ["Mergenta is thinking…", ...shuffled.slice(0, numMessages)];
       setSelectedThinkingMessages(selected);
       setCurrentMessageIndex(0);
       setFade(true);
@@ -157,7 +158,7 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
 
   return (
     <div className="flex-1 overflow-y-auto px-4 md:px-6 relative">
-      <div className={`max-w-3xl mx-auto py-6 ${messages.length > 0 ? "pb-48" : ""}`}>
+      <div className={`max-w-3xl mx-auto py-6 ${messages.length > 0 ? "pb-40" : ""}`}>
           {messages.length === 0 ? (
             <div className="text-center py-8">{/* Empty state - clean and minimal */}</div>
           ) : (
@@ -175,13 +176,6 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
               {/* Loading Indicator - appears instantly when processing */}
               {isLoading && selectedThinkingMessages.length > 0 && (
                 <div className="flex flex-col items-center justify-center py-8 animate-fade-in">
-                  {/* Warmth line - shown from turn 2 onwards */}
-                  {warmthLine && (
-                    <p className="text-sm text-muted-foreground mb-4 animate-fade-in">
-                      {warmthLine}
-                    </p>
-                  )}
-                  
                   <div className="relative w-16 h-16 mb-4">
                     <img 
                       src="/lovable-uploads/0ef37e7c-4020-4d43-b3cb-e900815b9635.png"
@@ -190,12 +184,23 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
                       style={{ animationDuration: '2s' }}
                     />
                   </div>
-                  <p 
-                    className="text-sm text-muted-foreground transition-opacity duration-300"
-                    style={{ opacity: fade ? 1 : 0 }}
-                  >
-                    {selectedThinkingMessages[currentMessageIndex]}
-                  </p>
+                  
+                  {/* Turn 1: Show thinking messages */}
+                  {turnCount === 1 && (
+                    <p 
+                      className="text-sm text-muted-foreground transition-opacity duration-300"
+                      style={{ opacity: fade ? 1 : 0 }}
+                    >
+                      {selectedThinkingMessages[currentMessageIndex]}
+                    </p>
+                  )}
+                  
+                  {/* Turn 2+: Show only warmth line (no thinking messages) */}
+                  {turnCount >= 2 && warmthLine && (
+                    <p className="text-sm text-muted-foreground animate-fade-in">
+                      {warmthLine}
+                    </p>
+                  )}
                 </div>
               )}
             </>
@@ -205,7 +210,7 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
         
         {/* Gradient fade overlay to seal bottom */}
         {messages.length > 0 && (
-          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background via-background/95 to-transparent pointer-events-none z-20" />
+          <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-background via-background/98 to-transparent pointer-events-none z-20" />
         )}
     </div>
   );

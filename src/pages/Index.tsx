@@ -193,7 +193,7 @@ const Index = () => {
           <>
             {/* Chat State - Messages Exist */}
             {/* Chat messages take full space */}
-            <main className="flex-1 flex flex-col overflow-hidden">
+            <main className="flex-1 flex flex-col">
               <ChatInterface messages={messages} isLoading={isLoading} turnCount={turnCount} />
             </main>
 
