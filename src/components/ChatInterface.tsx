@@ -8,7 +8,7 @@ interface Message {
   timestamp: Date;
   sources?: Array<{
     id: string;
-    type: 'google' | 'rss';
+    type: "google" | "rss";
     title: string;
     url: string;
     snippet: string;
@@ -34,12 +34,10 @@ const ChatInterface = ({ messages, isLoading }: ChatInterfaceProps) => {
   return (
     <div className="flex flex-col h-full">
       {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto px-4 md:px-6">
-        <div className={`max-w-3xl mx-auto py-6 ${messages.length > 0 ? 'pb-56' : ''}`}>
+      <div className="flex-1 overflow-y-auto px-4 md:px-6" style={{ paddingBottom: "120px" }}>
+        <div className="max-w-3xl mx-auto py-6">
           {messages.length === 0 ? (
-            <div className="text-center py-8">
-              {/* Empty state - clean and minimal */}
-            </div>
+            <div className="text-center py-8">{/* Empty state - clean and minimal */}</div>
           ) : (
             messages.map((message) => (
               <ChatMessage
@@ -54,7 +52,6 @@ const ChatInterface = ({ messages, isLoading }: ChatInterfaceProps) => {
           <div ref={messagesEndRef} />
         </div>
       </div>
-
     </div>
   );
 };
