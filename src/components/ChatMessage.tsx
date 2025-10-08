@@ -19,54 +19,71 @@ const ChatMessage = ({ message, isUser, timestamp, sources }: ChatMessageProps) 
     <div className="w-full mb-4">
       <div className={cn("flex w-full", isUser ? "justify-end" : "justify-start")}>
         <div className={cn(
-          "max-w-[80%] rounded-2xl px-4 py-3 shadow-sm transition-all duration-200",
+          "max-w-[80%] rounded-2xl px-4 py-3 shadow-sm transition-all duration-200 text-left",
           isUser 
             ? "bg-blue-100 text-blue-900 border border-blue-200 dark:bg-blue-900/20 dark:text-blue-100 dark:border-blue-800/30" 
-            : "bg-gray-50 text-gray-900 border border-gray-200 dark:bg-gray-900/50 dark:text-gray-100 dark:border-gray-800"
+            : "bg-white border border-gray-100"
         )}>
-          <div className="text-sm md:text-base leading-loose prose prose-sm dark:prose-invert max-w-none prose-p:mb-4 prose-li:mb-2">
+          <div className="text-sm md:text-base prose prose-sm max-w-none">
             <ReactMarkdown
               components={{
-                // Paragraphs with generous spacing
-                p: ({ children }) => (
-                  <p className="mb-4 last:mb-0 leading-loose">{children}</p>
-                ),
+                // Paragraphs - body text styling
+                p: ({ children }) => {
+                  const content = String(children);
+                  // Check if it's a summary line
+                  if (content.toLowerCase().startsWith('in summary:')) {
+                    return (
+                      <p className="mt-3 leading-relaxed font-medium italic" style={{ color: '#000000' }}>
+                        {children}
+                      </p>
+                    );
+                  }
+                  // Regular body text
+                  return (
+                    <p className="mb-2 last:mb-0 leading-relaxed font-normal text-base" style={{ color: '#333333' }}>
+                      {children}
+                    </p>
+                  );
+                },
                 
-                // Bold headings with emphasis
+                // Bold text - bullet titles
                 strong: ({ children }) => (
-                  <strong className="font-bold text-blue-900 dark:text-blue-200 text-base">
+                  <strong className="font-medium text-base leading-relaxed" style={{ color: '#222222' }}>
                     {children}
                   </strong>
                 ),
                 
-                // Unordered lists with proper spacing
+                // Unordered lists
                 ul: ({ children }) => (
-                  <ul className="my-4 ml-6 space-y-2 list-disc marker:text-blue-600 dark:marker:text-blue-400">
+                  <ul className="my-4 ml-6 space-y-2 list-disc" style={{ color: '#333333' }}>
                     {children}
                   </ul>
                 ),
                 
-                // Ordered lists with proper spacing
+                // Ordered lists
                 ol: ({ children }) => (
-                  <ol className="my-4 ml-6 space-y-2 list-decimal marker:text-blue-600 dark:marker:text-blue-400 marker:font-semibold">
+                  <ol className="my-4 ml-6 space-y-2 list-decimal" style={{ color: '#333333' }}>
                     {children}
                   </ol>
                 ),
                 
-                // List items with breathing room
+                // List items
                 li: ({ children }) => (
-                  <li className="mb-2 pl-2 leading-loose">{children}</li>
+                  <li className="mb-2 pl-2 leading-relaxed text-base font-normal" style={{ color: '#333333' }}>
+                    {children}
+                  </li>
                 ),
                 
-                // Headings (## format)
+                // Headings - H2
                 h2: ({ children }) => (
-                  <h2 className="text-lg font-bold mt-6 mb-3 text-blue-900 dark:text-blue-200">
+                  <h2 className="text-xl font-semibold mb-2" style={{ color: '#000000' }}>
                     {children}
                   </h2>
                 ),
                 
+                // Headings - H3
                 h3: ({ children }) => (
-                  <h3 className="text-base font-bold mt-4 mb-2 text-blue-800 dark:text-blue-300">
+                  <h3 className="text-lg font-semibold mb-2" style={{ color: '#000000' }}>
                     {children}
                   </h3>
                 ),

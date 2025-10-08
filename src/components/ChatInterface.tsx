@@ -193,7 +193,7 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
   }, [isLoading, turnCount, selectedWarmthMessages]);
 
   return (
-    <div className="flex-1 overflow-y-auto px-4 md:px-6 relative">
+    <div className="flex-1 overflow-y-auto px-4 md:px-6 relative" style={{ backgroundColor: '#fde7ef' }}>
       <div className={`max-w-3xl mx-auto py-6 ${messages.length > 0 ? "pb-52" : ""}`}>
         {messages.length === 0 ? (
           <div className="text-center py-8">{/* Empty state - clean and minimal */}</div>
@@ -249,7 +249,9 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
 
       {/* Gradient fade overlay - positioned as sibling of scroll container */}
       {messages.length > 0 && (
-        <div className="absolute bottom-0 left-0 right-0 h-52 bg-gradient-to-t from-background via-background/98 to-transparent pointer-events-none z-20" />
+        <div className="absolute bottom-0 left-0 right-0 h-52 pointer-events-none z-20" style={{ 
+          background: 'linear-gradient(to top, #fde7ef, rgba(253, 231, 239, 0.98), transparent)' 
+        }} />
       )}
     </div>
   );
