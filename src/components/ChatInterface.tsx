@@ -34,15 +34,24 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
   const allThinkingMessages = [
     "Mergenta is thinking…",
     "Analysing your query thoughtfully…",
+    “Absorbing every detail of your prompt…”,
+    “Letting the ideas align before responding…”,
     "Generating insights — just a moment…",
     "Connecting ideas to craft the best response…",
     "Exploring the most relevant information…",
     "Evaluating context for an accurate answer…",
     "Piecing together key insights…",
     "Thinking through your question carefully…",
+      “Sorting signals from noise to form clarity…”,
     "Synthesising knowledge across sources…",
+    “Assembling the most meaningful perspective…”,
+“Exploring all angles for a balanced answer…”
     "Reflecting before responding…",
     "Gathering precise details for clarity…",
+      “Reaching into the data vault for precision…”,
+“Fine-tuning thoughts for the perfect phrasing…”,
+“Scanning patterns to uncover insight…”,
+“Framing a response that truly resonates…”,
     "Composing your answer elegantly…",
     "Understanding intent before replying…",
     "Refining the response to ensure precision…",
@@ -148,7 +157,7 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
     }
   }, [isLoading, turnCount]);
 
-  // Cycle through selected thinking messages with 4-4.5s intervals
+  // Cycle through selected thinking messages with 5-5.5s intervals
   useEffect(() => {
     if (!isLoading || selectedThinkingMessages.length === 0) {
       return;
@@ -162,13 +171,13 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
           setFade(true);
         }, 300);
       },
-      Math.floor(Math.random() * 500) + 4000,
+      Math.floor(Math.random() * 500) + 5000,
     ); // 4000-4500ms
 
     return () => clearInterval(interval);
   }, [isLoading, selectedThinkingMessages]);
 
-  // Cycle through selected warmth messages with 4-4.5s intervals
+  // Cycle through selected warmth messages with 5-5.5s intervals
   useEffect(() => {
     if (!isLoading || turnCount < 2 || selectedWarmthMessages.length === 0) {
       return;
@@ -186,7 +195,7 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
           setWarmthFade(true);
         }, 300);
       },
-      Math.floor(Math.random() * 500) + 4000,
+      Math.floor(Math.random() * 500) + 5000,
     ); // 4000-4500ms
 
     return () => clearInterval(interval);
