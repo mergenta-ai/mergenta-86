@@ -29,21 +29,21 @@ const ChatMessage = ({ message, isUser, timestamp, sources }: ChatMessageProps) 
               components={{
                 // Main Title - H1
                 h1: ({ children }) => (
-                  <h1 className="text-lg font-semibold mb-3" style={{ color: '#000000' }}>
+                  <h1 className="text-lg font-semibold mb-5 mt-2" style={{ color: '#000000' }}>
                     {children}
                   </h1>
                 ),
                 
                 // Section Headings - H2
                 h2: ({ children }) => (
-                  <h2 className="text-lg font-semibold mb-3" style={{ color: '#000000' }}>
+                  <h2 className="text-lg font-semibold mb-4 mt-6" style={{ color: '#000000' }}>
                     {children}
                   </h2>
                 ),
                 
                 // Sub-headings - H3
                 h3: ({ children }) => (
-                  <h3 className="text-lg font-semibold mb-3" style={{ color: '#000000' }}>
+                  <h3 className="text-lg font-semibold mb-3 mt-5" style={{ color: '#000000' }}>
                     {children}
                   </h3>
                 ),
@@ -65,7 +65,7 @@ const ChatMessage = ({ message, isUser, timestamp, sources }: ChatMessageProps) 
                   }
                   // Regular body text
                   return (
-                    <p className="mb-2 last:mb-0 leading-relaxed font-normal text-base" style={{ color: '#333333' }}>
+                    <p className="mb-4 last:mb-0 leading-relaxed font-normal text-base" style={{ color: '#333333' }}>
                       {children}
                     </p>
                   );
@@ -83,7 +83,7 @@ const ChatMessage = ({ message, isUser, timestamp, sources }: ChatMessageProps) 
                       </em>
                     );
                   }
-                  return <em>{children}</em>;
+                  return <em style={{ fontStyle: 'italic' }}>{children}</em>;
                 },
                 
                 // Bold text - outer bullet titles
@@ -99,7 +99,7 @@ const ChatMessage = ({ message, isUser, timestamp, sources }: ChatMessageProps) 
                   const isNested = node?.position?.start.column && node.position.start.column > 1;
                   return (
                     <ul 
-                      className={`my-2 space-y-2 list-disc ${isNested ? 'ml-8' : 'ml-4'}`}
+                      className={`my-4 space-y-3 list-disc ${isNested ? 'ml-8' : 'ml-4'}`}
                       style={{ color: isNested ? '#333333' : '#222222' }}
                     >
                       {children}
@@ -112,7 +112,7 @@ const ChatMessage = ({ message, isUser, timestamp, sources }: ChatMessageProps) 
                   const isNested = node?.position?.start.column && node.position.start.column > 1;
                   return (
                     <ol 
-                      className={`my-2 space-y-2 list-decimal ${isNested ? 'ml-8' : 'ml-4'}`}
+                      className={`my-4 space-y-3 list-decimal ${isNested ? 'ml-8' : 'ml-4'}`}
                       style={{ color: isNested ? '#333333' : '#222222' }}
                     >
                       {children}
@@ -129,7 +129,7 @@ const ChatMessage = ({ message, isUser, timestamp, sources }: ChatMessageProps) 
                   
                   return (
                     <li 
-                      className={`mb-2 leading-relaxed text-base ${hasNestedList ? 'font-medium' : 'font-normal'}`}
+                      className={`mb-3 leading-relaxed text-base ${hasNestedList ? 'font-medium' : 'font-normal'}`}
                       style={{ color: hasNestedList ? '#222222' : '#333333' }}
                     >
                       {children}
