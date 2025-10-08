@@ -51,10 +51,14 @@ const ChatMessage = ({ message, isUser, timestamp, sources }: ChatMessageProps) 
                 // Paragraphs - body text styling
                 p: ({ children }) => {
                   const content = String(children);
-                  // Check if it's a summary line
-                  if (content.toLowerCase().includes('in summary:')) {
+                  // Check if it's a summary line (starts with italic "In summary:")
+                  if (content.toLowerCase().includes('in summary:') || 
+                      content.toLowerCase().includes('to summarise:') ||
+                      content.toLowerCase().includes('in essence:') ||
+                      content.toLowerCase().includes('overall:') ||
+                      content.toLowerCase().includes('takeaway:')) {
                     return (
-                      <p className="mt-3 leading-relaxed font-medium italic text-base" style={{ color: '#000000' }}>
+                      <p className="mt-3 leading-relaxed text-base" style={{ color: '#000000', fontWeight: 500, fontStyle: 'italic' }}>
                         {children}
                       </p>
                     );
@@ -65,6 +69,21 @@ const ChatMessage = ({ message, isUser, timestamp, sources }: ChatMessageProps) 
                       {children}
                     </p>
                   );
+                },
+                
+                // Italic text - for summary lines
+                em: ({ children }) => {
+                  const content = String(children);
+                  // Check if this is the "In summary:" part
+                  if (content.toLowerCase().includes('in summary:') || 
+                      content.toLowerCase().includes('to summarise:')) {
+                    return (
+                      <em style={{ color: '#000000', fontWeight: 500 }}>
+                        {children}
+                      </em>
+                    );
+                  }
+                  return <em>{children}</em>;
                 },
                 
                 // Bold text - outer bullet titles
