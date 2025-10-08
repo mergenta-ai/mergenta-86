@@ -7,6 +7,51 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+const FORMATTING_SYSTEM_PROMPT = `You are Mergenta, a helpful and articulate AI assistant. 
+
+CRITICAL FORMATTING REQUIREMENTS:
+1. **Use Markdown Formatting Extensively:**
+   - Use **bold** for all section headings and key terms
+   - Use bullet points (- or •) for lists, each on a NEW LINE
+   - Use numbered lists (1., 2., 3.) when showing sequential steps
+   - Add blank lines between paragraphs for breathing room
+   - Add blank lines between list groups and sections
+
+2. **Whitespace and Legibility:**
+   - Add double line breaks between major sections
+   - Each bullet point must be on its own line
+   - Never write bullets inline like "• item1 • item2"
+   - Create visual hierarchy with proper spacing
+
+3. **Structure Guidelines:**
+   - Start with a brief intro paragraph
+   - Use headings (##) for main sections with bold (**Section Name**)
+   - Group related points under clear headings
+   - End with a summary or conclusion when appropriate
+
+4. **Visual Hierarchy Example:**
+   **Main Topic:**
+   
+   Brief introduction paragraph with context.
+   
+   **Section 1: Category Name**
+   - First point with clear explanation
+   - Second point with details
+   - Third point completing the thought
+   
+   **Section 2: Another Category**
+   1. Sequential step one
+   2. Sequential step two
+   3. Sequential step three
+   
+   Conclusion paragraph wrapping up the response.
+
+5. **Citations and Sources:**
+   - When provided with sources, use inline citations like [G1], [RSS1]
+   - List all sources at the end with proper formatting
+
+Remember: Clean formatting creates an enriching reading experience. Use whitespace generously!`;
+
 const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
 const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const supabase = createClient(supabaseUrl, supabaseKey);
@@ -341,7 +386,7 @@ async function callOpenAI(prompt: string, intentType?: string, modelOverride?: s
     messages: [
       {
         role: 'system',
-        content: 'You are a helpful AI assistant. When provided with sources, always include inline citations like [G1], [RSS1] and provide a complete source list at the end.'
+        content: FORMATTING_SYSTEM_PROMPT
       },
       { role: 'user', content: prompt }
     ]
@@ -400,10 +445,11 @@ async function callAnthropic(prompt: string, intentType?: string, modelOverride?
     body: JSON.stringify({
       model,
       max_tokens: 2000,
+      system: FORMATTING_SYSTEM_PROMPT,
       messages: [
         {
           role: 'user',
-          content: `You are a helpful AI assistant. When provided with sources, always include inline citations like [G1], [RSS1] and provide a complete source list at the end.\n\n${prompt}`
+          content: prompt
         }
       ]
     })
@@ -446,7 +492,7 @@ async function callMistral(prompt: string, intentType?: string, modelOverride?: 
       messages: [
         {
           role: 'system',
-          content: 'You are a helpful AI assistant. When provided with sources, always include inline citations like [G1], [RSS1] and provide a complete source list at the end.'
+          content: FORMATTING_SYSTEM_PROMPT
         },
         { role: 'user', content: prompt }
       ],
@@ -492,7 +538,7 @@ async function callXAI(prompt: string, intentType?: string, modelOverride?: stri
       messages: [
         {
           role: 'system',
-          content: 'You are a helpful AI assistant. When provided with sources, always include inline citations like [G1], [RSS1] and provide a complete source list at the end.'
+          content: FORMATTING_SYSTEM_PROMPT
         },
         { role: 'user', content: prompt }
       ],
@@ -535,7 +581,7 @@ async function callGoogle(prompt: string, intentType?: string, modelOverride?: s
     body: JSON.stringify({
       contents: [{
         parts: [{
-          text: `You are a helpful AI assistant. When provided with sources, always include inline citations like [G1], [RSS1] and provide a complete source list at the end.\n\n${prompt}`
+          text: `${FORMATTING_SYSTEM_PROMPT}\n\n${prompt}`
         }]
       }],
       generationConfig: {

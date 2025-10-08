@@ -24,14 +24,77 @@ const ChatMessage = ({ message, isUser, timestamp, sources }: ChatMessageProps) 
             ? "bg-blue-100 text-blue-900 border border-blue-200 dark:bg-blue-900/20 dark:text-blue-100 dark:border-blue-800/30" 
             : "bg-gray-50 text-gray-900 border border-gray-200 dark:bg-gray-900/50 dark:text-gray-100 dark:border-gray-800"
         )}>
-          <div className="text-sm md:text-base leading-relaxed prose prose-sm dark:prose-invert max-w-none">
+          <div className="text-sm md:text-base leading-loose prose prose-sm dark:prose-invert max-w-none prose-p:mb-4 prose-li:mb-2">
             <ReactMarkdown
               components={{
-                p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
-                strong: ({ children }) => <strong className="font-semibold text-blue-800 dark:text-blue-300">{children}</strong>,
-                ul: ({ children }) => <ul className="my-2 ml-4 list-disc">{children}</ul>,
-                ol: ({ children }) => <ol className="my-2 ml-4 list-decimal">{children}</ol>,
-                li: ({ children }) => <li className="mb-1">{children}</li>,
+                // Paragraphs with generous spacing
+                p: ({ children }) => (
+                  <p className="mb-4 last:mb-0 leading-loose">{children}</p>
+                ),
+                
+                // Bold headings with emphasis
+                strong: ({ children }) => (
+                  <strong className="font-bold text-blue-900 dark:text-blue-200 text-base">
+                    {children}
+                  </strong>
+                ),
+                
+                // Unordered lists with proper spacing
+                ul: ({ children }) => (
+                  <ul className="my-4 ml-6 space-y-2 list-disc marker:text-blue-600 dark:marker:text-blue-400">
+                    {children}
+                  </ul>
+                ),
+                
+                // Ordered lists with proper spacing
+                ol: ({ children }) => (
+                  <ol className="my-4 ml-6 space-y-2 list-decimal marker:text-blue-600 dark:marker:text-blue-400 marker:font-semibold">
+                    {children}
+                  </ol>
+                ),
+                
+                // List items with breathing room
+                li: ({ children }) => (
+                  <li className="mb-2 pl-2 leading-loose">{children}</li>
+                ),
+                
+                // Headings (## format)
+                h2: ({ children }) => (
+                  <h2 className="text-lg font-bold mt-6 mb-3 text-blue-900 dark:text-blue-200">
+                    {children}
+                  </h2>
+                ),
+                
+                h3: ({ children }) => (
+                  <h3 className="text-base font-bold mt-4 mb-2 text-blue-800 dark:text-blue-300">
+                    {children}
+                  </h3>
+                ),
+                
+                // Code blocks
+                code: ({ node, inline, children, ...props }: any) => (
+                  inline ? (
+                    <code className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-800 rounded text-sm font-mono">
+                      {children}
+                    </code>
+                  ) : (
+                    <code className="block p-3 bg-gray-100 dark:bg-gray-900 rounded-lg text-sm font-mono overflow-x-auto my-3">
+                      {children}
+                    </code>
+                  )
+                ),
+                
+                // Blockquotes
+                blockquote: ({ children }) => (
+                  <blockquote className="border-l-4 border-blue-500 pl-4 py-2 my-4 italic text-gray-700 dark:text-gray-300">
+                    {children}
+                  </blockquote>
+                ),
+                
+                // Horizontal rules
+                hr: () => (
+                  <hr className="my-6 border-t-2 border-gray-200 dark:border-gray-700" />
+                ),
               }}
             >
               {message}
