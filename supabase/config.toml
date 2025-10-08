@@ -95,3 +95,6 @@ verify_jwt = true
 
 [functions.test-gemini-key]
 verify_jwt = false
+
+[functions.sync-quota-configs]
+verify_jwt = false
