@@ -248,7 +248,7 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                 {/* Dropdown - only for certain tabs */}
                 {activeTab === tab.id && !["power-playbook"].includes(tab.id) && (
                   <div 
-                    className="absolute top-full w-[220px] bg-[#F8F5FE] rounded-lg shadow-md border border-[#E5D9F2] z-50"
+                    className="absolute top-full w-[220px] bg-[#F8F5FE] rounded-lg shadow-md border border-[#E5D9F2] z-[100]"
                     onMouseEnter={handleDropdownEnter}
                     onMouseLeave={handleDropdownLeave}
                   >
@@ -391,7 +391,7 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                             </button>
                             {expandedGroups.has(group.title) && (
                               <div 
-                                className={`absolute left-full ${groupIdx >= 2 ? 'bottom-0' : 'top-0'} bg-[#F8F5FE] rounded-lg shadow-md border border-[#E5D9F2] z-50 w-48`}
+                                className={`absolute left-full ${groupIdx >= 2 ? 'bottom-0' : 'top-0'} bg-[#F8F5FE] rounded-lg shadow-md border border-[#E5D9F2] z-[100] w-48`}
                                 onMouseEnter={() => handleSubmenuEnter(group.title)}
                                 onMouseLeave={handleSubmenuLeave}
                               >

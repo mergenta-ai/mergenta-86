@@ -263,7 +263,7 @@ const Index = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 lg:ml-20 ml-0 flex flex-col relative w-full max-w-full overflow-x-hidden overflow-y-visible">
+      <div className="flex-1 lg:ml-20 ml-0 flex flex-col w-full max-w-full overflow-x-hidden">
         {messages.length === 0 ? (
           <>
             {/* Default State - No Messages */}
