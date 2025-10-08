@@ -24,16 +24,37 @@ const ChatMessage = ({ message, isUser, timestamp, sources }: ChatMessageProps) 
             ? "bg-blue-100 text-blue-900 border border-blue-200 dark:bg-blue-900/20 dark:text-blue-100 dark:border-blue-800/30" 
             : "bg-white border border-gray-100"
         )}>
-          <div className="text-sm md:text-base prose prose-sm max-w-none">
+          <div className="text-base prose prose-sm max-w-none">
             <ReactMarkdown
               components={{
+                // Main Title - H1
+                h1: ({ children }) => (
+                  <h1 className="text-lg font-semibold mb-3" style={{ color: '#000000' }}>
+                    {children}
+                  </h1>
+                ),
+                
+                // Section Headings - H2
+                h2: ({ children }) => (
+                  <h2 className="text-lg font-semibold mb-3" style={{ color: '#000000' }}>
+                    {children}
+                  </h2>
+                ),
+                
+                // Sub-headings - H3
+                h3: ({ children }) => (
+                  <h3 className="text-lg font-semibold mb-3" style={{ color: '#000000' }}>
+                    {children}
+                  </h3>
+                ),
+                
                 // Paragraphs - body text styling
                 p: ({ children }) => {
                   const content = String(children);
                   // Check if it's a summary line
-                  if (content.toLowerCase().startsWith('in summary:')) {
+                  if (content.toLowerCase().includes('in summary:')) {
                     return (
-                      <p className="mt-3 leading-relaxed font-medium italic" style={{ color: '#000000' }}>
+                      <p className="mt-3 leading-relaxed font-medium italic text-base" style={{ color: '#000000' }}>
                         {children}
                       </p>
                     );
@@ -46,47 +67,56 @@ const ChatMessage = ({ message, isUser, timestamp, sources }: ChatMessageProps) 
                   );
                 },
                 
-                // Bold text - bullet titles
+                // Bold text - outer bullet titles
                 strong: ({ children }) => (
-                  <strong className="font-medium text-base leading-relaxed" style={{ color: '#222222' }}>
+                  <strong className="font-medium leading-relaxed" style={{ color: '#222222' }}>
                     {children}
                   </strong>
                 ),
                 
-                // Unordered lists
-                ul: ({ children }) => (
-                  <ul className="my-4 ml-6 space-y-2 list-disc" style={{ color: '#333333' }}>
-                    {children}
-                  </ul>
-                ),
+                // Unordered lists - outer bullets
+                ul: ({ children, node }) => {
+                  // Check if this is a nested list (has parent li)
+                  const isNested = node?.position?.start.column && node.position.start.column > 1;
+                  return (
+                    <ul 
+                      className={`my-2 space-y-2 list-disc ${isNested ? 'ml-8' : 'ml-4'}`}
+                      style={{ color: isNested ? '#333333' : '#222222' }}
+                    >
+                      {children}
+                    </ul>
+                  );
+                },
                 
                 // Ordered lists
-                ol: ({ children }) => (
-                  <ol className="my-4 ml-6 space-y-2 list-decimal" style={{ color: '#333333' }}>
-                    {children}
-                  </ol>
-                ),
+                ol: ({ children, node }) => {
+                  const isNested = node?.position?.start.column && node.position.start.column > 1;
+                  return (
+                    <ol 
+                      className={`my-2 space-y-2 list-decimal ${isNested ? 'ml-8' : 'ml-4'}`}
+                      style={{ color: isNested ? '#333333' : '#222222' }}
+                    >
+                      {children}
+                    </ol>
+                  );
+                },
                 
                 // List items
-                li: ({ children }) => (
-                  <li className="mb-2 pl-2 leading-relaxed text-base font-normal" style={{ color: '#333333' }}>
-                    {children}
-                  </li>
-                ),
-                
-                // Headings - H2
-                h2: ({ children }) => (
-                  <h2 className="text-xl font-semibold mb-2" style={{ color: '#000000' }}>
-                    {children}
-                  </h2>
-                ),
-                
-                // Headings - H3
-                h3: ({ children }) => (
-                  <h3 className="text-lg font-semibold mb-2" style={{ color: '#000000' }}>
-                    {children}
-                  </h3>
-                ),
+                li: ({ children, node }) => {
+                  // Check if this li contains a nested list
+                  const hasNestedList = node?.children?.some(
+                    (child: any) => child.type === 'list'
+                  );
+                  
+                  return (
+                    <li 
+                      className={`mb-2 leading-relaxed text-base ${hasNestedList ? 'font-medium' : 'font-normal'}`}
+                      style={{ color: hasNestedList ? '#222222' : '#333333' }}
+                    >
+                      {children}
+                    </li>
+                  );
+                },
                 
                 // Code blocks
                 code: ({ node, inline, children, ...props }: any) => (
