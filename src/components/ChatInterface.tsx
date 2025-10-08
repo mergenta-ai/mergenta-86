@@ -223,7 +223,7 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
   }, [isLoading, turnCount, selectedWarmthMessages]);
 
   return (
-    <div ref={scrollContainerRef} className="flex-1 overflow-y-auto px-3 sm:px-4 md:px-6 relative min-h-0" style={{ backgroundColor: '#fde7ef', maxHeight: 'calc(100vh - var(--chat-input-height, 120px))', paddingBottom: '20px', scrollPaddingBottom: '20px', boxSizing: 'border-box', overflowY: 'auto' }}>
+    <div ref={scrollContainerRef} className="flex-1 overflow-y-auto px-3 sm:px-4 md:px-6 relative min-h-0" style={{ maxHeight: 'calc(100vh - var(--chat-input-height, 120px))', paddingBottom: '20px', scrollPaddingBottom: '20px', boxSizing: 'border-box', overflowY: 'auto' }}>
       <div className={`max-w-3xl mx-auto py-4 sm:py-6 ${messages.length > 0 ? "pb-40 sm:pb-52" : ""}`}>
         {messages.length === 0 ? (
           <div className="text-center py-8">{/* Empty state - clean and minimal */}</div>
