@@ -92,3 +92,6 @@ verify_jwt = true
 
 [functions.admin-update-user-plan]
 verify_jwt = true
+
+[functions.test-gemini-key]
+verify_jwt = false
