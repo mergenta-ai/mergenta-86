@@ -223,8 +223,8 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
   }, [isLoading, turnCount, selectedWarmthMessages]);
 
   return (
-    <div ref={scrollContainerRef} className="flex-1 overflow-y-auto px-4 md:px-6 relative" style={{ backgroundColor: '#fde7ef' }}>
-      <div className={`max-w-3xl mx-auto py-6 ${messages.length > 0 ? "pb-52" : ""}`}>
+    <div ref={scrollContainerRef} className="flex-1 overflow-y-auto px-3 sm:px-4 md:px-6 relative min-h-0" style={{ backgroundColor: '#fde7ef', maxHeight: 'calc(100vh - var(--chat-input-height))' }}>
+      <div className={`max-w-3xl mx-auto py-4 sm:py-6 ${messages.length > 0 ? "pb-40 sm:pb-52" : ""}`}>
         {messages.length === 0 ? (
           <div className="text-center py-8">{/* Empty state - clean and minimal */}</div>
         ) : (
@@ -289,7 +289,7 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
         <Button
           onClick={scrollToBottom}
           size="icon"
-          className="fixed bottom-24 right-6 md:right-8 z-30 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 w-10 h-10 bg-background border border-border hover:bg-accent"
+          className="fixed bottom-20 sm:bottom-24 right-4 sm:right-6 md:right-8 z-30 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 w-10 h-10 bg-background border border-border hover:bg-accent"
           aria-label="Scroll to bottom"
         >
           <ArrowDown className="h-5 w-5" />

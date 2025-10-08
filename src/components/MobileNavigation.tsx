@@ -65,7 +65,7 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({ onAddToChat, onProm
             </Button>
           </SheetTrigger>
           
-          <SheetContent side="left" className="w-[320px] p-0 overflow-y-auto">
+          <SheetContent side="left" className="w-[85vw] sm:w-[300px] max-w-[320px] p-0 overflow-y-auto">
             <div className="flex flex-col h-full">
               {/* Header with Logo and Brand */}
               <div className="p-6 border-b bg-gradient-to-r from-primary/5 to-purple-50">

@@ -241,4 +241,27 @@ All colors MUST be HSL.
   .scrollbar-thin::-webkit-scrollbar-thumb:active {
     background: hsl(var(--primary));
   }
+
+  /* Responsive foundation - box-sizing inheritance */
+  html, body, #root {
+    box-sizing: border-box;
+  }
+
+  *, *::before, *::after {
+    box-sizing: inherit;
+  }
+
+  /* CSS custom properties for dynamic spacing */
+  :root {
+    --chat-input-height: 140px;
+    --header-height: 180px;
+    --mobile-nav-height: 80px;
+  }
+
+  @media (max-width: 768px) {
+    :root {
+      --chat-input-height: 160px;
+      --header-height: 140px;
+    }
+  }
 }

@@ -211,7 +211,7 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
     <TooltipProvider delayDuration={300}>
       <div className="flex justify-center w-full px-4 mt-2" ref={containerRef}>
         <div className="w-full max-w-5xl">
-          <div className="flex justify-center gap-2 relative">
+          <div className="flex justify-center gap-1.5 sm:gap-2 relative overflow-x-auto scrollbar-thin">
             {tabs.map((tab, index) => (
               <div key={index} className="relative">
                 <button
@@ -230,7 +230,7 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                   onMouseLeave={handleTabLeave}
                   style={{ backgroundColor: activeTab === tab.id ? '#C7A8EA' : '#F3EAFE' }}
                   className={`
-                    w-[100px] py-2 rounded-xl font-inter font-medium text-sm tracking-tight text-center
+                    w-[85px] sm:w-[90px] md:w-[100px] py-1.5 sm:py-2 rounded-xl font-inter font-medium text-sm tracking-tight text-center
                     transition-all duration-300 ease-in-out
                     focus:outline-none focus:ring-2 focus:ring-purple-300 focus:ring-offset-2
                     flex items-center justify-center

@@ -25,9 +25,9 @@ const Header = () => {
   const planDisplay = planType.charAt(0).toUpperCase() + planType.slice(1);
 
   return (
-    <div className="flex flex-col items-center pt-9 md:pt-16 px-4 relative">
+    <div className="flex flex-col items-center pt-6 sm:pt-9 md:pt-12 lg:pt-16 px-4 relative">
       {/* Softer Title */}
-      <h1 className="font-inter text-4xl md:text-5xl font-medium text-[#7D55C7] tracking-[-0.01em] text-center">
+      <h1 className="font-inter text-3xl sm:text-4xl md:text-5xl font-medium text-[#7D55C7] tracking-[-0.01em] text-center">
         Mergenta
       </h1>
 

@@ -245,7 +245,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex w-full">
       {/* Mobile Navigation */}
       <MobileNavigation />
       
@@ -253,7 +253,7 @@ const Index = () => {
       <MergentaSidebar />
       
       {/* Model Display - Fixed Top Right Corner */}
-      <div className="fixed top-4 right-4 z-50 lg:right-6">
+      <div className="fixed top-4 right-4 z-50 lg:right-6 xl:right-8">
         <ModelDisplay 
           selectedModel={selectedModel}
           onClick={() => {
@@ -263,7 +263,7 @@ const Index = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 lg:ml-20 ml-0 flex flex-col relative">
+      <div className="flex-1 lg:ml-20 ml-0 flex flex-col relative w-full max-w-full overflow-x-hidden">
         {messages.length === 0 ? (
           <>
             {/* Default State - No Messages */}
@@ -305,7 +305,7 @@ const Index = () => {
             </main>
 
             {/* Fixed bottom search bar */}
-            <div className="fixed bottom-4 left-0 right-0 z-50 flex justify-center px-4 shadow-lg">
+            <div className="fixed bottom-4 left-0 right-0 z-50 flex justify-center px-4 sm:px-6 shadow-lg">
               <div className="w-full max-w-3xl">
                 <ChatInput 
                   onSendMessage={handleSendMessage} 

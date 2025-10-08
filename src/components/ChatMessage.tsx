@@ -19,7 +19,7 @@ const ChatMessage = ({ message, isUser, timestamp, sources }: ChatMessageProps) 
     <div className="w-full mb-4">
       <div className={cn("flex w-full", isUser ? "justify-end" : "justify-start")}>
         <div className={cn(
-          "max-w-[80%] rounded-2xl px-4 py-3 shadow-sm transition-all duration-200 text-left",
+          "max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-[80%] rounded-2xl px-3 py-2 sm:px-4 sm:py-3 shadow-sm transition-all duration-200 text-left",
           isUser 
             ? "bg-blue-100 text-blue-900 border border-blue-200 dark:bg-blue-900/20 dark:text-blue-100 dark:border-blue-800/30" 
             : "bg-white border border-gray-100"
