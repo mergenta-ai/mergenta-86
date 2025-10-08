@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_quota_config: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          limit_value: number
+          model_name: string
+          notes: string | null
+          quota_type: Database["public"]["Enums"]["quota_type"]
+          updated_at: string | null
+          vendor_type: Database["public"]["Enums"]["vendor_type"]
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          limit_value: number
+          model_name: string
+          notes?: string | null
+          quota_type: Database["public"]["Enums"]["quota_type"]
+          updated_at?: string | null
+          vendor_type: Database["public"]["Enums"]["vendor_type"]
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          limit_value?: number
+          model_name?: string
+          notes?: string | null
+          quota_type?: Database["public"]["Enums"]["quota_type"]
+          updated_at?: string | null
+          vendor_type?: Database["public"]["Enums"]["vendor_type"]
+        }
+        Relationships: []
+      }
       admin_settings: {
         Row: {
           description: string | null
@@ -1167,6 +1203,7 @@ export type Database = {
           id: string
           last_reset: string | null
           limit_value: number
+          model_name: string | null
           quota_type: Database["public"]["Enums"]["quota_type"]
           updated_at: string | null
           used_count: number | null
@@ -1177,6 +1214,7 @@ export type Database = {
           id?: string
           last_reset?: string | null
           limit_value: number
+          model_name?: string | null
           quota_type: Database["public"]["Enums"]["quota_type"]
           updated_at?: string | null
           used_count?: number | null
@@ -1187,6 +1225,7 @@ export type Database = {
           id?: string
           last_reset?: string | null
           limit_value?: number
+          model_name?: string | null
           quota_type?: Database["public"]["Enums"]["quota_type"]
           updated_at?: string | null
           used_count?: number | null

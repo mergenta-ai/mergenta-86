@@ -179,18 +179,22 @@ serve(async (req) => {
       try {
         console.log(`Attempting vendor: ${vendor}`);
         
-        // Check vendor quota
-        const hasQuota = await checkVendorQuota(vendor);
-        if (!hasQuota) {
-          console.log(`Vendor ${vendor} quota exhausted`);
-          continue;
-        }
-
+        // Get the model that will be used
         const response = await callVendor(vendor, prompt, intentType, modelToUse);
         
         if (response) {
-          // Update vendor quota
-          await updateVendorQuota(vendor, response.tokensUsed);
+          // Extract model name from response
+          const modelName = response.model || modelToUse || undefined;
+          
+          // Check vendor quota for the specific model
+          const hasQuota = await checkVendorQuota(vendor, modelName);
+          if (!hasQuota) {
+            console.log(`Vendor ${vendor}${modelName ? `/${modelName}` : ''} quota exhausted`);
+            continue;
+          }
+          
+          // Update vendor quota with model name
+          await updateVendorQuota(vendor, response.tokensUsed, modelName);
           
           // Log successful call
           if (fallbackUsed) {
@@ -239,16 +243,29 @@ serve(async (req) => {
   }
 });
 
-async function checkVendorQuota(vendor: string): Promise<boolean> {
+async function checkVendorQuota(vendor: string, modelName?: string): Promise<boolean> {
   try {
-    const { data: quota } = await supabase
+    // Build query for model-specific quota
+    let query = supabase
       .from('vendor_quotas')
       .select('*')
       .eq('vendor_type', vendor)
-      .eq('quota_type', 'daily')
-      .single();
+      .eq('quota_type', 'daily');
+    
+    // If model name is provided, check model-specific quota
+    if (modelName) {
+      query = query.eq('model_name', modelName);
+    } else {
+      // Check vendor-level quota (model_name is null)
+      query = query.is('model_name', null);
+    }
 
-    if (!quota) return true; // No quota limits set
+    const { data: quota } = await query.maybeSingle();
+
+    if (!quota) {
+      console.log(`No quota limits set for ${vendor}${modelName ? `/${modelName}` : ''}`);
+      return true; // No quota limits set
+    }
 
     const now = new Date();
     const lastReset = new Date(quota.last_reset);
@@ -262,13 +279,16 @@ async function checkVendorQuota(vendor: string): Promise<boolean> {
           used_count: 0,
           last_reset: now.toISOString()
         })
-        .eq('vendor_type', vendor)
-        .eq('quota_type', 'daily');
+        .eq('id', quota.id);
       
+      console.log(`Reset quota for ${vendor}${modelName ? `/${modelName}` : ''}`);
       return true;
     }
 
-    return quota.used_count < quota.limit_value;
+    const hasQuota = quota.used_count < quota.limit_value;
+    console.log(`Quota check for ${vendor}${modelName ? `/${modelName}` : ''}: ${quota.used_count}/${quota.limit_value} (${hasQuota ? 'available' : 'exhausted'})`);
+    
+    return hasQuota;
   } catch (error) {
     console.error('Check vendor quota error:', error);
     return true; // Allow on error
@@ -611,28 +631,38 @@ async function callGoogle(prompt: string, intentType?: string, modelOverride?: s
   };
 }
 
-async function updateVendorQuota(vendor: string, tokensUsed: number) {
+async function updateVendorQuota(vendor: string, tokensUsed: number, modelName?: string) {
   try {
-    const { data: quota } = await supabase
+    // Build query for model-specific quota
+    let query = supabase
       .from('vendor_quotas')
-      .select('used_count')
+      .select('*')
       .eq('vendor_type', vendor)
-      .eq('quota_type', 'daily')
-      .single();
+      .eq('quota_type', 'daily');
+    
+    if (modelName) {
+      query = query.eq('model_name', modelName);
+    } else {
+      query = query.is('model_name', null);
+    }
 
-    const newCount = (quota?.used_count || 0) + tokensUsed;
+    const { data: quota } = await query.maybeSingle();
+
+    if (!quota) {
+      console.log(`No quota record found for ${vendor}${modelName ? `/${modelName}` : ''}, skipping update`);
+      return;
+    }
+
+    const newCount = (quota.used_count || 0) + tokensUsed;
 
     await supabase
       .from('vendor_quotas')
-      .upsert({
-        vendor_type: vendor,
-        quota_type: 'daily',
-        used_count: newCount,
-        limit_value: 10000, // Default limit
-        last_reset: new Date().toISOString()
-      }, {
-        onConflict: 'vendor_type,quota_type'
-      });
+      .update({
+        used_count: newCount
+      })
+      .eq('id', quota.id);
+
+    console.log(`Updated quota for ${vendor}${modelName ? `/${modelName}` : ''}: ${newCount}/${quota.limit_value}`);
 
   } catch (error) {
     console.error('Update vendor quota error:', error);

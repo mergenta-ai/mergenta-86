@@ -10,6 +10,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
 import { Database, Globe, Zap, BarChart3, Settings, ArrowLeft, Users } from 'lucide-react';
 import UserManagement from '@/components/admin/UserManagement';
+import { QuotaManagement } from '@/components/admin/QuotaManagement';
 
 interface RSSFeed {
   id: string;
@@ -142,7 +143,7 @@ const AdminDashboard: React.FC = () => {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="overview" className="flex items-center gap-2">
             <BarChart3 className="h-4 w-4" />
             Overview
@@ -150,6 +151,10 @@ const AdminDashboard: React.FC = () => {
           <TabsTrigger value="users" className="flex items-center gap-2">
             <Users className="h-4 w-4" />
             Users
+          </TabsTrigger>
+          <TabsTrigger value="quotas" className="flex items-center gap-2">
+            <Database className="h-4 w-4" />
+            Quotas
           </TabsTrigger>
           <TabsTrigger value="rss" className="flex items-center gap-2">
             <Globe className="h-4 w-4" />
@@ -160,7 +165,7 @@ const AdminDashboard: React.FC = () => {
             Vendors
           </TabsTrigger>
           <TabsTrigger value="settings" className="flex items-center gap-2">
-            <Database className="h-4 w-4" />
+            <Settings className="h-4 w-4" />
             Settings
           </TabsTrigger>
         </TabsList>
@@ -279,6 +284,10 @@ const AdminDashboard: React.FC = () => {
 
         <TabsContent value="users" className="space-y-6">
           <UserManagement />
+        </TabsContent>
+
+        <TabsContent value="quotas" className="space-y-6">
+          <QuotaManagement />
         </TabsContent>
 
         <TabsContent value="rss" className="space-y-6">
