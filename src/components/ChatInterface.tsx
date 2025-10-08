@@ -47,7 +47,7 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
     “Assembling the most meaningful perspective…”,
 “Exploring all angles for a balanced answer…”
     "Reflecting before responding…",
-    "Gathering precise details for clarity…",
+  "Gathering precise details for clarity…",
       “Reaching into the data vault for precision…”,
 “Fine-tuning thoughts for the perfect phrasing…”,
 “Scanning patterns to uncover insight…”,
