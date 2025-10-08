@@ -1,5 +1,7 @@
 import { useRef, useEffect, useState } from "react";
+import { ArrowDown } from "lucide-react";
 import ChatMessage from "./ChatMessage";
+import { Button } from "./ui/button";
 
 interface Message {
   id: string;
@@ -23,6 +25,7 @@ interface ChatInterfaceProps {
 
 const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [fade, setFade] = useState(true);
   const [selectedThinkingMessages, setSelectedThinkingMessages] = useState<string[]>([]);
@@ -30,6 +33,7 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
   const [currentWarmthIndex, setCurrentWarmthIndex] = useState(0);
   const [selectedWarmthMessages, setSelectedWarmthMessages] = useState<string[]>([]);
   const [warmthFade, setWarmthFade] = useState(true);
+  const [showScrollButton, setShowScrollButton] = useState(false);
 
   const allThinkingMessages = [
     "Mergenta is thinking…",
@@ -124,9 +128,26 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const handleScroll = () => {
+    if (!scrollContainerRef.current) return;
+    
+    const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
+    const isNearBottom = scrollHeight - scrollTop - clientHeight < 100;
+    
+    setShowScrollButton(!isNearBottom && messages.length > 0);
+  };
+
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, [messages.length]);
 
   // Select 3-4 random thinking messages when loading starts
   useEffect(() => {
@@ -202,7 +223,7 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
   }, [isLoading, turnCount, selectedWarmthMessages]);
 
   return (
-    <div className="flex-1 overflow-y-auto px-4 md:px-6 relative" style={{ backgroundColor: '#fde7ef' }}>
+    <div ref={scrollContainerRef} className="flex-1 overflow-y-auto px-4 md:px-6 relative" style={{ backgroundColor: '#fde7ef' }}>
       <div className={`max-w-3xl mx-auto py-6 ${messages.length > 0 ? "pb-52" : ""}`}>
         {messages.length === 0 ? (
           <div className="text-center py-8">{/* Empty state - clean and minimal */}</div>
@@ -261,6 +282,18 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
         <div className="absolute bottom-0 left-0 right-0 h-52 pointer-events-none z-20" style={{ 
           background: 'linear-gradient(to top, #fde7ef, rgba(253, 231, 239, 0.98), transparent)' 
         }} />
+      )}
+
+      {/* Scroll to bottom button */}
+      {showScrollButton && (
+        <Button
+          onClick={scrollToBottom}
+          size="icon"
+          className="fixed bottom-24 right-6 md:right-8 z-30 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 w-10 h-10 bg-background border border-border hover:bg-accent"
+          aria-label="Scroll to bottom"
+        >
+          <ArrowDown className="h-5 w-5" />
+        </Button>
       )}
     </div>
   );
