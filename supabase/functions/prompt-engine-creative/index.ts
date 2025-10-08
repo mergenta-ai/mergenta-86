@@ -278,7 +278,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ 
         error: 'Failed to generate prompt',
-        details: (error as Error).message
+        details: error.message
       }),
       {
         status: 500,

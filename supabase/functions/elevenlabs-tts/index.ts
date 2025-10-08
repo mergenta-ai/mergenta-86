@@ -108,7 +108,7 @@ serve(async (req) => {
     console.error('ElevenLabs TTS error:', error);
     
     const errorResponse: TTSResponse = {
-      error: (error as Error).message || 'Internal server error'
+      error: error.message || 'Internal server error'
     };
 
     return new Response(JSON.stringify(errorResponse), {

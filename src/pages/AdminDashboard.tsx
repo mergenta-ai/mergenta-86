@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
-import { Database, Globe, Zap, BarChart3, Settings, ArrowLeft, Users } from 'lucide-react';
-import UserManagement from '@/components/admin/UserManagement';
-import { QuotaManagement } from '@/components/admin/QuotaManagement';
+import { Database, Globe, Zap, BarChart3, Settings, Upload } from 'lucide-react';
 
 interface RSSFeed {
   id: string;
@@ -99,7 +95,6 @@ const AdminDashboard: React.FC = () => {
     return 'text-green-500';
   };
 
-
   const categoryStats = rssFeeds.reduce((acc, feed) => {
     const category = feed.category || 'Uncategorized';
     acc[category] = (acc[category] || 0) + 1;
@@ -122,39 +117,20 @@ const AdminDashboard: React.FC = () => {
   return (
     <div className="container mx-auto py-8 px-4 max-w-6xl">
       <div className="mb-8">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold flex items-center gap-2">
-              <Settings className="h-8 w-8" />
-              Admin Dashboard
-            </h1>
-            <p className="text-muted-foreground mt-2">
-              Monitor and manage your LLM routing system
-            </p>
-          </div>
-          <Link 
-            to="/" 
-            className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 px-8"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Home
-          </Link>
-        </div>
+        <h1 className="text-3xl font-bold flex items-center gap-2">
+          <Settings className="h-8 w-8" />
+          Admin Dashboard
+        </h1>
+        <p className="text-muted-foreground mt-2">
+          Monitor and manage your LLM routing system
+        </p>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-6">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="overview" className="flex items-center gap-2">
             <BarChart3 className="h-4 w-4" />
             Overview
-          </TabsTrigger>
-          <TabsTrigger value="users" className="flex items-center gap-2">
-            <Users className="h-4 w-4" />
-            Users
-          </TabsTrigger>
-          <TabsTrigger value="quotas" className="flex items-center gap-2">
-            <Database className="h-4 w-4" />
-            Quotas
           </TabsTrigger>
           <TabsTrigger value="rss" className="flex items-center gap-2">
             <Globe className="h-4 w-4" />
@@ -165,7 +141,7 @@ const AdminDashboard: React.FC = () => {
             Vendors
           </TabsTrigger>
           <TabsTrigger value="settings" className="flex items-center gap-2">
-            <Settings className="h-4 w-4" />
+            <Database className="h-4 w-4" />
             Settings
           </TabsTrigger>
         </TabsList>
@@ -280,14 +256,6 @@ const AdminDashboard: React.FC = () => {
               </CardContent>
             </Card>
           </div>
-        </TabsContent>
-
-        <TabsContent value="users" className="space-y-6">
-          <UserManagement />
-        </TabsContent>
-
-        <TabsContent value="quotas" className="space-y-6">
-          <QuotaManagement />
         </TabsContent>
 
         <TabsContent value="rss" className="space-y-6">

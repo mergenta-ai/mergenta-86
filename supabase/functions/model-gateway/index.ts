@@ -7,52 +7,6 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const FORMATTING_SYSTEM_PROMPT = `You are Mergenta AI.
-
-**CRITICAL RESPONSE FORMAT RULES - MANDATORY COMPLIANCE:**
-
-1. **ALWAYS** start your response with a clear # heading that summarizes the topic
-2. Use **heavy markdown formatting** throughout:
-   - # for main heading (required at start)
-   - ## for major sections
-   - ### for subsections
-   - **bold** for ALL key terms, important concepts, and emphasis in text
-   - Use bullet points and numbered lists liberally
-3. **SPACING REQUIREMENTS:**
-   - Leave blank lines between ALL major sections
-   - Leave blank lines between headings and content
-   - Leave blank lines between paragraphs
-   - Leave blank lines between lists and surrounding content
-4. **ALWAYS** end EVERY response with: *In summary:* [your one-sentence takeaway]
-
-**Response Structure:**
-# [Main Topic Heading]
-
-[Opening paragraph with **bold key terms**]
-
-## [Section Heading]
-
-[Content with **bold important words**]
-
-- **Key point**: explanation
-- **Another point**: details
-
-## [Another Section]
-
-[More content]
-
-*In summary:* [concise one-sentence conclusion]
-
-**Additional Instructions:**
-- Bold key terms, dates, names (e.g., **1901**, **Dark matter**)
-- Use British spelling throughout
-- When provided with sources, use inline citations like [G1], [RSS1]
-- Each bullet point must be on its own line
-- Create visual hierarchy with proper spacing
-- Never write bullets inline
-
-Remember: Heavy markdown formatting with generous whitespace creates an enriching reading experience!`;
-
 const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
 const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const supabase = createClient(supabaseUrl, supabaseKey);
@@ -70,7 +24,6 @@ interface ModelRequest {
   intentType?: string;
   searchSources?: any[];
   preferredVendor?: string;
-  preferredModel?: string;
 }
 
 interface ModelResponse {
@@ -145,11 +98,8 @@ serve(async (req) => {
   }
 
   try {
-    const { prompt, userId, intentType, searchSources, preferredVendor, preferredModel }: ModelRequest = await req.json();
-    console.log('Model gateway request:', { userId, intentType, vendor: preferredVendor, model: preferredModel });
-
-    // Validate and resolve the model to use
-    const modelToUse = await validateAndResolveModel(userId, intentType, preferredModel);
+    const { prompt, userId, intentType, searchSources, preferredVendor }: ModelRequest = await req.json();
+    console.log('Model gateway request:', { userId, intentType, vendor: preferredVendor });
 
     // Get vendor priority from admin settings
     const { data: vendorSettings } = await supabase
@@ -180,22 +130,18 @@ serve(async (req) => {
       try {
         console.log(`Attempting vendor: ${vendor}`);
         
-        // Get the model that will be used
-        const response = await callVendor(vendor, prompt, intentType, modelToUse);
+        // Check vendor quota
+        const hasQuota = await checkVendorQuota(vendor);
+        if (!hasQuota) {
+          console.log(`Vendor ${vendor} quota exhausted`);
+          continue;
+        }
+
+        const response = await callVendor(vendor, prompt, intentType);
         
         if (response) {
-          // Extract model name from response
-          const modelName = response.model || modelToUse || undefined;
-          
-          // Check vendor quota for the specific model
-          const hasQuota = await checkVendorQuota(vendor, modelName);
-          if (!hasQuota) {
-            console.log(`Vendor ${vendor}${modelName ? `/${modelName}` : ''} quota exhausted`);
-            continue;
-          }
-          
-          // Update vendor quota with model name
-          await updateVendorQuota(vendor, response.tokensUsed, modelName);
+          // Update vendor quota
+          await updateVendorQuota(vendor, response.tokensUsed);
           
           // Log successful call
           if (fallbackUsed) {
@@ -215,7 +161,7 @@ serve(async (req) => {
         lastError = error;
         
         // Log failed attempt
-        await logVendorFallback(userId, vendor, null, (error as Error).message, false);
+        await logVendorFallback(userId, vendor, null, error.message, false);
         continue;
       }
     }
@@ -244,29 +190,16 @@ serve(async (req) => {
   }
 });
 
-async function checkVendorQuota(vendor: string, modelName?: string): Promise<boolean> {
+async function checkVendorQuota(vendor: string): Promise<boolean> {
   try {
-    // Build query for model-specific quota
-    let query = supabase
+    const { data: quota } = await supabase
       .from('vendor_quotas')
       .select('*')
       .eq('vendor_type', vendor)
-      .eq('quota_type', 'daily');
-    
-    // If model name is provided, check model-specific quota
-    if (modelName) {
-      query = query.eq('model_name', modelName);
-    } else {
-      // Check vendor-level quota (model_name is null)
-      query = query.is('model_name', null);
-    }
+      .eq('quota_type', 'daily')
+      .single();
 
-    const { data: quota } = await query.maybeSingle();
-
-    if (!quota) {
-      console.log(`No quota limits set for ${vendor}${modelName ? `/${modelName}` : ''}`);
-      return true; // No quota limits set
-    }
+    if (!quota) return true; // No quota limits set
 
     const now = new Date();
     const lastReset = new Date(quota.last_reset);
@@ -280,97 +213,20 @@ async function checkVendorQuota(vendor: string, modelName?: string): Promise<boo
           used_count: 0,
           last_reset: now.toISOString()
         })
-        .eq('id', quota.id);
+        .eq('vendor_type', vendor)
+        .eq('quota_type', 'daily');
       
-      console.log(`Reset quota for ${vendor}${modelName ? `/${modelName}` : ''}`);
       return true;
     }
 
-    const hasQuota = quota.used_count < quota.limit_value;
-    console.log(`Quota check for ${vendor}${modelName ? `/${modelName}` : ''}: ${quota.used_count}/${quota.limit_value} (${hasQuota ? 'available' : 'exhausted'})`);
-    
-    return hasQuota;
+    return quota.used_count < quota.limit_value;
   } catch (error) {
     console.error('Check vendor quota error:', error);
     return true; // Allow on error
   }
 }
 
-async function validateAndResolveModel(
-  userId: string, 
-  intentType?: string,
-  preferredModel?: string
-): Promise<string | null> {
-  try {
-    // Get user's plan
-    const { data: userPlan } = await supabase
-      .from('user_plans')
-      .select('plan_type')
-      .eq('user_id', userId)
-      .eq('is_active', true)
-      .maybeSingle();
-
-    const planType = userPlan?.plan_type || 'free';
-
-    // Model tier requirements
-    const modelTiers: Record<string, string> = {
-      'gpt-5-nano': 'free',
-      'gemini-2.5-flash': 'free',
-      'gemini-2.5-flash-lite': 'free',
-      'gpt-5-mini': 'pro',
-      'gemini-2.5-pro': 'pro',
-      'gpt-5': 'zip',
-      'claude-sonnet-4': 'zip',
-      'claude-opus-4.1': 'ace',
-      'o3-pro': 'ace',
-      'o4-mini': 'max',
-    };
-
-    const planHierarchy: Record<string, number> = {
-      free: 0,
-      pro: 1,
-      zip: 2,
-      ace: 3,
-      max: 4,
-    };
-
-    // If a preferred model is provided, validate against plan
-    if (preferredModel) {
-      const requiredPlan = modelTiers[preferredModel] || 'free';
-      const userPlanLevel = planHierarchy[planType] || 0;
-      const requiredLevel = planHierarchy[requiredPlan] || 0;
-
-      if (userPlanLevel < requiredLevel) {
-        throw new Error(JSON.stringify({
-          error: 'model_locked',
-          message: `This model requires a ${requiredPlan.charAt(0).toUpperCase() + requiredPlan.slice(1)} plan or higher.`,
-          requiredPlan,
-          currentPlan: planType,
-        }));
-      }
-
-      // Check if user's plan allows model overwrite
-      const { data: featureLimits } = await supabase
-        .from('feature_limits')
-        .select('allow_model_overwrite')
-        .eq('plan_type', planType)
-        .limit(1)
-        .maybeSingle();
-
-      if (featureLimits?.allow_model_overwrite) {
-        return preferredModel;
-      }
-    }
-
-    // Otherwise, use intent-based model selection from feature_limits
-    return null;
-  } catch (error) {
-    console.error('Error validating model:', error);
-    throw error;
-  }
-}
-
-async function callVendor(vendor: string, prompt: string, intentType?: string, modelOverride?: string | null): Promise<ModelResponse | null> {
+async function callVendor(vendor: string, prompt: string, intentType?: string): Promise<ModelResponse | null> {
   const config = VENDOR_CONFIGS[vendor as keyof typeof VENDOR_CONFIGS];
   if (!config) {
     throw new Error(`Unknown vendor: ${vendor}`);
@@ -378,36 +234,31 @@ async function callVendor(vendor: string, prompt: string, intentType?: string, m
 
   switch (vendor) {
     case 'openai':
-      return await callOpenAI(prompt, intentType, modelOverride);
+      return await callOpenAI(prompt, intentType);
     case 'anthropic':
-      return await callAnthropic(prompt, intentType, modelOverride);
+      return await callAnthropic(prompt, intentType);
     case 'google':
-      return await callGoogle(prompt, intentType, modelOverride);
+      return await callGoogle(prompt, intentType);
     case 'mistral':
-      return await callMistral(prompt, intentType, modelOverride);
+      return await callMistral(prompt, intentType);
     case 'xai':
-      return await callXAI(prompt, intentType, modelOverride);
+      return await callXAI(prompt, intentType);
     default:
       throw new Error(`Vendor ${vendor} not implemented`);
   }
 }
 
-async function callOpenAI(prompt: string, intentType?: string, modelOverride?: string | null): Promise<ModelResponse | null> {
+async function callOpenAI(prompt: string, intentType?: string): Promise<ModelResponse | null> {
   if (!openAIKey) throw new Error('OpenAI API key not configured');
 
-  let model = intentType === 'research' ? 'gpt-5-2025-08-07' : 'gpt-4o-mini';
-  
-  // Use model override if provided and it's an OpenAI model
-  if (modelOverride && modelOverride.startsWith('openai/')) {
-    model = modelOverride.split('/')[1];
-  }
+  const model = intentType === 'research' ? 'gpt-5-2025-08-07' : 'gpt-4o-mini';
   
   const requestBody: any = {
     model,
     messages: [
       {
         role: 'system',
-        content: FORMATTING_SYSTEM_PROMPT
+        content: 'You are a helpful AI assistant. When provided with sources, always include inline citations like [G1], [RSS1] and provide a complete source list at the end.'
       },
       { role: 'user', content: prompt }
     ]
@@ -446,15 +297,10 @@ async function callOpenAI(prompt: string, intentType?: string, modelOverride?: s
   };
 }
 
-async function callAnthropic(prompt: string, intentType?: string, modelOverride?: string | null): Promise<ModelResponse | null> {
+async function callAnthropic(prompt: string, intentType?: string): Promise<ModelResponse | null> {
   if (!anthropicKey) throw new Error('Anthropic API key not configured');
 
-  let model = intentType === 'research' ? 'claude-opus-4-1-20250805' : 'claude-3-5-haiku-20241022';
-  
-  // Use model override if provided and it's an Anthropic model
-  if (modelOverride && modelOverride.startsWith('anthropic/')) {
-    model = modelOverride.split('/')[1];
-  }
+  const model = intentType === 'research' ? 'claude-opus-4-1-20250805' : 'claude-3-5-haiku-20241022';
   
   const response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -466,11 +312,10 @@ async function callAnthropic(prompt: string, intentType?: string, modelOverride?
     body: JSON.stringify({
       model,
       max_tokens: 2000,
-      system: FORMATTING_SYSTEM_PROMPT,
       messages: [
         {
           role: 'user',
-          content: prompt
+          content: `You are a helpful AI assistant. When provided with sources, always include inline citations like [G1], [RSS1] and provide a complete source list at the end.\n\n${prompt}`
         }
       ]
     })
@@ -492,15 +337,10 @@ async function callAnthropic(prompt: string, intentType?: string, modelOverride?
   };
 }
 
-async function callMistral(prompt: string, intentType?: string, modelOverride?: string | null): Promise<ModelResponse | null> {
+async function callMistral(prompt: string, intentType?: string): Promise<ModelResponse | null> {
   if (!mistralKey) throw new Error('Mistral API key not configured');
 
-  let model = intentType === 'research' ? 'mistral-large-latest' : 'mistral-small-latest';
-  
-  // Use model override if provided and it's a Mistral model
-  if (modelOverride && modelOverride.startsWith('mistral/')) {
-    model = modelOverride.split('/')[1];
-  }
+  const model = intentType === 'research' ? 'mistral-large-latest' : 'mistral-small-latest';
   
   const response = await fetch('https://api.mistral.ai/v1/chat/completions', {
     method: 'POST',
@@ -513,7 +353,7 @@ async function callMistral(prompt: string, intentType?: string, modelOverride?: 
       messages: [
         {
           role: 'system',
-          content: FORMATTING_SYSTEM_PROMPT
+          content: 'You are a helpful AI assistant. When provided with sources, always include inline citations like [G1], [RSS1] and provide a complete source list at the end.'
         },
         { role: 'user', content: prompt }
       ],
@@ -538,15 +378,10 @@ async function callMistral(prompt: string, intentType?: string, modelOverride?: 
   };
 }
 
-async function callXAI(prompt: string, intentType?: string, modelOverride?: string | null): Promise<ModelResponse | null> {
+async function callXAI(prompt: string, intentType?: string): Promise<ModelResponse | null> {
   if (!xaiKey) throw new Error('xAI API key not configured');
 
-  let model = 'grok-beta';
-  
-  // Use model override if provided and it's an xAI model
-  if (modelOverride && modelOverride.startsWith('xai/')) {
-    model = modelOverride.split('/')[1];
-  }
+  const model = 'grok-beta';
   
   const response = await fetch('https://api.x.ai/v1/chat/completions', {
     method: 'POST',
@@ -559,7 +394,7 @@ async function callXAI(prompt: string, intentType?: string, modelOverride?: stri
       messages: [
         {
           role: 'system',
-          content: FORMATTING_SYSTEM_PROMPT
+          content: 'You are a helpful AI assistant. When provided with sources, always include inline citations like [G1], [RSS1] and provide a complete source list at the end.'
         },
         { role: 'user', content: prompt }
       ],
@@ -584,17 +419,10 @@ async function callXAI(prompt: string, intentType?: string, modelOverride?: stri
   };
 }
 
-async function callGoogle(prompt: string, intentType?: string, modelOverride?: string | null): Promise<ModelResponse | null> {
+async function callGoogle(prompt: string, intentType?: string): Promise<ModelResponse | null> {
   if (!geminiKey) throw new Error('Google Gemini API key not configured');
 
-  let model = 'gemini-pro';
-  
-  // Use model override if provided and it's a Google model
-  if (modelOverride && modelOverride.startsWith('google/')) {
-    model = modelOverride.split('/')[1];
-  }
-
-  const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`, {
+  const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${geminiKey}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -602,7 +430,7 @@ async function callGoogle(prompt: string, intentType?: string, modelOverride?: s
     body: JSON.stringify({
       contents: [{
         parts: [{
-          text: `${FORMATTING_SYSTEM_PROMPT}\n\n${prompt}`
+          text: `You are a helpful AI assistant. When provided with sources, always include inline citations like [G1], [RSS1] and provide a complete source list at the end.\n\n${prompt}`
         }]
       }],
       generationConfig: {
@@ -627,43 +455,33 @@ async function callGoogle(prompt: string, intentType?: string, modelOverride?: s
     content: data.candidates[0].content.parts[0].text,
     tokensUsed: data.usageMetadata?.totalTokenCount || 0,
     vendor: 'google',
-    model,
+    model: 'gemini-pro',
     fallbackUsed: false
   };
 }
 
-async function updateVendorQuota(vendor: string, tokensUsed: number, modelName?: string) {
+async function updateVendorQuota(vendor: string, tokensUsed: number) {
   try {
-    // Build query for model-specific quota
-    let query = supabase
+    const { data: quota } = await supabase
       .from('vendor_quotas')
-      .select('*')
+      .select('used_count')
       .eq('vendor_type', vendor)
-      .eq('quota_type', 'daily');
-    
-    if (modelName) {
-      query = query.eq('model_name', modelName);
-    } else {
-      query = query.is('model_name', null);
-    }
+      .eq('quota_type', 'daily')
+      .single();
 
-    const { data: quota } = await query.maybeSingle();
-
-    if (!quota) {
-      console.log(`No quota record found for ${vendor}${modelName ? `/${modelName}` : ''}, skipping update`);
-      return;
-    }
-
-    const newCount = (quota.used_count || 0) + tokensUsed;
+    const newCount = (quota?.used_count || 0) + tokensUsed;
 
     await supabase
       .from('vendor_quotas')
-      .update({
-        used_count: newCount
-      })
-      .eq('id', quota.id);
-
-    console.log(`Updated quota for ${vendor}${modelName ? `/${modelName}` : ''}: ${newCount}/${quota.limit_value}`);
+      .upsert({
+        vendor_type: vendor,
+        quota_type: 'daily',
+        used_count: newCount,
+        limit_value: 10000, // Default limit
+        last_reset: new Date().toISOString()
+      }, {
+        onConflict: 'vendor_type,quota_type'
+      });
 
   } catch (error) {
     console.error('Update vendor quota error:', error);

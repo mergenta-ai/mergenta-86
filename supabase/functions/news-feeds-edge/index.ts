@@ -28,14 +28,7 @@ interface FeedResult {
   sourceName: string;
   category: string;
   publishedAt: string;
-  domain: string;
-  image_url?: string;
   score?: number;
-  metadata?: {
-    freshness: 'fresh' | 'recent' | 'older';
-    wordCount: number;
-    contentQuality: 'high' | 'medium' | 'low';
-  };
 }
 
 serve(async (req) => {
@@ -62,39 +55,18 @@ serve(async (req) => {
       rssResults = await getRecentRSSContent(category, maxResults);
     }
 
-    // Process results with enhanced metadata
-    const processedResults = rssResults.map((result, index) => {
-      const publishedDate = new Date(result.publishedAt);
-      const now = new Date();
-      const ageInHours = (now.getTime() - publishedDate.getTime()) / (1000 * 60 * 60);
-      
-      const freshness = ageInHours < 24 ? 'fresh' : ageInHours < 168 ? 'recent' : 'older';
-      const wordCount = (result.snippet || '').split(' ').length;
-      const contentQuality = wordCount > 100 ? 'high' : wordCount > 50 ? 'medium' : 'low';
-      
-      return {
-        ...result,
-        id: `RSS${index + 1}`,
-        type: 'rss' as const,
-        domain: extractDomainFromUrl(result.url),
-        score: query ? calculateRSSRelevanceScore(result, query) : calculateFreshnessScore(ageInHours),
-        metadata: {
-          freshness,
-          wordCount,
-          contentQuality
-        }
-      };
-    });
+    // Process results and add IDs for citation
+    const processedResults = rssResults.map((result, index) => ({
+      ...result,
+      id: `RSS${index + 1}`,
+      type: 'rss' as const,
+      score: query ? calculateRSSRelevanceScore(result, query) : 0
+    }));
 
-    // Prioritize fresh content and sort by relevance/freshness
-    processedResults.sort((a, b) => {
-      // Fresh RSS content gets priority
-      if (a.metadata?.freshness === 'fresh' && b.metadata?.freshness !== 'fresh') return -1;
-      if (b.metadata?.freshness === 'fresh' && a.metadata?.freshness !== 'fresh') return 1;
-      
-      // Then sort by score
-      return (b.score || 0) - (a.score || 0);
-    });
+    // Sort by relevance if we have a query, otherwise by date
+    if (query) {
+      processedResults.sort((a, b) => (b.score || 0) - (a.score || 0));
+    }
 
     console.log(`RSS search completed: ${processedResults.length} results`);
 
@@ -205,7 +177,6 @@ async function processFeed(source: any) {
             content: item.content,
             summary: item.summary,
             url: item.url,
-            image_url: item.imageUrl,
             published_at: item.publishedAt,
             scraped_at: new Date().toISOString(),
             is_active: true
@@ -222,81 +193,6 @@ async function processFeed(source: any) {
   } catch (error) {
     console.error(`Error processing feed ${source.name}:`, error);
   }
-}
-
-function extractImageFromRSS(itemXml: string, description: string): string | null {
-  try {
-    // Priority 1: media:thumbnail or media:content (with url attribute)
-    const mediaThumbnailMatch = itemXml.match(/<media:thumbnail[^>]*url=["']([^"']+)["']/i);
-    if (mediaThumbnailMatch) {
-      console.log('Found media:thumbnail:', mediaThumbnailMatch[1]);
-      return mediaThumbnailMatch[1];
-    }
-
-    const mediaContentMatch = itemXml.match(/<media:content[^>]*url=["']([^"']+)["'][^>]*(?:type=["']image\/[^"']*["']|medium=["']image["'])/i);
-    if (mediaContentMatch) {
-      console.log('Found media:content:', mediaContentMatch[1]);
-      return mediaContentMatch[1];
-    }
-
-    // Priority 2: enclosure with image type (check both url then type, and type then url)
-    const enclosureMatch1 = itemXml.match(/<enclosure[^>]*url=["']([^"']+)["'][^>]*type=["']image\/[^"']*["']/i);
-    if (enclosureMatch1) {
-      console.log('Found enclosure (url first):', enclosureMatch1[1]);
-      return enclosureMatch1[1];
-    }
-
-    const enclosureMatch2 = itemXml.match(/<enclosure[^>]*type=["']image\/[^"']*["'][^>]*url=["']([^"']+)["']/i);
-    if (enclosureMatch2) {
-      console.log('Found enclosure (type first):', enclosureMatch2[1]);
-      return enclosureMatch2[1];
-    }
-
-    // Priority 3: image tag with url child
-    const imageTag = extractXMLTag(itemXml, 'image');
-    if (imageTag) {
-      const imageUrl = extractXMLTag(imageTag, 'url');
-      if (imageUrl) {
-        console.log('Found image tag url:', imageUrl);
-        return imageUrl;
-      }
-    }
-
-    // Priority 4: Look for img tags in description/content
-    // Clean HTML entities first
-    const cleanDesc = description
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>')
-      .replace(/&quot;/g, '"')
-      .replace(/&amp;/g, '&');
-
-    const imgMatch = cleanDesc.match(/<img[^>]*src=["']([^"']+)["']/i);
-    if (imgMatch) {
-      console.log('Found img in description:', imgMatch[1]);
-      return imgMatch[1];
-    }
-
-    // Priority 5: Check content:encoded for images
-    const contentEncoded = extractXMLTag(itemXml, 'content:encoded');
-    if (contentEncoded) {
-      const cleanContent = contentEncoded
-        .replace(/&lt;/g, '<')
-        .replace(/&gt;/g, '>')
-        .replace(/&quot;/g, '"')
-        .replace(/&amp;/g, '&');
-      
-      const contentImgMatch = cleanContent.match(/<img[^>]*src=["']([^"']+)["']/i);
-      if (contentImgMatch) {
-        console.log('Found img in content:encoded:', contentImgMatch[1]);
-        return contentImgMatch[1];
-      }
-    }
-
-  } catch (error) {
-    console.error('Error extracting image:', error);
-  }
-
-  return null;
 }
 
 async function parseRSSFeed(xmlText: string, source: any): Promise<any[]> {
@@ -320,9 +216,6 @@ async function parseRSSFeed(xmlText: string, source: any): Promise<any[]> {
                      extractXMLTag(itemXml, 'updated') || '';
 
       if (title && link) {
-        // Extract image
-        const imageUrl = extractImageFromRSS(itemXml, description);
-
         // Clean content
         const cleanContent = description
           .replace(/<[^>]+>/g, ' ')
@@ -337,7 +230,6 @@ async function parseRSSFeed(xmlText: string, source: any): Promise<any[]> {
           content: cleanContent,
           summary,
           url: link.trim(),
-          imageUrl: imageUrl,
           publishedAt: parseDate(pubDate) || new Date().toISOString()
         });
       }
@@ -353,15 +245,7 @@ async function parseRSSFeed(xmlText: string, source: any): Promise<any[]> {
 function extractXMLTag(xml: string, tagName: string): string | null {
   const regex = new RegExp(`<${tagName}[^>]*>([\\s\\S]*?)<\\/${tagName}>`, 'i');
   const match = xml.match(regex);
-  if (!match) return null;
-  
-  let content = match[1].trim();
-  
-  // Handle CDATA sections - remove CDATA wrapper and return clean content
-  const cdataRegex = /<!\[CDATA\[([\s\S]*?)\]\]>/g;
-  content = content.replace(cdataRegex, '$1');
-  
-  return content;
+  return match ? match[1].trim() : null;
 }
 
 function parseDate(dateString: string): string | null {
@@ -445,23 +329,6 @@ async function getRecentRSSContent(category?: string, maxResults: number = 5): P
   }
 }
 
-function extractDomainFromUrl(url: string): string {
-  try {
-    return new URL(url).hostname.replace('www.', '');
-  } catch {
-    return url.split('/')[0] || 'unknown';
-  }
-}
-
-function calculateFreshnessScore(ageInHours: number): number {
-  if (ageInHours < 1) return 10;      // < 1 hour
-  if (ageInHours < 6) return 8;       // < 6 hours  
-  if (ageInHours < 24) return 6;      // < 24 hours
-  if (ageInHours < 168) return 4;     // < 1 week
-  if (ageInHours < 720) return 2;     // < 1 month
-  return 1;                           // older
-}
-
 function calculateRSSRelevanceScore(result: any, query: string): number {
   const queryTerms = query.toLowerCase().split(/\s+/);
   const titleText = result.title.toLowerCase();
@@ -487,27 +354,15 @@ function calculateRSSRelevanceScore(result: any, query: string): number {
     score += 2;
   }
   
-  // Enhanced recency bonus with fresher priorities
+  // Recency bonus (newer articles get higher scores)
   const publishedDate = new Date(result.publishedAt || '');
   const now = new Date();
   const ageInHours = (now.getTime() - publishedDate.getTime()) / (1000 * 60 * 60);
   
-  if (ageInHours < 1) {
-    score += 5; // Super fresh content
-  } else if (ageInHours < 6) {
-    score += 4; // Very fresh content
-  } else if (ageInHours < 24) {
-    score += 3; // Fresh content bonus
+  if (ageInHours < 24) {
+    score += 2; // Fresh content bonus
   } else if (ageInHours < 168) { // 1 week
     score += 1;
-  }
-  
-  // Quality bonus based on content length
-  const wordCount = contentText.split(' ').length;
-  if (wordCount > 200) {
-    score += 2; // Substantial content
-  } else if (wordCount > 100) {
-    score += 1; // Good content
   }
   
   return score;

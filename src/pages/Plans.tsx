@@ -1,157 +1,74 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { Check, Sparkles, Zap, Rocket, Crown, Trophy } from 'lucide-react';
+import { Check, Crown, Star, Zap } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Plans = () => {
   const navigate = useNavigate();
-  const [isAnnual, setIsAnnual] = useState(false);
 
   const plans = [
     {
-      name: 'FREE',
-      tagline: 'Explore the Essentials',
-      icon: <Sparkles className="h-6 w-6" />,
-      monthlyPrice: 0,
-      annualPrice: 0,
-      seats: 'Single user',
+      name: 'Basic',
+      price: '$9',
+      period: '/month',
+      description: 'Perfect for getting started',
+      icon: <Star className="h-6 w-6" />,
       features: [
-        'Essential conversational AI',
-        'Basic workflow creation',
-        'TXT download',
-        'Community support'
+        '1,000 AI conversations per month',
+        'Basic writing assistance',
+        'Email support',
+        'Standard response time',
+        'Mobile app access'
       ],
-      callout: 'Begin Smart',
-      popular: false,
-      highlight: false
+      buttonText: 'Get Started',
+      popular: false
     },
     {
-      name: 'PRO',
-      tagline: 'Accelerate Your Ideas',
-      icon: <Zap className="h-6 w-6" />,
-      monthlyPrice: 15,
-      annualPrice: 153,
-      seats: 'Single user',
-      features: [
-        'Includes Free features',
-        'Enhanced conversational intelligence',
-        'File uploads & improved workflows',
-        'Faster responses & task execution',
-        'Saved chats & basic history'
-      ],
-      callout: 'Think Faster',
-      popular: false,
-      highlight: false
-    },
-    {
-      name: 'ZIP',
-      tagline: 'Fast and Smart',
-      icon: <Rocket className="h-6 w-6" />,
-      monthlyPrice: 75,
-      annualPrice: 765,
-      seats: 'Single user',
-      features: [
-        'Includes Pro features',
-        'Advanced AI workflows & smarter automation',
-        'Email automation & document management',
-        'Export to Google Docs',
-        'File processing for multiple document types',
-        'Mail-based support'
-      ],
-      callout: 'Speed and Ease',
-      popular: true,
-      highlight: false
-    },
-    {
-      name: 'ACE',
-      tagline: 'Unlock Ultimate Experience',
+      name: 'Pro',
+      price: '$29',
+      period: '/month',
+      description: 'Best for professionals',
       icon: <Crown className="h-6 w-6" />,
-      monthlyPrice: 150,
-      annualPrice: 1530,
-      seats: 'Single user',
-      teamPricing: {
-        annual: 1530,
-        perSeat: 30,
-        minSeats: 5
-      },
       features: [
-        'Includes Pro features',
-        'Deep-research AI reasoning',
-        'Improved quotas & performance',
-        'Extended file management',
-        'Exports to Docs & TXT',
-        'Priority workflow processing',
-        'Personalised support',
-        'Early access to new tools'
+        '10,000 AI conversations per month',
+        'Advanced writing assistance',
+        'Priority support',
+        'Faster response time',
+        'All integrations',
+        'Custom templates',
+        'Analytics dashboard'
       ],
-      callout: 'Go Beyond',
-      popular: false,
-      highlight: true
+      buttonText: 'Upgrade to Pro',
+      popular: true
     },
     {
-      name: 'MAX',
-      tagline: 'All Powerful Plan',
-      icon: <Trophy className="h-6 w-6" />,
-      monthlyPrice: 200,
-      annualPrice: 2040,
-      seats: 'Single user',
-      teamPricing: {
-        annual: 2040,
-        perSeat: 25,
-        minSeats: 10
-      },
+      name: 'Enterprise',
+      price: '$99',
+      period: '/month',
+      description: 'For teams and organizations',
+      icon: <Zap className="h-6 w-6" />,
       features: [
-        'Includes ZIP + ACE features',
-        'Full automation capabilities',
-        'Maximum quotas & top-tier performance',
-        'Full export options (Docs + downloads)',
-        'Workflow memory & continuity',
-        'Premium AI research tools',
-        'Dedicated support',
-        'Data backup & secure storage'
+        'Unlimited AI conversations',
+        'Premium writing assistance',
+        '24/7 priority support',
+        'Instant response time',
+        'White-label options',
+        'Custom integrations',
+        'Advanced analytics',
+        'Team management',
+        'SSO integration'
       ],
-      callout: 'Premium Power',
-      popular: false,
-      highlight: true
+      buttonText: 'Contact Sales',
+      popular: false
     }
   ];
 
-  const getPrice = (plan: typeof plans[0]) => {
-    if (plan.monthlyPrice === 0) return '$0';
-    return isAnnual 
-      ? `$${plan.annualPrice}` 
-      : `$${plan.monthlyPrice}`;
-  };
-
-  const getPeriod = (plan: typeof plans[0]) => {
-    if (plan.monthlyPrice === 0) return '';
-    return isAnnual ? '/year' : '/month';
-  };
-
-  const getSavings = (plan: typeof plans[0]) => {
-    if (plan.monthlyPrice === 0 || !isAnnual) return null;
-    const monthlyCost = plan.monthlyPrice * 12;
-    const savings = monthlyCost - plan.annualPrice;
-    return `Save $${savings}/year`;
-  };
-
-  const getTeamPricing = (plan: typeof plans[0]) => {
-    if (!plan.teamPricing) return null;
-    
-    if (isAnnual) {
-      return `Team: $${plan.teamPricing.annual}/year + $${plan.teamPricing.perSeat}/seat/year (min ${plan.teamPricing.minSeats} seats)`;
-    } else {
-      // Use the actual monthly price as base for team pricing
-      return `Team: $${plan.monthlyPrice}/month + $${plan.teamPricing.perSeat}/seat/month (min ${plan.teamPricing.minSeats} seats)`;
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gradient-background p-6">
-      <div className="max-w-[1600px] mx-auto">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-12">
           <Button 
             variant="ghost" 
             onClick={() => navigate('/')}
@@ -162,145 +79,93 @@ const Plans = () => {
           <h1 className="text-4xl font-bold text-foreground mb-4">
             Choose Your Plan
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Select the perfect plan that fits your needs and unlock the full potential of Mergenta AI
           </p>
-
-          {/* Billing Toggle */}
-          <div className="flex items-center justify-center gap-4 mb-12">
-            <span className={`text-sm font-medium ${!isAnnual ? 'text-foreground' : 'text-muted-foreground'}`}>
-              Monthly
-            </span>
-            <button
-              onClick={() => setIsAnnual(!isAnnual)}
-              className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors ${
-                isAnnual ? 'bg-primary' : 'bg-muted'
-              }`}
-              role="switch"
-              aria-checked={isAnnual}
-            >
-              <span
-                className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${
-                  isAnnual ? 'translate-x-7' : 'translate-x-1'
-                }`}
-              />
-            </button>
-            <div className="flex items-center gap-2">
-              <span className={`text-sm font-medium ${isAnnual ? 'text-foreground' : 'text-muted-foreground'}`}>
-                Annual
-              </span>
-              <span className="text-xs font-semibold text-green-600 bg-green-50 dark:bg-green-950 px-2 py-1 rounded-full">
-                Save 15%
-              </span>
-            </div>
-          </div>
         </div>
 
         {/* Plans Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-12">
-          {plans.map((plan) => (
+        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {plans.map((plan, index) => (
             <Card 
               key={plan.name}
-              className={`relative flex flex-col transition-all duration-300 ${
+              className={`relative transition-all duration-300 hover:shadow-elegant ${
                 plan.popular 
                   ? 'border-primary shadow-glow scale-105' 
-                  : plan.highlight
-                  ? 'border-primary/50 hover:border-primary'
                   : 'border-border hover:border-primary/50'
               }`}
             >
               {plan.popular && (
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-gradient-primary text-white px-4 py-1.5 rounded-full text-xs font-medium shadow-lg">
+                  <span className="bg-gradient-primary text-white px-4 py-2 rounded-full text-sm font-medium">
                     Most Popular
                   </span>
                 </div>
               )}
               
-              <CardHeader className="text-center pb-4 flex-shrink-0">
+              <CardHeader className="text-center pb-4">
                 <div className={`w-12 h-12 mx-auto mb-4 rounded-full flex items-center justify-center ${
-                  plan.popular || plan.highlight 
-                    ? 'bg-gradient-primary text-white' 
-                    : 'bg-accent text-accent-foreground'
+                  plan.popular ? 'bg-primary text-primary-foreground' : 'bg-accent text-accent-foreground'
                 }`}>
                   {plan.icon}
                 </div>
-                <CardTitle className="text-2xl mb-2">{plan.name}</CardTitle>
-                <CardDescription className="text-xs mb-4">{plan.tagline}</CardDescription>
-                <div className="space-y-1">
-                  <div>
-                    <span className="text-3xl font-bold text-foreground">{getPrice(plan)}</span>
-                    <span className="text-sm text-muted-foreground">{getPeriod(plan)}</span>
-                  </div>
-                  {getSavings(plan) && (
-                    <p className="text-xs text-green-600 font-medium">{getSavings(plan)}</p>
-                  )}
+                <CardTitle className="text-2xl">{plan.name}</CardTitle>
+                <CardDescription>{plan.description}</CardDescription>
+                <div className="mt-4">
+                  <span className="text-4xl font-bold text-foreground">{plan.price}</span>
+                  <span className="text-muted-foreground">{plan.period}</span>
                 </div>
-                <p className="text-xs text-muted-foreground mt-3">{plan.seats}</p>
               </CardHeader>
               
-              <CardContent className="flex flex-col flex-grow pt-0">
-                <ul className="space-y-2.5 mb-6 flex-grow">
+              <CardContent>
+                <ul className="space-y-3 mb-6">
                   {plan.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-start">
-                      <Check className="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-xs text-foreground leading-relaxed">{feature}</span>
+                      <Check className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                      <span className="text-sm text-foreground">{feature}</span>
                     </li>
                   ))}
                 </ul>
-
-                {getTeamPricing(plan) && (
-                  <div className="mb-4 p-3 bg-primary/5 border border-primary/20 rounded-lg">
-                    <p className="text-xs text-primary font-medium">{getTeamPricing(plan)}</p>
-                  </div>
-                )}
-
-                <div className="mt-auto space-y-3">
-                  <p className="text-xs font-semibold text-center text-primary italic">
-                    {plan.callout}
-                  </p>
-                  
-                  <Button 
-                    className={`w-full ${
-                      plan.popular || plan.highlight
-                        ? 'bg-gradient-primary hover:opacity-90 text-white' 
-                        : ''
-                    }`}
-                    variant={plan.popular || plan.highlight ? 'default' : 'outline'}
-                    size="lg"
-                  >
-                    Choose Plan
-                  </Button>
-                </div>
+                
+                <Button 
+                  className={`w-full ${
+                    plan.popular 
+                      ? 'bg-gradient-primary hover:opacity-90' 
+                      : ''
+                  }`}
+                  variant={plan.popular ? 'default' : 'outline'}
+                  size="lg"
+                >
+                  {plan.buttonText}
+                </Button>
               </CardContent>
             </Card>
           ))}
         </div>
 
-        {/* Tagline */}
-        <div className="text-center mb-8">
-          <p className="text-lg font-semibold text-foreground">
-            Mergenta AI – AI Reimagined. Intelligent Conversations That Become Workflows.
-          </p>
-        </div>
-
-        {/* Fair-Use Policy */}
-        <div className="max-w-4xl mx-auto mb-6">
-          <Card className="bg-muted/30 border-border">
-            <CardContent className="p-6">
-              <h3 className="text-sm font-semibold text-foreground mb-2">Fair-Use Policy</h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                All plans operate under Mergenta's Fair-Use Policy. Usage limits are generous and designed for normal creative and professional activity. Excessive or automated high-volume usage may be throttled to maintain platform stability.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Footer Note */}
-        <div className="text-center">
-          <p className="text-xs text-muted-foreground">
-            All prices shown are in USD. Indian users will see equivalent INR pricing at checkout.
-          </p>
+        {/* FAQ Section */}
+        <div className="mt-16 text-center">
+          <h2 className="text-2xl font-bold text-foreground mb-8">
+            Frequently Asked Questions
+          </h2>
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto text-left">
+            <div className="space-y-4">
+              <h3 className="font-semibold text-foreground">Can I change my plan anytime?</h3>
+              <p className="text-muted-foreground">Yes, you can upgrade or downgrade your plan at any time. Changes will be reflected in your next billing cycle.</p>
+            </div>
+            <div className="space-y-4">
+              <h3 className="font-semibold text-foreground">What happens if I exceed my limits?</h3>
+              <p className="text-muted-foreground">You'll receive notifications as you approach your limits, and you can easily upgrade to continue using the service.</p>
+            </div>
+            <div className="space-y-4">
+              <h3 className="font-semibold text-foreground">Do you offer refunds?</h3>
+              <p className="text-muted-foreground">Yes, we offer a 30-day money-back guarantee for all paid plans if you're not satisfied.</p>
+            </div>
+            <div className="space-y-4">
+              <h3 className="font-semibold text-foreground">Is there a free trial?</h3>
+              <p className="text-muted-foreground">Yes, all plans come with a 7-day free trial so you can test all features before committing.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

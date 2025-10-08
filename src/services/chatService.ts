@@ -6,7 +6,6 @@ export interface ChatRequest {
   formData?: Record<string, any>;
   intentType?: 'creative' | 'knowledge' | 'research' | 'user_search' | 'experience_studio';
   userId: string;
-  preferredModel?: string;
 }
 
 export interface ChatResponse {
@@ -60,8 +59,7 @@ export class ChatService {
           contentType: request.contentType,
           formData: request.formData,
           intentType: request.intentType,
-          userId: session.user.id,
-          preferredModel: request.preferredModel
+          userId: session.user.id
         }
       });
 
@@ -211,7 +209,7 @@ export class ChatService {
   /**
    * Handle direct user search or chat
    */
-  async handleDirectMessage(message: string, preferredModel?: string, isFollowUp: boolean = false): Promise<ChatResponse> {
+  async handleDirectMessage(message: string): Promise<ChatResponse> {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       
@@ -219,15 +217,14 @@ export class ChatService {
         throw new Error('Authentication required');
       }
 
-      // Only trigger search for new queries, not follow-ups
-      const isSearch = !isFollowUp && this.looksLikeSearch(message);
+      // Determine if this looks like a search query vs a chat message
+      const isSearch = this.looksLikeSearch(message);
       const intentType = isSearch ? 'user_search' : 'creative';
 
       return await this.sendMessage({
         prompt: message,
         intentType,
-        userId: session.user.id,
-        preferredModel
+        userId: session.user.id
       });
 
     } catch (error) {
