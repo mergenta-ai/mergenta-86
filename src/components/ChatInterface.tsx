@@ -277,12 +277,6 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Gradient fade overlay - positioned as sibling of scroll container */}
-      {messages.length > 0 && (
-        <div className="absolute bottom-0 left-0 right-0 h-52 pointer-events-none z-20" style={{ 
-          background: 'linear-gradient(to top, #fde7ef, rgba(253, 231, 239, 0.98), transparent)' 
-        }} />
-      )}
 
       {/* Scroll to bottom button */}
       {showScrollButton && (
