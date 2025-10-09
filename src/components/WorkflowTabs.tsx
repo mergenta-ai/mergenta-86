@@ -214,11 +214,7 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
             {tabs.map((tab, index) => (
               <div key={index} className="relative">
                 <button
-                  onMouseEnter={() => {
-                    if (tab.id !== "power-playbook") {
-                      handleTabHover(tab.id);
-                    }
-                  }}
+                  onMouseEnter={() => handleTabHover(tab.id)}
                   onClick={() => {
                     if (tab.id === "power-playbook") {
                       setPowerPlaybookModalOpen(true);
@@ -243,7 +239,7 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                 </button>
                 
                 {/* Dropdown - only for certain tabs */}
-                {activeTab === tab.id && !["power-playbook"].includes(tab.id) && (
+                {activeTab === tab.id && !["power-playbook", "think-hard", "deep-research"].includes(tab.id) && (
                   <div 
                     className="absolute top-full w-[100px] bg-[#F8F5FE] rounded-lg shadow-md border border-[#E5D9F2] z-50"
                     onMouseEnter={handleDropdownEnter}
