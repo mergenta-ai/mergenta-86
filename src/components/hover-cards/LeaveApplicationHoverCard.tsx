@@ -49,7 +49,6 @@ const LeaveApplicationHoverCard = ({ children, onPromptGenerated }: LeaveApplica
   const handleClearDraft = (e: React.MouseEvent) => {
     e.stopPropagation();
     clearDraft();
-    setShowCard(false);
   };
 
   const handleGeneratePrompt = async () => {

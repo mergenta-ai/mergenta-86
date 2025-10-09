@@ -154,6 +154,7 @@ export const useDraftPersistence = ({
     toast({
       title: "Draft cleared",
       description: "Your draft has been removed.",
+      duration: 1000,
     });
   }, [cardId, initialData, toast]);
 
