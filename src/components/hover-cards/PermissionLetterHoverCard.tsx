@@ -1,22 +1,22 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import { BookOpen, X } from "lucide-react";
+import { FileText, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useClickOutside } from "@/lib/clickOutside";
 import { useDraftPersistence } from "@/hooks/useDraftPersistence";
 
-interface PublicationRequestHoverCardProps {
+interface PermissionLetterHoverCardProps {
   children: React.ReactNode;
   onPromptGenerated?: (prompt: string) => void;
 }
 
-const PublicationRequestHoverCard = ({ children, onPromptGenerated }: PublicationRequestHoverCardProps) => {
+const PermissionLetterHoverCard = ({ children, onPromptGenerated }: PermissionLetterHoverCardProps) => {
   const [showCard, setShowCard] = useState(false);
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const { draftData, saveDraft, clearDraft, isLoading } = useDraftPersistence({
-    cardId: "publication-request",
+    cardId: "permission-letter",
     initialData: {
       to: "",
       subject: "",
@@ -26,14 +26,6 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
       from: "",
     },
   });
-
-  // defensive locals
-  const to = draftData?.to ?? "";
-  const subject = draftData?.subject ?? "";
-  const coreMessage = draftData?.coreMessage ?? "";
-  const finalTouch = draftData?.finalTouch ?? "";
-  const signOff = draftData?.signOff ?? "";
-  const from = draftData?.from ?? "";
 
   const handleMouseEnter = () => {
     if (closeTimeoutRef.current) {
@@ -53,43 +45,72 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
     e.stopPropagation();
   };
 
-  const handleClearDraft = (e?: React.MouseEvent) => {
-    e?.stopPropagation();
+  const handleGeneratePrompt = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke("prompt-engine-consolidated", {
+        body: {
+          contentType: "permission_letter",
+          formData: {
+            to: draftData.to,
+            subject: draftData.subject,
+            coreMessage: draftData.coreMessage,
+            finalTouch: draftData.finalTouch,
+            signOff: draftData.signOff,
+            from: draftData.from,
+          },
+        },
+      });
 
+      if (error) throw error;
+
+      if (data?.success && data?.prompt) {
+        onPromptGenerated?.(data.prompt);
+        setShowCard(false);
+      }
+    } catch (error) {
+      console.error("Error generating prompt:", error);
+    }
+  };
+
+  const handleClearDraft = () => {
+    // Check if any field currently has content
     const hasContent = Boolean(
-      (to && to.toString().trim() !== "") ||
-        (subject && subject.toString().trim() !== "") ||
-        (coreMessage && coreMessage.toString().trim() !== "") ||
-        (finalTouch && finalTouch.toString().trim() !== "") ||
-        (signOff && signOff.toString().trim() !== "") ||
-        (from && from.toString().trim() !== ""),
+      (draftData?.to && draftData.to.trim() !== "") ||
+        (draftData?.subject && draftData.subject.trim() !== "") ||
+        (draftData?.coreMessage && draftData.coreMessage.trim() !== "") ||
+        (draftData?.finalTouch && draftData.finalTouch.trim() !== "") ||
+        (draftData?.signOff && draftData.signOff.trim() !== "") ||
+        (draftData?.from && draftData.from.trim() !== ""),
     );
 
     if (hasContent) {
-      // clear UI immediately
+      // Immediately clear visible values so UI updates at once
       saveDraft("to", "");
       saveDraft("subject", "");
       saveDraft("coreMessage", "");
       saveDraft("finalTouch", "");
       saveDraft("signOff", "");
       saveDraft("from", "");
-      // clear persisted storage
+
+      // Clear persisted storage as well
       clearDraft();
-      return; // keep card open
+
+      // Keep the card open (user can verify empty fields)
+      return;
     }
 
-    // already empty -> close card
+    // If there was no content at all, close the card
     setShowCard(false);
   };
 
   // Close card when clicking outside
-  useClickOutside(showCard, () => setShowCard(false), "[data-publication-card]", "[data-publication-trigger]");
+  useClickOutside(showCard, () => setShowCard(false), "[data-permission-card]", "[data-permission-trigger]");
 
   return (
     <div className="relative">
       {/* Trigger Element */}
       <div
-        data-publication-trigger
+        data-permission-trigger
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={() => setShowCard(!showCard)}
@@ -99,9 +120,9 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
 
       {/* Full Screen Hover Area + Card */}
       {showCard && (
-        <div className="fixed inset-0 z-[200]">
+        <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
-            data-publication-card
+            data-permission-card
             className="absolute left-[918px] top-[220px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
@@ -112,31 +133,28 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
                 <div>
                   <div className="flex items-center justify-between mb-1">
                     <div className="flex items-center gap-2">
-                      <BookOpen className="w-5 h-5 text-[#5B34A0]" />
-                      <h3 className="text-lg font-semibold text-[#5B34A0]">Publication Request</h3>
+                      <FileText className="w-5 h-5 text-[#5B34A0]" />
+                      <h3 className="text-lg font-semibold text-[#5B34A0]">Permission Letter</h3>
                     </div>
-
                     <button
-                      type="button"
-                      onClick={(e) => handleClearDraft(e)}
-                      className="text-[#5B34A0] hover:text-[#6C3EB6] transition-colors"
+                      onClick={handleClearDraft}
+                      className="p-1 hover:bg-[#5B34A0]/10 rounded transition-colors"
                       title="Clear Draft"
                     >
-                      <X className="w-5 h-5" />
+                      <X className="w-4 h-4 text-[#5B34A0]" />
                     </button>
                   </div>
-
-                  <p className="text-sm text-[#6E6E6E] mb-4">Request to publish content or article</p>
+                  <p className="text-sm text-[#6E6E6E] mb-4">Request permission formally</p>
                 </div>
 
                 <div className="space-y-3">
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label>
                     <Textarea
-                      value={to || ""}
+                      value={draftData.to}
                       onChange={(e) => saveDraft("to", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
-                      placeholder="Dear Sir/Madam, Editor, Journal name, Magazine name, Publication name, etc..."
+                      placeholder="Dear Sir/Madam, Manager, Principal, Authority, Supervisor, etc..."
                       className="w-full min-h-[60px] resize-none"
                       autoComplete="off"
                     />
@@ -145,10 +163,10 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label>
                     <Textarea
-                      value={subject || ""}
+                      value={draftData.subject}
                       onChange={(e) => saveDraft("subject", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
-                      placeholder="Publication submission, Article proposal, Content request, Book publication, Story publication, etc..."
+                      placeholder="Approval, Access, Entry, Activity, Event, Sports, Special case, etc..."
                       className="w-full min-h-[60px] resize-none"
                       autoComplete="off"
                     />
@@ -157,10 +175,10 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Core Message</label>
                     <Textarea
-                      value={coreMessage || ""}
+                      value={draftData.coreMessage}
                       onChange={(e) => saveDraft("coreMessage", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
-                      placeholder="Article summary, genre, book excerpt, story/novel/book/publication details, research paper summary, story idea, etc..."
+                      placeholder="Reason, Duration, Purpose, Justification, etc..."
                       className="w-full min-h-[80px] resize-none"
                       autoComplete="off"
                     />
@@ -169,10 +187,10 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Final Touch</label>
                     <Textarea
-                      value={finalTouch || ""}
+                      value={draftData.finalTouch}
                       onChange={(e) => saveDraft("finalTouch", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
-                      placeholder="Tone, length, audience specification, special requests, etc..."
+                      placeholder="Responsibility, Assurance, Explanation, etc..."
                       className="w-full min-h-[60px] resize-none"
                       autoComplete="off"
                     />
@@ -181,10 +199,10 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Sign Off</label>
                     <Textarea
-                      value={signOff || ""}
+                      value={draftData.signOff}
                       onChange={(e) => saveDraft("signOff", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
-                      placeholder="Other details, closing lines, wrap-up..."
+                      placeholder="Thank you, Kindly approve, With respect, etc..."
                       className="w-full min-h-[60px] resize-none"
                       autoComplete="off"
                     />
@@ -193,10 +211,10 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">From</label>
                     <Input
-                      value={from || ""}
+                      value={draftData.from}
                       onChange={(e) => saveDraft("from", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
-                      placeholder="Your name, Your institution/organisation..."
+                      placeholder="Your Name, Class, Name of organisation, etc."
                       className="w-full"
                       autoComplete="off"
                     />
@@ -204,26 +222,9 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
 
                   <button
                     className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
-                    onClick={async () => {
-                      try {
-                        const { data, error } = await supabase.functions.invoke("prompt-engine-consolidated", {
-                          body: {
-                            contentType: "publication_request",
-                            formData: { to, subject, coreMessage, finalTouch, signOff, from },
-                          },
-                        });
-                        if (error) throw error;
-                        if (data?.success && data?.prompt) {
-                          onPromptGenerated?.(data.prompt);
-                          clearDraft();
-                          setShowCard(false);
-                        }
-                      } catch (error) {
-                        console.error("Error generating prompt:", error);
-                      }
-                    }}
+                    onClick={handleGeneratePrompt}
                   >
-                    Request Publication
+                    Request Permission
                   </button>
                 </div>
               </div>
@@ -235,4 +236,4 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
   );
 };
 
-export default PublicationRequestHoverCard;
+export default PermissionLetterHoverCard;
