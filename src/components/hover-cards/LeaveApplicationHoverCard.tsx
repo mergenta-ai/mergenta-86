@@ -48,7 +48,30 @@ const LeaveApplicationHoverCard = ({ children, onPromptGenerated }: LeaveApplica
 
   const handleClearDraft = (e: React.MouseEvent) => {
     e.stopPropagation();
-    clearDraft();
+
+    const hasContent = Boolean(
+      (to && to.trim() !== "") ||
+        (subject && subject.trim() !== "") ||
+        (coreMessage && coreMessage.trim() !== "") ||
+        (finalTouch && finalTouch.trim() !== "") ||
+        (signOff && signOff.trim() !== "") ||
+        (from && from.trim() !== ""),
+    );
+
+    if (hasContent) {
+      // Clear all fields instantly
+      saveDraft("to", "");
+      saveDraft("subject", "");
+      saveDraft("coreMessage", "");
+      saveDraft("finalTouch", "");
+      saveDraft("signOff", "");
+      saveDraft("from", "");
+      clearDraft(); // wipe persisted data
+      return; // keep card open
+    }
+
+    // If already empty, close the card
+    setShowCard(false);
   };
 
   const handleGeneratePrompt = async () => {
