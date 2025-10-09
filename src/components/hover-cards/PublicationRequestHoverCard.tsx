@@ -44,11 +44,7 @@ const PublicationRequestHoverCard = ({ onAddToChat, onPromptGenerated }: Publica
       saveDraft("signOff", "");
       saveDraft("from", "");
       clearDraft();
-      return; // keep visible so user sees empty fields
     }
-
-    // if already empty → close card (optional: use local state or onClose prop)
-    setVisible(false);
   };
 
   const handleGeneratePrompt = () => {
