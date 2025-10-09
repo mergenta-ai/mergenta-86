@@ -131,8 +131,13 @@ export const useDraftPersistence = ({
     const localKey = `card_draft_${cardId}`;
     localStorage.removeItem(localKey);
 
-    // Reset state immediately
-    setDraftData(initialData);
+    // Reset state immediately with a NEW object reference to force re-render
+    const freshData = Object.keys(initialData).reduce((acc, key) => {
+      acc[key] = '';
+      return acc;
+    }, {} as Record<string, any>);
+    
+    setDraftData(freshData);
     
     // Clear Supabase in background (don't block UI)
     supabase.auth.getUser().then(({ data: { user } }) => {
