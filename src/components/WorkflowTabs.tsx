@@ -38,8 +38,6 @@ import { FuturePathwaysModal } from "./modals/FuturePathwaysModal";
 import RealityCheckModal from "./modals/RealityCheckModal";
 import RoleplayHubModal from "./modals/RoleplayHubModal";
 import { ProtoRunModal } from "./modals/ProtoRunModal";
-import ThinkHardHoverCard from "./hover-cards/ThinkHardHoverCard";
-import DeepResearchHoverCard from "./hover-cards/DeepResearchHoverCard";
 import { ImageGenerationModal } from "./modals/ImageGenerationModal";
 
 const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: { 
@@ -425,29 +423,6 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                       </div>
                     )}
                     
-                    {activeTab === "think-hard" && (
-                      <div className="py-2">
-                        <ThinkHardHoverCard onPromptGenerated={onPromptGenerated}>
-                          <button
-                            className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
-                          >
-                            Start Deep Analysis
-                          </button>
-                        </ThinkHardHoverCard>
-                      </div>
-                    )}
-                    
-                    {activeTab === "deep-research" && (
-                      <div className="py-2">
-                        <DeepResearchHoverCard onPromptGenerated={onPromptGenerated}>
-                          <button
-                            className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
-                          >
-                            Begin Research
-                          </button>
-                        </DeepResearchHoverCard>
-                      </div>
-                    )}
                     
                     {activeTab === "task-assistant" && (
                       <div className="py-2">
