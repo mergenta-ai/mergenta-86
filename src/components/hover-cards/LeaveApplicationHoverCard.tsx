@@ -46,6 +46,12 @@ const LeaveApplicationHoverCard = ({ children, onPromptGenerated }: LeaveApplica
     e.stopPropagation();
   };
 
+  const handleClearDraft = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    clearDraft();
+    setShowCard(false);
+  };
+
   const handleGeneratePrompt = async () => {
     try {
       const { data, error } = await supabase.functions.invoke('prompt-engine-consolidated', {
@@ -114,14 +120,14 @@ const LeaveApplicationHoverCard = ({ children, onPromptGenerated }: LeaveApplica
                      <p className="text-sm text-[#6E6E6E] mb-4">Request time off professionally</p>
                    </div>
                    <Button
-                     variant="ghost"
-                     size="icon"
-                     className="h-6 w-6 rounded-full hover:bg-[#E5D9F2]"
-                     onClick={(e) => { e.stopPropagation(); clearDraft(); }}
-                     title="Clear draft"
-                   >
-                     <X className="h-4 w-4 text-[#5B34A0]" />
-                   </Button>
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 rounded-full hover:bg-[#6C3EB6] hover:text-white transition-all duration-300 hover:scale-110 hover:rotate-90 group"
+                      onClick={handleClearDraft}
+                      title="Clear draft"
+                    >
+                      <X className="h-4 w-4 text-[#5B34A0] group-hover:text-white transition-colors duration-300" />
+                    </Button>
                  </div>
                  <div className="space-y-3">
                    <div><label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label><Textarea value={to || undefined} onChange={(e) => saveDraft('to', e.target.value)} onClick={(e) => e.stopPropagation()} placeholder="Dear Sir/Madam, Manager, Principal, HR, Supervisor, etc..." className="w-full min-h-[60px] resize-none" autoComplete="off" /></div>

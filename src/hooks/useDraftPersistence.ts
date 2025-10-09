@@ -12,8 +12,8 @@ interface UseDraftPersistenceOptions {
 export const useDraftPersistence = ({
   cardId,
   initialData = {},
-  localStorageDebounce = 2000,
-  supabaseDebounce = 5000,
+  localStorageDebounce = 10,
+  supabaseDebounce = 100,
 }: UseDraftPersistenceOptions) => {
   const [draftData, setDraftData] = useState<Record<string, any>>(initialData);
   const [isLoading, setIsLoading] = useState(true);
