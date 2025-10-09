@@ -1,35 +1,24 @@
-import React, { useState, useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { X } from "lucide-react";
-import { useDraftPersistence } from "@/hooks/useDraftPersistence";
-import { useToast } from "@/hooks/use-toast";
+import React, { useState, useEffect, useRef } from "react";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { BookOpen } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { useClickOutside } from "@/lib/clickOutside";
 
 interface PublicationRequestHoverCardProps {
   children: React.ReactNode;
-  onAddToChat?: (message: string, response: string) => void;
   onPromptGenerated?: (prompt: string) => void;
 }
 
-const PublicationRequestHoverCard = ({ children, onAddToChat, onPromptGenerated }: PublicationRequestHoverCardProps) => {
-  const { toast } = useToast();
+const PublicationRequestHoverCard = ({ children, onPromptGenerated }: PublicationRequestHoverCardProps) => {
   const [showCard, setShowCard] = useState(false);
+  const [to, setTo] = useState("");
+  const [subject, setSubject] = useState("");
+  const [coreMessage, setCoreMessage] = useState("");
+  const [finalTouch, setFinalTouch] = useState("");
+  const [signOff, setSignOff] = useState("");
+  const [from, setFrom] = useState("");
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  const { draftData, saveDraft, clearDraft, isLoading } = useDraftPersistence({
-    cardId: "publication-request",
-    initialData: {
-      to: "",
-      subject: "",
-      workDetails: "",
-      publicationDetails: "",
-      signOff: "",
-      from: "",
-    },
-  });
 
   const handleMouseEnter = () => {
     if (closeTimeoutRef.current) {
@@ -49,67 +38,19 @@ const PublicationRequestHoverCard = ({ children, onAddToChat, onPromptGenerated 
     e.stopPropagation();
   };
 
-  const handleClearDraft = () => {
-    const hasContent = Boolean(
-      (draftData?.to && draftData.to.trim() !== "") ||
-        (draftData?.subject && draftData.subject.trim() !== "") ||
-        (draftData?.workDetails && draftData.workDetails.trim() !== "") ||
-        (draftData?.publicationDetails && draftData.publicationDetails.trim() !== "") ||
-        (draftData?.signOff && draftData.signOff.trim() !== "") ||
-        (draftData?.from && draftData.from.trim() !== ""),
-    );
-
-    if (hasContent) {
-      saveDraft("to", "");
-      saveDraft("subject", "");
-      saveDraft("workDetails", "");
-      saveDraft("publicationDetails", "");
-      saveDraft("signOff", "");
-      saveDraft("from", "");
-      clearDraft();
-    }
-  };
-
-  const handleGeneratePrompt = () => {
-    const prompt = `Generate a professional publication request letter with the following details:
-To: ${draftData.to}
-Subject: ${draftData.subject}
-Work Details: ${draftData.workDetails}
-Publication Details: ${draftData.publicationDetails}
-Sign Off: ${draftData.signOff}
-From: ${draftData.from}
-
-Please create a formal, well-structured publication request letter.`;
-
-    if (onPromptGenerated) {
-      onPromptGenerated(prompt);
-    }
-
-    if (onAddToChat) {
-      onAddToChat(prompt, "Generating your publication request letter...");
-    }
-
-    clearDraft();
-    setShowCard(false);
-  };
-
   // Close card when clicking outside
   useClickOutside(
     showCard,
     () => setShowCard(false),
-    '[data-publication-request-card]',
-    '[data-publication-request-trigger]'
+    '[data-publication-card]',
+    '[data-publication-trigger]'
   );
-
-  if (isLoading) {
-    return <div className="p-4">Loading draft...</div>;
-  }
 
   return (
     <div className="relative">
       {/* Trigger Element */}
       <div 
-        data-publication-request-trigger
+        data-publication-trigger
         onMouseEnter={handleMouseEnter} 
         onMouseLeave={handleMouseLeave}
         onClick={() => setShowCard(!showCard)}
@@ -121,114 +62,118 @@ Please create a formal, well-structured publication request letter.`;
       {showCard && (
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
-            data-publication-request-card
-            className="absolute left-[918px] top-[160px] w-80 pointer-events-auto"
+            data-publication-card
+            className="absolute left-[918px] top-[220px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
           >
-            <div className="p-6 bg-background rounded-lg shadow-lg border">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-foreground">Publication Request Letter</h3>
-                <Button variant="ghost" size="icon" onClick={handleClearDraft} className="h-8 w-8">
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-
+            <div className="p-6 bg-pastel-lavender rounded-2xl shadow-lg border border-[#E5D9F2] animate-in fade-in-0 zoom-in-95 duration-200">
               <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="to" className="text-sm font-medium text-foreground">
-                    To (Publisher/Editor)
-                  </Label>
-                  <Input
-                    id="to"
-                    placeholder="e.g., Editor-in-Chief, Journal Name"
-                    value={draftData.to || ""}
-                    onChange={(e) => saveDraft("to", e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    className="w-full"
-                    autoComplete="off"
-                  />
+                 <div>
+                   <div className="flex items-center gap-2 mb-1">
+                     <BookOpen className="w-5 h-5 text-[#5B34A0]" />
+                     <h3 className="text-lg font-semibold text-[#5B34A0]">Publication Request</h3>
+                   </div>
+                   <p className="text-sm text-[#6E6E6E] mb-4">Request to publish content or article</p>
+                 </div>
+                
+                <div className="space-y-3">
+                  <div>
+                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label>
+                    <Textarea
+                      value={to || undefined}
+                      onChange={(e) => setTo(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Dear Sir/Madam, Editor, Journal name, Magazine name, Publication name, etc..."
+                      className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
+                      />
+                  </div>
+                  
+                  <div>
+                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label>
+                    <Textarea
+                      value={subject || undefined}
+                      onChange={(e) => setSubject(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Publication submission, Article proposal, Content request, Book publication, Story publication, etc..."
+                      className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Core Message</label>
+                    <Textarea
+                      value={coreMessage || undefined}
+                      onChange={(e) => setCoreMessage(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Article summary, genre, book excerpt, story/novel/book/publication details, research paper summary, story idea, etc..."
+                      className="w-full min-h-[80px] resize-none"
+                      autoComplete="off"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Final Touch</label>
+                    <Textarea
+                      value={finalTouch || undefined}
+                      onChange={(e) => setFinalTouch(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Tone, length, audience specification, special requests, etc..."
+                      className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Sign Off</label>
+                    <Textarea
+                      value={signOff || undefined}
+                      onChange={(e) => setSignOff(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Other details, closing lines, wrap-up..."
+                      className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">From</label>
+                    <Input
+                      value={from || undefined}
+                      onChange={(e) => setFrom(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Your name, Your instirution/organisation..."
+                      className="w-full"
+                      autoComplete="off"
+                    />
+                  </div>
+                  
+                  <button
+                    className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
+                    onClick={async () => {
+                      try {
+                        const { data, error } = await supabase.functions.invoke('prompt-engine-consolidated', {
+                          body: { 
+                            contentType: 'publication_request', 
+                            formData: { to, subject, coreMessage, finalTouch, signOff, from } 
+                          }
+                        });
+                        if (error) throw error;
+                        if (data?.success && data?.prompt) {
+                          onPromptGenerated?.(data.prompt);
+                          setShowCard(false);
+                        }
+                      } catch (error) {
+                        console.error('Error generating prompt:', error);
+                      }
+                    }}
+                  >
+                    Request Publication
+                  </button>
                 </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="subject" className="text-sm font-medium text-foreground">
-                    Subject
-                  </Label>
-                  <Input
-                    id="subject"
-                    placeholder="e.g., Request for Publication of Research Article"
-                    value={draftData.subject || ""}
-                    onChange={(e) => saveDraft("subject", e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    className="w-full"
-                    autoComplete="off"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="workDetails" className="text-sm font-medium text-foreground">
-                    Work Details
-                  </Label>
-                  <Textarea
-                    id="workDetails"
-                    placeholder="Describe your work (title, abstract, key findings, etc.)"
-                    value={draftData.workDetails || ""}
-                    onChange={(e) => saveDraft("workDetails", e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    className="w-full min-h-[80px] resize-none"
-                    autoComplete="off"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="publicationDetails" className="text-sm font-medium text-foreground">
-                    Publication Details
-                  </Label>
-                  <Textarea
-                    id="publicationDetails"
-                    placeholder="Publication venue, why it's suitable, any relevant background"
-                    value={draftData.publicationDetails || ""}
-                    onChange={(e) => saveDraft("publicationDetails", e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    className="w-full min-h-[80px] resize-none"
-                    autoComplete="off"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="signOff" className="text-sm font-medium text-foreground">
-                    Sign Off
-                  </Label>
-                  <Input
-                    id="signOff"
-                    placeholder="e.g., Sincerely, Best regards"
-                    value={draftData.signOff || ""}
-                    onChange={(e) => saveDraft("signOff", e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    className="w-full"
-                    autoComplete="off"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="from" className="text-sm font-medium text-foreground">
-                    From
-                  </Label>
-                  <Input
-                    id="from"
-                    placeholder="Your name and credentials"
-                    value={draftData.from || ""}
-                    onChange={(e) => saveDraft("from", e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    className="w-full"
-                    autoComplete="off"
-                  />
-                </div>
-
-                <Button onClick={handleGeneratePrompt} className="w-full mt-4">
-                  Generate Publication Request
-                </Button>
               </div>
             </div>
           </div>
