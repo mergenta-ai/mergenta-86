@@ -22,13 +22,10 @@ export const useDraftPersistence = ({
 
   const localStorageTimerRef = useRef<NodeJS.Timeout>();
   const supabaseTimerRef = useRef<NodeJS.Timeout>();
-  const hasLoadedRef = useRef(false);
 
   // Load draft on mount
   useEffect(() => {
     const loadDraft = async () => {
-      if (hasLoadedRef.current) return;
-      hasLoadedRef.current = true;
 
       try {
         // Try localStorage first
@@ -129,37 +126,35 @@ export const useDraftPersistence = ({
   }, [saveToLocalStorage, saveToSupabase]);
 
   // Clear draft
-  const clearDraft = useCallback(async () => {
-    try {
-      // Clear localStorage
-      const localKey = `card_draft_${cardId}`;
-      localStorage.removeItem(localKey);
+  const clearDraft = useCallback(() => {
+    // Clear localStorage immediately
+    const localKey = `card_draft_${cardId}`;
+    localStorage.removeItem(localKey);
 
-      // Clear Supabase
-      const { data: { user } } = await supabase.auth.getUser();
+    // Reset state immediately
+    setDraftData(initialData);
+    
+    // Clear Supabase in background (don't block UI)
+    supabase.auth.getUser().then(({ data: { user } }) => {
       if (user) {
-        await supabase
+        supabase
           .from('card_drafts')
           .delete()
           .eq('user_id', user.id)
-          .eq('card_id', cardId);
+          .eq('card_id', cardId)
+          .then(({ error }) => {
+            if (error) {
+              console.error('Error clearing draft from Supabase:', error);
+            }
+          });
       }
-
-      // Reset state
-      setDraftData(initialData);
-      
-      toast({
-        title: "Draft cleared",
-        description: "Your draft has been removed.",
-      });
-    } catch (error) {
-      console.error('Error clearing draft:', error);
-      toast({
-        title: "Error",
-        description: "Failed to clear draft.",
-        variant: "destructive",
-      });
-    }
+    });
+    
+    // Show toast after state reset
+    toast({
+      title: "Draft cleared",
+      description: "Your draft has been removed.",
+    });
   }, [cardId, initialData, toast]);
 
   // Cleanup timers on unmount

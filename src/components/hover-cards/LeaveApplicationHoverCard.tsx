@@ -67,7 +67,7 @@ const LeaveApplicationHoverCard = ({ children, onPromptGenerated }: LeaveApplica
       if (data?.success && data?.prompt) {
         onPromptGenerated?.(data.prompt);
         setShowCard(false);
-        await clearDraft();
+        clearDraft();
       }
     } catch (error) {
       console.error('Error generating prompt:', error);
