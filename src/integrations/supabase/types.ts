@@ -14,6 +14,99 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_quota_config: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          limit_value: number
+          model_name: string
+          notes: string | null
+          quota_type: Database["public"]["Enums"]["quota_type"]
+          updated_at: string | null
+          vendor_type: Database["public"]["Enums"]["vendor_type"]
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          limit_value: number
+          model_name: string
+          notes?: string | null
+          quota_type: Database["public"]["Enums"]["quota_type"]
+          updated_at?: string | null
+          vendor_type: Database["public"]["Enums"]["vendor_type"]
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          limit_value?: number
+          model_name?: string
+          notes?: string | null
+          quota_type?: Database["public"]["Enums"]["quota_type"]
+          updated_at?: string | null
+          vendor_type?: Database["public"]["Enums"]["vendor_type"]
+        }
+        Relationships: []
+      }
+      admin_settings: {
+        Row: {
+          description: string | null
+          id: string
+          setting_key: string
+          setting_value: Json
+          updated_at: string | null
+        }
+        Insert: {
+          description?: string | null
+          id?: string
+          setting_key: string
+          setting_value: Json
+          updated_at?: string | null
+        }
+        Update: {
+          description?: string | null
+          id?: string
+          setting_key?: string
+          setting_value?: Json
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      cloudconvert_usage: {
+        Row: {
+          conversation_id: string | null
+          created_at: string | null
+          daily_count: number | null
+          export_date: string
+          export_type: string | null
+          id: string
+          last_reset: string | null
+          user_id: string
+        }
+        Insert: {
+          conversation_id?: string | null
+          created_at?: string | null
+          daily_count?: number | null
+          export_date?: string
+          export_type?: string | null
+          id?: string
+          last_reset?: string | null
+          user_id: string
+        }
+        Update: {
+          conversation_id?: string | null
+          created_at?: string | null
+          daily_count?: number | null
+          export_date?: string
+          export_type?: string | null
+          id?: string
+          last_reset?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       conversations: {
         Row: {
           created_at: string
@@ -38,6 +131,470 @@ export type Database = {
           updated_at?: string
           user_id?: string
           workflow_type?: string | null
+        }
+        Relationships: []
+      }
+      document_upload_usage: {
+        Row: {
+          created_at: string | null
+          daily_count: number | null
+          file_name: string | null
+          file_size: number | null
+          id: string
+          last_reset: string | null
+          pages_extracted: number | null
+          upload_date: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          daily_count?: number | null
+          file_name?: string | null
+          file_size?: number | null
+          id?: string
+          last_reset?: string | null
+          pages_extracted?: number | null
+          upload_date?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          daily_count?: number | null
+          file_name?: string | null
+          file_size?: number | null
+          id?: string
+          last_reset?: string | null
+          pages_extracted?: number | null
+          upload_date?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      email_limits: {
+        Row: {
+          created_at: string | null
+          daily_gmail_quota: number | null
+          daily_outlook_quota: number | null
+          id: string
+          monthly_gmail_quota: number | null
+          monthly_outlook_quota: number | null
+          plan_type: Database["public"]["Enums"]["plan_type"]
+        }
+        Insert: {
+          created_at?: string | null
+          daily_gmail_quota?: number | null
+          daily_outlook_quota?: number | null
+          id?: string
+          monthly_gmail_quota?: number | null
+          monthly_outlook_quota?: number | null
+          plan_type: Database["public"]["Enums"]["plan_type"]
+        }
+        Update: {
+          created_at?: string | null
+          daily_gmail_quota?: number | null
+          daily_outlook_quota?: number | null
+          id?: string
+          monthly_gmail_quota?: number | null
+          monthly_outlook_quota?: number | null
+          plan_type?: Database["public"]["Enums"]["plan_type"]
+        }
+        Relationships: []
+      }
+      email_processing_log: {
+        Row: {
+          action_taken: Database["public"]["Enums"]["action_taken"]
+          ai_tokens_used: number | null
+          created_at: string
+          error_message: string | null
+          gmail_draft_id: string | null
+          gmail_message_id: string
+          gmail_message_sent_id: string | null
+          id: string
+          processing_mode: Database["public"]["Enums"]["processing_trigger_mode"]
+          processing_time_ms: number | null
+          rule_applied_id: string | null
+          rule_applied_name: string | null
+          sender_email: string
+          sender_name: string | null
+          subject: string | null
+          user_id: string
+        }
+        Insert: {
+          action_taken: Database["public"]["Enums"]["action_taken"]
+          ai_tokens_used?: number | null
+          created_at?: string
+          error_message?: string | null
+          gmail_draft_id?: string | null
+          gmail_message_id: string
+          gmail_message_sent_id?: string | null
+          id?: string
+          processing_mode: Database["public"]["Enums"]["processing_trigger_mode"]
+          processing_time_ms?: number | null
+          rule_applied_id?: string | null
+          rule_applied_name?: string | null
+          sender_email: string
+          sender_name?: string | null
+          subject?: string | null
+          user_id: string
+        }
+        Update: {
+          action_taken?: Database["public"]["Enums"]["action_taken"]
+          ai_tokens_used?: number | null
+          created_at?: string
+          error_message?: string | null
+          gmail_draft_id?: string | null
+          gmail_message_id?: string
+          gmail_message_sent_id?: string | null
+          id?: string
+          processing_mode?: Database["public"]["Enums"]["processing_trigger_mode"]
+          processing_time_ms?: number | null
+          rule_applied_id?: string | null
+          rule_applied_name?: string | null
+          sender_email?: string
+          sender_name?: string | null
+          subject?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_processing_log_rule_applied_id_fkey"
+            columns: ["rule_applied_id"]
+            isOneToOne: false
+            referencedRelation: "email_sender_rules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      email_processing_stats: {
+        Row: {
+          avg_processing_time_ms: number
+          created_at: string
+          date: string
+          drafts_created: number
+          emails_sent: number
+          id: string
+          total_failed: number
+          total_ignored: number
+          total_processed: number
+          total_tokens_used: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avg_processing_time_ms?: number
+          created_at?: string
+          date?: string
+          drafts_created?: number
+          emails_sent?: number
+          id?: string
+          total_failed?: number
+          total_ignored?: number
+          total_processed?: number
+          total_tokens_used?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avg_processing_time_ms?: number
+          created_at?: string
+          date?: string
+          drafts_created?: number
+          emails_sent?: number
+          id?: string
+          total_failed?: number
+          total_ignored?: number
+          total_processed?: number
+          total_tokens_used?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      email_sender_rules: {
+        Row: {
+          action: Database["public"]["Enums"]["email_action"]
+          apply_to_mode: Database["public"]["Enums"]["apply_to_mode"]
+          created_at: string
+          custom_prompt: string | null
+          id: string
+          is_active: boolean
+          priority: number
+          reply_mode: string | null
+          sender_email: string
+          sender_name: string | null
+          sender_pattern_type: Database["public"]["Enums"]["sender_pattern_type"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          action?: Database["public"]["Enums"]["email_action"]
+          apply_to_mode?: Database["public"]["Enums"]["apply_to_mode"]
+          created_at?: string
+          custom_prompt?: string | null
+          id?: string
+          is_active?: boolean
+          priority?: number
+          reply_mode?: string | null
+          sender_email: string
+          sender_name?: string | null
+          sender_pattern_type?: Database["public"]["Enums"]["sender_pattern_type"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          action?: Database["public"]["Enums"]["email_action"]
+          apply_to_mode?: Database["public"]["Enums"]["apply_to_mode"]
+          created_at?: string
+          custom_prompt?: string | null
+          id?: string
+          is_active?: boolean
+          priority?: number
+          reply_mode?: string | null
+          sender_email?: string
+          sender_name?: string | null
+          sender_pattern_type?: Database["public"]["Enums"]["sender_pattern_type"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      email_usage: {
+        Row: {
+          created_at: string | null
+          daily_count: number | null
+          id: string
+          last_daily_reset: string | null
+          last_monthly_reset: string | null
+          monthly_count: number | null
+          service_type: string
+          usage_date: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          daily_count?: number | null
+          id?: string
+          last_daily_reset?: string | null
+          last_monthly_reset?: string | null
+          monthly_count?: number | null
+          service_type: string
+          usage_date?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          daily_count?: number | null
+          id?: string
+          last_daily_reset?: string | null
+          last_monthly_reset?: string | null
+          monthly_count?: number | null
+          service_type?: string
+          usage_date?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      export_limits: {
+        Row: {
+          created_at: string | null
+          daily_cloudconvert_quota: number | null
+          daily_document_upload: number | null
+          daily_google_docs_export: number | null
+          daily_google_sheets_export: number | null
+          daily_txt_download: number | null
+          id: string
+          max_document_pages: number | null
+          plan_type: Database["public"]["Enums"]["plan_type"]
+        }
+        Insert: {
+          created_at?: string | null
+          daily_cloudconvert_quota?: number | null
+          daily_document_upload?: number | null
+          daily_google_docs_export?: number | null
+          daily_google_sheets_export?: number | null
+          daily_txt_download?: number | null
+          id?: string
+          max_document_pages?: number | null
+          plan_type: Database["public"]["Enums"]["plan_type"]
+        }
+        Update: {
+          created_at?: string | null
+          daily_cloudconvert_quota?: number | null
+          daily_document_upload?: number | null
+          daily_google_docs_export?: number | null
+          daily_google_sheets_export?: number | null
+          daily_txt_download?: number | null
+          id?: string
+          max_document_pages?: number | null
+          plan_type?: Database["public"]["Enums"]["plan_type"]
+        }
+        Relationships: []
+      }
+      feature_limits: {
+        Row: {
+          allow_model_overwrite: boolean | null
+          allow_web_search: boolean | null
+          content_type: string | null
+          created_at: string | null
+          daily_quota: number
+          fallback_models: string[] | null
+          feature_name: string
+          id: string
+          intent_type: string | null
+          max_words: number
+          plan_type: Database["public"]["Enums"]["plan_type"]
+          primary_model: string
+          updated_at: string | null
+        }
+        Insert: {
+          allow_model_overwrite?: boolean | null
+          allow_web_search?: boolean | null
+          content_type?: string | null
+          created_at?: string | null
+          daily_quota?: number
+          fallback_models?: string[] | null
+          feature_name: string
+          id?: string
+          intent_type?: string | null
+          max_words?: number
+          plan_type: Database["public"]["Enums"]["plan_type"]
+          primary_model: string
+          updated_at?: string | null
+        }
+        Update: {
+          allow_model_overwrite?: boolean | null
+          allow_web_search?: boolean | null
+          content_type?: string | null
+          created_at?: string | null
+          daily_quota?: number
+          fallback_models?: string[] | null
+          feature_name?: string
+          id?: string
+          intent_type?: string | null
+          max_words?: number
+          plan_type?: Database["public"]["Enums"]["plan_type"]
+          primary_model?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      gmail_connections: {
+        Row: {
+          auto_reply_enabled: boolean | null
+          connected_at: string | null
+          created_at: string | null
+          default_reply_mode: string | null
+          encrypted_access_token: string
+          encrypted_refresh_token: string
+          gmail_email: string
+          history_id: string | null
+          id: string
+          last_synced_at: string | null
+          processing_mode: Database["public"]["Enums"]["processing_mode"]
+          token_expires_at: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          auto_reply_enabled?: boolean | null
+          connected_at?: string | null
+          created_at?: string | null
+          default_reply_mode?: string | null
+          encrypted_access_token: string
+          encrypted_refresh_token: string
+          gmail_email: string
+          history_id?: string | null
+          id?: string
+          last_synced_at?: string | null
+          processing_mode?: Database["public"]["Enums"]["processing_mode"]
+          token_expires_at: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          auto_reply_enabled?: boolean | null
+          connected_at?: string | null
+          created_at?: string | null
+          default_reply_mode?: string | null
+          encrypted_access_token?: string
+          encrypted_refresh_token?: string
+          gmail_email?: string
+          history_id?: string | null
+          id?: string
+          last_synced_at?: string | null
+          processing_mode?: Database["public"]["Enums"]["processing_mode"]
+          token_expires_at?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      gmail_processing_queue: {
+        Row: {
+          created_at: string | null
+          email_address: string
+          error_message: string | null
+          history_id: string
+          id: string
+          processed_at: string | null
+          retry_count: number | null
+          status: Database["public"]["Enums"]["processing_status"] | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          email_address: string
+          error_message?: string | null
+          history_id: string
+          id?: string
+          processed_at?: string | null
+          retry_count?: number | null
+          status?: Database["public"]["Enums"]["processing_status"] | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          email_address?: string
+          error_message?: string | null
+          history_id?: string
+          id?: string
+          processed_at?: string | null
+          retry_count?: number | null
+          status?: Database["public"]["Enums"]["processing_status"] | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      gmail_quota_usage: {
+        Row: {
+          created_at: string | null
+          daily_count: number | null
+          id: string
+          last_daily_reset: string | null
+          last_monthly_reset: string | null
+          monthly_count: number | null
+          usage_date: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          daily_count?: number | null
+          id?: string
+          last_daily_reset?: string | null
+          last_monthly_reset?: string | null
+          monthly_count?: number | null
+          usage_date?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          daily_count?: number | null
+          id?: string
+          last_daily_reset?: string | null
+          last_monthly_reset?: string | null
+          monthly_count?: number | null
+          usage_date?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -78,6 +635,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      plan_limits: {
+        Row: {
+          created_at: string | null
+          feature_name: string
+          id: string
+          limit_value: number
+          plan_type: Database["public"]["Enums"]["plan_type"]
+          quota_type: Database["public"]["Enums"]["quota_type"]
+          reset_period: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          feature_name: string
+          id?: string
+          limit_value: number
+          plan_type?: Database["public"]["Enums"]["plan_type"]
+          quota_type: Database["public"]["Enums"]["quota_type"]
+          reset_period?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          feature_name?: string
+          id?: string
+          limit_value?: number
+          plan_type?: Database["public"]["Enums"]["plan_type"]
+          quota_type?: Database["public"]["Enums"]["quota_type"]
+          reset_period?: string | null
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
@@ -193,6 +780,195 @@ export type Database = {
         }
         Relationships: []
       }
+      router_config: {
+        Row: {
+          async_token_limit: number
+          created_at: string | null
+          daily_gen_quota: number
+          daily_web_search_quota: number
+          id: string
+          monthly_document_upload_quota: number
+          monthly_gen_quota: number
+          monthly_image_quota: number
+          monthly_video_quota: number
+          monthly_web_search_quota: number
+          plan_type: Database["public"]["Enums"]["plan_type"]
+          sync_token_limit: number
+        }
+        Insert: {
+          async_token_limit: number
+          created_at?: string | null
+          daily_gen_quota: number
+          daily_web_search_quota: number
+          id?: string
+          monthly_document_upload_quota: number
+          monthly_gen_quota: number
+          monthly_image_quota: number
+          monthly_video_quota: number
+          monthly_web_search_quota: number
+          plan_type: Database["public"]["Enums"]["plan_type"]
+          sync_token_limit: number
+        }
+        Update: {
+          async_token_limit?: number
+          created_at?: string | null
+          daily_gen_quota?: number
+          daily_web_search_quota?: number
+          id?: string
+          monthly_document_upload_quota?: number
+          monthly_gen_quota?: number
+          monthly_image_quota?: number
+          monthly_video_quota?: number
+          monthly_web_search_quota?: number
+          plan_type?: Database["public"]["Enums"]["plan_type"]
+          sync_token_limit?: number
+        }
+        Relationships: []
+      }
+      rss_feeds: {
+        Row: {
+          category: string | null
+          content: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          published_at: string | null
+          scraped_at: string | null
+          source_name: string
+          source_url: string
+          summary: string | null
+          title: string
+          url: string
+        }
+        Insert: {
+          category?: string | null
+          content?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          published_at?: string | null
+          scraped_at?: string | null
+          source_name: string
+          source_url: string
+          summary?: string | null
+          title: string
+          url: string
+        }
+        Update: {
+          category?: string | null
+          content?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          published_at?: string | null
+          scraped_at?: string | null
+          source_name?: string
+          source_url?: string
+          summary?: string | null
+          title?: string
+          url?: string
+        }
+        Relationships: []
+      }
+      search_cache: {
+        Row: {
+          cache_key: string
+          created_at: string
+          id: string
+          results: Json
+        }
+        Insert: {
+          cache_key: string
+          created_at?: string
+          id?: string
+          results: Json
+        }
+        Update: {
+          cache_key?: string
+          created_at?: string
+          id?: string
+          results?: Json
+        }
+        Relationships: []
+      }
+      search_queries: {
+        Row: {
+          cache_hits: number | null
+          created_at: string | null
+          fallback_used: boolean | null
+          id: string
+          intent_type: string | null
+          query_text: string
+          rss_sources_count: number | null
+          search_results_count: number | null
+          sources_used: Json | null
+          tokens_consumed: number | null
+          updated_at: string | null
+          user_id: string
+          web_sources_count: number | null
+        }
+        Insert: {
+          cache_hits?: number | null
+          created_at?: string | null
+          fallback_used?: boolean | null
+          id?: string
+          intent_type?: string | null
+          query_text: string
+          rss_sources_count?: number | null
+          search_results_count?: number | null
+          sources_used?: Json | null
+          tokens_consumed?: number | null
+          updated_at?: string | null
+          user_id: string
+          web_sources_count?: number | null
+        }
+        Update: {
+          cache_hits?: number | null
+          created_at?: string | null
+          fallback_used?: boolean | null
+          id?: string
+          intent_type?: string | null
+          query_text?: string
+          rss_sources_count?: number | null
+          search_results_count?: number | null
+          sources_used?: Json | null
+          tokens_consumed?: number | null
+          updated_at?: string | null
+          user_id?: string
+          web_sources_count?: number | null
+        }
+        Relationships: []
+      }
+      talk_mode_usage: {
+        Row: {
+          created_at: string
+          daily_minutes_limit: number | null
+          id: string
+          last_reset: string
+          updated_at: string
+          used_minutes: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          daily_minutes_limit?: number | null
+          id?: string
+          last_reset?: string
+          updated_at?: string
+          used_minutes?: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          daily_minutes_limit?: number | null
+          id?: string
+          last_reset?: string
+          updated_at?: string
+          used_minutes?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       usage_analytics: {
         Row: {
           created_at: string
@@ -220,6 +996,39 @@ export type Database = {
           session_id?: string | null
           user_id?: string
           workflow_type?: string | null
+        }
+        Relationships: []
+      }
+      user_plans: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          plan_type: Database["public"]["Enums"]["plan_type"]
+          subscription_end: string | null
+          subscription_start: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          plan_type?: Database["public"]["Enums"]["plan_type"]
+          subscription_end?: string | null
+          subscription_start?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          plan_type?: Database["public"]["Enums"]["plan_type"]
+          subscription_end?: string | null
+          subscription_start?: string | null
+          updated_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -295,15 +1104,187 @@ export type Database = {
         }
         Relationships: []
       }
+      user_quotas: {
+        Row: {
+          created_at: string | null
+          feature_name: string
+          id: string
+          last_reset: string | null
+          quota_type: Database["public"]["Enums"]["quota_type"]
+          updated_at: string | null
+          used_count: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          feature_name: string
+          id?: string
+          last_reset?: string | null
+          quota_type: Database["public"]["Enums"]["quota_type"]
+          updated_at?: string | null
+          used_count?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          feature_name?: string
+          id?: string
+          last_reset?: string | null
+          quota_type?: Database["public"]["Enums"]["quota_type"]
+          updated_at?: string | null
+          used_count?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          assigned_at: string | null
+          assigned_by: string | null
+          id: string
+          notes: string | null
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          assigned_at?: string | null
+          assigned_by?: string | null
+          id?: string
+          notes?: string | null
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          assigned_at?: string | null
+          assigned_by?: string | null
+          id?: string
+          notes?: string | null
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      vendor_fallbacks: {
+        Row: {
+          created_at: string | null
+          error_message: string | null
+          fallback_vendor: Database["public"]["Enums"]["vendor_type"] | null
+          id: string
+          primary_vendor: Database["public"]["Enums"]["vendor_type"]
+          request_data: Json | null
+          success: boolean | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          error_message?: string | null
+          fallback_vendor?: Database["public"]["Enums"]["vendor_type"] | null
+          id?: string
+          primary_vendor: Database["public"]["Enums"]["vendor_type"]
+          request_data?: Json | null
+          success?: boolean | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          error_message?: string | null
+          fallback_vendor?: Database["public"]["Enums"]["vendor_type"] | null
+          id?: string
+          primary_vendor?: Database["public"]["Enums"]["vendor_type"]
+          request_data?: Json | null
+          success?: boolean | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      vendor_quotas: {
+        Row: {
+          created_at: string | null
+          id: string
+          last_reset: string | null
+          limit_value: number
+          model_name: string | null
+          quota_type: Database["public"]["Enums"]["quota_type"]
+          updated_at: string | null
+          used_count: number | null
+          vendor_type: Database["public"]["Enums"]["vendor_type"]
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          last_reset?: string | null
+          limit_value: number
+          model_name?: string | null
+          quota_type: Database["public"]["Enums"]["quota_type"]
+          updated_at?: string | null
+          used_count?: number | null
+          vendor_type: Database["public"]["Enums"]["vendor_type"]
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          last_reset?: string | null
+          limit_value?: number
+          model_name?: string | null
+          quota_type?: Database["public"]["Enums"]["quota_type"]
+          updated_at?: string | null
+          used_count?: number | null
+          vendor_type?: Database["public"]["Enums"]["vendor_type"]
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      cleanup_expired_cache: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      cleanup_old_gmail_queue_entries: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_admin_or_moderator: {
+        Args: { _user_id: string }
+        Returns: boolean
+      }
+      is_super_admin: {
+        Args: { _user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      action_taken: "replied_draft" | "replied_sent" | "ignored" | "failed"
+      app_role: "admin" | "moderator" | "user"
+      apply_to_mode: "both" | "pull" | "push"
+      email_action: "reply" | "ignore" | "forward" | "flag"
+      plan_type: "free" | "pro" | "zip" | "ace" | "max"
+      processing_mode: "pull" | "push" | "hybrid"
+      processing_status: "pending" | "processing" | "completed" | "failed"
+      processing_trigger_mode: "pull_manual" | "pull_user" | "push_worker"
+      quota_type: "daily" | "monthly" | "per_card" | "per_vendor"
+      sender_pattern_type: "exact" | "domain" | "wildcard"
+      vendor_type:
+        | "openai"
+        | "anthropic"
+        | "google"
+        | "gemini"
+        | "mistral"
+        | "xai"
+        | "elevenlabs"
+        | "cloudconvert"
+        | "local"
+        | "meta"
+        | "microsoft"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -430,6 +1411,30 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      action_taken: ["replied_draft", "replied_sent", "ignored", "failed"],
+      app_role: ["admin", "moderator", "user"],
+      apply_to_mode: ["both", "pull", "push"],
+      email_action: ["reply", "ignore", "forward", "flag"],
+      plan_type: ["free", "pro", "zip", "ace", "max"],
+      processing_mode: ["pull", "push", "hybrid"],
+      processing_status: ["pending", "processing", "completed", "failed"],
+      processing_trigger_mode: ["pull_manual", "pull_user", "push_worker"],
+      quota_type: ["daily", "monthly", "per_card", "per_vendor"],
+      sender_pattern_type: ["exact", "domain", "wildcard"],
+      vendor_type: [
+        "openai",
+        "anthropic",
+        "google",
+        "gemini",
+        "mistral",
+        "xai",
+        "elevenlabs",
+        "cloudconvert",
+        "local",
+        "meta",
+        "microsoft",
+      ],
+    },
   },
 } as const

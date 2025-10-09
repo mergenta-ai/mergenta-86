@@ -1,5 +1,8 @@
 project_id = "sqpiuquzcejtyuqykvxn"
 
+[functions.pubsub-gmail]
+verify_jwt = false
+
 [functions.prompt-engine]
 verify_jwt = false
 
@@ -13,4 +16,85 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.prompt-engine-consolidated]
+verify_jwt = false
+
+[functions.chat-router]
+verify_jwt = true
+
+[functions.model-gateway]
+verify_jwt = true
+
+[functions.image-generation]
+verify_jwt = true
+
+[functions.websearch-edge]
+verify_jwt = true
+
+[functions.news-feeds-edge]
+verify_jwt = true
+
+[functions.elevenlabs-tts]
+verify_jwt = true
+
+[functions.google-stt]
+verify_jwt = true
+
+[functions.openai-whisper-stt]
+verify_jwt = true
+
+[functions.google-tts]
+verify_jwt = true
+
+[functions.openai-tts]
+verify_jwt = true
+
+[functions.talk-mode-router]
+verify_jwt = true
+
+[functions.document-upload]
+verify_jwt = true
+
+[functions.export-google]
+verify_jwt = true
+
+[functions.export-cloudconvert]
+verify_jwt = true
+
+[functions.gmail-automation]
+verify_jwt = true
+
+[functions.outlook-automation]
+verify_jwt = true
+
+[functions.gmail-oauth-authorize]
+verify_jwt = true
+
+[functions.gmail-oauth-callback]
+verify_jwt = false
+
+[functions.gmail-disconnect]
+verify_jwt = true
+
+[functions.gmail-worker]
+verify_jwt = false
+
+[functions.gmail-process-manual]
+verify_jwt = true
+
+[functions.gmail-pull-manual]
+verify_jwt = true
+
+[functions.gmail-pull-user]
+verify_jwt = true
+
+[functions.admin-list-users]
+verify_jwt = true
+
+[functions.admin-update-user-plan]
+verify_jwt = true
+
+[functions.test-gemini-key]
+verify_jwt = false
+
+[functions.sync-quota-configs]
 verify_jwt = false

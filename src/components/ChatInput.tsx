@@ -1,6 +1,14 @@
 import { useState, useRef, useEffect } from "react";
-import { Send, Loader2, Cpu, Paperclip, Globe, Mic, Share, Download, AudioWaveform, X } from "lucide-react";
+import { Send, Loader2, Cpu, Paperclip, Globe, Mic, Download, AudioWaveform, X, Volume2, Lock } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
+import TTSPlayer from "./TTSPlayer";
+import { useVoiceRecording } from "@/hooks/useVoiceRecording";
+import { useDocumentUpload } from "@/hooks/useDocumentUpload";
+import { toast } from "sonner";
+import ExportModal from "./modals/ExportModal";
+import UpgradePromptModal from "./modals/UpgradePromptModal";
+import { useUserPlan } from "@/hooks/useUserPlan";
+import { getAvailableModels, getLockedModels } from "@/config/modelConfig";
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
@@ -8,13 +16,23 @@ interface ChatInputProps {
   initialValue?: string;
   placeholder?: string;
   onFocus?: () => void;
+  lastResponse?: string;
+  onModelSelect?: (model: string) => void;
 }
 
-const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeholder = "Ask Mergenta...", onFocus }: ChatInputProps) => {
+const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeholder = "Ask Mergenta...", onFocus, lastResponse, onModelSelect }: ChatInputProps) => {
   const [input, setInput] = useState(initialValue);
-  const [isRecording, setIsRecording] = useState(false);
   const [showModelDropdown, setShowModelDropdown] = useState(false);
+  const [showTTS, setShowTTS] = useState(false);
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [selectedLockedModel, setSelectedLockedModel] = useState<{ name: string; requiredPlan: string } | null>(null);
   const modelDropdownRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  const { isRecording, isTranscribing, startRecording, stopRecording } = useVoiceRecording();
+  const { uploadDocument, isUploading } = useDocumentUpload();
+  const { planType } = useUserPlan();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,11 +55,8 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
     }
   };
 
-  const handleActionButtonClick = () => {
-    if (isRecording) {
-      // Stop recording
-      setIsRecording(false);
-    } else if (input.trim()) {
+  const handleActionButtonClick = async () => {
+    if (input.trim()) {
       // Send message
       onSendMessage(input.trim());
       setInput("");
@@ -51,9 +66,21 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
         textarea.style.height = 'auto';
         textarea.style.height = '24px';
       }
+    } else if (isRecording) {
+      // Stop recording and transcribe
+      try {
+        const transcribedText = await stopRecording();
+        if (transcribedText) {
+          setInput(transcribedText);
+          toast.success('Audio transcribed successfully');
+        }
+      } catch (error) {
+        console.error('Recording error:', error);
+      }
     } else {
       // Start recording
-      setIsRecording(true);
+      await startRecording();
+      toast.info('Recording started - click again to stop');
     }
   };
 
@@ -71,14 +98,16 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
 
   const getActionButtonIcon = () => {
     if (isLoading) return <Loader2 className="h-4 w-4 animate-spin text-white" />;
-    if (isRecording) return <AudioWaveform className="h-4 w-4 text-white" />;
     if (input.trim()) return <Send className="h-4 w-4 text-white" />;
+    if (isTranscribing) return <AudioWaveform className="h-4 w-4 animate-pulse text-white" />;
+    if (isRecording) return <AudioWaveform className="h-4 w-4 animate-pulse text-white" />;
     return <AudioWaveform className="h-4 w-4 text-white" />;
   };
 
   const getActionButtonTooltip = () => {
-    if (isRecording) return "Stop recording";
     if (input.trim()) return "Send";
+    if (isTranscribing) return "Transcribing...";
+    if (isRecording) return "Stop recording";
     return "Voice input";
   };
 
@@ -127,11 +156,54 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
     };
   }, []);
 
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const result = await uploadDocument(file);
+    if (result?.extractedText) {
+      setInput((prev) => prev + '\n\n' + result.extractedText);
+      toast.success('Document content added to prompt');
+    }
+
+    // Reset file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   return (
     <TooltipProvider>
+      {/* Hidden file input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".pdf,.docx,.txt,.xls,.xlsx"
+        onChange={handleFileUpload}
+        className="hidden"
+      />
+
+      {/* Export Modal */}
+      <ExportModal
+        isOpen={showExportModal}
+        onClose={() => setShowExportModal(false)}
+        content={lastResponse || input}
+      />
+
+      {/* TTS Player - Shows above input when enabled */}
+      {showTTS && lastResponse && (
+        <div className="fixed bottom-32 left-1/2 transform -translate-x-1/2 z-[60] w-full max-w-md px-4">
+          <TTSPlayer 
+            text={lastResponse}
+            isVisible={showTTS}
+            onClose={() => setShowTTS(false)}
+          />
+        </div>
+      )}
+      
       <div className="flex justify-center w-full px-4 mt-2 lg:mt-0">
         <form onSubmit={handleSubmit} className="w-full max-w-3xl mx-auto">
-          <div className="flex flex-col w-full rounded-xl shadow-sm bg-white px-4 pt-3 pb-3 min-h-[94px]">
+          <div className="flex flex-col w-full rounded-xl shadow-sm bg-white px-4 pt-3 pb-3 min-h-[94px] border border-gray-300">
             {/* Input field at top */}
             <div className="flex-grow relative">
               <textarea
@@ -186,24 +258,14 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                   <TooltipTrigger asChild>
                     <button
                       type="button"
-                      className="p-3 lg:p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700 touch-manipulation min-h-[44px] min-w-[44px] lg:min-h-auto lg:min-w-auto flex items-center justify-center"
-                    >
-                      <Share className="h-5 w-5 lg:h-4 lg:w-4" />
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent>Export</TooltipContent>
-                </Tooltip>
-                
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <button
-                      type="button"
-                      className="p-3 lg:p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700 touch-manipulation min-h-[44px] min-w-[44px] lg:min-h-auto lg:min-w-auto flex items-center justify-center"
+                      onClick={() => setShowExportModal(true)}
+                      disabled={!lastResponse && !input}
+                      className="p-3 lg:p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700 touch-manipulation min-h-[44px] min-w-[44px] lg:min-h-auto lg:min-w-auto flex items-center justify-center disabled:opacity-50"
                     >
                       <Download className="h-5 w-5 lg:h-4 lg:w-4" />
                     </button>
                   </TooltipTrigger>
-                  <TooltipContent>Download</TooltipContent>
+                  <TooltipContent>Export & Download</TooltipContent>
                 </Tooltip>
               </div>
 
@@ -225,93 +287,97 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
 
                 {/* Model Selection Dropdown */}
                 {showModelDropdown && (
-                  <div className="absolute bottom-full mb-2 right-0 bg-white rounded-lg shadow-lg border border-gray-100 z-50 min-w-max">
-                    <div className="flex">
-                      {/* Creativity Column */}
-                      <div className="p-4 min-w-[140px]">
-                        <h3 className="font-semibold text-sm text-gray-800 mb-1">Creativity</h3>
-                        <p className="text-xs text-gray-500 mb-3">Inventive & Expressive</p>
+                  <div className="absolute bottom-full mb-2 right-0 bg-white rounded-lg shadow-lg border border-gray-100 z-50 max-w-md max-h-96 overflow-y-auto">
+                    {/* Available Models */}
+                    {getAvailableModels(planType).length > 0 && (
+                      <div className="p-4">
+                        <h3 className="font-semibold text-sm text-gray-800 mb-3">Available Models</h3>
                         <div className="space-y-2">
-                          {[
-                            { name: "GPT-5", badge: "New" },
-                            { name: "GPT-4.1", badge: null },
-                            { name: "Gemini 2.5 Flash", badge: null },
-                            { name: "Grok 3", badge: null },
-                            { name: "Claude Haiku 3.5", badge: null }
-                          ].map((model, idx) => (
+                          {getAvailableModels(planType).map((model) => (
                             <button
-                              key={idx}
-                              className="w-full text-left text-sm text-gray-700 hover:bg-gray-50 py-1 px-2 rounded transition-colors flex items-center justify-between"
+                              key={model.id}
+                              className="w-full text-left text-sm text-gray-700 hover:bg-gray-50 py-2 px-3 rounded transition-colors"
                               onClick={() => {
-                                console.log(`Selected: ${model.name}`);
+                                onModelSelect?.(model.id);
                                 setShowModelDropdown(false);
                               }}
                             >
-                              <span>{model.name}</span>
-                              {model.badge && (
-                                <span className="text-xs bg-green-100 text-green-800 px-1.5 py-0.5 rounded">
-                                  {model.badge}
-                                </span>
-                              )}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Dividing Line */}
-                      <div className="w-px bg-gray-200 my-4"></div>
-
-                      {/* Research Column */}
-                      <div className="p-4 min-w-[140px]">
-                        <h3 className="font-semibold text-sm text-gray-800 mb-1">Research</h3>
-                        <p className="text-xs text-gray-500 mb-3">Reasoning & Thinking</p>
-                        <div className="space-y-2">
-                          {[
-                            { name: "Gemini 2.5 Pro", badge: null },
-                            { name: "Claude Sonet 4", badge: null },
-                            { name: "Grok 4", badge: null },
-                            { name: "o3", badge: null },
-                            { name: "o4-mini", badge: null },
-                            { name: "Claude Opus 4.1", badge: "Ace" },
-                            { name: "o3-pro", badge: "Ace" }
-                          ].map((model, idx) => (
-                            <button
-                              key={idx}
-                              className="w-full text-left text-sm text-gray-700 hover:bg-gray-50 py-1 px-2 rounded transition-colors flex items-center justify-between"
-                              onClick={() => {
-                                console.log(`Selected: ${model.name}`);
-                                setShowModelDropdown(false);
-                              }}
-                            >
-                              <span>{model.name}</span>
-                              {model.badge && (
-                                <div className="flex items-center gap-1 ml-2">
+                              <div className="flex items-center justify-between">
+                                <span className="font-medium">{model.displayName}</span>
+                                {model.badge && (
                                   <span className="text-xs bg-purple-100 text-purple-800 px-1.5 py-0.5 rounded">
                                     {model.badge}
                                   </span>
-                                  <span className="text-xs text-gray-500">onwards</span>
-                                </div>
-                              )}
+                                )}
+                              </div>
+                              <p className="text-xs text-gray-500 mt-1">{model.description}</p>
                             </button>
                           ))}
                         </div>
                       </div>
-                    </div>
+                    )}
+
+                    {/* Locked Models */}
+                    {getLockedModels(planType).length > 0 && (
+                      <div className="p-4 bg-gray-50 border-t border-gray-100">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Lock className="h-4 w-4 text-gray-400" />
+                          <h3 className="font-semibold text-sm text-gray-600">Locked Models</h3>
+                        </div>
+                        <div className="space-y-2">
+                          {getLockedModels(planType).map((model) => (
+                            <button
+                              key={model.id}
+                              className="w-full text-left text-sm text-gray-600 hover:bg-gray-100 py-2 px-3 rounded transition-colors opacity-75"
+                              onClick={() => {
+                                setSelectedLockedModel({ 
+                                  name: model.displayName, 
+                                  requiredPlan: model.requiredPlan 
+                                });
+                                setShowUpgradeModal(true);
+                                setShowModelDropdown(false);
+                              }}
+                            >
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                  <Lock className="h-3 w-3" />
+                                  <span className="font-medium">{model.displayName}</span>
+                                </div>
+                                {model.badge && (
+                                  <span className="text-xs bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded">
+                                    {model.badge}
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-xs text-gray-500 mt-1 ml-5">
+                                {model.description} • Requires {model.requiredPlan.charAt(0).toUpperCase() + model.requiredPlan.slice(1)}
+                              </p>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
 
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    className="p-3 lg:p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700 touch-manipulation min-h-[44px] min-w-[44px] lg:min-h-auto lg:min-w-auto flex items-center justify-center"
-                  >
-                    <Paperclip className="h-5 w-5 lg:h-4 lg:w-4" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent>File upload</TooltipContent>
-              </Tooltip>
+               <Tooltip>
+                 <TooltipTrigger asChild>
+                   <button
+                     type="button"
+                     onClick={() => fileInputRef.current?.click()}
+                     disabled={isUploading}
+                     className="p-3 lg:p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700 touch-manipulation min-h-[44px] min-w-[44px] lg:min-h-auto lg:min-w-auto flex items-center justify-center disabled:opacity-50"
+                   >
+                     {isUploading ? (
+                       <Loader2 className="h-5 w-5 lg:h-4 lg:w-4 animate-spin" />
+                     ) : (
+                       <Paperclip className="h-5 w-5 lg:h-4 lg:w-4" />
+                     )}
+                   </button>
+                 </TooltipTrigger>
+                 <TooltipContent>Upload document (PDF, DOCX, TXT, Excel)</TooltipContent>
+               </Tooltip>
 
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -337,6 +403,24 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                 <TooltipContent>Voice input</TooltipContent>
               </Tooltip>
 
+              {/* TTS Button - Only show if we have a response */}
+              {lastResponse && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      onClick={() => setShowTTS(!showTTS)}
+                      className={`p-3 lg:p-2 rounded-md hover:bg-gray-100 transition-colors touch-manipulation min-h-[44px] min-w-[44px] lg:min-h-auto lg:min-w-auto flex items-center justify-center ${
+                        showTTS ? 'text-purple-600 bg-purple-50' : 'text-gray-500 hover:text-gray-700'
+                      }`}
+                    >
+                      <Volume2 className="h-5 w-5 lg:h-4 lg:w-4" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>Text to Speech</TooltipContent>
+                </Tooltip>
+              )}
+
               {/* Action button */}
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -359,6 +443,15 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
           </div>
         </form>
       </div>
+
+      {/* Upgrade Prompt Modal */}
+      <UpgradePromptModal 
+        open={showUpgradeModal}
+        onOpenChange={setShowUpgradeModal}
+        modelName={selectedLockedModel?.name || ''}
+        requiredPlan={selectedLockedModel?.requiredPlan as any || 'pro'}
+        currentPlan={planType}
+      />
     </TooltipProvider>
   );
 };
