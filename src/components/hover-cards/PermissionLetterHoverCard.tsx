@@ -27,13 +27,13 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
     },
   });
 
-  // convenience locals
-  const to = (draftData?.to as string) || "";
-  const subject = (draftData?.subject as string) || "";
-  const coreMessage = (draftData?.coreMessage as string) || "";
-  const finalTouch = (draftData?.finalTouch as string) || "";
-  const signOff = (draftData?.signOff as string) || "";
-  const from = (draftData?.from as string) || "";
+  // defensive locals
+  const to = draftData?.to ?? "";
+  const subject = draftData?.subject ?? "";
+  const coreMessage = draftData?.coreMessage ?? "";
+  const finalTouch = draftData?.finalTouch ?? "";
+  const signOff = draftData?.signOff ?? "";
+  const from = draftData?.from ?? "";
 
   const handleMouseEnter = () => {
     if (closeTimeoutRef.current) {
@@ -53,17 +53,16 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
     e.stopPropagation();
   };
 
-  // clear-then-close behaviour
   const handleClearDraft = (e?: React.MouseEvent) => {
-    if (e) e.stopPropagation();
+    e?.stopPropagation();
 
     const hasContent = Boolean(
-      (to && to.trim() !== "") ||
-        (subject && subject.trim() !== "") ||
-        (coreMessage && coreMessage.trim() !== "") ||
-        (finalTouch && finalTouch.trim() !== "") ||
-        (signOff && signOff.trim() !== "") ||
-        (from && from.trim() !== ""),
+      (to && to.toString().trim() !== "") ||
+        (subject && subject.toString().trim() !== "") ||
+        (coreMessage && coreMessage.toString().trim() !== "") ||
+        (finalTouch && finalTouch.toString().trim() !== "") ||
+        (signOff && signOff.toString().trim() !== "") ||
+        (from && from.toString().trim() !== ""),
     );
 
     if (hasContent) {
@@ -100,7 +99,7 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
 
       {/* Full Screen Hover Area + Card */}
       {showCard && (
-        <div className="fixed inset-0 z-[200] pointer-events-none">
+        <div className="fixed inset-0 z-[200]">
           <div
             data-publication-card
             className="absolute left-[918px] top-[220px] w-80 pointer-events-auto"
@@ -118,7 +117,8 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
                     </div>
 
                     <button
-                      onClick={handleClearDraft}
+                      type="button"
+                      onClick={(e) => handleClearDraft(e)}
                       className="text-[#5B34A0] hover:text-[#6C3EB6] transition-colors"
                       title="Clear Draft"
                     >
