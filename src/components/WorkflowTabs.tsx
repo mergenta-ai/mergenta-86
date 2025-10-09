@@ -225,7 +225,7 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                   className={`
                     w-[100px] py-2 rounded-xl font-inter font-medium text-sm tracking-tight text-center
                     transition-all duration-300 ease-in-out
-                    focus:outline-none focus:ring-2 focus:ring-purple-300 focus:ring-offset-2
+                    focus:outline-none
                     flex items-center justify-center
                     leading-tight
                     hover:shadow-md
