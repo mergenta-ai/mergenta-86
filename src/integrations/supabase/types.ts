@@ -74,6 +74,33 @@ export type Database = {
         }
         Relationships: []
       }
+      card_drafts: {
+        Row: {
+          card_id: string
+          created_at: string
+          draft_json: Json
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          card_id: string
+          created_at?: string
+          draft_json?: Json
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          card_id?: string
+          created_at?: string
+          draft_json?: Json
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       cloudconvert_usage: {
         Row: {
           conversation_id: string | null
