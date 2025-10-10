@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Input } from '../ui/input';
-import { Textarea } from '../ui/textarea';
-import { Label } from '../ui/label';
-import { Button } from '../ui/button';
+import React, { useState, useRef } from "react";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { Label } from "../ui/label";
+import { Button } from "../ui/button";
+import { X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useClickOutside } from "@/lib/clickOutside";
+import { useDraftPersistence } from "@/hooks/useDraftPersistence";
 
 interface ScriptHoverCardProps {
   children: React.ReactNode;
@@ -13,14 +15,29 @@ interface ScriptHoverCardProps {
 
 const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGenerated }) => {
   const [showCard, setShowCard] = useState(false);
-  const [scriptTitle, setScriptTitle] = useState('');
-  const [keyDetails, setKeyDetails] = useState('');
-  const [structure, setStructure] = useState('');
-  const [theme, setTheme] = useState('');
-  const [mood, setMood] = useState('');
-  const [format, setFormat] = useState('');
-  const [audience, setAudience] = useState('');
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const { draftData, saveDraft, clearDraft, isLoading } = useDraftPersistence({
+    cardId: "script",
+    initialData: {
+      title: "",
+      keyDetails: "",
+      structure: "",
+      theme: "",
+      mood: "",
+      format: "",
+      audience: "",
+    },
+  });
+
+  // locals
+  const title = draftData?.title ?? "";
+  const keyDetails = draftData?.keyDetails ?? "";
+  const structure = draftData?.structure ?? "";
+  const theme = draftData?.theme ?? "";
+  const mood = draftData?.mood ?? "";
+  const format = draftData?.format ?? "";
+  const audience = draftData?.audience ?? "";
 
   const handleMouseEnter = () => {
     if (closeTimeoutRef.current) {
@@ -31,58 +48,83 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
   };
 
   const handleMouseLeave = () => {
-    closeTimeoutRef.current = setTimeout(() => {
-      setShowCard(false);
-    }, 250);
+    closeTimeoutRef.current = setTimeout(() => setShowCard(false), 250);
   };
 
   const handleCardClick = (e: React.MouseEvent) => {
-    // Prevent the card from closing when clicking inside
     e.stopPropagation();
+  };
+
+  const handleClearDraft = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+
+    const hasContent = Boolean(
+      (title && title.trim() !== "") ||
+        (keyDetails && keyDetails.trim() !== "") ||
+        (structure && structure.trim() !== "") ||
+        (theme && theme.trim() !== "") ||
+        (mood && mood.trim() !== "") ||
+        (format && format.trim() !== "") ||
+        (audience && audience.trim() !== ""),
+    );
+
+    if (hasContent) {
+      // Immediately clear visible fields
+      saveDraft("title", "");
+      saveDraft("keyDetails", "");
+      saveDraft("structure", "");
+      saveDraft("theme", "");
+      saveDraft("mood", "");
+      saveDraft("format", "");
+      saveDraft("audience", "");
+      // Clear persisted storage
+      clearDraft();
+      return; // keep card open so user sees emptied fields
+    }
+
+    // already empty -> close card
+    setShowCard(false);
   };
 
   const handleGeneratePrompt = async () => {
     try {
-      const { data, error } = await supabase.functions.invoke('prompt-engine-consolidated', {
-        body: { 
-          contentType: 'script', 
-          formData: { 
-            scriptTitle, 
-            keyDetails, 
-            structure, 
-            theme, 
-            mood, 
-            format, 
-            audience 
-          } 
-        }
+      const { data, error } = await supabase.functions.invoke("prompt-engine-consolidated", {
+        body: {
+          contentType: "script",
+          formData: {
+            title,
+            keyDetails,
+            structure,
+            theme,
+            mood,
+            format,
+            audience,
+          },
+        },
       });
 
       if (error) throw error;
-      
+
       if (data?.success && data?.prompt) {
         onPromptGenerated?.(data.prompt);
+        clearDraft();
         setShowCard(false);
       }
-    } catch (error) {
-      console.error('Error generating prompt:', error);
+    } catch (err) {
+      console.error("Error generating prompt:", err);
     }
   };
 
-  // Close card when clicking outside
-  useClickOutside(
-    showCard,
-    () => setShowCard(false),
-    '[data-script-card]',
-    '[data-script-trigger]'
-  );
+  useClickOutside(showCard, () => setShowCard(false), "[data-script-card]", "[data-script-trigger]");
+
+  if (isLoading) return <div className="p-4">Loading draft...</div>;
 
   return (
     <div className="relative">
       {/* Trigger Element */}
-      <div 
+      <div
         data-script-trigger
-        onMouseEnter={handleMouseEnter} 
+        onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={() => setShowCard(!showCard)}
       >
@@ -101,66 +143,76 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
           >
             <div className="p-4 bg-pastel-lavender border border-pastel-lavender-hover rounded-lg shadow-xl animate-fade-in duration-300">
               <div className="space-y-3">
-                {/* Title */}
-                <div className="flex items-center gap-2 pb-2 border-b border-pastel-lavender-hover">
-                  <span className="text-lg">🎬</span>
-                  <div>
-                    <h3 className="font-semibold text-sidebar-text-violet text-lg">Script</h3>
-                    <p className="text-xs text-sidebar-text-dark italic">
-                      Dialogue-driven format for plays, films or skits.
-                    </p>
+                {/* Header + Clear */}
+                <div className="flex items-start justify-between pb-2 border-b border-pastel-lavender-hover">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">🎬</span>
+                    <div>
+                      <h3 className="font-semibold text-sidebar-text-violet text-lg">Script</h3>
+                      <p className="text-xs text-sidebar-text-dark italic">
+                        Dialogue-driven format for plays, films or skits.
+                      </p>
+                    </div>
                   </div>
+
+                  <button
+                    onClick={handleClearDraft}
+                    title="Clear draft"
+                    className="p-1 rounded hover:bg-[#5B34A0]/10 transition-colors"
+                  >
+                    <X className="w-4 h-4 text-[#5B34A0]" />
+                  </button>
                 </div>
 
-                {/* Script Title Input */}
+                {/* Script Title */}
                 <div className="space-y-2">
                   <Label htmlFor="script-title" className="text-sm font-medium text-sidebar-text-dark">
                     Script Title
                   </Label>
-                   <Input
-                     id="script-title"
-                     value={scriptTitle}
-                     onChange={(e) => setScriptTitle(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="Enter your script title..."
-                     className="text-sm placeholder-gray-400"
-                     autoComplete="off"
-                   />
+                  <Input
+                    id="script-title"
+                    value={title}
+                    onChange={(e) => saveDraft("title", e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder="Enter your script title..."
+                    className="text-sm placeholder-gray-400"
+                    autoComplete="off"
+                  />
                 </div>
 
-                {/* Key Details Input */}
+                {/* Key Details */}
                 <div className="space-y-2">
                   <Label htmlFor="key-details" className="text-sm font-medium text-sidebar-text-dark">
                     Key Details / Plot Points
                   </Label>
-                   <Textarea
-                     id="key-details"
-                     value={keyDetails}
-                     onChange={(e) => setKeyDetails(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="Main characters, scenes, key movements..."
-                     className="text-sm min-h-[70px] resize-none placeholder-gray-400"
-                     autoComplete="off"
-                   />
+                  <Textarea
+                    id="key-details"
+                    value={keyDetails}
+                    onChange={(e) => saveDraft("keyDetails", e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder="Main characters, scenes, key movements..."
+                    className="text-sm min-h-[70px] resize-none placeholder-gray-400"
+                    autoComplete="off"
+                  />
                 </div>
 
-                {/* Structure Input */}
+                {/* Structure */}
                 <div className="space-y-2">
                   <Label htmlFor="structure" className="text-sm font-medium text-sidebar-text-dark">
                     Structure
                   </Label>
-                   <Input
-                     id="structure"
-                     value={structure}
-                     onChange={(e) => setStructure(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="Long, Medium, Short, Micro"
-                     className="text-sm placeholder-gray-400"
-                     autoComplete="off"
-                   />
+                  <Input
+                    id="structure"
+                    value={structure}
+                    onChange={(e) => saveDraft("structure", e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder="Long, Medium, Short, Micro"
+                    className="text-sm placeholder-gray-400"
+                    autoComplete="off"
+                  />
                 </div>
 
-                {/* Theme Input */}
+                {/* Theme */}
                 <div className="space-y-2">
                   <Label htmlFor="theme" className="text-sm font-medium text-sidebar-text-dark">
                     Theme
@@ -168,7 +220,7 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
                   <Input
                     id="theme"
                     value={theme}
-                    onChange={(e) => setTheme(e.target.value)}
+                    onChange={(e) => saveDraft("theme", e.target.value)}
                     onClick={(e) => e.stopPropagation()}
                     placeholder="Identity, Revenge, Power, Love, etc."
                     className="text-sm placeholder-gray-400"
@@ -176,7 +228,7 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
                   />
                 </div>
 
-                {/* Mood Input */}
+                {/* Mood */}
                 <div className="space-y-2">
                   <Label htmlFor="mood" className="text-sm font-medium text-sidebar-text-dark">
                     Mood
@@ -184,7 +236,7 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
                   <Input
                     id="mood"
                     value={mood}
-                    onChange={(e) => setMood(e.target.value)}
+                    onChange={(e) => saveDraft("mood", e.target.value)}
                     onClick={(e) => e.stopPropagation()}
                     placeholder="Romantic, Eerie, Dark, Light, Suspense"
                     className="text-sm placeholder-gray-400"
@@ -192,7 +244,7 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
                   />
                 </div>
 
-                {/* Format Input */}
+                {/* Format */}
                 <div className="space-y-2">
                   <Label htmlFor="format" className="text-sm font-medium text-sidebar-text-dark">
                     Format
@@ -200,7 +252,7 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
                   <Input
                     id="format"
                     value={format}
-                    onChange={(e) => setFormat(e.target.value)}
+                    onChange={(e) => saveDraft("format", e.target.value)}
                     onClick={(e) => e.stopPropagation()}
                     placeholder="Screenplay, Radio, TV, Web Series"
                     className="text-sm placeholder-gray-400"
@@ -208,7 +260,7 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
                   />
                 </div>
 
-                {/* Audience Input */}
+                {/* Audience */}
                 <div className="space-y-2">
                   <Label htmlFor="audience" className="text-sm font-medium text-sidebar-text-dark">
                     Audience
@@ -216,7 +268,7 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
                   <Input
                     id="audience"
                     value={audience}
-                    onChange={(e) => setAudience(e.target.value)}
+                    onChange={(e) => saveDraft("audience", e.target.value)}
                     onClick={(e) => e.stopPropagation()}
                     placeholder="Children, Teens, Young Adults, Mature"
                     className="text-sm placeholder-gray-400"
@@ -225,7 +277,7 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
                 </div>
 
                 {/* Start Button */}
-                <Button 
+                <Button
                   onClick={handleGeneratePrompt}
                   className="w-full mt-4 bg-sidebar-text-violet hover:bg-sidebar-text-violet/90 text-white font-medium"
                 >
