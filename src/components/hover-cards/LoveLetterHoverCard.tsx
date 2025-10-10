@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { Textarea } from "../ui/textarea";
 import { Input } from "../ui/input";
-import { Heart } from "lucide-react";
+import { Heart, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useClickOutside } from "@/lib/clickOutside";
+import { useDraftPersistence } from "@/hooks/useDraftPersistence";
 
 interface LoveLetterHoverCardProps {
   children: React.ReactNode;
@@ -12,37 +13,46 @@ interface LoveLetterHoverCardProps {
 
 const LoveLetterHoverCard = ({ children, onPromptGenerated }: LoveLetterHoverCardProps) => {
   const [showCard, setShowCard] = useState(false);
-  const [to, setTo] = useState("");
-  const [subject, setSubject] = useState("");
-  const [coreMessage, setCoreMessage] = useState("");
-  const [finalTouch, setFinalTouch] = useState("");
-  const [signOff, setSignOff] = useState("");
-  const [from, setFrom] = useState("");
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const { draftData, saveDraft, clearDraft, isLoading } = useDraftPersistence({
+    cardId: "love_letter",
+    initialData: { to: "", subject: "", coreMessage: "", finalTouch: "", signOff: "", from: "" },
+  });
+
+  // always-string locals to avoid controlled/uncontrolled issues
+  const to = draftData?.to ?? "";
+  const subject = draftData?.subject ?? "";
+  const coreMessage = draftData?.coreMessage ?? "";
+  const finalTouch = draftData?.finalTouch ?? "";
+  const signOff = draftData?.signOff ?? "";
+  const from = draftData?.from ?? "";
 
   const handleGeneratePrompt = async () => {
     try {
-      const { data, error } = await supabase.functions.invoke('prompt-engine-consolidated', {
-        body: { 
-          contentType: 'love_letter', 
-          formData: { 
-            to, 
-            from, 
-            coreMessage, 
-            finalTouch, 
-            signOff 
-          } 
-        }
+      const { data, error } = await supabase.functions.invoke("prompt-engine-consolidated", {
+        body: {
+          contentType: "love_letter",
+          formData: {
+            to,
+            subject,
+            coreMessage,
+            finalTouch,
+            signOff,
+            from,
+          },
+        },
       });
 
       if (error) throw error;
-      
+
       if (data?.success && data?.prompt) {
         onPromptGenerated?.(data.prompt);
+        clearDraft();
         setShowCard(false);
       }
     } catch (error) {
-      console.error('Error generating prompt:', error);
+      console.error("Error generating prompt:", error);
     }
   };
 
@@ -55,7 +65,7 @@ const LoveLetterHoverCard = ({ children, onPromptGenerated }: LoveLetterHoverCar
   };
 
   const handleMouseLeave = () => {
-   closeTimeoutRef.current = setTimeout(() => {
+    closeTimeoutRef.current = setTimeout(() => {
       setShowCard(false);
     }, 250);
   };
@@ -64,20 +74,43 @@ const LoveLetterHoverCard = ({ children, onPromptGenerated }: LoveLetterHoverCar
     e.stopPropagation();
   };
 
-  // Close card when clicking outside
-  useClickOutside(
-    showCard,
-    () => setShowCard(false),
-    '[data-love-letter-card]',
-    '[data-love-letter-trigger]'
-  );
+  const handleClearDraft = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+
+    const hasContent = Boolean(
+      (to && to.trim() !== "") ||
+        (subject && subject.trim() !== "") ||
+        (coreMessage && coreMessage.trim() !== "") ||
+        (finalTouch && finalTouch.trim() !== "") ||
+        (signOff && signOff.trim() !== "") ||
+        (from && from.trim() !== ""),
+    );
+
+    if (hasContent) {
+      saveDraft("to", "");
+      saveDraft("subject", "");
+      saveDraft("coreMessage", "");
+      saveDraft("finalTouch", "");
+      saveDraft("signOff", "");
+      saveDraft("from", "");
+      clearDraft();
+      return; // keep card open so user sees emptied fields
+    }
+
+    // already empty -> close card
+    setShowCard(false);
+  };
+
+  useClickOutside(showCard, () => setShowCard(false), "[data-love-letter-card]", "[data-love-letter-trigger]");
+
+  if (isLoading) return <div className="p-4">Loading draft...</div>;
 
   return (
-   <div className="relative">
+    <div className="relative">
       {/* Trigger Element */}
-      <div 
+      <div
         data-love-letter-trigger
-        onMouseEnter={handleMouseEnter} 
+        onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={() => setShowCard(!showCard)}
       >
@@ -96,93 +129,105 @@ const LoveLetterHoverCard = ({ children, onPromptGenerated }: LoveLetterHoverCar
           >
             <div className="p-6 bg-pastel-lavender rounded-2xl shadow-lg border border-[#E5D9F2] animate-in fade-in-0 zoom-in-95 duration-200">
               <div className="space-y-4">
-                 <div>
-                   <div className="flex items-center gap-2 mb-1">
-                     <Heart className="w-5 h-5 text-[#5B34A0]" />
-                     <h3 className="text-lg font-semibold text-[#5B34A0]">Love Letter</h3>
-                   </div>
-                   <p className="text-sm text-[#6E6E6E] mb-4">Express your deepest feelings and emotions</p>
-                 </div>
-                
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Heart className="w-5 h-5 text-[#5B34A0]" />
+                    <h3 className="text-lg font-semibold text-[#5B34A0]">Love Letter</h3>
+                  </div>
+                  <p className="text-sm text-[#6E6E6E] mb-4">Express your deepest feelings and emotions</p>
+                </div>
+
                 <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div />
+                    <button
+                      type="button"
+                      onClick={(e) => handleClearDraft(e)}
+                      className="p-1 hover:bg-[#5B34A0]/10 rounded transition-colors"
+                      title="Clear Draft"
+                    >
+                      <X className="w-4 h-4 text-[#5B34A0]" />
+                    </button>
+                  </div>
+
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label>
-                     <Textarea
-                        value={to || undefined}
-                        onChange={(e) => setTo(e.target.value)}
-                        onClick={(e) => e.stopPropagation()}
-                        placeholder="Dear [Name], My Love, Darling, Sweetheart, Honey, Hubby etc..."
-                        className="w-full min-h-[60px] resize-none"
-                       autoComplete="off"
-                      />
+                    <Textarea
+                      value={to}
+                      onChange={(e) => saveDraft("to", e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Dear [Name], My Love, Darling, Sweetheart, Honey, etc..."
+                      className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
+                    />
                   </div>
-                  
+
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label>
-                     <Textarea
-                        value={subject || undefined}
-                        onChange={(e) => setSubject(e.target.value)}
-                        onClick={(e) => e.stopPropagation()}
-                        placeholder="Mention Affection, Care, Commitment, Admiration, Attraction, Deep love, etc..."
-                        className="w-full min-h-[60px] resize-none"
-                       autoComplete="off"
-                      />
+                    <Textarea
+                      value={subject}
+                      onChange={(e) => saveDraft("subject", e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Affection, Care, Commitment, Admiration, Attraction, etc..."
+                      className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
+                    />
                   </div>
-                  
+
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Core Message</label>
-                     <Textarea
-                       value={coreMessage || undefined}
-                       onChange={(e) => setCoreMessage(e.target.value)}
-                       onClick={(e) => e.stopPropagation()}
-                       placeholder="Type your message here about feelings, love, emotions, cherished moments, nostalgia, longing etc..."
-                       className="w-full min-h-[80px] resize-none"
-                       autoComplete="off"
-                     />
+                    <Textarea
+                      value={coreMessage}
+                      onChange={(e) => saveDraft("coreMessage", e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Feelings, cherished moments, longing, nostalgia, etc..."
+                      className="w-full min-h-[80px] resize-none"
+                      autoComplete="off"
+                    />
                   </div>
-                  
+
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Final Touch</label>
-                     <Textarea
-                       value={finalTouch || undefined}
-                       onChange={(e) => setFinalTouch(e.target.value)}
-                       onClick={(e) => e.stopPropagation()}
-                       placeholder="Talk about Future dreams, shared memories, promises, yearning etc..."
-                       className="w-full min-h-[60px] resize-none"
-                       autoComplete="off"
-                     />
+                    <Textarea
+                      value={finalTouch}
+                      onChange={(e) => saveDraft("finalTouch", e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Future dreams, promises, shared memories..."
+                      className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
+                    />
                   </div>
-                  
+
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Sign Off</label>
-                     <Textarea
-                       value={signOff || undefined}
-                       onChange={(e) => setSignOff(e.target.value)}
-                       onClick={(e) => e.stopPropagation()}
-                       placeholder="Forever yours, with all my love, yours truly, love you etc...."
-                       className="w-full min-h-[60px] resize-none"
-                       autoComplete="off"
-                     />
+                    <Textarea
+                      value={signOff}
+                      onChange={(e) => saveDraft("signOff", e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Forever yours, With all my love, Yours truly..."
+                      className="w-full min-h-[60px] resize-none"
+                      autoComplete="off"
+                    />
                   </div>
-                  
+
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">From</label>
-                     <Input
-                       value={from || undefined}
-                       onChange={(e) => setFrom(e.target.value)}
-                       onClick={(e) => e.stopPropagation()}
-                       placeholder="Sender: Your Name"
-                       className="w-full"
-                       autoComplete="off"
-                     />
+                    <Input
+                      value={from}
+                      onChange={(e) => saveDraft("from", e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Sender: Your Name"
+                      className="w-full"
+                      autoComplete="off"
+                    />
                   </div>
-                  
-                   <button
-                     className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
-                     onClick={handleGeneratePrompt}
-                   >
-                     Express Love
-                   </button>
+
+                  <button
+                    className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
+                    onClick={handleGeneratePrompt}
+                  >
+                    Express Love
+                  </button>
                 </div>
               </div>
             </div>
