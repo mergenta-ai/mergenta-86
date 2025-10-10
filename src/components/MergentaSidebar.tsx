@@ -18,30 +18,6 @@ const MergentaSidebar = () => {
   const [showPolicies, setShowPolicies] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
-  // centralised click handler for sidebar icons (keeps existing boolean state shape)
-  const handleIconClick = (panelName?: string) => {
-    // remember previous open states
-    const prev = {
-      history: showHistory,
-      policies: showPolicies,
-      help: showHelp,
-      profile: showProfile,
-    };
-
-    // close all panels first
-    setShowHistory(false);
-    setShowPolicies(false);
-    setShowHelp(false);
-    setShowProfile(false);
-
-    // if a panelName provided, toggle that panel based on its previous state
-    if (panelName) {
-      if (panelName === "history") setShowHistory(!prev.history);
-      if (panelName === "policies") setShowPolicies(!prev.policies);
-      if (panelName === "help") setShowHelp(!prev.help);
-      if (panelName === "profile") setShowProfile(!prev.profile);
-    }
-  };
 
   const [showRSSReader, setShowRSSReader] = useState(false);
   const [rssReaderCategory, setRSSReaderCategory] = useState<string>("");
@@ -127,7 +103,7 @@ const MergentaSidebar = () => {
         </div>
 
         {/* New Chat Icon */}
-        <div className="relative mb-2">
+        <div className="relative mb-2" onMouseEnter={() => handleIconClick()}>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -145,7 +121,7 @@ const MergentaSidebar = () => {
         </div>
 
         {/* Trending Icon */}
-        <div className="relative mb-2">
+        <div className="relative mb-2" onMoueEnter={() => handleIconClick()}>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -163,7 +139,7 @@ const MergentaSidebar = () => {
         </div>
 
         {/* Email Icon */}
-        <div className="relative mb-2">
+        <div className="relative mb-2" onMouseEnter={() => handleIconClick()}>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -182,7 +158,7 @@ const MergentaSidebar = () => {
 
         {/* Admin Panel Icon - Only visible to admin/moderator */}
         {canAccessAdmin && (
-          <div className="relative mb-2">
+          <div className="relative mb-2" onMouseEnter={() => handleIconClick()}>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
@@ -202,33 +178,42 @@ const MergentaSidebar = () => {
 
         {/* History Icon */}
         <div className="relative mb-2" onMouseEnter={() => handleMouseEnter("history")}>
-          <Button
-            variant="ghost"
-            className="h-16 w-16 rounded-xl hover:bg-pastel-magenta hover:shadow-[0_0_8px_rgba(248,200,220,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-magenta-hover"
-            onClick={() => handleIconClick("history")}
-            aria-label="History"
-          >
-            <Clock className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                className="h-16 w-16 rounded-xl hover:bg-pastel-magenta hover:shadow-[0_0_8px_rgba(248,200,220,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-magenta-hover"
+              >
+                <Clock className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="right" className="ml-2">
+              <p>History</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
 
         {/* Middle Section - Main Icons */}
         <div className="flex flex-col justify-start space-y-2">
           {/* Policies */}
-          {/* Policies */}
           <div className="relative" onMouseEnter={() => handleMouseEnter("policies")}>
-            <Button
-              variant="ghost"
-              className="h-16 w-16 rounded-xl hover:bg-pastel-violet hover:shadow-[0_0_8px_rgba(209,196,233,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-violet-hover"
-              onClick={() => handleIconClick("policies")}
-              aria-label="Policies"
-            >
-              <FileText className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="h-16 w-16 rounded-xl hover:bg-pastel-violet hover:shadow-[0_0_8px_rgba(209,196,233,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-violet-hover"
+                >
+                  <FileText className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right" className="ml-2">
+                <p>Policies</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
 
           {/* Plans */}
-          <div className="relative">
+          <div className="relative" onMouseEnter={() => handleIconClick()}>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
@@ -247,14 +232,19 @@ const MergentaSidebar = () => {
 
           {/* Help & Support */}
           <div className="relative" onMouseEnter={() => handleMouseEnter("help")}>
-            <Button
-              variant="ghost"
-              className="h-16 w-16 rounded-xl hover:bg-pastel-magenta hover:shadow-[0_0_8px_rgba(248,200,220,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-magenta-hover"
-              onClick={() => handleIconClick("help")}
-              aria-label="Help & Support"
-            >
-              <HelpCircle className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="h-16 w-16 rounded-xl hover:bg-pastel-magenta hover:shadow-[0_0_8px_rgba(248,200,220,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-magenta-hover"
+                >
+                  <HelpCircle className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right" className="ml-2">
+                <p>Help & Support</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
 
@@ -263,14 +253,19 @@ const MergentaSidebar = () => {
 
         {/* Profile Section */}
         <div className="relative pb-1" onMouseEnter={() => handleMouseEnter("profile")}>
-          <Button
-            variant="ghost"
-            className="h-16 w-16 rounded-xl hover:bg-pastel-violet hover:shadow-[0_0_8px_rgba(209,196,233,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-violet-hover"
-            onClick={() => handleIconClick("profile")}
-            aria-label="Profile"
-          >
-            <User className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                className="h-16 w-16 rounded-xl hover:bg-pastel-violet hover:shadow-[0_0_8px_rgba(209,196,233,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-violet-hover"
+              >
+                <User className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="right" className="ml-2">
+              <p>Profile</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
 
         {/* Plan Badge */}
