@@ -19,13 +19,6 @@ const LeaveApplicationHoverCard = ({ children, onPromptGenerated }: LeaveApplica
     initialData: { to: "", subject: "", coreMessage: "", finalTouch: "", signOff: "", from: "" },
   });
 
-  const to = (draftData.to as string) || "";
-  const subject = (draftData.subject as string) || "";
-  const coreMessage = (draftData.coreMessage as string) || "";
-  const finalTouch = (draftData.finalTouch as string) || "";
-  const signOff = (draftData.signOff as string) || "";
-  const from = (draftData.from as string) || "";
-
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleMouseEnter = () => {
@@ -50,12 +43,12 @@ const LeaveApplicationHoverCard = ({ children, onPromptGenerated }: LeaveApplica
     e.stopPropagation();
 
     const hasContent = Boolean(
-      (to && to.trim() !== "") ||
-        (subject && subject.trim() !== "") ||
-        (coreMessage && coreMessage.trim() !== "") ||
-        (finalTouch && finalTouch.trim() !== "") ||
-        (signOff && signOff.trim() !== "") ||
-        (from && from.trim() !== ""),
+      (draftData.to && draftData.to.trim() !== "") ||
+        (draftData.subject && draftData.subject.trim() !== "") ||
+        (draftData.coreMessage && draftData.coreMessage.trim() !== "") ||
+        (draftData.finalTouch && draftData.finalTouch.trim() !== "") ||
+        (draftData.signOff && draftData.signOff.trim() !== "") ||
+        (draftData.from && draftData.from.trim() !== ""),
     );
 
     if (hasContent) {
@@ -80,12 +73,12 @@ const LeaveApplicationHoverCard = ({ children, onPromptGenerated }: LeaveApplica
         body: {
           contentType: "leave_application",
           formData: {
-            to,
-            subject,
-            coreMessage,
-            finalTouch,
-            signOff,
-            from,
+            to: draftData.to,
+            subject: draftData.subject,
+            coreMessage: draftData.coreMessage,
+            finalTouch: draftData.finalTouch,
+            signOff: draftData.signOff,
+            from: draftData.from,
           },
         },
       });
@@ -150,7 +143,7 @@ const LeaveApplicationHoverCard = ({ children, onPromptGenerated }: LeaveApplica
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label>
                     <Textarea
-                      value={to || undefined}
+                      value={draftData.to}
                       onChange={(e) => saveDraft("to", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Dear Sir/Madam, Manager, Principal, HR, Supervisor, etc..."
@@ -161,7 +154,7 @@ const LeaveApplicationHoverCard = ({ children, onPromptGenerated }: LeaveApplica
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label>
                     <Textarea
-                      value={subject || undefined}
+                      value={draftData.subject}
                       onChange={(e) => saveDraft("subject", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Leave, Absence, Sick, Vacation, Emergency, etc..."
@@ -172,7 +165,7 @@ const LeaveApplicationHoverCard = ({ children, onPromptGenerated }: LeaveApplica
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Core Message</label>
                     <Textarea
-                      value={coreMessage || undefined}
+                      value={draftData.coreMessage}
                       onChange={(e) => saveDraft("coreMessage", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Enter dates, reason, duration, explanation, absence, etc..."
@@ -183,7 +176,7 @@ const LeaveApplicationHoverCard = ({ children, onPromptGenerated }: LeaveApplica
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Final Touch</label>
                     <Textarea
-                      value={finalTouch || undefined}
+                      value={draftData.finalTouch}
                       onChange={(e) => saveDraft("finalTouch", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Tell about medical note, family reason, urgency, context, etc..."
@@ -194,7 +187,7 @@ const LeaveApplicationHoverCard = ({ children, onPromptGenerated }: LeaveApplica
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Sign Off</label>
                     <Textarea
-                      value={signOff || undefined}
+                      value={draftData.signOff}
                       onChange={(e) => saveDraft("signOff", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Kindly approve, With regards, Thank you, etc..."
@@ -205,7 +198,7 @@ const LeaveApplicationHoverCard = ({ children, onPromptGenerated }: LeaveApplica
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">From</label>
                     <Input
-                      value={from || undefined}
+                      value={draftData.from}
                       onChange={(e) => saveDraft("from", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Your Name"
