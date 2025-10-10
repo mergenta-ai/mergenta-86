@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Input } from '../ui/input';
-import { Textarea } from '../ui/textarea';
-import { Label } from '../ui/label';
-import { Button } from '../ui/button';
-import { Sparkles } from 'lucide-react';
+import React, { useState, useRef } from "react";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { Label } from "../ui/label";
+import { Button } from "../ui/button";
+import { Sparkles, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useClickOutside } from "@/lib/clickOutside";
+import { useDraftPersistence } from "@/hooks/useDraftPersistence";
 
 interface AstroLensHoverCardProps {
   children: React.ReactNode;
@@ -14,11 +15,23 @@ interface AstroLensHoverCardProps {
 
 const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children, onPromptGenerated }) => {
   const [showCard, setShowCard] = useState(false);
-  const [date, setDate] = useState('');
-  const [year, setYear] = useState('');
-  const [place, setPlace] = useState('');
-  const [specific, setSpecific] = useState('');
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const { draftData, saveDraft, clearDraft, isLoading } = useDraftPersistence({
+    cardId: "astro_lens",
+    initialData: {
+      date: "",
+      year: "",
+      place: "",
+      specific: "",
+    },
+  });
+
+  // convenience locals
+  const date = (draftData?.date as string) ?? "";
+  const year = (draftData?.year as string) ?? "";
+  const place = (draftData?.place as string) ?? "";
+  const specific = (draftData?.specific as string) ?? "";
 
   const handleMouseEnter = () => {
     if (closeTimeoutRef.current) {
@@ -38,20 +51,64 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children, onPro
     e.stopPropagation();
   };
 
+  const handleClearDraft = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+
+    const hasContent = Boolean(
+      (date && date.trim() !== "") ||
+        (year && year.trim() !== "") ||
+        (place && place.trim() !== "") ||
+        (specific && specific.trim() !== ""),
+    );
+
+    if (hasContent) {
+      // Immediately clear visible fields so UI updates right away
+      saveDraft("date", "");
+      saveDraft("year", "");
+      saveDraft("place", "");
+      saveDraft("specific", "");
+
+      // Then clear persisted storage
+      clearDraft();
+
+      // Keep the card open so user sees empty fields
+      return;
+    }
+
+    // already empty -> close card
+    setShowCard(false);
+  };
+
+  const handleGeneratePrompt = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke("prompt-engine-consolidated", {
+        body: {
+          contentType: "astro_lens",
+          formData: { date, year, place, specific },
+        },
+      });
+      if (error) throw error;
+      if (data?.success && data?.prompt) {
+        onPromptGenerated?.(data.prompt);
+        clearDraft();
+        setShowCard(false);
+      }
+    } catch (err) {
+      console.error("Error generating prompt:", err);
+    }
+  };
+
   // Close card when clicking outside
-  useClickOutside(
-    showCard,
-    () => setShowCard(false),
-    '[data-astro-card]',
-    '[data-astro-trigger]'
-  );
+  useClickOutside(showCard, () => setShowCard(false), "[data-astro-card]", "[data-astro-trigger]");
+
+  if (isLoading) return <div className="p-4">Loading draft...</div>;
 
   return (
     <div className="relative">
       {/* Trigger Element */}
-      <div 
+      <div
         data-astro-trigger
-        onMouseEnter={handleMouseEnter} 
+        onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={() => setShowCard(!showCard)}
       >
@@ -68,106 +125,105 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children, onPro
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
           >
-            <div className="p-4 border rounded-2xl shadow-xl animate-in fade-in-0 zoom-in-95 duration-200" style={{ backgroundColor: '#F3E8FB', borderColor: '#E5D9F2' }}>
+            <div
+              className="p-4 border rounded-2xl shadow-xl animate-in fade-in-0 zoom-in-95 duration-200"
+              style={{ backgroundColor: "#F3E8FB", borderColor: "#E5D9F2" }}
+            >
               <div className="space-y-3">
-                {/* Title */}
-                <div className="flex items-center gap-2 pb-2 border-b" style={{ borderColor: '#E5D9F2' }}>
-                  <Sparkles className="text-lg" style={{ color: '#5B34A0' }} />
-                  <div>
-                    <h3 className="font-semibold text-lg" style={{ color: '#5B34A0' }}>Astro Lens</h3>
-                    <p className="text-xs italic" style={{ color: '#6E6E6E' }}>
-                      Personal insights through planetary patterns.
-                    </p>
+                {/* Header + clear */}
+                <div className="flex items-start justify-between pb-2 border-b" style={{ borderColor: "#E5D9F2" }}>
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="text-lg" style={{ color: "#5B34A0" }} />
+                    <div>
+                      <h3 className="font-semibold text-lg" style={{ color: "#5B34A0" }}>
+                        Astro Lens
+                      </h3>
+                      <p className="text-xs italic" style={{ color: "#6E6E6E" }}>
+                        Personal insights through planetary patterns.
+                      </p>
+                    </div>
                   </div>
+
+                  <button
+                    onClick={handleClearDraft}
+                    title="Clear draft"
+                    className="p-1 rounded hover:bg-[#5B34A0]/10 transition-colors"
+                  >
+                    <X className="w-4 h-4 text-[#5B34A0]" />
+                  </button>
                 </div>
 
-                {/* Date of birth Input */}
+                {/* Date of birth */}
                 <div className="space-y-2">
                   <Label htmlFor="date" className="text-sm font-medium text-sidebar-text-dark">
                     Date of birth
                   </Label>
-                    <Input
-                      id="date"
-                      value={date || undefined}
-                      onChange={(e) => setDate(e.target.value)}
-                      onClick={(e) => e.stopPropagation()}
-                      placeholder="Enter your date of birth (DD/MM)"
-                      className="text-sm bg-white"
-                      autoComplete="off"
-                    />
+                  <Input
+                    id="date"
+                    value={date}
+                    onChange={(e) => saveDraft("date", e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder="Enter your date of birth (DD/MM)"
+                    className="text-sm bg-white"
+                    autoComplete="off"
+                  />
                 </div>
 
-                {/* Year of Birth Input */}
+                {/* Year of birth */}
                 <div className="space-y-2">
                   <Label htmlFor="year" className="text-sm font-medium text-sidebar-text-dark">
                     Year of birth
                   </Label>
-                    <Input
-                      id="year"
-                      value={year || undefined}
-                      onChange={(e) => setYear(e.target.value)}
-                      onClick={(e) => e.stopPropagation()}
-                      placeholder="Enter your year of birth (YYYY)"
-                      className="text-sm bg-white"
-                      autoComplete="off"
-                    />
+                  <Input
+                    id="year"
+                    value={year}
+                    onChange={(e) => saveDraft("year", e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder="Enter your year of birth (YYYY)"
+                    className="text-sm bg-white"
+                    autoComplete="off"
+                  />
                 </div>
 
-                {/* Place of birth Input */}
+                {/* Place of birth */}
                 <div className="space-y-2">
                   <Label htmlFor="place" className="text-sm font-medium text-sidebar-text-dark">
                     Place of Birth
                   </Label>
-                    <Textarea
-                      id="place"
-                      value={place || undefined}
-                      onChange={(e) => setPlace(e.target.value)}
-                      onClick={(e) => e.stopPropagation()}
-                      placeholder="Write city, state and country"
-                      className="text-sm bg-white"
-                      autoComplete="off"
-                    />
+                  <Textarea
+                    id="place"
+                    value={place}
+                    onChange={(e) => saveDraft("place", e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder="Write city, state and country"
+                    className="text-sm bg-white"
+                    autoComplete="off"
+                  />
                 </div>
 
-                {/* Specific information you seek Input */}
+                {/* Specific info */}
                 <div className="space-y-2">
                   <Label htmlFor="specific" className="text-sm font-medium text-sidebar-text-dark">
                     Specific information you seek
                   </Label>
-                    <Textarea
-                      id="specific"
-                      value={specific || undefined}
-                      onChange={(e) => setSpecific(e.target.value)}
-                      onClick={(e) => e.stopPropagation()}
-                      placeholder="Describe what you want to know in particular"
-                      className="text-sm bg-white"
-                      autoComplete="off"
-                    />
+                  <Textarea
+                    id="specific"
+                    value={specific}
+                    onChange={(e) => saveDraft("specific", e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder="Describe what you want to know in particular"
+                    className="text-sm bg-white"
+                    autoComplete="off"
+                  />
                 </div>
 
-                {/* Give Prediction */}
+                {/* Action */}
                 <Button
                   className="w-full text-white transition-colors duration-200"
-                  style={{ backgroundColor: '#6C3EB6' }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#5B34A0')}
-                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#6C3EB6')}
-                  onClick={async () => {
-                    try {
-                      const { data, error } = await supabase.functions.invoke('prompt-engine-consolidated', {
-                        body: { 
-                          contentType: 'astro_lens', 
-                          formData: { date, year, place, specific } 
-                        }
-                      });
-                      if (error) throw error;
-                      if (data?.success && data?.prompt) {
-                        onPromptGenerated?.(data.prompt);
-                        setShowCard(false);
-                      }
-                    } catch (error) {
-                      console.error('Error generating prompt:', error);
-                    }
-                  }}
+                  style={{ backgroundColor: "#6C3EB6" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#5B34A0")}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#6C3EB6")}
+                  onClick={handleGeneratePrompt}
                 >
                   Reveal Insights
                 </Button>
