@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
-import { Button } from '../ui/button';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useState, useRef } from "react";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Button } from "../ui/button";
+import { X } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { useClickOutside } from "@/lib/clickOutside";
+import { useDraftPersistence } from "@/hooks/useDraftPersistence";
 
 interface SpeechHoverCardProps {
   children: React.ReactNode;
@@ -12,14 +14,29 @@ interface SpeechHoverCardProps {
 
 const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGenerated }) => {
   const [showCard, setShowCard] = useState(false);
-  const [theme, setTheme] = useState('');
-  const [tone, setTone] = useState('');
-  const [audience, setAudience] = useState('');
-  const [languageStyle, setLanguageStyle] = useState('');
-  const [engagementTechniques, setEngagementTechniques] = useState('');
-  const [duration, setDuration] = useState('');
-  const [impact, setImpact] = useState('');
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const { draftData, saveDraft, clearDraft, isLoading } = useDraftPersistence({
+    cardId: "speech",
+    initialData: {
+      theme: "",
+      tone: "",
+      audience: "",
+      languageStyle: "",
+      engagementTechniques: "",
+      duration: "",
+      impact: "",
+    },
+  });
+
+  // convenience locals
+  const theme = (draftData?.theme as string) ?? "";
+  const tone = (draftData?.tone as string) ?? "";
+  const audience = (draftData?.audience as string) ?? "";
+  const languageStyle = (draftData?.languageStyle as string) ?? "";
+  const engagementTechniques = (draftData?.engagementTechniques as string) ?? "";
+  const duration = (draftData?.duration as string) ?? "";
+  const impact = (draftData?.impact as string) ?? "";
 
   const handleMouseEnter = () => {
     if (closeTimeoutRef.current) {
@@ -39,47 +56,79 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
     e.stopPropagation();
   };
 
+  const handleClearDraft = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+
+    const hasContent = Boolean(
+      (theme && theme.trim() !== "") ||
+        (tone && tone.trim() !== "") ||
+        (audience && audience.trim() !== "") ||
+        (languageStyle && languageStyle.trim() !== "") ||
+        (engagementTechniques && engagementTechniques.trim() !== "") ||
+        (duration && duration.trim() !== "") ||
+        (impact && impact.trim() !== ""),
+    );
+
+    if (hasContent) {
+      // clear visible fields immediately
+      saveDraft("theme", "");
+      saveDraft("tone", "");
+      saveDraft("audience", "");
+      saveDraft("languageStyle", "");
+      saveDraft("engagementTechniques", "");
+      saveDraft("duration", "");
+      saveDraft("impact", "");
+
+      // clear persisted storage as well
+      clearDraft();
+
+      // keep card open so user sees it's cleared
+      return;
+    }
+
+    // already empty -> close card
+    setShowCard(false);
+  };
+
   const handleGeneratePrompt = async () => {
     try {
-      const { data, error } = await supabase.functions.invoke('prompt-engine-consolidated', {
-        body: { 
-          contentType: 'speech', 
-          formData: { 
+      const { data, error } = await supabase.functions.invoke("prompt-engine-consolidated", {
+        body: {
+          contentType: "speech",
+          formData: {
             topic: theme,
             audience,
             length: duration,
             tone,
             keyMessages: engagementTechniques,
-            callToAction: impact
-          } 
-        }
+            callToAction: impact,
+            languageStyle,
+          },
+        },
       });
 
       if (error) throw error;
 
-      if (data?.prompt && onPromptGenerated) {
-        onPromptGenerated(data.prompt);
+      if (data?.success && data?.prompt) {
+        onPromptGenerated?.(data.prompt);
+        clearDraft();
         setShowCard(false);
       }
-    } catch (error) {
-      console.error('Error generating speech prompt:', error);
+    } catch (err) {
+      console.error("Error generating speech prompt:", err);
     }
   };
 
-  // Close card when clicking outside
-  useClickOutside(
-    showCard,
-    () => setShowCard(false),
-    '[data-speech-card]',
-    '[data-speech-trigger]'
-  );
+  useClickOutside(showCard, () => setShowCard(false), "[data-speech-card]", "[data-speech-trigger]");
+
+  if (isLoading) return <div className="p-4">Loading draft...</div>;
 
   return (
     <div className="relative">
       {/* Trigger Element */}
-      <div 
+      <div
         data-speech-trigger
-        onMouseEnter={handleMouseEnter} 
+        onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={() => setShowCard(!showCard)}
       >
@@ -98,66 +147,72 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
           >
             <div className="p-4 bg-pastel-lavender border border-pastel-lavender-hover rounded-lg shadow-xl animate-fade-in duration-300">
               <div className="space-y-3">
-                {/* Title */}
-                <div className="flex items-center gap-2 pb-2 border-b border-pastel-lavender-hover">
-                  <span className="text-lg">🎤</span>
-                  <div>
-                    <h3 className="font-semibold text-sidebar-text-violet text-lg">Speech</h3>
-                    <p className="text-xs text-sidebar-text-dark italic">
-                      Inspiring words crafted for audience and impact.
-                    </p>
+                {/* Header + clear */}
+                <div className="flex items-start justify-between pb-2 border-b border-pastel-lavender-hover">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">🎤</span>
+                    <div>
+                      <h3 className="font-semibold text-sidebar-text-violet text-lg">Speech</h3>
+                      <p className="text-xs text-sidebar-text-dark italic">
+                        Inspiring words crafted for audience and impact.
+                      </p>
+                    </div>
                   </div>
+
+                  <button
+                    onClick={handleClearDraft}
+                    title="Clear draft"
+                    className="p-1 rounded hover:bg-[#5B34A0]/10 transition-colors"
+                  >
+                    <X className="w-4 h-4 text-[#5B34A0]" />
+                  </button>
                 </div>
 
-                {/* Theme Input */}
                 <div className="space-y-2">
                   <Label htmlFor="theme" className="text-sm font-medium text-sidebar-text-dark">
                     Theme
                   </Label>
-                   <Input
-                     id="theme"
-                     value={theme}
-                     onChange={(e) => setTheme(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="Write your central idea..."
-                     className="text-sm placeholder:text-gray-500"
-                     autoComplete="off"
-                   />
+                  <Input
+                    id="theme"
+                    value={theme}
+                    onChange={(e) => saveDraft("theme", e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder="Write your central idea..."
+                    className="text-sm placeholder:text-gray-500"
+                    autoComplete="off"
+                  />
                 </div>
 
-                {/* Tone Input */}
                 <div className="space-y-2">
                   <Label htmlFor="tone" className="text-sm font-medium text-sidebar-text-dark">
                     Tone
                   </Label>
-                   <Input
-                     id="tone"
-                     value={tone}
-                     onChange={(e) => setTone(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="Solemn, Motivational, Humorous etc."
-                     className="text-sm placeholder:text-gray-500"
-                     autoComplete="off"
-                   />
+                  <Input
+                    id="tone"
+                    value={tone}
+                    onChange={(e) => saveDraft("tone", e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder="Solemn, Motivational, Humorous etc."
+                    className="text-sm placeholder:text-gray-500"
+                    autoComplete="off"
+                  />
                 </div>
 
-                {/* Audience Input */}
                 <div className="space-y-2">
                   <Label htmlFor="audience" className="text-sm font-medium text-sidebar-text-dark">
                     Audience
                   </Label>
-                   <Input
-                     id="audience"
-                     value={audience}
-                     onChange={(e) => setAudience(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="Students, Public, Leaders, Associations"
-                     className="text-sm placeholder:text-gray-500"
-                     autoComplete="off"
-                   />
+                  <Input
+                    id="audience"
+                    value={audience}
+                    onChange={(e) => saveDraft("audience", e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder="Students, Public, Leaders, Associations"
+                    className="text-sm placeholder:text-gray-500"
+                    autoComplete="off"
+                  />
                 </div>
 
-                {/* Language Style Input */}
                 <div className="space-y-2">
                   <Label htmlFor="language-style" className="text-sm font-medium text-sidebar-text-dark">
                     Language Style
@@ -165,7 +220,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
                   <Input
                     id="language-style"
                     value={languageStyle}
-                    onChange={(e) => setLanguageStyle(e.target.value)}
+                    onChange={(e) => saveDraft("languageStyle", e.target.value)}
                     onClick={(e) => e.stopPropagation()}
                     placeholder="Simple, Poetic, Technical, Rhetorical etc."
                     className="text-sm placeholder:text-gray-500"
@@ -173,7 +228,6 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
                   />
                 </div>
 
-                {/* Engagement Techniques Input */}
                 <div className="space-y-2">
                   <Label htmlFor="engagement-techniques" className="text-sm font-medium text-sidebar-text-dark">
                     Engagement Techniques
@@ -181,7 +235,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
                   <Input
                     id="engagement-techniques"
                     value={engagementTechniques}
-                    onChange={(e) => setEngagementTechniques(e.target.value)}
+                    onChange={(e) => saveDraft("engagementTechniques", e.target.value)}
                     onClick={(e) => e.stopPropagation()}
                     placeholder="Stories, Questions, Humour, Quotes etc."
                     className="text-sm placeholder:text-gray-500"
@@ -189,7 +243,6 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
                   />
                 </div>
 
-                {/* Duration Input */}
                 <div className="space-y-2">
                   <Label htmlFor="duration" className="text-sm font-medium text-sidebar-text-dark">
                     Duration
@@ -197,7 +250,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
                   <Input
                     id="duration"
                     value={duration}
-                    onChange={(e) => setDuration(e.target.value)}
+                    onChange={(e) => saveDraft("duration", e.target.value)}
                     onClick={(e) => e.stopPropagation()}
                     placeholder="Mention minutes or hours..."
                     className="text-sm placeholder:text-gray-500"
@@ -205,7 +258,6 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
                   />
                 </div>
 
-                {/* Impact Input */}
                 <div className="space-y-2">
                   <Label htmlFor="impact" className="text-sm font-medium text-sidebar-text-dark">
                     Impact
@@ -213,7 +265,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
                   <Input
                     id="impact"
                     value={impact}
-                    onChange={(e) => setImpact(e.target.value)}
+                    onChange={(e) => saveDraft("impact", e.target.value)}
                     onClick={(e) => e.stopPropagation()}
                     placeholder="Memorable, Thought-provoking etc."
                     className="text-sm placeholder:text-gray-500"
@@ -221,7 +273,6 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
                   />
                 </div>
 
-                {/* Start Speech Button */}
                 <Button
                   className="w-full bg-sidebar-text-violet hover:bg-sidebar-text-violet/90 text-white transition-colors duration-200"
                   onClick={handleGeneratePrompt}
