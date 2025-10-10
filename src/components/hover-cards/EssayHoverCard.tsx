@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Input } from '../ui/input';
-import { Textarea } from '../ui/textarea';
-import { Label } from '../ui/label';
-import { Button } from '../ui/button';
+import React, { useState, useRef } from "react";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { Label } from "../ui/label";
+import { Button } from "../ui/button";
+import { X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useClickOutside } from "@/lib/clickOutside";
+import { useDraftPersistence } from "@/hooks/useDraftPersistence";
 
 interface EssayHoverCardProps {
   children: React.ReactNode;
@@ -13,13 +15,26 @@ interface EssayHoverCardProps {
 
 const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGenerated }) => {
   const [showCard, setShowCard] = useState(false);
-  const [essayTitle, setEssayTitle] = useState('');
-  const [keyPoints, setKeyPoints] = useState('');
-  const [wordCount, setWordCount] = useState('');
-  const [tone, setTone] = useState('');
-  const [audience, setAudience] = useState('');
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
- 
+
+  const { draftData, saveDraft, clearDraft, isLoading } = useDraftPersistence({
+    cardId: "essay",
+    initialData: {
+      essayTitle: "",
+      keyPoints: "",
+      wordCount: "",
+      tone: "",
+      audience: "",
+    },
+  });
+
+  // stable locals (always strings) to avoid controlled/uncontrolled issues
+  const essayTitle = draftData?.essayTitle ?? "";
+  const keyPoints = draftData?.keyPoints ?? "";
+  const wordCount = draftData?.wordCount ?? "";
+  const tone = draftData?.tone ?? "";
+  const audience = draftData?.audience ?? "";
+
   const handleMouseEnter = () => {
     if (closeTimeoutRef.current) {
       clearTimeout(closeTimeoutRef.current);
@@ -38,46 +53,71 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
     e.stopPropagation();
   };
 
+  const handleClearDraft = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+
+    const hasContent = Boolean(
+      (essayTitle && essayTitle.trim() !== "") ||
+        (keyPoints && keyPoints.trim() !== "") ||
+        (wordCount && wordCount.trim() !== "") ||
+        (tone && tone.trim() !== "") ||
+        (audience && audience.trim() !== ""),
+    );
+
+    if (hasContent) {
+      // immediately clear visible fields so UI updates right away
+      saveDraft("essayTitle", "");
+      saveDraft("keyPoints", "");
+      saveDraft("wordCount", "");
+      saveDraft("tone", "");
+      saveDraft("audience", "");
+      // then clear persisted storage
+      clearDraft();
+      return; // keep card open so user can see emptiness
+    }
+
+    // already empty -> close card
+    setShowCard(false);
+  };
+
   const handleGeneratePrompt = async () => {
     try {
-      const { data, error } = await supabase.functions.invoke('prompt-engine-consolidated', {
-        body: { 
-          contentType: 'essay', 
-          formData: { 
+      const { data, error } = await supabase.functions.invoke("prompt-engine-consolidated", {
+        body: {
+          contentType: "essay",
+          formData: {
             essayTitle,
-            keyPoints, 
-            wordCount, 
-            tone, 
-            audience 
-          } 
-        }
+            keyPoints,
+            wordCount,
+            tone,
+            audience,
+          },
+        },
       });
 
       if (error) throw error;
-      
+
       if (data?.success && data?.prompt) {
         onPromptGenerated?.(data.prompt);
+        clearDraft();
         setShowCard(false);
       }
-    } catch (error) {
-      console.error('Error generating prompt:', error);
+    } catch (err) {
+      console.error("Error generating prompt:", err);
     }
   };
 
   // Close card when clicking outside
-  useClickOutside(
-    showCard,
-    () => setShowCard(false),
-    '[data-essay-card]',
-    '[data-essay-trigger]'
-  );
+  useClickOutside(showCard, () => setShowCard(false), "[data-essay-card]", "[data-essay-trigger]");
+
+  if (isLoading) return <div className="p-4">Loading draft...</div>;
 
   return (
     <div className="relative">
       {/* Trigger Element */}
-      <div 
+      <div
         data-essay-trigger
-        onMouseEnter={handleMouseEnter} 
+        onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={() => setShowCard(!showCard)}
       >
@@ -96,15 +136,25 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
           >
             <div className="p-4 bg-pastel-lavender border border-pastel-lavender-hover rounded-lg shadow-xl animate-in fade-in-0 zoom-in-95 duration-200">
               <div className="space-y-3">
-                {/* Title */}
-                <div className="flex items-center gap-2 pb-2 border-b border-pastel-lavender-hover">
-                  <span className="text-lg">📄</span>
-                  <div>
-                    <h3 className="font-semibold text-sidebar-text-violet text-lg">Essay</h3>
-                    <p className="text-xs text-sidebar-text-dark italic">
-                      Structured, formal writing — balanced arguments and clarity.
-                    </p>
+                {/* Header + Clear */}
+                <div className="flex items-start justify-between pb-2 border-b border-pastel-lavender-hover">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">📄</span>
+                    <div>
+                      <h3 className="font-semibold text-sidebar-text-violet text-lg">Essay</h3>
+                      <p className="text-xs text-sidebar-text-dark italic">
+                        Structured, formal writing — balanced arguments and clarity.
+                      </p>
+                    </div>
                   </div>
+
+                  <button
+                    onClick={handleClearDraft}
+                    title="Clear draft"
+                    className="p-1 rounded hover:bg-[#5B34A0]/10 transition-colors"
+                  >
+                    <X className="w-4 h-4 text-[#5B34A0]" />
+                  </button>
                 </div>
 
                 {/* Essay Title Input */}
@@ -112,15 +162,15 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
                   <Label htmlFor="essay-title" className="text-sm font-medium text-sidebar-text-dark">
                     Essay Title
                   </Label>
-                   <Input
-                     id="essay-title"
-                     value={essayTitle}
-                     onChange={(e) => setEssayTitle(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="Enter your essay title..."
-                     className="text-sm"
-                     autoComplete="off"
-                   />
+                  <Input
+                    id="essay-title"
+                    value={essayTitle}
+                    onChange={(e) => saveDraft("essayTitle", e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder="Enter your essay title..."
+                    className="text-sm"
+                    autoComplete="off"
+                  />
                 </div>
 
                 {/* Key Points Input */}
@@ -128,15 +178,15 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
                   <Label htmlFor="key-points" className="text-sm font-medium text-sidebar-text-dark">
                     Key Points / Topics
                   </Label>
-                   <Textarea
-                     id="key-points"
-                     value={keyPoints}
-                     onChange={(e) => setKeyPoints(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="List your main points or topics..."
-                     className="text-sm min-h-[70px] resize-none"
-                     autoComplete="off"
-                   />
+                  <Textarea
+                    id="key-points"
+                    value={keyPoints}
+                    onChange={(e) => saveDraft("keyPoints", e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder="List your main points or topics..."
+                    className="text-sm min-h-[70px] resize-none"
+                    autoComplete="off"
+                  />
                 </div>
 
                 {/* Word Count Input */}
@@ -144,46 +194,50 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
                   <Label htmlFor="word-count" className="text-sm font-medium text-sidebar-text-dark">
                     Word Count
                   </Label>
-                   <Input
-                     id="word-count"
-                     type="number"
-                     value={wordCount}
-                     onChange={(e) => setWordCount(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="400–2000"
-                     min="400"
-                     max="2000"
-                     className="text-sm"
-                     autoComplete="off"
-                   />
+                  <Input
+                    id="word-count"
+                    type="number"
+                    value={wordCount}
+                    onChange={(e) => saveDraft("wordCount", e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder="400–2000"
+                    min={400}
+                    max={2000}
+                    className="text-sm"
+                    autoComplete="off"
+                  />
                 </div>
 
                 {/* Tone Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="tone" className="text-sm font-medium text-sidebar-text-dark">Tone</Label>
-                   <Textarea
-                     id="tone"
-                     value={tone}
-                     onChange={(e) => setTone(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="formal, analytical, neutral, critical, narrative, persuasive, imaginative, humorous, motivating, empathitic, optimistic. etc..."
-                     className="text-sm min-h-[60px] resize-none"
-                     autoComplete="off"
-                   />
+                  <Label htmlFor="tone" className="text-sm font-medium text-sidebar-text-dark">
+                    Tone
+                  </Label>
+                  <Textarea
+                    id="tone"
+                    value={tone}
+                    onChange={(e) => saveDraft("tone", e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder="formal, analytical, narrative, persuasive, etc..."
+                    className="text-sm min-h-[60px] resize-none"
+                    autoComplete="off"
+                  />
                 </div>
 
                 {/* Audience Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="audience" className="text-sm font-medium text-sidebar-text-dark">Audience</Label>
-                   <Textarea
-                     id="audience"
-                     value={audience}
-                     onChange={(e) => setAudience(e.target.value)}
-                     onClick={(e) => e.stopPropagation()}
-                     placeholder="academic, business, professional, technical, media, government, community, American, European, Australian, Asian, African, Chinese, Indian, etc..."
-                     className="text-sm min-h-[60px] resize-none"
-                     autoComplete="off"
-                   />
+                  <Label htmlFor="audience" className="text-sm font-medium text-sidebar-text-dark">
+                    Audience
+                  </Label>
+                  <Textarea
+                    id="audience"
+                    value={audience}
+                    onChange={(e) => saveDraft("audience", e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder="academic, business, professional, general, etc..."
+                    className="text-sm min-h-[60px] resize-none"
+                    autoComplete="off"
+                  />
                 </div>
 
                 {/* Start Essay Button */}
