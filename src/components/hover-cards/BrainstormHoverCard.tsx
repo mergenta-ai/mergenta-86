@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Input } from '../ui/input';
-import { Textarea } from '../ui/textarea';
-import { Label } from '../ui/label';
-import { Button } from '../ui/button';
+import React, { useState, useRef } from "react";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { Label } from "../ui/label";
+import { Button } from "../ui/button";
+import { X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useClickOutside } from "@/lib/clickOutside";
+import { useDraftPersistence } from "@/hooks/useDraftPersistence";
 
 interface BrainstormHoverCardProps {
   children: React.ReactNode;
@@ -13,35 +15,21 @@ interface BrainstormHoverCardProps {
 
 const BrainstormHoverCard: React.FC<BrainstormHoverCardProps> = ({ children, onPromptGenerated }) => {
   const [showCard, setShowCard] = useState(false);
-  const [problemStatement, setProblemStatement] = useState('');
-  const [constraints, setConstraints] = useState('');
-  const [desiredOutcome, setDesiredOutcome] = useState('');
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const handleGeneratePrompt = async () => {
-    try {
-      const { data, error } = await supabase.functions.invoke('prompt-engine-consolidated', {
-        body: { 
-          contentType: 'brainstorm', 
-          formData: { 
-            idea: problemStatement, 
-            keyAssumptions: constraints, 
-            risksWeaknesses: desiredOutcome, 
-            alternativePerspectives: '' 
-          } 
-        }
-      });
+  const { draftData, saveDraft, clearDraft, isLoading } = useDraftPersistence({
+    cardId: "brainstorm",
+    initialData: {
+      problemStatement: "",
+      constraints: "",
+      desiredOutcome: "",
+    },
+  });
 
-      if (error) throw error;
-      
-      if (data?.success && data?.prompt) {
-        onPromptGenerated?.(data.prompt);
-        setShowCard(false);
-      }
-    } catch (error) {
-      console.error('Error generating prompt:', error);
-    }
-  };
+  // convenience locals
+  const problemStatement = (draftData?.problemStatement as string) ?? "";
+  const constraints = (draftData?.constraints as string) ?? "";
+  const desiredOutcome = (draftData?.desiredOutcome as string) ?? "";
 
   const handleMouseEnter = () => {
     if (closeTimeoutRef.current) {
@@ -61,20 +49,68 @@ const BrainstormHoverCard: React.FC<BrainstormHoverCardProps> = ({ children, onP
     e.stopPropagation();
   };
 
-  // Close card when clicking outside
-  useClickOutside(
-    showCard,
-    () => setShowCard(false),
-    '[data-brainstorm-card]',
-    '[data-brainstorm-trigger]'
-  );
+  const handleClearDraft = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+
+    const hasContent = Boolean(
+      (problemStatement && problemStatement.trim() !== "") ||
+        (constraints && constraints.trim() !== "") ||
+        (desiredOutcome && desiredOutcome.trim() !== ""),
+    );
+
+    if (hasContent) {
+      // immediately clear visible fields so UI updates right away
+      saveDraft("problemStatement", "");
+      saveDraft("constraints", "");
+      saveDraft("desiredOutcome", "");
+
+      // clear persisted storage as well
+      clearDraft();
+
+      // keep card open so user can verify emptiness
+      return;
+    }
+
+    // already empty -> close card
+    setShowCard(false);
+  };
+
+  const handleGeneratePrompt = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke("prompt-engine-consolidated", {
+        body: {
+          contentType: "brainstorm",
+          formData: {
+            idea: problemStatement,
+            keyAssumptions: constraints,
+            risksWeaknesses: desiredOutcome,
+            alternativePerspectives: "",
+          },
+        },
+      });
+
+      if (error) throw error;
+
+      if (data?.success && data?.prompt) {
+        onPromptGenerated?.(data.prompt);
+        clearDraft();
+        setShowCard(false);
+      }
+    } catch (err) {
+      console.error("Error generating prompt:", err);
+    }
+  };
+
+  useClickOutside(showCard, () => setShowCard(false), "[data-brainstorm-card]", "[data-brainstorm-trigger]");
+
+  if (isLoading) return <div className="p-4">Loading draft...</div>;
 
   return (
     <div className="relative">
       {/* Trigger Element */}
-      <div 
+      <div
         data-brainstorm-trigger
-        onMouseEnter={handleMouseEnter} 
+        onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={() => setShowCard(!showCard)}
       >
@@ -91,73 +127,83 @@ const BrainstormHoverCard: React.FC<BrainstormHoverCardProps> = ({ children, onP
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
           >
-            <div className="p-4 border rounded-lg shadow-xl animate-in fade-in-0 zoom-in-95 duration-200" style={{ backgroundColor: '#F1E4FA', borderColor: '#E5D9F2' }}>
+            <div
+              className="p-4 border rounded-lg shadow-xl animate-in fade-in-0 zoom-in-95 duration-200"
+              style={{ backgroundColor: "#F1E4FA", borderColor: "#E5D9F2" }}
+            >
               <div className="space-y-3">
-                {/* Title */}
-                <div className="flex items-center gap-2 pb-2 border-b" style={{ borderColor: '#E5D9F2' }}>
-                  <span className="text-lg">💡</span>
-                  <div>
-                    <h3 className="font-semibold text-sidebar-text-violet text-lg">Brainstorm with me</h3>
-                    <p className="text-xs text-sidebar-text-dark italic">
-                      Generate fresh ideas fast — creative, bold and varied.
-                    </p>
+                {/* Header + clear */}
+                <div className="flex items-start justify-between pb-2 border-b" style={{ borderColor: "#E5D9F2" }}>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">💡</span>
+                    <div>
+                      <h3 className="font-semibold text-[#5B34A0] text-lg">Brainstorm with me</h3>
+                      <p className="text-xs text-[#6E6E6E] italic">
+                        Generate fresh ideas fast — creative, bold and varied.
+                      </p>
+                    </div>
                   </div>
+
+                  <button
+                    onClick={handleClearDraft}
+                    title="Clear draft"
+                    className="p-1 rounded hover:bg-[#5B34A0]/10 transition-colors"
+                  >
+                    <X className="w-4 h-4 text-[#5B34A0]" />
+                  </button>
                 </div>
 
-                {/* Problem Statement Input */}
+                {/* Problem Statement */}
                 <div className="space-y-2">
-                  <Label htmlFor="problem-statement" className="text-sm font-medium text-sidebar-text-dark">
+                  <Label htmlFor="problem-statement" className="text-sm font-medium text-[#5B34A0]">
                     Problem Statement
                   </Label>
-                    <Textarea
-                      id="problem-statement"
-                      value={problemStatement || undefined}
-                      onChange={(e) => setProblemStatement(e.target.value)}
-                      onClick={(e) => e.stopPropagation()}
-                      placeholder="Enter topic, challenge or idea…"
-                      className="text-sm min-h-[70px] resize-none bg-white"
-                      autoComplete="off"
-                    />
+                  <Textarea
+                    id="problem-statement"
+                    value={problemStatement}
+                    onChange={(e) => saveDraft("problemStatement", e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder="Enter topic, challenge or idea…"
+                    className="text-sm min-h-[70px] resize-none bg-white"
+                    autoComplete="off"
+                  />
                 </div>
 
-                {/* Constraints Input */}
+                {/* Constraints */}
                 <div className="space-y-2">
-                  <Label htmlFor="constraints" className="text-sm font-medium text-sidebar-text-dark">
+                  <Label htmlFor="constraints" className="text-sm font-medium text-[#5B34A0]">
                     Constraints
                   </Label>
-                    <Input
-                      id="constraints"
-                      value={constraints || undefined}
-                      onChange={(e) => setConstraints(e.target.value)}
-                      onClick={(e) => e.stopPropagation()}
-                      placeholder="Budget, time limit, resources etc."
-                      className="text-sm bg-white"
-                      autoComplete="off"
-                    />
+                  <Input
+                    id="constraints"
+                    value={constraints}
+                    onChange={(e) => saveDraft("constraints", e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder="Budget, time limit, resources etc."
+                    className="text-sm bg-white"
+                    autoComplete="off"
+                  />
                 </div>
 
-                {/* Desired Outcome Input */}
+                {/* Desired Outcome */}
                 <div className="space-y-2">
-                  <Label htmlFor="desired-outcome" className="text-sm font-medium text-sidebar-text-dark">
+                  <Label htmlFor="desired-outcome" className="text-sm font-medium text-[#5B34A0]">
                     Desired Outcome
                   </Label>
-                    <Input
-                      id="desired-outcome"
-                      value={desiredOutcome || undefined}
-                      onChange={(e) => setDesiredOutcome(e.target.value)}
-                      onClick={(e) => e.stopPropagation()}
-                      placeholder="Innovation, efficiency, alternatives etc."
-                      className="text-sm bg-white"
-                      autoComplete="off"
-                    />
+                  <Input
+                    id="desired-outcome"
+                    value={desiredOutcome}
+                    onChange={(e) => saveDraft("desiredOutcome", e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder="Innovation, efficiency, alternatives etc."
+                    className="text-sm bg-white"
+                    autoComplete="off"
+                  />
                 </div>
 
-                {/* Start Brainstorming Button */}
                 <Button
                   className="w-full text-white transition-colors duration-200"
-                  style={{ backgroundColor: '#7D4EFF' }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#6A3DD4')}
-                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#7D4EFF')}
+                  style={{ backgroundColor: "#7D4EFF" }}
                   onClick={handleGeneratePrompt}
                 >
                   Start Brainstorming
