@@ -103,7 +103,7 @@ const LoveLetterHoverCard = ({ children, onPromptGenerated }: LoveLetterHoverCar
 
   useClickOutside(showCard, () => setShowCard(false), "[data-love-letter-card]", "[data-love-letter-trigger]");
 
-  if (isLoading) return <div className="p-4">Loading draft...</div>;
+  
 
   return (
     <div className="relative">

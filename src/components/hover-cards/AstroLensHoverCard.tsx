@@ -101,7 +101,7 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children, onPro
   // Close card when clicking outside
   useClickOutside(showCard, () => setShowCard(false), "[data-astro-card]", "[data-astro-trigger]");
 
-  if (isLoading) return <div className="p-4">Loading draft...</div>;
+  
 
   return (
     <div className="relative">

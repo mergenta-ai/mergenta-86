@@ -100,7 +100,7 @@ const CongratulatoryLetterHoverCard = ({ children, onPromptGenerated }: Congratu
   // Close card when clicking outside
   useClickOutside(showCard, () => setShowCard(false), "[data-congratulatory-card]", "[data-congratulatory-trigger]");
 
-  if (isLoading) return <div className="p-4">Loading draft...</div>;
+  
 
   return (
     <div className="relative">

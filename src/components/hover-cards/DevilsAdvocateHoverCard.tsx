@@ -108,7 +108,7 @@ const DevilsAdvocateHoverCard: React.FC<DevilsAdvocateHoverCardProps> = ({ child
   // Close card when clicking outside
   useClickOutside(showCard, () => setShowCard(false), "[data-devils-advocate-card]", "[data-devils-advocate-trigger]");
 
-  if (isLoading) return <div className="p-4">Loading draft...</div>;
+  
 
   return (
     <div className="relative">

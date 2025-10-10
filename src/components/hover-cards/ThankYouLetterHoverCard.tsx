@@ -98,7 +98,7 @@ const ThankYouLetterHoverCard = ({ children, onPromptGenerated }: ThankYouLetter
   // Close card when clicking outside
   useClickOutside(showCard, () => setShowCard(false), "[data-thank-you-card]", "[data-thank-you-trigger]");
 
-  if (isLoading) return <div className="p-4">Loading draft...</div>;
+  
 
   return (
     <div className="relative">

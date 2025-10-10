@@ -97,7 +97,7 @@ const GeneralLetterHoverCard = ({ children, onPromptGenerated }: GeneralLetterHo
 
   useClickOutside(showCard, () => setShowCard(false), "[data-general-letter-card]", "[data-general-letter-trigger]");
 
-  if (isLoading) return <div className="p-4">Loading draft...</div>;
+  
 
   return (
     <div className="relative">

@@ -103,7 +103,7 @@ const BrainstormHoverCard: React.FC<BrainstormHoverCardProps> = ({ children, onP
 
   useClickOutside(showCard, () => setShowCard(false), "[data-brainstorm-card]", "[data-brainstorm-trigger]");
 
-  if (isLoading) return <div className="p-4">Loading draft...</div>;
+  
 
   return (
     <div className="relative">

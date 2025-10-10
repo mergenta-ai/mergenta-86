@@ -93,7 +93,7 @@ const RecommendationLetterHoverCard = ({ children, onPromptGenerated }: Recommen
 
   useClickOutside(showCard, () => setShowCard(false), "[data-recommendation-card]", "[data-recommendation-trigger]");
 
-  if (isLoading) return <div className="p-4">Loading draft...</div>;
+  
 
   return (
     <div className="relative">

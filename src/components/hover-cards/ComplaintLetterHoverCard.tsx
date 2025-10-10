@@ -98,7 +98,7 @@ const ComplaintLetterHoverCard = ({ children, onPromptGenerated }: ComplaintLett
   // Close card when clicking outside
   useClickOutside(showCard, () => setShowCard(false), "[data-complaint-card]", "[data-complaint-trigger]");
 
-  if (isLoading) return <div className="p-4">Loading draft...</div>;
+  
 
   return (
     <div className="relative">

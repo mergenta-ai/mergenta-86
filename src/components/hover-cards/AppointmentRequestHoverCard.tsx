@@ -70,7 +70,7 @@ const AppointmentRequestHoverCard = ({ children, onPromptGenerated }: Appointmen
     "[data-appointment-request-trigger]",
   );
 
-  if (isLoading) return <div className="p-4">Loading draft...</div>;
+  
 
   return (
     <div className="relative">

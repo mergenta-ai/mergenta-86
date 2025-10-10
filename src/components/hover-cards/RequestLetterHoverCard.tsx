@@ -94,7 +94,7 @@ const RequestLetterHoverCard = ({ children, onPromptGenerated }: RequestLetterHo
   // Close card when clicking outside
   useClickOutside(showCard, () => setShowCard(false), "[data-request-card]", "[data-request-trigger]");
 
-  if (isLoading) return <div className="p-4">Loading draft...</div>;
+  
 
   return (
     <div className="relative">

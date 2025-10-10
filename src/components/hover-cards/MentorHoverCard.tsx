@@ -112,7 +112,7 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children, onPromptGen
   // Close card when clicking outside
   useClickOutside(showCard, () => setShowCard(false), "[data-mentor-card]", "[data-mentor-trigger]");
 
-  if (isLoading) return <div className="p-4">Loading draft...</div>;
+  
 
   return (
     <div className="relative">

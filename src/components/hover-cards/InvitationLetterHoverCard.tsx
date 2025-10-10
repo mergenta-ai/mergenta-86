@@ -103,7 +103,7 @@ const InvitationLetterHoverCard = ({ children, onPromptGenerated }: InvitationLe
     "[data-invitation-letter-trigger]",
   );
 
-  if (isLoading) return <div className="p-4">Loading draft...</div>;
+  
 
   return (
     <div className="relative">

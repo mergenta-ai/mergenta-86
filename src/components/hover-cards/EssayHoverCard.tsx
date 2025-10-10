@@ -110,7 +110,7 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
   // Close card when clicking outside
   useClickOutside(showCard, () => setShowCard(false), "[data-essay-card]", "[data-essay-trigger]");
 
-  if (isLoading) return <div className="p-4">Loading draft...</div>;
+  
 
   return (
     <div className="relative">

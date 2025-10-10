@@ -110,7 +110,7 @@ const PoetryHoverCard: React.FC<PoetryHoverCardProps> = ({ children, onPromptGen
 
   useClickOutside(showCard, () => setShowCard(false), "[data-poetry-card]", "[data-poetry-trigger]");
 
-  if (isLoading) return <div className="p-4">Loading draft...</div>;
+  
 
   return (
     <div className="relative">

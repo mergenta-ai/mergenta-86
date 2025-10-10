@@ -117,7 +117,7 @@ const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children, onPromp
 
   useClickOutside(showCard, () => setShowCard(false), "[data-scenario-card]", "[data-scenario-trigger]");
 
-  if (isLoading) return <div className="p-4">Loading draft...</div>;
+  
 
   return (
     <div className="relative">

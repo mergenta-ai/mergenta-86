@@ -113,7 +113,7 @@ const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children, onPromptGener
   // Close card when clicking outside
   useClickOutside(showCard, () => setShowCard(false), "[data-story-card]", "[data-story-trigger]");
 
-  if (isLoading) return <div className="p-4">Loading draft...</div>;
+  
 
   return (
     <div className="relative">

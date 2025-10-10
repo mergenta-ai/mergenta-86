@@ -99,7 +99,7 @@ const ApologyLetterHoverCard = ({ children, onPromptGenerated }: ApologyLetterHo
   // Close card when clicking outside
   useClickOutside(showCard, () => setShowCard(false), "[data-apology-letter-card]", "[data-apology-letter-trigger]");
 
-  if (isLoading) return <div className="p-4">Loading draft...</div>;
+  
 
   return (
     <div className="relative">

@@ -117,7 +117,7 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
 
   useClickOutside(showCard, () => setShowCard(false), "[data-script-card]", "[data-script-trigger]");
 
-  if (isLoading) return <div className="p-4">Loading draft...</div>;
+  
 
   return (
     <div className="relative">

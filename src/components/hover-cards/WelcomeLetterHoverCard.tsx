@@ -97,7 +97,7 @@ const WelcomeLetterHoverCard = ({ children, onPromptGenerated }: WelcomeLetterHo
 
   useClickOutside(showCard, () => setShowCard(false), "[data-welcome-card]", "[data-welcome-trigger]");
 
-  if (isLoading) return <div className="p-4">Loading draft...</div>;
+  
 
   return (
     <div className="relative">

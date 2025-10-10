@@ -121,7 +121,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
 
   useClickOutside(showCard, () => setShowCard(false), "[data-speech-card]", "[data-speech-trigger]");
 
-  if (isLoading) return <div className="p-4">Loading draft...</div>;
+  
 
   return (
     <div className="relative">

@@ -98,7 +98,7 @@ const FarewellLetterHoverCard = ({ children, onPromptGenerated }: FarewellLetter
   // Close card when clicking outside
   useClickOutside(showCard, () => setShowCard(false), "[data-farewell-letter-card]", "[data-farewell-letter-trigger]");
 
-  if (isLoading) return <div className="p-4">Loading draft...</div>;
+  
 
   return (
     <div className="relative">

@@ -113,7 +113,7 @@ const FlashFictionHoverCard: React.FC<FlashFictionHoverCardProps> = ({ children,
   // Close when clicking outside
   useClickOutside(showCard, () => setShowCard(false), "[data-flash-fiction-card]", "[data-flash-fiction-trigger]");
 
-  if (isLoading) return <div className="p-4">Loading draft...</div>;
+  
 
   return (
     <div className="relative">

@@ -122,7 +122,7 @@ const BlogHoverCard: React.FC<BlogHoverCardProps> = ({ children, onPromptGenerat
 
   useClickOutside(showCard, () => setShowCard(false), "[data-blog-card]", "[data-blog-trigger]");
 
-  if (isLoading) return <div className="p-4">Loading draft...</div>;
+  
 
   return (
     <div className="relative">
