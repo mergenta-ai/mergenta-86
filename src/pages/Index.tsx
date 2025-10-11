@@ -126,59 +126,6 @@ const Index = () => {
     }
   };
 
-  const handleSelectConversation = async (conversationId: string) => {
-    try {
-      setIsLoading(true);
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      // Fetch all messages for this conversation
-      const { data: messages, error } = await supabase
-        .from('messages')
-        .select('id, content, is_user, created_at, metadata')
-        .eq('conversation_id', conversationId)
-        .order('created_at', { ascending: true });
-
-      if (error) {
-        console.error('Error loading conversation:', error);
-        toast({
-          title: "Error",
-          description: "Failed to load conversation",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      // Transform database messages to UI messages
-      const loadedMessages: Message[] = messages.map((msg) => ({
-        id: msg.id,
-        text: msg.content,
-        isUser: msg.is_user,
-        timestamp: new Date(msg.created_at),
-        sources: (msg.metadata as any)?.sources || undefined,
-      }));
-
-      // Update state
-      setMessages(loadedMessages);
-      setCurrentConversationId(conversationId);
-      setTurnCount(messages.filter(m => m.is_user).length);
-      
-      toast({
-        title: "Conversation Loaded",
-        description: "Previous conversation has been loaded",
-      });
-    } catch (error) {
-      console.error('Error in handleSelectConversation:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load conversation",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const handleSendMessage = async (message: string) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -303,7 +250,7 @@ const Index = () => {
       <MobileNavigation />
       
       {/* Desktop Sidebar */}
-      <MergentaSidebar onSelectConversation={handleSelectConversation} />
+      <MergentaSidebar />
       
       {/* Model Display - Fixed Top Right Corner */}
       <div className="fixed top-4 right-4 z-50 lg:right-6 xl:right-8">

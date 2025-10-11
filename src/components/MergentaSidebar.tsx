@@ -9,43 +9,16 @@ import PoliciesPanel from "./sidebar/PoliciesPanel";
 import HelpPanel from "./sidebar/HelpPanel";
 import { ProfilePanel } from "./sidebar/ProfilePanel";
 
+
 import { RSSReaderModal } from "./modals/RSSReaderModal";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
-interface MergentaSidebarProps {
-  onSelectConversation?: (conversationId: string) => void;
-}
-
-const MergentaSidebar: React.FC<MergentaSidebarProps> = ({ onSelectConversation }) => {
+const MergentaSidebar = () => {
   const [showHistory, setShowHistory] = useState(false);
   const [showPolicies, setShowPolicies] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
-  // centralised click handler for sidebar icons (keeps existing boolean state shape)
-  const handleIconClick = (panelName?: string) => {
-    // remember previous open states
-    const prev = {
-      history: showHistory,
-      policies: showPolicies,
-      help: showHelp,
-      profile: showProfile,
-    };
-
-    // close all panels first
-    setShowHistory(false);
-    setShowPolicies(false);
-    setShowHelp(false);
-    setShowProfile(false);
-
-    // if a panelName provided, toggle that panel based on its previous state
-    if (panelName) {
-      if (panelName === "history") setShowHistory(!prev.history);
-      if (panelName === "policies") setShowPolicies(!prev.policies);
-      if (panelName === "help") setShowHelp(!prev.help);
-      if (panelName === "profile") setShowProfile(!prev.profile);
-    }
-  };
 
   const [showRSSReader, setShowRSSReader] = useState(false);
   const [rssReaderCategory, setRSSReaderCategory] = useState<string>("");
@@ -98,20 +71,17 @@ const MergentaSidebar: React.FC<MergentaSidebarProps> = ({ onSelectConversation 
 
   // Handle new chat
   const handleNewChat = () => {
-    handleClickOutside(); // Close all panels
     // Reload the page to start a new chat
     window.location.reload();
   };
 
   // Handle email
   const handleEmail = () => {
-    handleClickOutside(); // Close all panels
     navigate("/emails");
   };
 
   // Handle RSS Reader
   const handleOpenRSSReader = (category?: string) => {
-    handleClickOutside(); // Close all panels
     setRSSReaderCategory(category || "");
     setShowRSSReader(true);
   };
@@ -134,7 +104,7 @@ const MergentaSidebar: React.FC<MergentaSidebarProps> = ({ onSelectConversation 
         </div>
 
         {/* New Chat Icon */}
-        <div className="relative mb-2" onMouseEnter={handleMouseLeave}>
+        <div className="relative mb-2">
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -152,7 +122,7 @@ const MergentaSidebar: React.FC<MergentaSidebarProps> = ({ onSelectConversation 
         </div>
 
         {/* Trending Icon */}
-        <div className="relative mb-2" onMouseEnter={handleMouseLeave}>
+        <div className="relative mb-2">
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -170,7 +140,7 @@ const MergentaSidebar: React.FC<MergentaSidebarProps> = ({ onSelectConversation 
         </div>
 
         {/* Email Icon */}
-        <div className="relative mb-2" onMouseEnter={handleMouseLeave}>
+        <div className="relative mb-2">
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -189,16 +159,13 @@ const MergentaSidebar: React.FC<MergentaSidebarProps> = ({ onSelectConversation 
 
         {/* Admin Panel Icon - Only visible to admin/moderator */}
         {canAccessAdmin && (
-          <div className="relative mb-2" onMouseEnter={handleMouseLeave}>
+          <div className="relative mb-2">
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
                   variant="ghost"
                   className="h-16 w-16 rounded-xl hover:bg-pastel-orange hover:shadow-[0_0_8px_rgba(248,220,200,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-orange-hover"
-                  onClick={() => {
-                    handleClickOutside(); // Close all panels
-                    navigate("/admin");
-                  }}
+                  onClick={() => navigate("/admin")}
                 >
                   <Shield className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
                 </Button>
@@ -212,42 +179,48 @@ const MergentaSidebar: React.FC<MergentaSidebarProps> = ({ onSelectConversation 
 
         {/* History Icon */}
         <div className="relative mb-2" onMouseEnter={() => handleMouseEnter("history")}>
-          <Button
-            variant="ghost"
-            className="h-16 w-16 rounded-xl hover:bg-pastel-magenta hover:shadow-[0_0_8px_rgba(248,200,220,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-magenta-hover"
-            onClick={() => handleIconClick("history")}
-            aria-label="History"
-          >
-            <Clock className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                className="h-16 w-16 rounded-xl hover:bg-pastel-magenta hover:shadow-[0_0_8px_rgba(248,200,220,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-magenta-hover"
+              >
+                <Clock className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="right" className="ml-2">
+              <p>History</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
 
         {/* Middle Section - Main Icons */}
         <div className="flex flex-col justify-start space-y-2">
           {/* Policies */}
-          {/* Policies */}
           <div className="relative" onMouseEnter={() => handleMouseEnter("policies")}>
-            <Button
-              variant="ghost"
-              className="h-16 w-16 rounded-xl hover:bg-pastel-violet hover:shadow-[0_0_8px_rgba(209,196,233,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-violet-hover"
-              onClick={() => handleIconClick("policies")}
-              aria-label="Policies"
-            >
-              <FileText className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="h-16 w-16 rounded-xl hover:bg-pastel-violet hover:shadow-[0_0_8px_rgba(209,196,233,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-violet-hover"
+                >
+                  <FileText className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right" className="ml-2">
+                <p>Policies</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
 
           {/* Plans */}
-          <div className="relative" onMouseEnter={handleMouseLeave}>
+          <div className="relative">
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
                   variant="ghost"
                   className="h-16 w-16 rounded-xl hover:bg-pastel-lavender hover:shadow-[0_0_8px_rgba(234,220,248,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-lavender-hover"
-                  onClick={() => {
-                    handleClickOutside(); // Close all panels
-                    navigate("/plans");
-                  }}
+                  onClick={() => navigate("/plans")}
                 >
                   <Crown className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
                 </Button>
@@ -260,14 +233,19 @@ const MergentaSidebar: React.FC<MergentaSidebarProps> = ({ onSelectConversation 
 
           {/* Help & Support */}
           <div className="relative" onMouseEnter={() => handleMouseEnter("help")}>
-            <Button
-              variant="ghost"
-              className="h-16 w-16 rounded-xl hover:bg-pastel-magenta hover:shadow-[0_0_8px_rgba(248,200,220,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-magenta-hover"
-              onClick={() => handleIconClick("help")}
-              aria-label="Help & Support"
-            >
-              <HelpCircle className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="h-16 w-16 rounded-xl hover:bg-pastel-magenta hover:shadow-[0_0_8px_rgba(248,200,220,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-magenta-hover"
+                >
+                  <HelpCircle className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right" className="ml-2">
+                <p>Help & Support</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
 
@@ -276,14 +254,19 @@ const MergentaSidebar: React.FC<MergentaSidebarProps> = ({ onSelectConversation 
 
         {/* Profile Section */}
         <div className="relative pb-1" onMouseEnter={() => handleMouseEnter("profile")}>
-          <Button
-            variant="ghost"
-            className="h-16 w-16 rounded-xl hover:bg-pastel-violet hover:shadow-[0_0_8px_rgba(209,196,233,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-violet-hover"
-            onClick={() => handleIconClick("profile")}
-            aria-label="Profile"
-          >
-            <User className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                className="h-16 w-16 rounded-xl hover:bg-pastel-violet hover:shadow-[0_0_8px_rgba(209,196,233,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-violet-hover"
+              >
+                <User className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="right" className="ml-2">
+              <p>Profile</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
 
         {/* Plan Badge */}
@@ -303,11 +286,7 @@ const MergentaSidebar: React.FC<MergentaSidebarProps> = ({ onSelectConversation 
           onMouseEnter={() => setShowHistory(true)}
           onMouseLeave={() => setShowHistory(false)}
         >
-          <HistoryPanel 
-            isVisible={showHistory} 
-            onClose={() => setShowHistory(false)} 
-            onSelectConversation={onSelectConversation}
-          />
+          <HistoryPanel isVisible={showHistory} onClose={() => setShowHistory(false)} />
         </div>
       )}
 
