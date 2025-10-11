@@ -285,7 +285,7 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose, onSelec
         </div>
       
       <ScrollArea className="h-[calc(100%-140px)]">
-        <div className="px-3 py-2">
+        <div className="px-3 py-2 relative">
           {loading ? (
             <div className="flex items-center justify-center py-8">
               <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
@@ -301,11 +301,13 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose, onSelec
               return (
                 <div
                   key={item.id}
-                  className="group relative mb-1 rounded-md hover:bg-purple-100/50 transition-all duration-200 cursor-pointer"
-                  onClick={() => handleConversationClick(item.id)}
+                  className="group relative mb-1 rounded-md hover:bg-purple-100/50 transition-all duration-200"
                 >
                   <div className="flex items-center justify-between gap-2 px-3 py-2.5">
-                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                    <div 
+                      className="flex items-center gap-2 flex-1 min-w-0 cursor-pointer"
+                      onClick={() => handleConversationClick(item.id)}
+                    >
                       <FileText className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                       <span className="text-sm text-foreground flex-1 min-w-0 truncate">
                         {shortTitle}
@@ -319,21 +321,24 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose, onSelec
                       }}
                     >
                       <PopoverTrigger asChild>
-                        <button 
-                          className="h-6 w-6 flex items-center justify-center rounded-md bg-gray-200 hover:bg-gray-300 border border-gray-300 flex-shrink-0"
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-7 w-7 p-0 hover:bg-accent flex-shrink-0 relative z-10"
                           onClick={(e) => {
                             e.stopPropagation();
                             console.log('Button clicked for item:', item.id);
                           }}
                         >
-                          <MoreHorizontal className="h-4 w-4 text-gray-700" />
-                        </button>
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
                       </PopoverTrigger>
                       <PopoverContent 
-                        className="w-40 p-1 z-[9999] bg-popover border-border" 
+                        className="w-40 p-1 bg-background border shadow-lg" 
                         align="end"
-                        side="bottom"
-                        sideOffset={5}
+                        side="right"
+                        sideOffset={8}
+                        style={{ zIndex: 99999 }}
                       >
                         <div className="space-y-1">
                           <button 
