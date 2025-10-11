@@ -301,7 +301,7 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose, onSelec
               return (
                 <div
                   key={item.id}
-                  className="group relative mb-1 rounded-md hover:bg-accent transition-all duration-200 cursor-pointer"
+                  className="group relative mb-1 rounded-md hover:bg-purple-100/50 transition-all duration-200 cursor-pointer"
                   onClick={() => handleConversationClick(item.id)}
                 >
                   <div className="flex items-center justify-between gap-2 px-3 py-2.5">
@@ -320,13 +320,13 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose, onSelec
                     >
                       <PopoverTrigger asChild>
                         <button 
-                          className="h-6 w-6 flex items-center justify-center rounded hover:bg-accent/50 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                          className="h-6 w-6 flex items-center justify-center rounded-md bg-gray-200 hover:bg-gray-300 border border-gray-300 flex-shrink-0"
                           onClick={(e) => {
                             e.stopPropagation();
                             console.log('Button clicked for item:', item.id);
                           }}
                         >
-                          <MoreHorizontal className="h-3.5 w-3.5 text-muted-foreground" />
+                          <MoreHorizontal className="h-4 w-4 text-gray-700" />
                         </button>
                       </PopoverTrigger>
                       <PopoverContent 
