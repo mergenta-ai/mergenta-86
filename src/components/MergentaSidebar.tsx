@@ -94,17 +94,20 @@ const MergentaSidebar = () => {
 
   // Handle new chat
   const handleNewChat = () => {
+    handleClickOutside(); // Close all panels
     // Reload the page to start a new chat
     window.location.reload();
   };
 
   // Handle email
   const handleEmail = () => {
+    handleClickOutside(); // Close all panels
     navigate("/emails");
   };
 
   // Handle RSS Reader
   const handleOpenRSSReader = (category?: string) => {
+    handleClickOutside(); // Close all panels
     setRSSReaderCategory(category || "");
     setShowRSSReader(true);
   };
@@ -188,7 +191,10 @@ const MergentaSidebar = () => {
                 <Button
                   variant="ghost"
                   className="h-16 w-16 rounded-xl hover:bg-pastel-orange hover:shadow-[0_0_8px_rgba(248,220,200,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-orange-hover"
-                  onClick={() => navigate("/admin")}
+                  onClick={() => {
+                    handleClickOutside(); // Close all panels
+                    navigate("/admin");
+                  }}
                 >
                   <Shield className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
                 </Button>
@@ -234,7 +240,10 @@ const MergentaSidebar = () => {
                 <Button
                   variant="ghost"
                   className="h-16 w-16 rounded-xl hover:bg-pastel-lavender hover:shadow-[0_0_8px_rgba(234,220,248,0.4)] transition-all duration-300 [&_svg]:!size-6 active:bg-pastel-lavender-hover"
-                  onClick={() => navigate("/plans")}
+                  onClick={() => {
+                    handleClickOutside(); // Close all panels
+                    navigate("/plans");
+                  }}
                 >
                   <Crown className="h-6 w-6 text-sidebar-icon-default hover:text-sidebar-icon-hover" />
                 </Button>
