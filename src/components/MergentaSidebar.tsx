@@ -130,7 +130,7 @@ const MergentaSidebar = () => {
         </div>
 
         {/* New Chat Icon */}
-        <div className="relative mb-2">
+        <div className="relative mb-2" onMouseEnter={handleMouseLeave}>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -148,7 +148,7 @@ const MergentaSidebar = () => {
         </div>
 
         {/* Trending Icon */}
-        <div className="relative mb-2">
+        <div className="relative mb-2" onMouseEnter={handleMouseLeave}>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -166,7 +166,7 @@ const MergentaSidebar = () => {
         </div>
 
         {/* Email Icon */}
-        <div className="relative mb-2">
+        <div className="relative mb-2" onMouseEnter={handleMouseLeave}>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -185,7 +185,7 @@ const MergentaSidebar = () => {
 
         {/* Admin Panel Icon - Only visible to admin/moderator */}
         {canAccessAdmin && (
-          <div className="relative mb-2">
+          <div className="relative mb-2" onMouseEnter={handleMouseLeave}>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
@@ -234,7 +234,7 @@ const MergentaSidebar = () => {
           </div>
 
           {/* Plans */}
-          <div className="relative">
+          <div className="relative" onMouseEnter={handleMouseLeave}>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
