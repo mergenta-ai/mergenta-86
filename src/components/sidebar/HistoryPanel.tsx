@@ -1,12 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { ScrollArea } from '../ui/scroll-area';
 import { Button } from '../ui/button';
 import { MoreHorizontal, FileText, Pencil, Archive, Trash2, Loader2, Download } from 'lucide-react';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '../ui/popover';
 import {
   Dialog,
   DialogContent,
@@ -36,18 +32,52 @@ interface HistoryPanelProps {
 
 const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose, onSelectConversation }) => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [dropdownPosition, setDropdownPosition] = useState<{ top: number; left: number } | null>(null);
   const [historyItems, setHistoryItems] = useState<HistoryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [renameDialogOpen, setRenameDialogOpen] = useState(false);
   const [renameItemId, setRenameItemId] = useState<string | null>(null);
   const [newTitle, setNewTitle] = useState('');
   const { planType } = useUserPlan();
+  const buttonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
   
   useEffect(() => {
     if (isVisible) {
       loadHistory();
     }
   }, [isVisible]);
+
+  // Close dropdown on outside click or Escape
+  useEffect(() => {
+    if (!openDropdown) return;
+
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as Node;
+      const dropdownElement = document.getElementById(`dropdown-menu-${openDropdown}`);
+      const buttonElement = buttonRefs.current[openDropdown];
+      
+      if (dropdownElement && !dropdownElement.contains(target) && 
+          buttonElement && !buttonElement.contains(target)) {
+        setOpenDropdown(null);
+        setDropdownPosition(null);
+      }
+    };
+
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setOpenDropdown(null);
+        setDropdownPosition(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscape);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [openDropdown]);
 
   const loadHistory = async () => {
     try {
@@ -273,8 +303,84 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose, onSelec
     }
   };
 
+  const handleMenuToggle = useCallback((itemId: string, e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    
+    if (openDropdown === itemId) {
+      setOpenDropdown(null);
+      setDropdownPosition(null);
+    } else {
+      const button = buttonRefs.current[itemId];
+      if (button) {
+        const rect = button.getBoundingClientRect();
+        setDropdownPosition({
+          top: rect.bottom + 4,
+          left: rect.left - 150, // Position to the left of button
+        });
+        setOpenDropdown(itemId);
+      }
+    }
+  }, [openDropdown]);
+
   return (
     <>
+      {/* Portal-based dropdown menu */}
+      {openDropdown && dropdownPosition && createPortal(
+        <div
+          id={`dropdown-menu-${openDropdown}`}
+          className="fixed w-40 p-1 bg-background border border-border shadow-lg rounded-md"
+          style={{
+            top: `${dropdownPosition.top}px`,
+            left: `${dropdownPosition.left}px`,
+            zIndex: 99999,
+          }}
+        >
+          <div className="space-y-1">
+            <button 
+              className="w-full flex items-center gap-2 px-2 py-1.5 text-sm rounded text-foreground hover:bg-accent hover:text-foreground cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleAction('export', openDropdown);
+              }}
+            >
+              <Download className="h-4 w-4" />
+              Export
+            </button>
+            <button 
+              className="w-full flex items-center gap-2 px-2 py-1.5 text-sm rounded text-foreground hover:bg-accent hover:text-foreground cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleAction('rename', openDropdown);
+              }}
+            >
+              <Pencil className="h-4 w-4" />
+              Rename
+            </button>
+            <button 
+              className="w-full flex items-center gap-2 px-2 py-1.5 text-sm rounded text-foreground hover:bg-accent hover:text-foreground cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleAction('archive', openDropdown);
+              }}
+            >
+              <Archive className="h-4 w-4" />
+              Archive
+            </button>
+            <button 
+              className="w-full flex items-center gap-2 px-2 py-1.5 text-sm rounded text-destructive hover:bg-destructive/10 hover:text-destructive cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleAction('delete', openDropdown);
+              }}
+            >
+              <Trash2 className="h-4 w-4" />
+              Delete
+            </button>
+          </div>
+        </div>,
+        document.body
+      )}
+
       <div 
         className={`fixed left-20 top-0 h-full w-80 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-r border-border z-30 transform transition-transform duration-300 ease-in-out shadow-xl ${
           isVisible ? 'translate-x-0' : '-translate-x-full'
@@ -301,7 +407,7 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose, onSelec
               return (
                 <div
                   key={item.id}
-                  className="group relative mb-1 rounded-md hover:bg-purple-100/50 transition-all duration-200"
+                  className="group relative mb-1 rounded-md hover:bg-purple-100/50 transition-all duration-200 overflow-visible"
                 >
                   <div className="flex items-center justify-between gap-2 px-3 py-2.5">
                     <div 
@@ -314,76 +420,15 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose, onSelec
                       </span>
                     </div>
                     
-                    <Popover 
-                      open={openDropdown === item.id} 
-                      onOpenChange={(open) => {
-                        setOpenDropdown(open ? item.id : null);
-                      }}
+                    <Button
+                      ref={(el) => (buttonRefs.current[item.id] = el)}
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 w-7 p-0 opacity-0 group-hover:opacity-100 hover:bg-accent flex-shrink-0 transition-opacity"
+                      onClick={(e) => handleMenuToggle(item.id, e)}
                     >
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-7 w-7 p-0 opacity-0 group-hover:opacity-100 hover:bg-accent flex-shrink-0 relative z-10 transition-opacity"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            console.log('Button clicked for item:', item.id);
-                          }}
-                        >
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent 
-                        className="w-40 p-1 bg-background border shadow-lg" 
-                        align="end"
-                        side="right"
-                        sideOffset={8}
-                        style={{ zIndex: 99999 }}
-                      >
-                        <div className="space-y-1">
-                          <button 
-                            className="w-full flex items-center gap-2 px-2 py-1.5 text-sm rounded text-foreground hover:bg-accent hover:text-foreground cursor-pointer"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleAction('export', item.id);
-                            }}
-                          >
-                            <Download className="h-4 w-4" />
-                            Export
-                          </button>
-                          <button 
-                            className="w-full flex items-center gap-2 px-2 py-1.5 text-sm rounded text-foreground hover:bg-accent hover:text-foreground cursor-pointer"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleAction('rename', item.id);
-                            }}
-                          >
-                            <Pencil className="h-4 w-4" />
-                            Rename
-                          </button>
-                          <button 
-                            className="w-full flex items-center gap-2 px-2 py-1.5 text-sm rounded text-foreground hover:bg-accent hover:text-foreground cursor-pointer"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleAction('archive', item.id);
-                            }}
-                          >
-                            <Archive className="h-4 w-4" />
-                            Archive
-                          </button>
-                          <button 
-                            className="w-full flex items-center gap-2 px-2 py-1.5 text-sm rounded text-destructive hover:bg-destructive/10 hover:text-destructive cursor-pointer"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleAction('delete', item.id);
-                            }}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                            Delete
-                          </button>
-                        </div>
-                      </PopoverContent>
-                    </Popover>
+                      <MoreHorizontal className="h-4 w-4" />
+                    </Button>
                   </div>
                 </div>
               );
