@@ -320,23 +320,24 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose, onSelec
                     >
                       <PopoverTrigger asChild>
                         <button 
-                          className="h-8 w-8 flex items-center justify-center rounded-md bg-gray-200 hover:bg-gray-300 border border-gray-300 text-gray-700 hover:text-gray-900 transition-all flex-shrink-0 ml-2"
+                          className="h-6 w-6 flex items-center justify-center rounded hover:bg-accent/50 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
                           onClick={(e) => {
                             e.stopPropagation();
+                            console.log('Button clicked for item:', item.id);
                           }}
                         >
-                          <MoreHorizontal className="h-5 w-5" />
+                          <MoreHorizontal className="h-3.5 w-3.5 text-muted-foreground" />
                         </button>
                       </PopoverTrigger>
                       <PopoverContent 
-                        className="w-48 p-1 z-[9999] bg-popover border-border"
+                        className="w-40 p-1 z-[9999] bg-popover border-border" 
                         align="end"
                         side="bottom"
                         sideOffset={5}
                       >
-                        <div className="space-y-0.5">
+                        <div className="space-y-1">
                           <button 
-                            className="w-full flex items-center gap-3 px-3 py-2 text-sm rounded-sm hover:bg-accent text-foreground transition-colors"
+                            className="w-full flex items-center gap-2 px-2 py-1.5 text-sm rounded text-foreground hover:bg-accent hover:text-foreground cursor-pointer"
                             onClick={(e) => {
                               e.stopPropagation();
                               handleAction('export', item.id);
@@ -346,7 +347,7 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose, onSelec
                             Export
                           </button>
                           <button 
-                            className="w-full flex items-center gap-3 px-3 py-2 text-sm rounded-sm hover:bg-accent text-foreground transition-colors"
+                            className="w-full flex items-center gap-2 px-2 py-1.5 text-sm rounded text-foreground hover:bg-accent hover:text-foreground cursor-pointer"
                             onClick={(e) => {
                               e.stopPropagation();
                               handleAction('rename', item.id);
@@ -356,7 +357,7 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose, onSelec
                             Rename
                           </button>
                           <button 
-                            className="w-full flex items-center gap-3 px-3 py-2 text-sm rounded-sm hover:bg-accent text-foreground transition-colors"
+                            className="w-full flex items-center gap-2 px-2 py-1.5 text-sm rounded text-foreground hover:bg-accent hover:text-foreground cursor-pointer"
                             onClick={(e) => {
                               e.stopPropagation();
                               handleAction('archive', item.id);
@@ -365,9 +366,8 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose, onSelec
                             <Archive className="h-4 w-4" />
                             Archive
                           </button>
-                          <div className="h-px bg-border my-0.5" />
                           <button 
-                            className="w-full flex items-center gap-3 px-3 py-2 text-sm rounded-sm hover:bg-destructive/10 text-destructive transition-colors"
+                            className="w-full flex items-center gap-2 px-2 py-1.5 text-sm rounded text-destructive hover:bg-destructive/10 hover:text-destructive cursor-pointer"
                             onClick={(e) => {
                               e.stopPropagation();
                               handleAction('delete', item.id);
