@@ -319,13 +319,12 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose, onSelec
                     >
                       <PopoverTrigger asChild>
                         <button 
-                          className="h-7 w-7 flex items-center justify-center rounded-md hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                          className="h-7 w-7 flex items-center justify-center rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-all flex-shrink-0"
                           onClick={(e) => {
                             e.stopPropagation();
-                            setOpenDropdown(openDropdown === item.id ? null : item.id);
                           }}
                         >
-                          <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+                          <MoreHorizontal className="h-4 w-4" />
                         </button>
                       </PopoverTrigger>
                       <PopoverContent 
