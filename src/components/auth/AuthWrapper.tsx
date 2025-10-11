@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { AuthForm } from './AuthForm';
+import { EmailVerificationBanner } from './EmailVerificationBanner';
 
 interface AuthWrapperProps {
   children: React.ReactNode;
@@ -9,6 +10,14 @@ interface AuthWrapperProps {
 export const AuthWrapper = ({ children }: AuthWrapperProps) => {
   const { user, loading } = useAuth();
   const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
+  const [needsVerification, setNeedsVerification] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      // Check if user email is confirmed
+      setNeedsVerification(!user.email_confirmed_at);
+    }
+  }, [user]);
 
   if (loading) {
     return (
@@ -25,5 +34,12 @@ export const AuthWrapper = ({ children }: AuthWrapperProps) => {
     return <AuthForm mode={authMode} onModeChange={setAuthMode} />;
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      {needsVerification && user.email && (
+        <EmailVerificationBanner email={user.email} />
+      )}
+      {children}
+    </>
+  );
 };
