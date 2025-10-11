@@ -214,16 +214,16 @@ export const ProfilePanel = ({ isVisible, onClose, navigate }: ProfilePanelProps
                   <Button
                     key={item.id}
                     variant="ghost"
-                    className={`w-full h-auto p-3 mb-1 justify-start text-left transition-colors border-l-4 ${getSectionColor(item.section)}`}
+                    className="w-full h-12 px-4 py-3 mb-1 justify-start text-left rounded-lg hover:bg-purple-light transition-colors duration-200"
                     onClick={item.action}
                   >
-                    <Icon className="h-4 w-4 mr-3 flex-shrink-0" />
+                    <Icon className="h-4 w-4 mr-3 flex-shrink-0 text-primary" />
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium">
+                      <span className="text-sm font-medium text-foreground">
                         {item.title}
-                      </p>
+                      </span>
                     </div>
-                    <ChevronRight className="h-4 w-4 ml-2 flex-shrink-0 opacity-60" />
+                    <ChevronRight className="h-4 w-4 ml-2 flex-shrink-0 text-primary opacity-60" />
                   </Button>
                 );
               })}

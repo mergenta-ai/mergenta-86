@@ -85,15 +85,13 @@ const HelpPanel: React.FC<HelpPanelProps> = ({ isVisible, onClose }) => {
                 <Button
                   key={item.id}
                   variant="ghost"
-                  className={`w-full h-auto p-3 mb-1 justify-start text-left text-sidebar-text-dark hover:text-sidebar-text-violet hover:bg-pastel-lavender-hover/50 transition-colors ${getSectionColor(item.section)}`}
+                  className="w-full h-12 px-4 py-3 mb-1 justify-start text-left rounded-lg hover:bg-purple-light transition-colors duration-200"
                   onClick={item.action}
                 >
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium">
-                      {item.title}
-                    </p>
+                  <div className="flex items-center justify-between w-full">
+                    <span className="text-sm font-medium text-foreground">{item.title}</span>
+                    <ChevronRight className="h-4 w-4 text-primary flex-shrink-0" />
                   </div>
-                  <ChevronRight className="h-4 w-4 ml-2 flex-shrink-0 text-sidebar-text-violet" />
                 </Button>
               ))}
             </div>

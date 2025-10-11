@@ -25,17 +25,15 @@ const Header = () => {
   const planDisplay = planType.charAt(0).toUpperCase() + planType.slice(1);
 
   return (
-    <div className="flex flex-col items-center pt-6 sm:pt-9 md:pt-12 lg:pt-16 px-4 relative">
-      {/* Softer Title */}
-      <h1 className="font-inter text-3xl sm:text-4xl md:text-5xl font-medium text-[#7D55C7] tracking-[-0.01em] text-center">
+    <div className="flex flex-col items-center pt-8 sm:pt-12 md:pt-16 lg:pt-20 px-4">
+      {/* Logo */}
+      <h1 className="font-inter text-4xl sm:text-5xl md:text-6xl font-semibold text-primary tracking-tight text-center">
         Mergenta
       </h1>
 
-      {/* Sleek tagline pill */}
-      <div className="mt-2 mb-2 flex items-center justify-center">
-        <span className="inline-flex items-center px-4 py-1 rounded-full
-                         bg-white/95 text-[#444] shadow-sm
-                         ring-1 ring-[#6A0DAD]/15 text-sm md:text-base">
+      {/* Tagline pill */}
+      <div className="mt-3 mb-3 flex items-center justify-center">
+        <span className="inline-flex items-center px-4 py-2 rounded-full bg-white shadow-sm ring-1 ring-primary/15 text-sm md:text-base text-foreground">
           {currentTagline}
         </span>
       </div>

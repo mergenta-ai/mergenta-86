@@ -178,11 +178,12 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose, onSelec
               return (
                 <div
                   key={item.id}
-                  className="group relative mx-1 mb-0.5 rounded-lg hover:bg-purple-200/60 transition-colors cursor-pointer"
+                  className="group relative mx-1 mb-1 rounded-lg hover:bg-purple-light/60 transition-colors duration-200 cursor-pointer"
+                  style={{ height: 'var(--height-list-item)' }}
                   onClick={() => handleConversationClick(item.id)}
                 >
-                  <div className="flex items-center justify-between px-3 py-2.5">
-                    <span className="text-sm text-sidebar-text-dark flex-1 min-w-0 truncate pr-2">
+                  <div className="flex items-center justify-between px-4 py-3 h-full">
+                    <span className="text-sm text-foreground flex-1 min-w-0 truncate pr-2">
                       {shortTitle}
                     </span>
                     
@@ -195,25 +196,25 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose, onSelec
                     >
                       <PopoverTrigger asChild>
                         <button 
-                          className="h-6 w-6 flex items-center justify-center rounded hover:bg-purple-300/50 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                          className="h-8 w-8 flex items-center justify-center rounded-md hover:bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex-shrink-0"
                           onClick={(e) => {
                             e.stopPropagation();
                             console.log('Button clicked for item:', item.id);
                             setOpenDropdown(openDropdown === item.id ? null : item.id);
                           }}
                         >
-                          <MoreHorizontal className="h-3.5 w-3.5 text-sidebar-text-violet" />
+                          <MoreHorizontal className="h-4 w-4 text-primary" />
                         </button>
                       </PopoverTrigger>
                       <PopoverContent 
-                        className="w-40 p-1 z-[9999]" 
+                        className="w-40 p-1 z-[9999] bg-white" 
                         align="end"
                         side="bottom"
                         sideOffset={5}
                       >
                         <div className="space-y-1">
                           <button 
-                            className="w-full flex items-center gap-2 px-2 py-1.5 text-sm rounded text-red-600 hover:bg-red-50 hover:text-red-600 cursor-pointer"
+                            className="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-md text-red-600 hover:bg-red-50 hover:text-red-600 cursor-pointer min-h-[44px]"
                             onClick={(e) => {
                               e.stopPropagation();
                               handleAction('delete', item.id);

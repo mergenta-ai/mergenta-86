@@ -8,103 +8,133 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 27%;
+    /* Core Purple System - Consolidated from 9 to 4 */
+    --purple-primary: 271 85% 55%;        /* #8B5CF6 - Main brand */
+    --purple-secondary: 280 80% 70%;      /* #A78BFA - Lighter accent */
+    --purple-dark: 264 85% 36%;           /* #6A0DAD - Deep contrast */
+    --purple-light: 271 100% 98%;         /* #FAF5FF - Subtle backgrounds */
+    
+    /* Core Design System Colors */
+    --background: 270 50% 97%;            /* Light lavender gradient base */
+    --foreground: 220 13% 18%;            /* #1F2937 */
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 27%;
+    --card-foreground: 220 13% 18%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 27%;
+    --popover-foreground: 220 13% 18%;
 
-    --primary: 271 100% 36%;
+    --primary: 271 85% 55%;               /* Purple primary */
     --primary-foreground: 0 0% 100%;
 
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
 
     --muted: 240 4.8% 95.9%;
-    --muted-foreground: 0 0% 27%;
+    --muted-foreground: 220 9% 46%;       /* #6B7280 */
 
-    --accent: 320 100% 64%;
+    --accent: 264 73% 48%;                /* #7C3AED - Hover accent */
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 271 100% 36%;
+    --border: 271 92% 85% / 0.2;          /* Purple tint with opacity */
+    --input: 271 92% 85% / 0.2;
+    --ring: 271 85% 55% / 0.3;            /* Purple with opacity for focus */
 
-    /* Mergenta AI Design System */
-    --mergenta-violet: 271 77% 47%; /* Softer violet #7B2CBF */
-    --mergenta-magenta: 300 100% 50%; /* #FF00FF */
-    --mergenta-fuchsia: 328 100% 64%; /* #FF4DA6 */
-    --mergenta-deep-violet: 264 85% 36%; /* #6A0DAD */
-    --mergenta-dark-grey: 0 0% 27%; /* #444444 */
-    --mergenta-light-violet: 271 100% 98%; /* #F9F5FF */
-    --mergenta-soft-pink: 328 100% 97%; /* #FFF0F8 */
+    /* Text Colors */
+    --text-primary: 220 13% 18%;          /* #1F2937 */
+    --text-secondary: 220 9% 46%;         /* #6B7280 */
 
-    /* Premium Pastel Sidebar Colors - Exact hex match */
-    --pastel-magenta: 330 55% 89%; /* #F8C8DC */
-    --pastel-magenta-hover: 330 45% 78%; /* #E6A6C6 */
-    --pastel-violet: 258 44% 83%; /* #D1C4E9 */
-    --pastel-violet-hover: 258 46% 72%; /* #B39DDB */
-    --pastel-lavender: 276 71% 91%; /* #EADCF8 */
-    --pastel-lavender-hover: 276 65% 82%; /* #D0B7F0 */
-    --pastel-rose-lilac: 318 48% 78%; /* #E6A8D7 */
-    --power-playbook-bg: 300 38% 92%; /* #F3E1F3 */
+    /* Pastel Sidebar Colors */
+    --pastel-magenta: 330 55% 89%;
+    --pastel-magenta-hover: 330 45% 78%;
+    --pastel-violet: 258 44% 83%;
+    --pastel-violet-hover: 258 46% 72%;
+    --pastel-lavender: 276 71% 91%;
+    --pastel-lavender-hover: 276 65% 82%;
+    --pastel-rose-lilac: 318 48% 78%;
     
-    /* Sidebar Text Colors */
-    --sidebar-text-dark: 0 0% 27%; /* #444444 */
-    --sidebar-text-violet: 257 71% 38%; /* #6F42C1 */
-    
-    /* Sidebar Icon Colors */
-    --sidebar-icon-default: 276 35% 45%; /* Deep violet for good contrast */
-    --sidebar-icon-hover: 276 45% 35%; /* Darker for hover state */
-    --sidebar-icon-glow: 0 0 6px rgba(122, 85, 199, 0.3);
+    /* Sidebar Text */
+    --sidebar-text-dark: 220 13% 18%;
+    --sidebar-text-violet: 257 71% 38%;
+    --sidebar-icon-default: 276 35% 45%;
+    --sidebar-icon-hover: 276 45% 35%;
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, #FF00FF, #FF4DA6, #6A0DAD);
-    --gradient-background: linear-gradient(135deg, #F9F5FF, #FFF0F8, #FFFFFF);
+    --gradient-primary: linear-gradient(135deg, hsl(271, 85%, 55%), hsl(280, 80%, 70%));
+    --gradient-background: linear-gradient(135deg, hsl(271, 100%, 98%), hsl(270, 50%, 97%));
     --gradient-secondary: linear-gradient(135deg, hsl(0, 0%, 100%), hsl(0, 0%, 98%));
-    --gradient-accent: linear-gradient(90deg, hsl(300, 100%, 50%), hsl(320, 100%, 64%));
+    --gradient-accent: linear-gradient(90deg, hsl(271, 85%, 55%), hsl(280, 80%, 70%));
     
-    --mergenta-primary: 280 85% 36%;
-    --mergenta-secondary: 300 100% 50%;
-    --mergenta-light: 320 100% 64%;
-    --mergenta-glow: 300 100% 50%;
-    
-    --chat-bg: 0 0% 100%;
-    --message-user: 280 85% 36%;
-    --message-ai: 240 4.8% 95.9%;
-    
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --shadow-elegant: 0 4px 20px -4px hsl(var(--mergenta-primary) / 0.15);
-    --shadow-glow: 0 0 20px hsl(var(--mergenta-violet) / 0.4);
-    --shadow-soft: 0 2px 12px -2px hsl(var(--mergenta-violet) / 0.12);
+    /* Shadows */
+    --shadow-sm: 0 1px 2px hsl(271 85% 55% / 0.08);
+    --shadow-md: 0 4px 12px hsl(271 85% 55% / 0.12);
+    --shadow-lg: 0 8px 24px hsl(271 85% 55% / 0.16);
+    --shadow-elegant: 0 4px 20px -4px hsl(271 85% 55% / 0.15);
+    --shadow-glow: 0 0 20px hsl(271 85% 55% / 0.4);
+    --shadow-soft: 0 2px 12px -2px hsl(271 85% 55% / 0.12);
 
-    --radius: 0.5rem;
+    /* Spacing Scale */
+    --space-xs: 0.25rem;    /* 4px */
+    --space-sm: 0.5rem;     /* 8px */
+    --space-md: 1rem;       /* 16px */
+    --space-lg: 1.5rem;     /* 24px */
+    --space-xl: 2rem;       /* 32px */
+    --space-2xl: 3rem;      /* 48px */
+    --space-3xl: 4rem;      /* 64px */
 
-    /* Layout helpers (single source of truth) */
-    --chat-input-height: 120px; /* Desktop default */
-    --header-top-clamp: clamp(2rem, 6vh, 5rem); /* Responsive header spacing */
+    /* Component Heights */
+    --height-button: 48px;
+    --height-input: 48px;
+    --height-icon-button: 40px;
+    --height-list-item: 48px;
+    --height-pill: 44px;
+    --height-chat-input: 56px;
 
+    /* Border Radius */
+    --radius: 0.75rem;      /* 12px */
+    --radius-sm: 0.5rem;    /* 8px */
+    --radius-lg: 1rem;      /* 16px */
+
+    /* Typography Scale */
+    --font-size-xs: 0.75rem;    /* 12px */
+    --font-size-sm: 0.875rem;   /* 14px */
+    --font-size-base: 1rem;     /* 16px */
+    --font-size-lg: 1.125rem;   /* 18px */
+    --font-size-xl: 1.25rem;    /* 20px */
+    --font-size-2xl: 1.5rem;    /* 24px */
+
+    /* Transitions */
+    --transition-fast: 150ms ease-in-out;
+    --transition-base: 200ms ease-in-out;
+    --transition-slow: 300ms ease-in-out;
+    --transition-smooth: all 200ms ease-in-out;
+
+    /* Layout helpers */
+    --chat-input-height: 120px;
+    --header-top-clamp: clamp(2rem, 6vh, 5rem);
+
+    /* Sidebar variables for shadcn */
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Legacy support */
+    --chat-bg: 0 0% 100%;
+    --message-user: 271 85% 55%;
+    --message-ai: 240 4.8% 95.9%;
+    --mergenta-primary: 271 85% 55%;
+    --mergenta-secondary: 280 80% 70%;
+    --mergenta-light: 271 100% 98%;
+    --mergenta-glow: 271 85% 55%;
+    --mergenta-violet: 271 85% 55%;
   }
 
   .dark {
@@ -244,6 +274,19 @@ All colors MUST be HSL.
   
   .scrollbar-thin::-webkit-scrollbar-thumb:active {
     background: hsl(var(--primary));
+  }
+
+  /* Touch Target Utility */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  @media (max-width: 768px) {
+    button, a, [role="button"] {
+      min-height: 44px;
+      min-width: 44px;
+    }
   }
 
   /* Responsive override for chat input height */

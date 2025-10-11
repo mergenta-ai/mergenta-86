@@ -206,7 +206,7 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
 
   return (
     <TooltipProvider delayDuration={300}>
-      <div className="flex justify-center w-full px-4 mt-5" ref={containerRef}>
+      <div className="flex justify-center w-full px-4 mt-5 overflow-x-auto sm:overflow-visible" ref={containerRef}>
         <div className="w-full max-w-5xl">
           <div className="flex justify-center gap-2 relative">
             {tabs.map((tab, index) => (
@@ -219,17 +219,20 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                     }
                   }}
                   onMouseLeave={handleTabLeave}
-                  style={{ backgroundColor: activeTab === tab.id ? '#C7A8EA' : '#F3EAFE' }}
+                  style={{ 
+                    height: 'var(--height-pill)',
+                    backgroundColor: activeTab === tab.id ? 'hsl(var(--purple-secondary))' : 'hsl(var(--purple-light))'
+                  }}
                   className={`
-                    w-[100px] py-2 rounded-xl font-inter font-medium text-sm tracking-tight text-center
-                    transition-all duration-300 ease-in-out
+                    min-w-[100px] px-4 rounded-xl font-inter font-medium text-sm tracking-tight text-center
+                    transition-all duration-200 ease-in-out
                     focus:outline-none
                     flex items-center justify-center
                     leading-tight
                     hover:shadow-md
                     ${activeTab === tab.id
-                      ? 'text-[#6F42C1]' 
-                      : 'text-[#444] hover:bg-[#DCC8F2]'
+                      ? 'text-primary' 
+                      : 'text-foreground hover:bg-purple-secondary/30'
                     }
                   `}
                 >
@@ -239,7 +242,7 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                 {/* Dropdown - only for certain tabs */}
                 {activeTab === tab.id && !["power-playbook", "think-hard", "deep-research"].includes(tab.id) && (
                   <div 
-                    className="absolute top-full w-[100px] bg-[#F8F5FE] rounded-lg shadow-md border border-[#E5D9F2] z-50"
+                    className="absolute top-full w-[100px] bg-white rounded-lg shadow-lg border border-primary/20 z-[999]"
                     onMouseEnter={handleDropdownEnter}
                     onMouseLeave={handleDropdownLeave}
                   >
@@ -248,14 +251,14 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                         {beautifulWritingItems.map((item, idx) => {
                            if (item.text === "Essay") {
                              return (
-                               <EssayHoverCard key={idx} onPromptGenerated={onPromptGenerated}>
-                                 <button
-                                   className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
-                                   onClick={() => console.log(`Selected: ${item.text}`)}
-                                 >
-                                   {item.text}
-                                 </button>
-                               </EssayHoverCard>
+                                <EssayHoverCard key={idx} onPromptGenerated={onPromptGenerated}>
+                                  <button
+                                    className="w-full text-left px-4 py-3 min-h-[44px] text-sm text-foreground hover:bg-purple-light hover:text-primary transition-colors duration-200 leading-tight whitespace-normal"
+                                    onClick={() => console.log(`Selected: ${item.text}`)}
+                                  >
+                                    {item.text}
+                                  </button>
+                                </EssayHoverCard>
                              );
                            }
 
