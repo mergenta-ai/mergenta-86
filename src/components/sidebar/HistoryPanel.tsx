@@ -319,16 +319,16 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose, onSelec
                     >
                       <PopoverTrigger asChild>
                         <button 
-                          className="h-7 w-7 flex items-center justify-center rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-all flex-shrink-0"
+                          className="h-8 w-8 flex items-center justify-center rounded-md bg-secondary/80 hover:bg-secondary border border-border text-foreground hover:text-primary transition-all flex-shrink-0 ml-2"
                           onClick={(e) => {
                             e.stopPropagation();
                           }}
                         >
-                          <MoreHorizontal className="h-4 w-4" />
+                          <MoreHorizontal className="h-5 w-5" />
                         </button>
                       </PopoverTrigger>
                       <PopoverContent 
-                        className="w-48 p-1 z-[9999]" 
+                        className="w-48 p-1 z-[9999] bg-popover border-border"
                         align="end"
                         side="bottom"
                         sideOffset={5}
