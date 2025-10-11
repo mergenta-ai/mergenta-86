@@ -1,24 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollArea } from '../ui/scroll-area';
 import { Button } from '../ui/button';
-import { MoreHorizontal, FileText, Pencil, Archive, Trash2, Loader2, Download } from 'lucide-react';
+import { MoreHorizontal, Edit, Share, Archive, Trash2, Loader2 } from 'lucide-react';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '../ui/popover';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '../ui/dialog';
-import { Input } from '../ui/input';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { useUserPlan } from '@/hooks/useUserPlan';
 
 interface HistoryItem {
   id: string;
@@ -38,10 +28,6 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose, onSelec
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [historyItems, setHistoryItems] = useState<HistoryItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [renameDialogOpen, setRenameDialogOpen] = useState(false);
-  const [renameItemId, setRenameItemId] = useState<string | null>(null);
-  const [newTitle, setNewTitle] = useState('');
-  const { planType } = useUserPlan();
   
   useEffect(() => {
     if (isVisible) {
@@ -154,116 +140,9 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose, onSelec
         console.error('Error deleting conversation:', error);
         toast.error('Failed to delete conversation');
       }
-    } else if (action === 'rename') {
-      const item = historyItems.find(i => i.id === itemId);
-      if (item) {
-        setNewTitle(item.preview);
-        setRenameItemId(itemId);
-        setRenameDialogOpen(true);
-      }
-    } else if (action === 'archive') {
-      toast.info('Archive feature coming soon');
-    } else if (action === 'export') {
-      await handleExport(itemId);
     }
     
     setOpenDropdown(null);
-  };
-
-  const handleRename = async () => {
-    if (!renameItemId || !newTitle.trim()) return;
-
-    try {
-      const { error } = await supabase
-        .from('conversations')
-        .update({ title: newTitle.trim() })
-        .eq('id', renameItemId);
-
-      if (error) throw error;
-
-      toast.success('Conversation renamed');
-      setRenameDialogOpen(false);
-      setRenameItemId(null);
-      setNewTitle('');
-      loadHistory();
-    } catch (error) {
-      console.error('Error renaming conversation:', error);
-      toast.error('Failed to rename conversation');
-    }
-  };
-
-  const handleExport = async (conversationId: string) => {
-    try {
-      // Fetch all messages for the conversation
-      const { data: messages, error } = await supabase
-        .from('messages')
-        .select('content, is_user, created_at')
-        .eq('conversation_id', conversationId)
-        .order('created_at', { ascending: true });
-
-      if (error) throw error;
-
-      if (!messages || messages.length === 0) {
-        toast.error('No messages to export');
-        return;
-      }
-
-      // Format messages as text
-      let exportText = '';
-      messages.forEach((msg) => {
-        const sender = msg.is_user ? 'You' : 'Assistant';
-        const timestamp = new Date(msg.created_at).toLocaleString();
-        exportText += `[${timestamp}] ${sender}:\n${msg.content}\n\n`;
-      });
-
-      // Determine export format based on plan
-      let format = 'txt';
-      if (planType === 'pro' || planType === 'zip' || planType === 'ace' || planType === 'max') {
-        // Pro and above can export to .docx via API
-        format = 'docx';
-      }
-
-      if (format === 'txt') {
-        // Export as TXT (available for all plans)
-        const blob = new Blob([exportText], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `conversation-${conversationId}.txt`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        toast.success('Exported as TXT');
-      } else {
-        // For paid plans, call the export edge function
-        toast.info('Exporting to DOCX...');
-        const { data: { session } } = await supabase.auth.getSession();
-        
-        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-        const response = await fetch(`${supabaseUrl}/functions/v1/export-google`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${session?.access_token}`,
-          },
-          body: JSON.stringify({
-            conversationId,
-            format: 'docx',
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error('Export failed');
-        }
-
-        const result = await response.json();
-        toast.success('Exported as DOCX');
-      }
-    } catch (error) {
-      console.error('Error exporting conversation:', error);
-      toast.error('Failed to export conversation');
-    }
   };
 
   const handleConversationClick = (itemId: string) => {
@@ -273,21 +152,20 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose, onSelec
   };
 
   return (
-    <>
-      <div 
-        className={`fixed left-20 top-0 h-full w-80 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-r border-border z-30 transform transition-transform duration-300 ease-in-out shadow-xl ${
-          isVisible ? 'translate-x-0' : '-translate-x-full'
-        }`}
-      >
-        <div className="p-4 border-b border-border">
-          <h2 className="text-base font-semibold text-foreground">Chat History</h2>
-        </div>
+    <div 
+      className={`fixed left-20 top-0 h-full w-80 bg-gradient-to-b from-purple-50 to-purple-100 border-r border-purple-200 z-30 transform transition-transform duration-300 ease-in-out shadow-lg ${
+        isVisible ? 'translate-x-0' : '-translate-x-full'
+      }`}
+    >
+      <div className="p-4 border-b border-purple-200">
+        <h2 className="text-lg font-semibold text-purple-800 text-center">Chat History</h2>
+      </div>
       
-      <ScrollArea className="h-[calc(100%-140px)]">
-        <div className="px-3 py-2">
+      <ScrollArea className="h-[calc(100%-140px)] pr-3">
+        <div className="px-2 py-1">
           {loading ? (
             <div className="flex items-center justify-center py-8">
-              <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+              <Loader2 className="h-6 w-6 animate-spin text-purple-600" />
             </div>
           ) : historyItems.length === 0 ? (
             <div className="text-center py-8 px-4 text-muted-foreground text-sm">
@@ -295,79 +173,47 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose, onSelec
             </div>
           ) : (
             historyItems.map((item) => {
-              const shortTitle = item.preview.split(' ').slice(0, 6).join(' ');
+              const shortTitle = item.preview.split(' ').slice(0, 4).join(' ');
               
               return (
                 <div
                   key={item.id}
-                  className="group relative mb-1 rounded-md hover:bg-accent transition-all duration-200 cursor-pointer"
+                  className="group relative mx-1 mb-0.5 rounded-lg hover:bg-purple-200/60 transition-colors cursor-pointer"
                   onClick={() => handleConversationClick(item.id)}
                 >
-                  <div className="flex items-center justify-between gap-2 px-3 py-2.5">
-                    <div className="flex items-center gap-2 flex-1 min-w-0">
-                      <FileText className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                      <span className="text-sm text-foreground flex-1 min-w-0 truncate">
-                        {shortTitle}
-                      </span>
-                    </div>
+                  <div className="flex items-center justify-between px-3 py-2.5">
+                    <span className="text-sm text-sidebar-text-dark flex-1 min-w-0 truncate pr-2">
+                      {shortTitle}
+                    </span>
                     
                     <Popover 
                       open={openDropdown === item.id} 
                       onOpenChange={(open) => {
+                        console.log('Popover open change:', open, item.id);
                         setOpenDropdown(open ? item.id : null);
                       }}
                     >
                       <PopoverTrigger asChild>
                         <button 
-                          className="h-7 w-7 flex items-center justify-center rounded-md hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                          className="h-6 w-6 flex items-center justify-center rounded hover:bg-purple-300/50 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
                           onClick={(e) => {
                             e.stopPropagation();
+                            console.log('Button clicked for item:', item.id);
                             setOpenDropdown(openDropdown === item.id ? null : item.id);
                           }}
                         >
-                          <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+                          <MoreHorizontal className="h-3.5 w-3.5 text-sidebar-text-violet" />
                         </button>
                       </PopoverTrigger>
                       <PopoverContent 
-                        className="w-48 p-1 z-[9999]" 
+                        className="w-40 p-1 z-[9999]" 
                         align="end"
                         side="bottom"
                         sideOffset={5}
                       >
-                        <div className="space-y-0.5">
+                        <div className="space-y-1">
                           <button 
-                            className="w-full flex items-center gap-3 px-3 py-2 text-sm rounded-sm hover:bg-accent text-foreground transition-colors"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleAction('export', item.id);
-                            }}
-                          >
-                            <Download className="h-4 w-4" />
-                            Export
-                          </button>
-                          <button 
-                            className="w-full flex items-center gap-3 px-3 py-2 text-sm rounded-sm hover:bg-accent text-foreground transition-colors"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleAction('rename', item.id);
-                            }}
-                          >
-                            <Pencil className="h-4 w-4" />
-                            Rename
-                          </button>
-                          <button 
-                            className="w-full flex items-center gap-3 px-3 py-2 text-sm rounded-sm hover:bg-accent text-foreground transition-colors"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleAction('archive', item.id);
-                            }}
-                          >
-                            <Archive className="h-4 w-4" />
-                            Archive
-                          </button>
-                          <div className="h-px bg-border my-0.5" />
-                          <button 
-                            className="w-full flex items-center gap-3 px-3 py-2 text-sm rounded-sm hover:bg-destructive/10 text-destructive transition-colors"
+                            className="w-full flex items-center gap-2 px-2 py-1.5 text-sm rounded text-red-600 hover:bg-red-50 hover:text-red-600 cursor-pointer"
                             onClick={(e) => {
                               e.stopPropagation();
                               handleAction('delete', item.id);
@@ -387,47 +233,16 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose, onSelec
         </div>
       </ScrollArea>
       
-      <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-border bg-background/95">
+      <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-purple-200 bg-gradient-to-b from-purple-50 to-purple-100">
         <Button 
           variant="outline" 
-          className="w-full"
+          className="w-full border-purple-300 text-purple-700 hover:bg-purple-200"
           onClick={loadHistory}
-          size="sm"
         >
           Refresh History
         </Button>
       </div>
     </div>
-
-    <Dialog open={renameDialogOpen} onOpenChange={setRenameDialogOpen}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Rename Conversation</DialogTitle>
-          <DialogDescription>
-            Enter a new title for this conversation
-          </DialogDescription>
-        </DialogHeader>
-        <Input
-          value={newTitle}
-          onChange={(e) => setNewTitle(e.target.value)}
-          placeholder="Conversation title"
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              handleRename();
-            }
-          }}
-        />
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setRenameDialogOpen(false)}>
-            Cancel
-          </Button>
-          <Button onClick={handleRename}>
-            Save
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  </>
   );
 };
 
