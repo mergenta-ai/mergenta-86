@@ -324,13 +324,13 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose, onSelec
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="h-7 w-7 p-0 opacity-100 hover:bg-accent flex-shrink-0 relative z-10"
+                          className="h-7 w-7 p-0 opacity-0 group-hover:opacity-100 hover:bg-accent flex-shrink-0 relative z-10 transition-opacity"
                           onClick={(e) => {
                             e.stopPropagation();
                             console.log('Button clicked for item:', item.id);
                           }}
                         >
-                          <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+                          <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent 
