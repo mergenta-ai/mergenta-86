@@ -13,7 +13,11 @@ import { RSSReaderModal } from "./modals/RSSReaderModal";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
-const MergentaSidebar = () => {
+interface MergentaSidebarProps {
+  onSelectConversation?: (conversationId: string) => void;
+}
+
+const MergentaSidebar: React.FC<MergentaSidebarProps> = ({ onSelectConversation }) => {
   const [showHistory, setShowHistory] = useState(false);
   const [showPolicies, setShowPolicies] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
@@ -299,7 +303,11 @@ const MergentaSidebar = () => {
           onMouseEnter={() => setShowHistory(true)}
           onMouseLeave={() => setShowHistory(false)}
         >
-          <HistoryPanel isVisible={showHistory} onClose={() => setShowHistory(false)} />
+          <HistoryPanel 
+            isVisible={showHistory} 
+            onClose={() => setShowHistory(false)} 
+            onSelectConversation={onSelectConversation}
+          />
         </div>
       )}
 

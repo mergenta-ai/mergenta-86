@@ -269,6 +269,7 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose, onSelec
   const handleConversationClick = (itemId: string) => {
     if (onSelectConversation) {
       onSelectConversation(itemId);
+      onClose(); // Close the panel after selection
     }
   };
 
@@ -319,7 +320,7 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ isVisible, onClose, onSelec
                     >
                       <PopoverTrigger asChild>
                         <button 
-                          className="h-8 w-8 flex items-center justify-center rounded-md bg-secondary/80 hover:bg-secondary border border-border text-foreground hover:text-primary transition-all flex-shrink-0 ml-2"
+                          className="h-8 w-8 flex items-center justify-center rounded-md bg-gray-200 hover:bg-gray-300 border border-gray-300 text-gray-700 hover:text-gray-900 transition-all flex-shrink-0 ml-2"
                           onClick={(e) => {
                             e.stopPropagation();
                           }}
