@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import { Send, Loader2, Cpu, Paperclip, Globe, Mic, Download, AudioWaveform, X, Volume2, Lock } from "lucide-react";
+import { Send, Loader2, Cpu, Paperclip, Globe, Mic, Download, AudioWaveform, X, Volume2, Lock, Sparkles, Brain } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 import TTSPlayer from "./TTSPlayer";
 import { useVoiceRecording } from "@/hooks/useVoiceRecording";
@@ -8,7 +9,7 @@ import { toast } from "sonner";
 import ExportModal from "./modals/ExportModal";
 import UpgradePromptModal from "./modals/UpgradePromptModal";
 import { useUserPlan } from "@/hooks/useUserPlan";
-import { getAvailableModels, getLockedModels } from "@/config/modelConfig";
+import { MODEL_CONFIG, isModelAvailable } from "@/config/modelConfig";
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
@@ -28,6 +29,7 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [selectedLockedModel, setSelectedLockedModel] = useState<{ name: string; requiredPlan: string } | null>(null);
   const modelDropdownRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   const { isRecording, isTranscribing, startRecording, stopRecording } = useVoiceRecording();
@@ -287,76 +289,114 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
 
                 {/* Model Selection Dropdown */}
                 {showModelDropdown && (
-                  <div className="absolute bottom-full mb-2 right-0 bg-white rounded-lg shadow-lg border border-gray-100 z-50 max-w-md max-h-96 overflow-y-auto">
-                    {/* Available Models */}
-                    {getAvailableModels(planType).length > 0 && (
-                      <div className="p-4">
-                        <h3 className="font-semibold text-sm text-gray-800 mb-3">Available Models</h3>
-                        <div className="space-y-2">
-                          {getAvailableModels(planType).map((model) => (
-                            <button
-                              key={model.id}
-                              className="w-full text-left text-sm text-gray-700 hover:bg-gray-50 py-2 px-3 rounded transition-colors"
-                              onClick={() => {
-                                onModelSelect?.(model.id);
-                                setShowModelDropdown(false);
-                              }}
-                            >
-                              <div className="flex items-center justify-between">
-                                <span className="font-medium">{model.displayName}</span>
-                                {model.badge && (
-                                  <span className="text-xs bg-purple-100 text-purple-800 px-1.5 py-0.5 rounded">
-                                    {model.badge}
-                                  </span>
-                                )}
-                              </div>
-                              <p className="text-xs text-gray-500 mt-1">{model.description}</p>
-                            </button>
-                          ))}
+                  <div className="absolute bottom-full mb-2 right-0 bg-white rounded-lg shadow-xl border border-gray-200 z-[9999] w-[90vw] sm:w-[500px] max-h-[70vh] overflow-y-auto">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-0">
+                      {/* Creativity Column */}
+                      <div className="border-b sm:border-b-0 sm:border-r border-gray-200 p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Sparkles className="h-5 w-5 text-purple-600" />
+                          <div>
+                            <h3 className="text-sm font-semibold text-gray-900">Creativity</h3>
+                            <p className="text-xs text-gray-500">(Inventive & Expressive)</p>
+                          </div>
                         </div>
-                      </div>
-                    )}
-
-                    {/* Locked Models */}
-                    {getLockedModels(planType).length > 0 && (
-                      <div className="p-4 bg-gray-50 border-t border-gray-100">
-                        <div className="flex items-center gap-2 mb-3">
-                          <Lock className="h-4 w-4 text-gray-400" />
-                          <h3 className="font-semibold text-sm text-gray-600">Locked Models</h3>
-                        </div>
-                        <div className="space-y-2">
-                          {getLockedModels(planType).map((model) => (
-                            <button
-                              key={model.id}
-                              className="w-full text-left text-sm text-gray-600 hover:bg-gray-100 py-2 px-3 rounded transition-colors opacity-75"
-                              onClick={() => {
-                                setSelectedLockedModel({ 
-                                  name: model.displayName, 
-                                  requiredPlan: model.requiredPlan 
-                                });
-                                setShowUpgradeModal(true);
-                                setShowModelDropdown(false);
-                              }}
-                            >
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                  <Lock className="h-3 w-3" />
-                                  <span className="font-medium">{model.displayName}</span>
+                        <div className="space-y-1 mt-3">
+                          {MODEL_CONFIG.filter(m => m.category === 'creativity').map((model) => {
+                            const available = isModelAvailable(model.id, planType);
+                            
+                            return (
+                              <button
+                                key={model.id}
+                                onClick={() => {
+                                  if (planType === 'free' && !available) {
+                                    navigate('/plans');
+                                    setShowModelDropdown(false);
+                                    return;
+                                  }
+                                  onModelSelect?.(model.id);
+                                  setShowModelDropdown(false);
+                                }}
+                                className={`w-full text-left px-3 py-2 rounded-md transition-all text-sm ${
+                                  available
+                                    ? 'hover:bg-gray-50 text-gray-700'
+                                    : 'text-gray-400 hover:bg-gray-50'
+                                }`}
+                              >
+                                <div className="flex items-center justify-between gap-2">
+                                  <span className="flex-1 truncate">{model.displayName}</span>
+                                  <div className="flex items-center gap-1 flex-shrink-0">
+                                    {model.badge && (
+                                      <span className={`text-xs px-1.5 py-0.5 rounded font-semibold ${
+                                        model.badge === 'Latest' 
+                                          ? 'bg-green-100 text-green-700'
+                                          : model.badge === 'Ace'
+                                          ? 'bg-violet-100 text-violet-700'
+                                          : 'bg-purple-100 text-purple-600'
+                                      }`}>
+                                        {model.badge}
+                                      </span>
+                                    )}
+                                    {!available && <Lock className="h-3 w-3" />}
+                                  </div>
                                 </div>
-                                {model.badge && (
-                                  <span className="text-xs bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded">
-                                    {model.badge}
-                                  </span>
-                                )}
-                              </div>
-                              <p className="text-xs text-gray-500 mt-1 ml-5">
-                                {model.description} • Requires {model.requiredPlan.charAt(0).toUpperCase() + model.requiredPlan.slice(1)}
-                              </p>
-                            </button>
-                          ))}
+                              </button>
+                            );
+                          })}
                         </div>
                       </div>
-                    )}
+
+                      {/* Research Column */}
+                      <div className="p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Brain className="h-5 w-5 text-blue-600" />
+                          <div>
+                            <h3 className="text-sm font-semibold text-gray-900">Research</h3>
+                            <p className="text-xs text-gray-500">(Reasoning & Thinking)</p>
+                          </div>
+                        </div>
+                        <div className="space-y-1 mt-3">
+                          {MODEL_CONFIG.filter(m => m.category === 'research').map((model) => {
+                            const available = isModelAvailable(model.id, planType);
+                            
+                            return (
+                              <button
+                                key={model.id}
+                                onClick={() => {
+                                  if (planType === 'free' && !available) {
+                                    navigate('/plans');
+                                    setShowModelDropdown(false);
+                                    return;
+                                  }
+                                  onModelSelect?.(model.id);
+                                  setShowModelDropdown(false);
+                                }}
+                                className={`w-full text-left px-3 py-2 rounded-md transition-all text-sm ${
+                                  available
+                                    ? 'hover:bg-gray-50 text-gray-700'
+                                    : 'text-gray-400 hover:bg-gray-50'
+                                }`}
+                              >
+                                <div className="flex items-center justify-between gap-2">
+                                  <span className="flex-1 truncate">{model.displayName}</span>
+                                  <div className="flex items-center gap-1 flex-shrink-0">
+                                    {model.badge && (
+                                      <span className={`text-xs px-1.5 py-0.5 rounded font-semibold ${
+                                        model.badge === 'Ace'
+                                          ? 'bg-violet-100 text-violet-700'
+                                          : 'bg-blue-100 text-blue-700'
+                                      }`}>
+                                        {model.badge}
+                                      </span>
+                                    )}
+                                    {!available && <Lock className="h-3 w-3" />}
+                                  </div>
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
