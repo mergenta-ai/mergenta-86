@@ -7,7 +7,7 @@ interface AuthContextType {
   session: Session | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string) => Promise<{ needsConfirmation: boolean; message: string }>;
+  signUp: (email: string, password: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   signInWithApple: () => Promise<void>;
   signOut: () => Promise<void>;
@@ -54,26 +54,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const signUp = async (email: string, password: string) => {
-    const { data, error } = await supabase.auth.signUp({ 
+    const { error } = await supabase.auth.signUp({ 
       email, 
       password,
       options: {
         emailRedirectTo: `${window.location.origin}/`
       }
     });
-    
-    if (error) {
-      if (error.message.includes('already registered')) {
-        throw new Error('This email is already registered. Please sign in instead.');
-      }
-      throw error;
-    }
-    
-    // Return confirmation status
-    return { 
-      needsConfirmation: !!(data?.user && !data.session),
-      message: 'Please check your email to confirm your account.'
-    };
+    if (error) throw error;
   };
 
   const signInWithGoogle = async () => {

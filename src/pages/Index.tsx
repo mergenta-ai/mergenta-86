@@ -2,7 +2,7 @@ import { useState } from "react";
 import Header from "@/components/Header";
 import ChatInterface from "@/components/ChatInterface";
 import ChatInput from "@/components/ChatInput";
-import { BentoGridSection } from "@/components/BentoGridSection";
+import WorkflowTabs from "@/components/WorkflowTabs";
 import MergentaSidebar from "@/components/MergentaSidebar";
 import MobileNavigation from "@/components/MobileNavigation";
 import ModelDisplay from "@/components/ModelDisplay";
@@ -288,8 +288,8 @@ const Index = () => {
               onModelSelect={handleModelSelect}
             />
 
-            {/* Bento Grid - All devices */}
-            <BentoGridSection onAddToChat={handleAddToChat} onPromptGenerated={handlePromptGenerated} />
+            {/* Workflow tabs - All devices */}
+            <WorkflowTabs onAddToChat={handleAddToChat} onPromptGenerated={handlePromptGenerated} />
 
             {/* Chat messages */}
             <main className="flex-1 flex flex-col">

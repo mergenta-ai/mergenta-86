@@ -1,7 +1,6 @@
 import React, { useState, useRef } from "react";
 import { Textarea } from "../ui/textarea";
 import { Input } from "../ui/input";
-import { Button } from "../ui/button";
 import { Heart, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useClickOutside } from "@/lib/clickOutside";
@@ -128,91 +127,91 @@ const LoveLetterHoverCard = ({ children, onPromptGenerated }: LoveLetterHoverCar
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
           >
-            <div className="p-6 bg-white rounded-2xl shadow-lg border border-primary/15 animate-in fade-in-0 zoom-in-95 duration-200">
-              <div className="space-y-5">
+            <div className="p-6 bg-pastel-lavender rounded-2xl shadow-lg border border-[#E5D9F2] animate-in fade-in-0 zoom-in-95 duration-200">
+              <div className="space-y-4">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <Heart className="w-5 h-5 text-primary" />
-                    <h3 className="text-xl font-semibold text-primary">Love Letter</h3>
+                    <Heart className="w-5 h-5 text-[#5B34A0]" />
+                    <h3 className="text-lg font-semibold text-[#5B34A0]">Love Letter</h3>
                   </div>
-                  <p className="text-sm text-muted-foreground mb-4">Express your deepest feelings and emotions</p>
+                  <p className="text-sm text-[#6E6E6E] mb-4">Express your deepest feelings and emotions</p>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div />
                     <button
                       type="button"
                       onClick={(e) => handleClearDraft(e)}
-                      className="p-1 hover:bg-primary/10 rounded-md transition-colors"
+                      className="p-1 hover:bg-[#5B34A0]/10 rounded transition-colors"
                       title="Clear Draft"
                     >
-                      <X className="w-4 h-4 text-primary" />
+                      <X className="w-4 h-4 text-[#5B34A0]" />
                     </button>
                   </div>
 
                   <div>
-                    <label className="text-sm font-medium text-foreground mb-2 block">To</label>
+                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label>
                     <Textarea
                       value={to}
                       onChange={(e) => saveDraft("to", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Dear [Name], My Love, Darling, Sweetheart, Honey, etc..."
-                      className="w-full min-h-[80px]"
+                      className="w-full min-h-[60px] resize-none"
                       autoComplete="off"
                     />
                   </div>
 
                   <div>
-                    <label className="text-sm font-medium text-foreground mb-2 block">Subject / Purpose</label>
+                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label>
                     <Textarea
                       value={subject}
                       onChange={(e) => saveDraft("subject", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Affection, Care, Commitment, Admiration, Attraction, etc..."
-                      className="w-full min-h-[80px]"
+                      className="w-full min-h-[60px] resize-none"
                       autoComplete="off"
                     />
                   </div>
 
                   <div>
-                    <label className="text-sm font-medium text-foreground mb-2 block">Core Message</label>
+                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Core Message</label>
                     <Textarea
                       value={coreMessage}
                       onChange={(e) => saveDraft("coreMessage", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Feelings, cherished moments, longing, nostalgia, etc..."
-                      className="w-full min-h-[100px]"
+                      className="w-full min-h-[80px] resize-none"
                       autoComplete="off"
                     />
                   </div>
 
                   <div>
-                    <label className="text-sm font-medium text-foreground mb-2 block">Final Touch</label>
+                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Final Touch</label>
                     <Textarea
                       value={finalTouch}
                       onChange={(e) => saveDraft("finalTouch", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Future dreams, promises, shared memories..."
-                      className="w-full min-h-[80px]"
+                      className="w-full min-h-[60px] resize-none"
                       autoComplete="off"
                     />
                   </div>
 
                   <div>
-                    <label className="text-sm font-medium text-foreground mb-2 block">Sign Off</label>
+                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Sign Off</label>
                     <Textarea
                       value={signOff}
                       onChange={(e) => saveDraft("signOff", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Forever yours, With all my love, Yours truly..."
-                      className="w-full min-h-[80px]"
+                      className="w-full min-h-[60px] resize-none"
                       autoComplete="off"
                     />
                   </div>
 
                   <div>
-                    <label className="text-sm font-medium text-foreground mb-2 block">From</label>
+                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">From</label>
                     <Input
                       value={from}
                       onChange={(e) => saveDraft("from", e.target.value)}
@@ -223,12 +222,12 @@ const LoveLetterHoverCard = ({ children, onPromptGenerated }: LoveLetterHoverCar
                     />
                   </div>
 
-                  <Button
-                    className="w-full h-12"
+                  <button
+                    className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
                     onClick={handleGeneratePrompt}
                   >
                     Express Love
-                  </Button>
+                  </button>
                 </div>
               </div>
             </div>

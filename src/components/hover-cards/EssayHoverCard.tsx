@@ -134,15 +134,15 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
           >
-            <div className="p-6 bg-white rounded-2xl shadow-lg border border-primary/15">
-              <div className="space-y-5">
+            <div className="p-4 bg-pastel-lavender border border-pastel-lavender-hover rounded-lg shadow-xl animate-in fade-in-0 zoom-in-95 duration-200">
+              <div className="space-y-3">
                 {/* Header + Clear */}
-                <div className="flex items-start justify-between pb-3 border-b border-primary/20">
+                <div className="flex items-start justify-between pb-2 border-b border-pastel-lavender-hover">
                   <div className="flex items-center gap-2">
-                    <span className="text-xl">📄</span>
+                    <span className="text-lg">📄</span>
                     <div>
-                      <h3 className="font-semibold text-primary text-xl">Essay</h3>
-                      <p className="text-xs text-muted-foreground italic mt-1">
+                      <h3 className="font-semibold text-sidebar-text-violet text-lg">Essay</h3>
+                      <p className="text-xs text-sidebar-text-dark italic">
                         Structured, formal writing — balanced arguments and clarity.
                       </p>
                     </div>
@@ -151,15 +151,15 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
                   <button
                     onClick={handleClearDraft}
                     title="Clear draft"
-                    className="p-1 rounded-md hover:bg-primary/10 transition-colors"
+                    className="p-1 rounded hover:bg-[#5B34A0]/10 transition-colors"
                   >
-                    <X className="w-4 h-4 text-primary" />
+                    <X className="w-4 h-4 text-[#5B34A0]" />
                   </button>
                 </div>
 
                 {/* Essay Title Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="essay-title" className="text-sm font-medium text-foreground">
+                  <Label htmlFor="essay-title" className="text-sm font-medium text-sidebar-text-dark">
                     Essay Title
                   </Label>
                   <Input
@@ -168,13 +168,14 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
                     onChange={(e) => saveDraft("essayTitle", e.target.value)}
                     onClick={(e) => e.stopPropagation()}
                     placeholder="Enter your essay title..."
+                    className="text-sm"
                     autoComplete="off"
                   />
                 </div>
 
                 {/* Key Points Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="key-points" className="text-sm font-medium text-foreground">
+                  <Label htmlFor="key-points" className="text-sm font-medium text-sidebar-text-dark">
                     Key Points / Topics
                   </Label>
                   <Textarea
@@ -183,14 +184,14 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
                     onChange={(e) => saveDraft("keyPoints", e.target.value)}
                     onClick={(e) => e.stopPropagation()}
                     placeholder="List your main points or topics..."
-                    className="min-h-[80px]"
+                    className="text-sm min-h-[70px] resize-none"
                     autoComplete="off"
                   />
                 </div>
 
                 {/* Word Count Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="word-count" className="text-sm font-medium text-foreground">
+                  <Label htmlFor="word-count" className="text-sm font-medium text-sidebar-text-dark">
                     Word Count
                   </Label>
                   <Input
@@ -202,13 +203,14 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
                     placeholder="400–2000"
                     min={400}
                     max={2000}
+                    className="text-sm"
                     autoComplete="off"
                   />
                 </div>
 
                 {/* Tone Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="tone" className="text-sm font-medium text-foreground">
+                  <Label htmlFor="tone" className="text-sm font-medium text-sidebar-text-dark">
                     Tone
                   </Label>
                   <Textarea
@@ -217,14 +219,14 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
                     onChange={(e) => saveDraft("tone", e.target.value)}
                     onClick={(e) => e.stopPropagation()}
                     placeholder="formal, analytical, narrative, persuasive, etc..."
-                    className="min-h-[80px]"
+                    className="text-sm min-h-[60px] resize-none"
                     autoComplete="off"
                   />
                 </div>
 
                 {/* Audience Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="audience" className="text-sm font-medium text-foreground">
+                  <Label htmlFor="audience" className="text-sm font-medium text-sidebar-text-dark">
                     Audience
                   </Label>
                   <Textarea
@@ -233,14 +235,14 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
                     onChange={(e) => saveDraft("audience", e.target.value)}
                     onClick={(e) => e.stopPropagation()}
                     placeholder="academic, business, professional, general, etc..."
-                    className="min-h-[80px]"
+                    className="text-sm min-h-[60px] resize-none"
                     autoComplete="off"
                   />
                 </div>
 
                 {/* Start Essay Button */}
                 <Button
-                  className="w-full h-12"
+                  className="w-full bg-[#6F42C1] hover:bg-[#5A359A] text-white transition-colors duration-200"
                   onClick={handleGeneratePrompt}
                 >
                   Start Essay

@@ -29,28 +29,11 @@ export const AuthForm = ({ mode, onModeChange }: AuthFormProps) => {
         await signIn(email, password);
         toast.success('Welcome back to Mergenta!');
       } else {
-        const result = await signUp(email, password);
-        if (result?.needsConfirmation) {
-          toast.success(
-            result.message || 'Account created! Check your email to verify your account.',
-            { duration: 6000 }
-          );
-        }
+        await signUp(email, password);
+        toast.success('Account created! Check your email to verify.');
       }
     } catch (error: any) {
-      if (error.message.includes('already registered')) {
-        toast.error('This email is already registered. Try signing in instead.', {
-          duration: 5000,
-          action: {
-            label: 'Sign In',
-            onClick: () => onModeChange('signin')
-          }
-        });
-      } else if (error.message.includes('Invalid email')) {
-        toast.error('Please enter a valid email address.');
-      } else {
-        toast.error(error.message || 'Authentication failed');
-      }
+      toast.error(error.message || 'Authentication failed');
     } finally {
       setLoading(false);
     }

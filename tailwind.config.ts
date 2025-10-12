@@ -17,24 +17,7 @@ export default {
 				'2xl': '1400px'
 			}
 		},
-		screens: {
-			'xs': '375px',
-			'sm': '640px',
-			'md': '768px',
-			'lg': '1024px',
-			'xl': '1280px',
-			'2xl': '1400px',
-		},
 		extend: {
-			spacing: {
-				'xs': 'var(--space-xs)',
-				'sm': 'var(--space-sm)',
-				'md': 'var(--space-md)',
-				'lg': 'var(--space-lg)',
-				'xl': 'var(--space-xl)',
-				'2xl': 'var(--space-2xl)',
-				'3xl': 'var(--space-3xl)',
-			},
 			fontFamily: {
 				'inter': ['Inter', 'sans-serif'],
 				'poppins': ['Poppins', 'sans-serif'],
@@ -125,19 +108,10 @@ export default {
 			transitionTimingFunction: {
 				'smooth': 'var(--transition-smooth)'
 			},
-			fontSize: {
-				'xs': ['var(--font-size-xs)', { lineHeight: '1.4' }],
-				'sm': ['var(--font-size-sm)', { lineHeight: '1.5' }],
-				'base': ['var(--font-size-base)', { lineHeight: '1.6' }],
-				'lg': ['var(--font-size-lg)', { lineHeight: '1.5' }],
-				'xl': ['var(--font-size-xl)', { lineHeight: '1.4' }],
-				'2xl': ['var(--font-size-2xl)', { lineHeight: '1.3' }],
-			},
 			borderRadius: {
 				lg: 'var(--radius)',
-				md: 'var(--radius-sm)',
-				sm: 'calc(var(--radius-sm) - 2px)',
-				xl: 'var(--radius-lg)',
+				md: 'calc(var(--radius) - 2px)',
+				sm: 'calc(var(--radius) - 4px)'
 			},
 			keyframes: {
 				'accordion-down': {
