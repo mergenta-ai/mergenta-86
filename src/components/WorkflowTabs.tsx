@@ -195,11 +195,13 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
     <TooltipProvider delayDuration={300}>
       <div className="flex justify-center w-full px-4 mt-5" ref={containerRef}>
         <div className="w-full max-w-5xl">
-          <div className="flex justify-center gap-2 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory pb-2"
+          <div className="flex justify-center gap-2 relative overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory"
                style={{ 
                  WebkitOverflowScrolling: 'touch',
                  scrollbarWidth: 'none',
-                 msOverflowStyle: 'none'
+                 msOverflowStyle: 'none',
+                 paddingBottom: '400px',
+                 marginBottom: '-400px'
                }}>
             {tabs.map((tab, index) => (
               <div key={index} className="relative snap-center flex-shrink-0">
@@ -231,12 +233,9 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                 {/* Dropdown */}
                 {activeTab === tab.id && !["power-playbook", "think-hard", "deep-research"].includes(tab.id) && (
                   <div 
-                    className="fixed sm:absolute top-auto sm:top-full left-1/2 sm:left-0 -translate-x-1/2 sm:translate-x-0 w-[200px] sm:w-[100px] bg-[#F8F5FE] rounded-lg shadow-xl border border-[#E5D9F2] z-[200] mt-2"
-                    style={{ bottom: window.innerWidth < 640 ? '120px' : 'auto' }}
+                    className="absolute top-full w-[100px] bg-[#F8F5FE] rounded-lg shadow-lg border border-[#E5D9F2] z-[100]"
                     onMouseEnter={handleDropdownEnter}
                     onMouseLeave={handleDropdownLeave}
-                    onTouchStart={(e) => e.stopPropagation()}
-                    onClick={(e) => e.stopPropagation()}
                   >
                     {activeTab === "beautiful-writing" && (
                       <div className="py-2">
@@ -363,12 +362,9 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                             </button>
                             {expandedGroups.has(group.title) && (
                               <div 
-                                className={`fixed sm:absolute left-1/2 sm:left-full -translate-x-1/2 sm:translate-x-0 ${groupIdx >= 2 ? 'bottom-0' : 'top-0'} bg-[#F8F5FE] rounded-lg shadow-xl border border-[#E5D9F2] z-[250] w-64 sm:w-48`}
-                                style={{ bottom: window.innerWidth < 640 ? '120px' : 'auto', top: window.innerWidth < 640 ? 'auto' : groupIdx >= 2 ? 'auto' : '0' }}
+                                className={`absolute left-full ${groupIdx >= 2 ? 'bottom-0' : 'top-0'} bg-[#F8F5FE] rounded-lg shadow-lg border border-[#E5D9F2] z-[100] w-48`}
                                 onMouseEnter={() => handleSubmenuEnter(group.title)}
                                 onMouseLeave={handleSubmenuLeave}
-                                onTouchStart={(e) => e.stopPropagation()}
-                                onClick={(e) => e.stopPropagation()}
                               >
                                 <div className="py-2">
                                    {group.items.map((item, itemIdx) => {
