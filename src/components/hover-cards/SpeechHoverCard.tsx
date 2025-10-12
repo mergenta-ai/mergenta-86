@@ -121,8 +121,6 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
 
   useClickOutside(showCard, () => setShowCard(false), "[data-speech-card]", "[data-speech-trigger]");
 
-  
-
   return (
     <div className="relative">
       {/* Trigger Element */}
@@ -140,7 +138,7 @@ const SpeechHoverCard: React.FC<SpeechHoverCardProps> = ({ children, onPromptGen
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-speech-card
-            className="absolute left-[620px] top-[180px] w-80 pointer-events-auto"
+            className="absolute left-[610px] top-[180px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}

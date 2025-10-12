@@ -117,8 +117,6 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
 
   useClickOutside(showCard, () => setShowCard(false), "[data-script-card]", "[data-script-trigger]");
 
-  
-
   return (
     <div className="relative">
       {/* Trigger Element */}
@@ -136,7 +134,7 @@ const ScriptHoverCard: React.FC<ScriptHoverCardProps> = ({ children, onPromptGen
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-script-card
-            className="absolute left-[620px] top-[140px] w-80 pointer-events-auto"
+            className="absolute left-[610px] top-[140px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}

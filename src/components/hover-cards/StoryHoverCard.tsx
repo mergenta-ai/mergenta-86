@@ -130,7 +130,7 @@ const StoryHoverCard: React.FC<StoryHoverCardProps> = ({ children, onPromptGener
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-story-card
-            className="absolute left-[620px] top-[160px] w-80 pointer-events-auto"
+            className="absolute left-[610px] top-[180px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}

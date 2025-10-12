@@ -113,8 +113,6 @@ const FlashFictionHoverCard: React.FC<FlashFictionHoverCardProps> = ({ children,
   // Close when clicking outside
   useClickOutside(showCard, () => setShowCard(false), "[data-flash-fiction-card]", "[data-flash-fiction-trigger]");
 
-  
-
   return (
     <div className="relative">
       {/* Trigger */}
@@ -131,7 +129,7 @@ const FlashFictionHoverCard: React.FC<FlashFictionHoverCardProps> = ({ children,
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-flash-fiction-card
-            className="absolute left-[620px] top-[140px] w-80 pointer-events-auto"
+            className="absolute left-[610px] top-[140px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
