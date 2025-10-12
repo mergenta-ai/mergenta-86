@@ -29,32 +29,44 @@ export const MODEL_CONFIG: ModelInfo[] = [
     requiredPlan: 'free',
     description: 'Fast and efficient for most tasks',
   },
-  {
-    id: 'gemini-2.5-flash-lite',
-    displayName: 'Gemini 2.5 Flash Lite',
-    category: 'creativity',
-    vendor: 'google',
-    requiredPlan: 'free',
-    description: 'Lightweight and quick',
-  },
-  {
-    id: 'gpt-5-nano',
-    displayName: 'GPT-5 Nano',
-    category: 'creativity',
-    vendor: 'openai',
-    requiredPlan: 'free',
-    description: 'Speed-optimized GPT model',
-  },
   
-  // Pro tier models
+  // Pro tier models - Creativity
   {
-    id: 'gpt-5-mini',
-    displayName: 'GPT-5 Mini',
+    id: 'gpt-5',
+    displayName: 'GPT-5',
     category: 'creativity',
     vendor: 'openai',
     requiredPlan: 'pro',
-    description: 'Balanced performance and cost',
+    badge: 'Latest',
+    description: 'Most advanced GPT model',
+    isNew: true,
   },
+  {
+    id: 'gpt-4.1',
+    displayName: 'GPT-4.1',
+    category: 'creativity',
+    vendor: 'openai',
+    requiredPlan: 'pro',
+    description: 'Advanced creative generation',
+  },
+  {
+    id: 'grok-3',
+    displayName: 'Grok 3',
+    category: 'creativity',
+    vendor: 'xai',
+    requiredPlan: 'pro',
+    description: 'Fast and witty responses',
+  },
+  {
+    id: 'claude-haiku-3.5',
+    displayName: 'Claude Haiku 3.5',
+    category: 'creativity',
+    vendor: 'anthropic',
+    requiredPlan: 'pro',
+    description: 'Quick and efficient',
+  },
+  
+  // Pro tier models - Research
   {
     id: 'gemini-2.5-pro',
     displayName: 'Gemini 2.5 Pro',
@@ -63,26 +75,45 @@ export const MODEL_CONFIG: ModelInfo[] = [
     requiredPlan: 'pro',
     description: 'Advanced reasoning capabilities',
   },
-  
-  // Zip tier models
-  {
-    id: 'gpt-5',
-    displayName: 'GPT-5',
-    category: 'creativity',
-    vendor: 'openai',
-    requiredPlan: 'zip',
-    badge: 'Popular',
-    description: 'Powerful all-purpose model',
-  },
   {
     id: 'claude-sonnet-4',
     displayName: 'Claude Sonnet 4',
-    category: 'creativity',
+    category: 'research',
     vendor: 'anthropic',
-    requiredPlan: 'zip',
-    badge: 'New',
-    description: 'Exceptional reasoning and efficiency',
-    isNew: true,
+    requiredPlan: 'pro',
+    description: 'Exceptional reasoning',
+  },
+  {
+    id: 'claude-sonnet-4.5',
+    displayName: 'Claude Sonnet 4.5',
+    category: 'research',
+    vendor: 'anthropic',
+    requiredPlan: 'pro',
+    description: 'Enhanced reasoning',
+  },
+  {
+    id: 'o3',
+    displayName: 'o3',
+    category: 'research',
+    vendor: 'openai',
+    requiredPlan: 'pro',
+    description: 'Complex reasoning',
+  },
+  {
+    id: 'grok-4',
+    displayName: 'Grok 4',
+    category: 'research',
+    vendor: 'xai',
+    requiredPlan: 'pro',
+    description: 'Advanced analysis',
+  },
+  {
+    id: 'o4-mini',
+    displayName: 'o4-mini',
+    category: 'research',
+    vendor: 'openai',
+    requiredPlan: 'pro',
+    description: 'Fast reasoning',
   },
   
   // Ace tier models
@@ -93,27 +124,16 @@ export const MODEL_CONFIG: ModelInfo[] = [
     vendor: 'anthropic',
     requiredPlan: 'ace',
     badge: 'Ace',
-    description: 'Most capable reasoning model',
+    description: 'Most capable reasoning',
   },
   {
     id: 'o3-pro',
-    displayName: 'o3 Pro',
+    displayName: 'o3-pro',
     category: 'research',
     vendor: 'openai',
     requiredPlan: 'ace',
     badge: 'Ace',
-    description: 'Advanced multi-step reasoning',
-  },
-  
-  // Max tier models
-  {
-    id: 'o4-mini',
-    displayName: 'o4 Mini',
-    category: 'research',
-    vendor: 'openai',
-    requiredPlan: 'max',
-    badge: 'Max',
-    description: 'Fast reasoning for complex tasks',
+    description: 'Top-tier reasoning',
   },
 ];
 

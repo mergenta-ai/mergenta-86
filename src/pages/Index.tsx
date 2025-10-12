@@ -9,6 +9,7 @@ import ModelDisplay from "@/components/ModelDisplay";
 
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useUserPlan } from "@/hooks/useUserPlan";
 import { chatService } from "@/services/chatService";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -30,16 +31,17 @@ const Index = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [generatedPrompt, setGeneratedPrompt] = useState("");
-  const [selectedModel, setSelectedModel] = useState("Default");
+  const [selectedModel, setSelectedModel] = useState("gemini-2.5-flash");
   const [turnCount, setTurnCount] = useState(0);
   const [currentConversationId, setCurrentConversationId] = useState<string | null>(null);
   const { toast } = useToast();
   const isMobile = useIsMobile();
+  const { planType } = useUserPlan();
 
   const handlePromptGenerated = (prompt: string) => {
     setGeneratedPrompt(prompt);
-    // Reset model to Default when workflow cards are used
-    setSelectedModel("Default");
+    // Reset model to gemini-2.5-flash when workflow cards are used
+    setSelectedModel("gemini-2.5-flash");
   };
 
   const handleModelSelect = (model: string) => {
@@ -256,9 +258,8 @@ const Index = () => {
       <div className="fixed top-4 right-4 z-50 lg:right-6 xl:right-8">
         <ModelDisplay 
           selectedModel={selectedModel}
-          onClick={() => {
-            // Optional: Could trigger model dropdown when clicked
-          }}
+          onModelSelect={handleModelSelect}
+          userPlan={planType}
         />
       </div>
 
