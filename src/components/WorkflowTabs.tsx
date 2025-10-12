@@ -207,47 +207,49 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
   return (
     <TooltipProvider delayDuration={300}>
       <div className="flex justify-center w-full px-4 mt-5" ref={containerRef}>
-        <div className="w-full max-w-5xl">
-          <div className="flex justify-center md:justify-center gap-2 relative overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory"
+        <div className="w-full max-w-5xl relative">
+          <div className="flex justify-center md:justify-center gap-2 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory"
                style={{ 
                  WebkitOverflowScrolling: 'touch',
                  scrollbarWidth: 'none',
                  msOverflowStyle: 'none'
                }}>
             {tabs.map((tab, index) => (
-              <div key={index} className="relative snap-center flex-shrink-0">
-                <button
-                  onMouseEnter={() => handleTabHover(tab.id)}
-                  onClick={() => {
-                    if (tab.id === "power-playbook") {
-                      setPowerPlaybookModalOpen(true);
-                    }
-                  }}
-                  onMouseLeave={handleTabLeave}
-                  style={{ backgroundColor: activeTab === tab.id ? '#C7A8EA' : '#F3EAFE' }}
-                  className={`
-                    w-[100px] py-2 rounded-xl font-inter font-medium text-sm tracking-tight text-center
-                    transition-all duration-300 ease-in-out
-                    focus:outline-none
-                    flex items-center justify-center
-                    leading-tight
-                    hover:shadow-md
-                    ${activeTab === tab.id
-                      ? 'text-[#6F42C1]' 
-                      : 'text-[#444] hover:bg-[#DCC8F2]'
-                    }
-                  `}
-                >
-                  <span className="whitespace-pre-line">{tab.text}</span>
-                </button>
-                
-                {/* Dropdown - only for certain tabs */}
-                {activeTab === tab.id && !["power-playbook", "think-hard", "deep-research"].includes(tab.id) && (
-                  <div 
-                    className="absolute top-full w-[100px] bg-[#F8F5FE] rounded-lg shadow-md border border-[#E5D9F2] z-50"
-                    onMouseEnter={handleDropdownEnter}
-                    onMouseLeave={handleDropdownLeave}
+              <div key={index} className="snap-center flex-shrink-0">
+                <div className="relative">
+                  <button
+                    onMouseEnter={() => handleTabHover(tab.id)}
+                    onClick={() => {
+                      if (tab.id === "power-playbook") {
+                        setPowerPlaybookModalOpen(true);
+                      }
+                    }}
+                    onMouseLeave={handleTabLeave}
+                    style={{ backgroundColor: activeTab === tab.id ? '#C7A8EA' : '#F3EAFE' }}
+                    className={`
+                      w-[100px] py-2 rounded-xl font-inter font-medium text-sm tracking-tight text-center
+                      transition-all duration-300 ease-in-out
+                      focus:outline-none
+                      flex items-center justify-center
+                      leading-tight
+                      hover:shadow-md
+                      ${activeTab === tab.id
+                        ? 'text-[#6F42C1]' 
+                        : 'text-[#444] hover:bg-[#DCC8F2]'
+                      }
+                    `}
                   >
+                    <span className="whitespace-pre-line">{tab.text}</span>
+                  </button>
+                  
+                  {/* Dropdown - only for certain tabs */}
+                  {activeTab === tab.id && !["power-playbook", "think-hard", "deep-research"].includes(tab.id) && (
+                    <div 
+                      className="absolute top-full left-0 w-[100px] bg-[#F8F5FE] rounded-lg shadow-md border border-[#E5D9F2] z-[100] mt-1"
+                      onMouseEnter={handleDropdownEnter}
+                      onMouseLeave={handleDropdownLeave}
+                      style={{ position: 'absolute' }}
+                    >
                     {activeTab === "beautiful-writing" && (
                       <div className="py-2">
                         {beautifulWritingItems.map((item, idx) => {
@@ -553,6 +555,7 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                   </div>
                 )}
               </div>
+            </div>
             ))}
           </div>
         </div>
