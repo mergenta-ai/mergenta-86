@@ -246,6 +246,16 @@ All colors MUST be HSL.
     background: hsl(var(--primary));
   }
 
+  /* Hide scrollbar while maintaining scroll functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari and Opera */
+  }
+
   /* Responsive override for chat input height */
   @media (max-width: 768px) {
     :root {

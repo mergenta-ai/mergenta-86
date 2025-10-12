@@ -208,9 +208,14 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
     <TooltipProvider delayDuration={300}>
       <div className="flex justify-center w-full px-4 mt-5" ref={containerRef}>
         <div className="w-full max-w-5xl">
-          <div className="flex justify-center gap-2 relative">
+          <div className="flex justify-center md:justify-center gap-2 relative overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory"
+               style={{ 
+                 WebkitOverflowScrolling: 'touch',
+                 scrollbarWidth: 'none',
+                 msOverflowStyle: 'none'
+               }}>
             {tabs.map((tab, index) => (
-              <div key={index} className="relative">
+              <div key={index} className="relative snap-center flex-shrink-0">
                 <button
                   onMouseEnter={() => handleTabHover(tab.id)}
                   onClick={() => {
