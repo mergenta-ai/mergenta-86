@@ -106,7 +106,6 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleTabHover = (tabId: string) => {
-    // Clear any pending timeout
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
@@ -115,11 +114,9 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
   };
 
   const handleTabLeave = () => {
-    // Clear any existing timeout
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
-    // Delay clearing the active tab to allow moving to submenu
     timeoutRef.current = setTimeout(() => {
       setActiveTab(null);
       timeoutRef.current = null;
@@ -127,7 +124,6 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
   };
 
   const handleDropdownEnter = () => {
-    // Clear any pending timeout when entering dropdown
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
@@ -135,12 +131,10 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
   };
 
   const handleDropdownLeave = () => {
-    // Clear dropdown immediately when leaving it
     setActiveTab(null);
   };
 
   const handleGroupHover = (groupTitle: string) => {
-    // Clear any pending timeout
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
@@ -149,11 +143,9 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
   };
 
   const handleGroupLeave = () => {
-    // Clear any existing timeout
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
-    // Delay clearing the expanded groups to allow moving to submenu
     timeoutRef.current = setTimeout(() => {
       setExpandedGroups(new Set());
       timeoutRef.current = null;
@@ -161,7 +153,6 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
   };
 
   const handleSubmenuEnter = (groupTitle: string) => {
-    // Clear any pending timeout when entering submenu
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
@@ -170,18 +161,15 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
   };
 
   const handleSubmenuLeave = () => {
-    // Clear any existing timeout
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
-    // Delay clearing the expanded groups to allow moving to hover cards
     timeoutRef.current = setTimeout(() => {
       setExpandedGroups(new Set());
       timeoutRef.current = null;
     }, 800);
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
@@ -195,7 +183,6 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
     };
   }, []);
 
-  // Cleanup all timeouts on unmount
   useEffect(() => {
     return () => {
       if (timeoutRef.current) {
@@ -207,49 +194,49 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
   return (
     <TooltipProvider delayDuration={300}>
       <div className="flex justify-center w-full px-4 mt-5" ref={containerRef}>
-        <div className="w-full max-w-5xl relative">
-          <div className="flex justify-center md:justify-center gap-2 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory"
+        <div className="w-full max-w-5xl">
+          <div className="flex justify-center gap-2 relative overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory"
                style={{ 
                  WebkitOverflowScrolling: 'touch',
                  scrollbarWidth: 'none',
-                 msOverflowStyle: 'none'
+                 msOverflowStyle: 'none',
+                 paddingBottom: '400px',
+                 marginBottom: '-400px'
                }}>
             {tabs.map((tab, index) => (
-              <div key={index} className="snap-center flex-shrink-0">
-                <div className="relative">
-                  <button
-                    onMouseEnter={() => handleTabHover(tab.id)}
-                    onClick={() => {
-                      if (tab.id === "power-playbook") {
-                        setPowerPlaybookModalOpen(true);
-                      }
-                    }}
-                    onMouseLeave={handleTabLeave}
-                    style={{ backgroundColor: activeTab === tab.id ? '#C7A8EA' : '#F3EAFE' }}
-                    className={`
-                      w-[100px] py-2 rounded-xl font-inter font-medium text-sm tracking-tight text-center
-                      transition-all duration-300 ease-in-out
-                      focus:outline-none
-                      flex items-center justify-center
-                      leading-tight
-                      hover:shadow-md
-                      ${activeTab === tab.id
-                        ? 'text-[#6F42C1]' 
-                        : 'text-[#444] hover:bg-[#DCC8F2]'
-                      }
-                    `}
+              <div key={index} className="relative snap-center flex-shrink-0">
+                <button
+                  onMouseEnter={() => handleTabHover(tab.id)}
+                  onClick={() => {
+                    if (tab.id === "power-playbook") {
+                      setPowerPlaybookModalOpen(true);
+                    }
+                  }}
+                  onMouseLeave={handleTabLeave}
+                  style={{ backgroundColor: activeTab === tab.id ? '#C7A8EA' : '#F3EAFE' }}
+                  className={`
+                    w-[100px] py-2 rounded-xl font-inter font-medium text-sm tracking-tight text-center
+                    transition-all duration-300 ease-in-out
+                    focus:outline-none
+                    flex items-center justify-center
+                    leading-tight
+                    hover:shadow-md
+                    ${activeTab === tab.id
+                      ? 'text-[#6F42C1]' 
+                      : 'text-[#444] hover:bg-[#DCC8F2]'
+                    }
+                  `}
+                >
+                  <span className="whitespace-pre-line">{tab.text}</span>
+                </button>
+                
+                {/* Dropdown */}
+                {activeTab === tab.id && !["power-playbook", "think-hard", "deep-research"].includes(tab.id) && (
+                  <div 
+                    className="absolute top-full w-[100px] bg-[#F8F5FE] rounded-lg shadow-lg border border-[#E5D9F2] z-[100]"
+                    onMouseEnter={handleDropdownEnter}
+                    onMouseLeave={handleDropdownLeave}
                   >
-                    <span className="whitespace-pre-line">{tab.text}</span>
-                  </button>
-                  
-                  {/* Dropdown - only for certain tabs */}
-                  {activeTab === tab.id && !["power-playbook", "think-hard", "deep-research"].includes(tab.id) && (
-                    <div 
-                      className="absolute top-full left-0 w-[100px] bg-[#F8F5FE] rounded-lg shadow-md border border-[#E5D9F2] z-[100] mt-1"
-                      onMouseEnter={handleDropdownEnter}
-                      onMouseLeave={handleDropdownLeave}
-                      style={{ position: 'absolute' }}
-                    >
                     {activeTab === "beautiful-writing" && (
                       <div className="py-2">
                         {beautifulWritingItems.map((item, idx) => {
@@ -375,53 +362,167 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                             </button>
                             {expandedGroups.has(group.title) && (
                               <div 
-                                className={`absolute left-full ${groupIdx >= 2 ? 'bottom-0' : 'top-0'} bg-[#F8F5FE] rounded-lg shadow-md border border-[#E5D9F2] z-50 w-48`}
+                                className={`absolute left-full ${groupIdx >= 2 ? 'bottom-0' : 'top-0'} bg-[#F8F5FE] rounded-lg shadow-lg border border-[#E5D9F2] z-[100] w-48`}
                                 onMouseEnter={() => handleSubmenuEnter(group.title)}
                                 onMouseLeave={handleSubmenuLeave}
                               >
                                 <div className="py-2">
                                    {group.items.map((item, itemIdx) => {
-                                     const getHoverCard = (item: string, content: React.ReactNode) => {
-                                        const hoverCards: { [key: string]: React.ComponentType<any> } = {
-                                          "Love letter": LoveLetterHoverCard,
-                                          "Apology letter": ApologyLetterHoverCard,
-                                          "Thank you letter": ThankYouLetterHoverCard,
-                                          "Condolence letter": CondolenceLetterHoverCard,
-                                          "Invitation letter": InvitationLetterHoverCard,
-                                          "Congratulatory letter": CongratulatoryLetterHoverCard,
-                                          "Welcome letter": WelcomeLetterHoverCard,
-                                          "Farewell letter": FarewellLetterHoverCard,
-                                          "Complaint letter": ComplaintLetterHoverCard,
-                                          "Recommendation letter": RecommendationLetterHoverCard,
-                                          "Request letter": RequestLetterHoverCard,
-                                          "General letter": GeneralLetterHoverCard,
-                                          "Leave application": LeaveApplicationHoverCard,
-                                          "Permission letter": PermissionLetterHoverCard,
-                                          "Appreciation letter": AppreciationLetterHoverCard,
-                                          "Appointment request letter": AppointmentRequestHoverCard,
-                                          "Publication request letter": PublicationRequestHoverCard,
-                                        };
-                                       
-                                        const HoverCard = hoverCards[item];
-                                        return HoverCard ? React.createElement(HoverCard, { key: itemIdx, onPromptGenerated, children: content }) : content;
-                                     };
-
-                                      const displayText = item === "Appointment request letter" 
-                                        ? "Appointment request\nletter"
-                                        : item === "Publication request letter"
-                                        ? "Publication request\nletter" 
-                                        : item;
-
-                                       return getHoverCard(
-                                         item,
-                                         <button
-                                           className="w-full text-left px-4 py-2 text-sm text-[#666] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-pre-line"
-                                           onClick={() => console.log(`Selected: ${item}`)}
-                                         >
-                                           {displayText}
-                                         </button>
-                                       );
-                                  })}
+                                      if (item === "Love letter") {
+                                        return (
+                                          <LoveLetterHoverCard key={itemIdx} onPromptGenerated={onPromptGenerated}>
+                                            <button className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal">
+                                              {item}
+                                            </button>
+                                          </LoveLetterHoverCard>
+                                        );
+                                      }
+                                      if (item === "Apology letter") {
+                                        return (
+                                          <ApologyLetterHoverCard key={itemIdx} onPromptGenerated={onPromptGenerated}>
+                                            <button className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal">
+                                              {item}
+                                            </button>
+                                          </ApologyLetterHoverCard>
+                                        );
+                                      }
+                                      if (item === "Thank you letter") {
+                                        return (
+                                          <ThankYouLetterHoverCard key={itemIdx} onPromptGenerated={onPromptGenerated}>
+                                            <button className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal">
+                                              {item}
+                                            </button>
+                                          </ThankYouLetterHoverCard>
+                                        );
+                                      }
+                                      if (item === "Condolence letter") {
+                                        return (
+                                          <CondolenceLetterHoverCard key={itemIdx} onPromptGenerated={onPromptGenerated}>
+                                            <button className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal">
+                                              {item}
+                                            </button>
+                                          </CondolenceLetterHoverCard>
+                                        );
+                                      }
+                                      if (item === "Invitation letter") {
+                                        return (
+                                          <InvitationLetterHoverCard key={itemIdx} onPromptGenerated={onPromptGenerated}>
+                                            <button className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal">
+                                              {item}
+                                            </button>
+                                          </InvitationLetterHoverCard>
+                                        );
+                                      }
+                                      if (item === "Congratulatory letter") {
+                                        return (
+                                          <CongratulatoryLetterHoverCard key={itemIdx} onPromptGenerated={onPromptGenerated}>
+                                            <button className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal">
+                                              {item}
+                                            </button>
+                                          </CongratulatoryLetterHoverCard>
+                                        );
+                                      }
+                                      if (item === "Welcome letter") {
+                                        return (
+                                          <WelcomeLetterHoverCard key={itemIdx} onPromptGenerated={onPromptGenerated}>
+                                            <button className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal">
+                                              {item}
+                                            </button>
+                                          </WelcomeLetterHoverCard>
+                                        );
+                                      }
+                                      if (item === "Farewell letter") {
+                                        return (
+                                          <FarewellLetterHoverCard key={itemIdx} onPromptGenerated={onPromptGenerated}>
+                                            <button className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal">
+                                              {item}
+                                            </button>
+                                          </FarewellLetterHoverCard>
+                                        );
+                                      }
+                                      if (item === "Leave application") {
+                                        return (
+                                          <LeaveApplicationHoverCard key={itemIdx} onPromptGenerated={onPromptGenerated}>
+                                            <button className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal">
+                                              {item}
+                                            </button>
+                                          </LeaveApplicationHoverCard>
+                                        );
+                                      }
+                                      if (item === "Permission letter") {
+                                        return (
+                                          <PermissionLetterHoverCard key={itemIdx} onPromptGenerated={onPromptGenerated}>
+                                            <button className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal">
+                                              {item}
+                                            </button>
+                                          </PermissionLetterHoverCard>
+                                        );
+                                      }
+                                      if (item === "Appreciation letter") {
+                                        return (
+                                          <AppreciationLetterHoverCard key={itemIdx} onPromptGenerated={onPromptGenerated}>
+                                            <button className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal">
+                                              {item}
+                                            </button>
+                                          </AppreciationLetterHoverCard>
+                                        );
+                                      }
+                                      if (item === "Appointment request letter") {
+                                        return (
+                                          <AppointmentRequestHoverCard key={itemIdx} onPromptGenerated={onPromptGenerated}>
+                                            <button className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal">
+                                              {item}
+                                            </button>
+                                          </AppointmentRequestHoverCard>
+                                        );
+                                      }
+                                      if (item === "Publication request letter") {
+                                        return (
+                                          <PublicationRequestHoverCard key={itemIdx} onPromptGenerated={onPromptGenerated}>
+                                            <button className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal">
+                                              {item}
+                                            </button>
+                                          </PublicationRequestHoverCard>
+                                        );
+                                      }
+                                      if (item === "Complaint letter") {
+                                        return (
+                                          <ComplaintLetterHoverCard key={itemIdx} onPromptGenerated={onPromptGenerated}>
+                                            <button className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal">
+                                              {item}
+                                            </button>
+                                          </ComplaintLetterHoverCard>
+                                        );
+                                      }
+                                      if (item === "Recommendation letter") {
+                                        return (
+                                          <RecommendationLetterHoverCard key={itemIdx} onPromptGenerated={onPromptGenerated}>
+                                            <button className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal">
+                                              {item}
+                                            </button>
+                                          </RecommendationLetterHoverCard>
+                                        );
+                                      }
+                                      if (item === "Request letter") {
+                                        return (
+                                          <RequestLetterHoverCard key={itemIdx} onPromptGenerated={onPromptGenerated}>
+                                            <button className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal">
+                                              {item}
+                                            </button>
+                                          </RequestLetterHoverCard>
+                                        );
+                                      }
+                                      if (item === "General letter") {
+                                        return (
+                                          <GeneralLetterHoverCard key={itemIdx} onPromptGenerated={onPromptGenerated}>
+                                            <button className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal">
+                                              {item}
+                                            </button>
+                                          </GeneralLetterHoverCard>
+                                        );
+                                      }
+                                      return null;
+                                    })}
                                 </div>
                               </div>
                             )}
@@ -429,90 +530,62 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                         ))}
                       </div>
                     )}
-                    
-                    
                     {activeTab === "task-assistant" && (
                       <div className="py-2">
                         {taskAssistantItems.map((item, idx) => {
-                           if (item.text === "Brainstorm with me") {
-                             return (
-                               <BrainstormHoverCard key={idx}>
-                                 <button
-                                          className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-pastel-lavender-hover hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
-                                   onClick={() => console.log(`Selected: ${item.text}`)}
-                                 >
-                                   {item.text}
-                                 </button>
-                               </BrainstormHoverCard>
-                             );
-                           }
-
-                           if (item.text === "Scenario Planning") {
-                             return (
-                               <ScenarioHoverCard key={idx}>
-                                 <button
-                                   className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
-                                   onClick={() => console.log(`Selected: ${item.text}`)}
-                                 >
-                                   {item.text}
-                                 </button>
-                               </ScenarioHoverCard>
-                             );
-                           }
-
-                           if (item.text === "Think like a mentor") {
-                             return (
-                               <MentorHoverCard key={idx}>
-                                 <button
-                                   className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
-                                   onClick={() => console.log(`Selected: ${item.text}`)}
-                                 >
-                                   {item.text}
-                                 </button>
-                               </MentorHoverCard>
-                             );
-                           }
-
-                           if (item.text === "Be a devil's advocate") {
-                             return (
-                               <DevilsAdvocateHoverCard key={idx}>
-                                 <button
-                                   className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
-                                   onClick={() => console.log(`Selected: ${item.text}`)}
-                                 >
-                                   {item.text}
-                                 </button>
-                               </DevilsAdvocateHoverCard>
-                             );
-                           }
-
-                           if (item.text === "Astro Lens") {
-                             return (
-                               <AstroLensHoverCard key={idx}>
-                                 <button
-                                   className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
-                                   onClick={() => console.log(`Selected: ${item.text}`)}
-                                 >
-                                   <div className="leading-tight">
-                                     <div>Astro</div>
-                                     <div>Lens</div>
-                                   </div>
-                                 </button>
-                               </AstroLensHoverCard>
-                             );
-                           }
-
+                          if (item.text === "Brainstorm with me") {
+                            return (
+                              <BrainstormHoverCard key={idx} onPromptGenerated={onPromptGenerated}>
+                                <button className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal">
+                                  {item.text}
+                                </button>
+                              </BrainstormHoverCard>
+                            );
+                          }
+                          if (item.text === "Scenario Planning") {
+                            return (
+                              <ScenarioHoverCard key={idx} onPromptGenerated={onPromptGenerated}>
+                                <button className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal">
+                                  {item.text}
+                                </button>
+                              </ScenarioHoverCard>
+                            );
+                          }
+                          if (item.text === "Think like a mentor") {
+                            return (
+                              <MentorHoverCard key={idx} onPromptGenerated={onPromptGenerated}>
+                                <button className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal">
+                                  {item.text}
+                                </button>
+                              </MentorHoverCard>
+                            );
+                          }
+                          if (item.text === "Be a devil's advocate") {
+                            return (
+                              <DevilsAdvocateHoverCard key={idx} onPromptGenerated={onPromptGenerated}>
+                                <button className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal">
+                                  {item.text}
+                                </button>
+                              </DevilsAdvocateHoverCard>
+                            );
+                          }
+                          if (item.text === "Astro Lens") {
+                            return (
+                              <AstroLensHoverCard key={idx} onPromptGenerated={onPromptGenerated}>
+                                <button className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal">
+                                  {item.text}
+                                </button>
+                              </AstroLensHoverCard>
+                            );
+                          }
                           return (
                             <Tooltip key={idx}>
                               <TooltipTrigger asChild>
-                                <button
-                                  className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal"
-                                  onClick={() => console.log(`Selected: ${item.text}`)}
-                                >
+                                <button className="w-full text-left px-4 py-3 text-sm text-[#444] hover:bg-[#EDE0F7] hover:text-[#6F42C1] transition-colors leading-tight whitespace-normal">
                                   {item.text}
                                 </button>
                               </TooltipTrigger>
-                              <TooltipContent side="right" className="max-w-xs">
+                              <TooltipContent side="left" className="max-w-xs">
                                 <p>{item.tooltip}</p>
                               </TooltipContent>
                             </Tooltip>
@@ -555,7 +628,6 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                   </div>
                 )}
               </div>
-            </div>
             ))}
           </div>
         </div>
