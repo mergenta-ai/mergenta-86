@@ -289,15 +289,15 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
 
                 {/* Model Selection Dropdown */}
                 {showModelDropdown && (
-                  <div className="absolute bottom-full mb-2 right-0 bg-white rounded-lg shadow-xl border border-gray-200 z-[9999] w-[90vw] sm:w-[500px] max-h-[70vh] overflow-y-auto">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-0">
+                  <div className="absolute bottom-full mb-2 right-0 sm:right-0 left-0 sm:left-auto bg-white rounded-lg shadow-xl border border-gray-200 z-[9999] w-full sm:w-[500px] max-w-[calc(100vw-2rem)] max-h-[70vh] overflow-y-auto mx-4 sm:mx-0">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-0 divide-y sm:divide-y-0 sm:divide-x divide-gray-200">
                       {/* Creativity Column */}
-                      <div className="border-b sm:border-b-0 sm:border-r border-gray-200 p-4">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Sparkles className="h-5 w-5 text-purple-600" />
-                          <div>
+                      <div className="p-4">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Sparkles className="h-4 w-4 text-purple-600 flex-shrink-0" />
+                          <div className="min-w-0">
                             <h3 className="text-sm font-semibold text-gray-900">Creativity</h3>
-                            <p className="text-xs text-gray-500">(Inventive & Expressive)</p>
+                            <p className="text-xs text-gray-500 truncate">(Inventive & Expressive)</p>
                           </div>
                         </div>
                         <div className="space-y-1 mt-3">
@@ -347,11 +347,11 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
 
                       {/* Research Column */}
                       <div className="p-4">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Brain className="h-5 w-5 text-blue-600" />
-                          <div>
+                        <div className="flex items-center gap-2 mb-3">
+                          <Brain className="h-4 w-4 text-blue-600 flex-shrink-0" />
+                          <div className="min-w-0">
                             <h3 className="text-sm font-semibold text-gray-900">Research</h3>
-                            <p className="text-xs text-gray-500">(Reasoning & Thinking)</p>
+                            <p className="text-xs text-gray-500 truncate">(Reasoning & Thinking)</p>
                           </div>
                         </div>
                         <div className="space-y-1 mt-3">
