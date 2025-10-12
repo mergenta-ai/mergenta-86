@@ -289,7 +289,7 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
 
                 {/* Model Selection Dropdown */}
                 {showModelDropdown && (
-                  <div className="absolute bottom-full mb-2 right-0 sm:right-0 left-0 sm:left-auto bg-white rounded-lg shadow-xl border border-gray-200 z-[9999] w-full sm:w-[500px] max-w-[calc(100vw-2rem)] max-h-[70vh] overflow-y-auto mx-4 sm:mx-0">
+                  <div className="fixed sm:absolute bottom-24 sm:bottom-full left-4 right-4 sm:left-auto sm:right-0 mb-2 bg-white rounded-lg shadow-xl border border-gray-200 z-[9999] sm:w-[500px] max-h-[70vh] overflow-y-auto">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-0 divide-y sm:divide-y-0 sm:divide-x divide-gray-200">
                       {/* Creativity Column */}
                       <div className="p-4">
@@ -300,7 +300,7 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                             <p className="text-xs text-gray-500 truncate">(Inventive & Expressive)</p>
                           </div>
                         </div>
-                        <div className="space-y-1 mt-3">
+                        <div className="space-y-1.5 mt-3">
                           {MODEL_CONFIG.filter(m => m.category === 'creativity').map((model) => {
                             const available = isModelAvailable(model.id, planType);
                             
@@ -316,27 +316,29 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                                   onModelSelect?.(model.id);
                                   setShowModelDropdown(false);
                                 }}
-                                className={`w-full text-left px-3 py-2 rounded-md transition-all text-sm ${
+                                className={`w-full text-left px-3 py-2.5 rounded-md transition-all text-sm ${
                                   available
                                     ? 'hover:bg-gray-50 text-gray-700'
                                     : 'text-gray-400 hover:bg-gray-50'
                                 }`}
                               >
-                                <div className="flex items-center justify-between gap-2">
-                                  <span className="flex-1 truncate">{model.displayName}</span>
-                                  <div className="flex items-center gap-1 flex-shrink-0">
+                                <div className="flex items-center justify-between gap-2 min-w-0">
+                                  <span className="flex-1 truncate text-left">{model.displayName}</span>
+                                  <div className="flex items-center gap-1.5 flex-shrink-0">
                                     {model.badge && (
-                                      <span className={`text-xs px-1.5 py-0.5 rounded font-semibold ${
+                                      <span className={`text-xs px-2 py-0.5 rounded font-semibold whitespace-nowrap ${
                                         model.badge === 'Latest' 
                                           ? 'bg-green-100 text-green-700'
                                           : model.badge === 'Ace'
                                           ? 'bg-violet-100 text-violet-700'
+                                          : model.badge === 'Max'
+                                          ? 'bg-orange-100 text-orange-700'
                                           : 'bg-purple-100 text-purple-600'
                                       }`}>
                                         {model.badge}
                                       </span>
                                     )}
-                                    {!available && <Lock className="h-3 w-3" />}
+                                    {!available && <Lock className="h-3.5 w-3.5" />}
                                   </div>
                                 </div>
                               </button>
@@ -354,7 +356,7 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                             <p className="text-xs text-gray-500 truncate">(Reasoning & Thinking)</p>
                           </div>
                         </div>
-                        <div className="space-y-1 mt-3">
+                        <div className="space-y-1.5 mt-3">
                           {MODEL_CONFIG.filter(m => m.category === 'research').map((model) => {
                             const available = isModelAvailable(model.id, planType);
                             
@@ -370,25 +372,27 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                                   onModelSelect?.(model.id);
                                   setShowModelDropdown(false);
                                 }}
-                                className={`w-full text-left px-3 py-2 rounded-md transition-all text-sm ${
+                                className={`w-full text-left px-3 py-2.5 rounded-md transition-all text-sm ${
                                   available
                                     ? 'hover:bg-gray-50 text-gray-700'
                                     : 'text-gray-400 hover:bg-gray-50'
                                 }`}
                               >
-                                <div className="flex items-center justify-between gap-2">
-                                  <span className="flex-1 truncate">{model.displayName}</span>
-                                  <div className="flex items-center gap-1 flex-shrink-0">
+                                <div className="flex items-center justify-between gap-2 min-w-0">
+                                  <span className="flex-1 truncate text-left">{model.displayName}</span>
+                                  <div className="flex items-center gap-1.5 flex-shrink-0">
                                     {model.badge && (
-                                      <span className={`text-xs px-1.5 py-0.5 rounded font-semibold ${
+                                      <span className={`text-xs px-2 py-0.5 rounded font-semibold whitespace-nowrap ${
                                         model.badge === 'Ace'
                                           ? 'bg-violet-100 text-violet-700'
+                                          : model.badge === 'Max'
+                                          ? 'bg-orange-100 text-orange-700'
                                           : 'bg-blue-100 text-blue-700'
                                       }`}>
                                         {model.badge}
                                       </span>
                                     )}
-                                    {!available && <Lock className="h-3 w-3" />}
+                                    {!available && <Lock className="h-3.5 w-3.5" />}
                                   </div>
                                 </div>
                               </button>
