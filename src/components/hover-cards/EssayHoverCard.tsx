@@ -110,8 +110,6 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
   // Close card when clicking outside
   useClickOutside(showCard, () => setShowCard(false), "[data-essay-card]", "[data-essay-trigger]");
 
-  
-
   return (
     <div className="relative">
       {/* Trigger Element */}
@@ -129,7 +127,7 @@ const EssayHoverCard: React.FC<EssayHoverCardProps> = ({ children, onPromptGener
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-essay-card
-            className="absolute left-[620px] top-[140px] w-80 pointer-events-auto"
+            className="absolute left-[570px] top-[140px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
