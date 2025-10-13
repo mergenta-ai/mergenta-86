@@ -125,7 +125,7 @@ const DevilsAdvocateHoverCard: React.FC<DevilsAdvocateHoverCardProps> = ({ child
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-devils-advocate-card
-            className="absolute left-[1050px] top-[360px] w-80 pointer-events-auto"
+            className="absolute left-[1044px] top-[360px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
