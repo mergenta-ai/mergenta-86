@@ -134,7 +134,7 @@ const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children, onPromp
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-scenario-card
-            className="absolute left-[1044px] top-[165px] w-80 pointer-events-auto"
+            className="absolute left-[1044px] top-[185px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
