@@ -199,7 +199,9 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                style={{ 
                  WebkitOverflowScrolling: 'touch',
                  scrollbarWidth: 'none',
-                 msOverflowStyle: 'none'
+                 msOverflowStyle: 'none',
+                 paddingBottom: '20px',
+                 marginBottom: '-20px'
                }}>
             {tabs.map((tab, index) => (
               <div key={index} className="relative snap-center flex-shrink-0">
@@ -231,7 +233,12 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                 {/* Dropdown */}
                 {activeTab === tab.id && !["power-playbook", "think-hard", "deep-research"].includes(tab.id) && (
                   <div 
-                    className="absolute top-full w-[100px] bg-[#F8F5FE] rounded-lg shadow-lg border border-[#E5D9F2] z-[100]"
+                    className="fixed sm:absolute top-auto sm:top-full w-[100px] bg-[#F8F5FE] rounded-lg shadow-lg border border-[#E5D9F2] z-[200] mt-2"
+                    style={{
+                      left: typeof window !== 'undefined' && window.innerWidth < 640 
+                        ? `${(index * 108) + 50}px`
+                        : 'auto'
+                    }}
                     onMouseEnter={handleDropdownEnter}
                     onMouseLeave={handleDropdownLeave}
                   >
@@ -360,7 +367,7 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                             </button>
                             {expandedGroups.has(group.title) && (
                               <div 
-                                className={`absolute left-full ${groupIdx >= 2 ? 'bottom-0' : 'top-0'} bg-[#F8F5FE] rounded-lg shadow-lg border border-[#E5D9F2] z-[100] w-48`}
+                                className={`fixed sm:absolute left-auto sm:left-full ${groupIdx >= 2 ? 'bottom-0' : 'top-0'} bg-[#F8F5FE] rounded-lg shadow-lg border border-[#E5D9F2] z-[250] w-48 ml-2`}
                                 onMouseEnter={() => handleSubmenuEnter(group.title)}
                                 onMouseLeave={handleSubmenuLeave}
                               >
