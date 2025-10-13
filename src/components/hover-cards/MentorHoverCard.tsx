@@ -129,7 +129,7 @@ const MentorHoverCard: React.FC<MentorHoverCardProps> = ({ children, onPromptGen
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-mentor-card
-            className="absolute left-[1045px] top-[285px] w-80 pointer-events-auto"
+            className="absolute left-[1050px] top-[290px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
