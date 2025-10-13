@@ -82,7 +82,7 @@ const AppointmentRequestHoverCard = ({ children, onPromptGenerated }: Appointmen
         <div className="fixed inset-0 z-[200]">
           <div
             data-appointment-request-card
-            className="absolute left-[918px] top-[200px] w-80 pointer-events-auto"
+            className="absolute left-[910px] top-[200px] w-80 pointer-events-auto"
             onClick={handleCardClick}
           >
             <div className="p-6 bg-pastel-lavender rounded-2xl shadow-lg border border-[#E5D9F2] animate-in fade-in-0 zoom-in-95 duration-200">
