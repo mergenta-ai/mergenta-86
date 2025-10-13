@@ -103,8 +103,6 @@ const BrainstormHoverCard: React.FC<BrainstormHoverCardProps> = ({ children, onP
 
   useClickOutside(showCard, () => setShowCard(false), "[data-brainstorm-card]", "[data-brainstorm-trigger]");
 
-  
-
   return (
     <div className="relative">
       {/* Trigger Element */}
@@ -122,7 +120,7 @@ const BrainstormHoverCard: React.FC<BrainstormHoverCardProps> = ({ children, onP
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-brainstorm-card
-            className="absolute left-[1052px] top-[490px] w-80 pointer-events-auto"
+            className="absolute left-[1044px] top-[490px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
