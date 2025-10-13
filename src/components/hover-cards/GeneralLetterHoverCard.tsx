@@ -97,8 +97,6 @@ const GeneralLetterHoverCard = ({ children, onPromptGenerated }: GeneralLetterHo
 
   useClickOutside(showCard, () => setShowCard(false), "[data-general-letter-card]", "[data-general-letter-trigger]");
 
-  
-
   return (
     <div className="relative">
       <div
@@ -114,7 +112,7 @@ const GeneralLetterHoverCard = ({ children, onPromptGenerated }: GeneralLetterHo
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-general-letter-card
-            className="absolute left-[918px] top-[220px] w-80 pointer-events-auto"
+            className="absolute left-[910px] top-[220px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}

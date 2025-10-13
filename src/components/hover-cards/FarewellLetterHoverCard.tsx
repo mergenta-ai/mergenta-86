@@ -98,8 +98,6 @@ const FarewellLetterHoverCard = ({ children, onPromptGenerated }: FarewellLetter
   // Close card when clicking outside
   useClickOutside(showCard, () => setShowCard(false), "[data-farewell-letter-card]", "[data-farewell-letter-trigger]");
 
-  
-
   return (
     <div className="relative">
       {/* Trigger Element */}
@@ -117,7 +115,7 @@ const FarewellLetterHoverCard = ({ children, onPromptGenerated }: FarewellLetter
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-farewell-letter-card
-            className="absolute left-[918px] top-[160px] w-80 pointer-events-auto"
+            className="absolute left-[910px] top-[160px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}

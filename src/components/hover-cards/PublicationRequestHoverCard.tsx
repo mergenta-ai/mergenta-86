@@ -96,19 +96,14 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
   };
 
   // Close card when clicking outside
-  useClickOutside(
-    showCard,
-    () => setShowCard(false),
-    '[data-publication-card]',
-    '[data-publication-trigger]'
-  );
+  useClickOutside(showCard, () => setShowCard(false), "[data-publication-card]", "[data-publication-trigger]");
 
   return (
     <div className="relative">
       {/* Trigger Element */}
-      <div 
+      <div
         data-publication-trigger
-        onMouseEnter={handleMouseEnter} 
+        onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={() => setShowCard(!showCard)}
       >
@@ -120,7 +115,7 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-publication-card
-            className="absolute left-[918px] top-[220px] w-80 pointer-events-auto"
+            className="absolute left-[910px] top-[220px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
@@ -145,86 +140,86 @@ const PublicationRequestHoverCard = ({ children, onPromptGenerated }: Publicatio
                     <X className="h-4 w-4 text-[#5B34A0] group-hover:text-white transition-colors duration-300" />
                   </Button>
                 </div>
-                
+
                 <div className="space-y-3">
-                   <div>
-                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label>
-                     <Textarea
-                       value={draftData.to}
-                       onChange={(e) => saveDraft("to", e.target.value)}
+                  <div>
+                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label>
+                    <Textarea
+                      value={draftData.to}
+                      onChange={(e) => saveDraft("to", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Dear Sir/Madam, Editor, Journal name, Magazine name, Publication name, etc..."
                       className="w-full min-h-[60px] resize-none"
                       autoComplete="off"
-                      />
+                    />
                   </div>
-                  
-                   <div>
-                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label>
-                     <Textarea
-                       value={draftData.subject}
-                       onChange={(e) => saveDraft("subject", e.target.value)}
+
+                  <div>
+                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label>
+                    <Textarea
+                      value={draftData.subject}
+                      onChange={(e) => saveDraft("subject", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Publication submission, Article proposal, Content request, Book publication, Story publication, etc..."
                       className="w-full min-h-[60px] resize-none"
                       autoComplete="off"
                     />
                   </div>
-                  
-                   <div>
-                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Core Message</label>
-                     <Textarea
-                       value={draftData.coreMessage}
-                       onChange={(e) => saveDraft("coreMessage", e.target.value)}
+
+                  <div>
+                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Core Message</label>
+                    <Textarea
+                      value={draftData.coreMessage}
+                      onChange={(e) => saveDraft("coreMessage", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Article summary, genre, book excerpt, story/novel/book/publication details, research paper summary, story idea, etc..."
                       className="w-full min-h-[80px] resize-none"
                       autoComplete="off"
                     />
                   </div>
-                  
-                   <div>
-                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Final Touch</label>
-                     <Textarea
-                       value={draftData.finalTouch}
-                       onChange={(e) => saveDraft("finalTouch", e.target.value)}
+
+                  <div>
+                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Final Touch</label>
+                    <Textarea
+                      value={draftData.finalTouch}
+                      onChange={(e) => saveDraft("finalTouch", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Tone, length, audience specification, special requests, etc..."
                       className="w-full min-h-[60px] resize-none"
                       autoComplete="off"
                     />
                   </div>
-                  
-                   <div>
-                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Sign Off</label>
-                     <Textarea
-                       value={draftData.signOff}
-                       onChange={(e) => saveDraft("signOff", e.target.value)}
+
+                  <div>
+                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Sign Off</label>
+                    <Textarea
+                      value={draftData.signOff}
+                      onChange={(e) => saveDraft("signOff", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Other details, closing lines, wrap-up..."
                       className="w-full min-h-[60px] resize-none"
                       autoComplete="off"
                     />
                   </div>
-                  
-                   <div>
-                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">From</label>
-                     <Input
-                       value={draftData.from}
-                       onChange={(e) => saveDraft("from", e.target.value)}
+
+                  <div>
+                    <label className="text-sm font-medium text-[#5B34A0] mb-1 block">From</label>
+                    <Input
+                      value={draftData.from}
+                      onChange={(e) => saveDraft("from", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Your name, Your instirution/organisation..."
                       className="w-full"
                       autoComplete="off"
                     />
                   </div>
-                  
-                   <button
-                     className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
-                     onClick={handleGeneratePrompt}
-                   >
-                     Request Publication
-                   </button>
+
+                  <button
+                    className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
+                    onClick={handleGeneratePrompt}
+                  >
+                    Request Publication
+                  </button>
                 </div>
               </div>
             </div>

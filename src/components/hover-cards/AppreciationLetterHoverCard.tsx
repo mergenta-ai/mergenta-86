@@ -79,7 +79,7 @@ const AppreciationLetterHoverCard = ({ children, onPromptGenerated }: Appreciati
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-appreciation-letter-card
-            className="absolute left-[918px] top-[220px] w-80 pointer-events-auto"
+            className="absolute left-[910px] top-[220px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
@@ -108,7 +108,7 @@ const AppreciationLetterHoverCard = ({ children, onPromptGenerated }: Appreciati
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label>
                     <Textarea
                       value={draftData.to || ""}
-                      onChange={(e) => saveDraft('to', e.target.value)}
+                      onChange={(e) => saveDraft("to", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Dear [Name], Employee, Colleague, Student, Team, Relative, Teacher, etc..."
                       className="w-full min-h-[60px] resize-none"
@@ -120,7 +120,7 @@ const AppreciationLetterHoverCard = ({ children, onPromptGenerated }: Appreciati
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label>
                     <Textarea
                       value={draftData.subject || ""}
-                      onChange={(e) => saveDraft('subject', e.target.value)}
+                      onChange={(e) => saveDraft("subject", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Recognition, Gratitude, Thanks, Appreciation, etc..."
                       className="w-full min-h-[60px] resize-none"
@@ -132,7 +132,7 @@ const AppreciationLetterHoverCard = ({ children, onPromptGenerated }: Appreciati
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Core Message</label>
                     <Textarea
                       value={draftData.coreMessage || ""}
-                      onChange={(e) => saveDraft('coreMessage', e.target.value)}
+                      onChange={(e) => saveDraft("coreMessage", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Efforts, Contributions, Achievements, Great work, Gratitude..."
                       className="w-full min-h-[80px] resize-none"
@@ -144,7 +144,7 @@ const AppreciationLetterHoverCard = ({ children, onPromptGenerated }: Appreciati
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Final Touch</label>
                     <Textarea
                       value={draftData.finalTouch || ""}
-                      onChange={(e) => saveDraft('finalTouch', e.target.value)}
+                      onChange={(e) => saveDraft("finalTouch", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Sincerity, Specific examples, Inspiration, Positive traits, etc..."
                       className="w-full min-h-[60px] resize-none"
@@ -156,7 +156,7 @@ const AppreciationLetterHoverCard = ({ children, onPromptGenerated }: Appreciati
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Sign Off</label>
                     <Textarea
                       value={draftData.signOff || ""}
-                      onChange={(e) => saveDraft('signOff', e.target.value)}
+                      onChange={(e) => saveDraft("signOff", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Keep inspiring, Best wishes, Energy to you, With regards, With thanks, etc..."
                       className="w-full min-h-[60px] resize-none"
@@ -168,7 +168,7 @@ const AppreciationLetterHoverCard = ({ children, onPromptGenerated }: Appreciati
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">From</label>
                     <Input
                       value={draftData.from || ""}
-                      onChange={(e) => saveDraft('from', e.target.value)}
+                      onChange={(e) => saveDraft("from", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Your Name"
                       className="w-full"
@@ -189,7 +189,7 @@ const AppreciationLetterHoverCard = ({ children, onPromptGenerated }: Appreciati
                               coreMessage: draftData.coreMessage,
                               finalTouch: draftData.finalTouch,
                               signOff: draftData.signOff,
-                              from: draftData.from
+                              from: draftData.from,
                             },
                           },
                         });

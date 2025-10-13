@@ -98,8 +98,6 @@ const ThankYouLetterHoverCard = ({ children, onPromptGenerated }: ThankYouLetter
   // Close card when clicking outside
   useClickOutside(showCard, () => setShowCard(false), "[data-thank-you-card]", "[data-thank-you-trigger]");
 
-  
-
   return (
     <div className="relative">
       {/* Trigger Element */}
@@ -117,7 +115,7 @@ const ThankYouLetterHoverCard = ({ children, onPromptGenerated }: ThankYouLetter
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-thank-you-card
-            className="absolute left-[918px] top-[120px] w-80 pointer-events-auto"
+            className="absolute left-[910px] top-[120px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}

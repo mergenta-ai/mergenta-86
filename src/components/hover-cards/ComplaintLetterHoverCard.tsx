@@ -98,8 +98,6 @@ const ComplaintLetterHoverCard = ({ children, onPromptGenerated }: ComplaintLett
   // Close card when clicking outside
   useClickOutside(showCard, () => setShowCard(false), "[data-complaint-card]", "[data-complaint-trigger]");
 
-  
-
   return (
     <div className="relative">
       {/* Trigger Element */}
@@ -117,7 +115,7 @@ const ComplaintLetterHoverCard = ({ children, onPromptGenerated }: ComplaintLett
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-complaint-card
-            className="absolute left-[918px] top-[205px] w-80 pointer-events-auto"
+            className="absolute left-[910px] top-[205px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}

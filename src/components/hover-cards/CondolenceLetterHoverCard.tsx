@@ -105,8 +105,6 @@ const CondolenceLetterHoverCard = ({ children, onPromptGenerated }: CondolenceLe
     "[data-condolence-letter-trigger]",
   );
 
-  
-
   return (
     <div className="relative">
       {/* Trigger Element */}
@@ -124,7 +122,7 @@ const CondolenceLetterHoverCard = ({ children, onPromptGenerated }: CondolenceLe
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-condolence-letter-card
-            className="absolute left-[918px] top-[120px] w-80 pointer-events-auto"
+            className="absolute left-[910px] top-[120px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}

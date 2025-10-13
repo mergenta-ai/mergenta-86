@@ -94,8 +94,6 @@ const RequestLetterHoverCard = ({ children, onPromptGenerated }: RequestLetterHo
   // Close card when clicking outside
   useClickOutside(showCard, () => setShowCard(false), "[data-request-card]", "[data-request-trigger]");
 
-  
-
   return (
     <div className="relative">
       {/* Trigger Element */}
@@ -112,7 +110,7 @@ const RequestLetterHoverCard = ({ children, onPromptGenerated }: RequestLetterHo
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-request-card
-            className="absolute left-[918px] top-[220px] w-80 pointer-events-auto"
+            className="absolute left-[910px] top-[220px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}

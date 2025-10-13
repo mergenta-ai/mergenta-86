@@ -99,8 +99,6 @@ const ApologyLetterHoverCard = ({ children, onPromptGenerated }: ApologyLetterHo
   // Close card when clicking outside
   useClickOutside(showCard, () => setShowCard(false), "[data-apology-letter-card]", "[data-apology-letter-trigger]");
 
-  
-
   return (
     <div className="relative">
       {/* Trigger Element */}
@@ -118,7 +116,7 @@ const ApologyLetterHoverCard = ({ children, onPromptGenerated }: ApologyLetterHo
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-apology-letter-card
-            className="absolute left-[918px] top-[120px] w-80 pointer-events-auto"
+            className="absolute left-[910px] top-[120px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}

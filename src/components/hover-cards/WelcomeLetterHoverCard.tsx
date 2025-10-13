@@ -97,8 +97,6 @@ const WelcomeLetterHoverCard = ({ children, onPromptGenerated }: WelcomeLetterHo
 
   useClickOutside(showCard, () => setShowCard(false), "[data-welcome-card]", "[data-welcome-trigger]");
 
-  
-
   return (
     <div className="relative">
       {/* Trigger Element */}
@@ -116,7 +114,7 @@ const WelcomeLetterHoverCard = ({ children, onPromptGenerated }: WelcomeLetterHo
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-welcome-card
-            className="absolute left-[918px] top-[160px] w-80 pointer-events-auto"
+            className="absolute left-[910px] top-[160px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
