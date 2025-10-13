@@ -199,9 +199,7 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                style={{ 
                  WebkitOverflowScrolling: 'touch',
                  scrollbarWidth: 'none',
-                 msOverflowStyle: 'none',
-                 paddingBottom: '400px',
-                 marginBottom: '-400px'
+                 msOverflowStyle: 'none'
                }}>
             {tabs.map((tab, index) => (
               <div key={index} className="relative snap-center flex-shrink-0">
