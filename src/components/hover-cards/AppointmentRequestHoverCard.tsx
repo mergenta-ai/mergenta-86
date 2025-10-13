@@ -14,75 +14,110 @@ interface AppointmentRequestHoverCardProps {
 
 const AppointmentRequestHoverCard = ({ children, onPromptGenerated }: AppointmentRequestHoverCardProps) => {
   const [showCard, setShowCard] = useState(false);
-  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  const { draftData, saveDraft, clearDraft, isLoading } = useDraftPersistence({
+  const { draftData, saveDraft, clearDraft } = useDraftPersistence({
     cardId: "appointment-request",
     initialData: { to: "", subject: "", coreMessage: "", finalTouch: "", signOff: "", from: "" },
   });
 
-  // always-string locals to avoid controlled/uncontrolled issues
-  const to = draftData?.to ?? "";
-  const subject = draftData?.subject ?? "";
-  const coreMessage = draftData?.coreMessage ?? "";
-  const finalTouch = draftData?.finalTouch ?? "";
-  const signOff = draftData?.signOff ?? "";
-  const from = draftData?.from ?? "";
+  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleMouseEnter = () => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
+    setShowCard(true);
+  };
+
+  const handleMouseLeave = () => {
+    closeTimeoutRef.current = setTimeout(() => {
+      setShowCard(false);
+    }, 250);
+  };
 
   const handleCardClick = (e: React.MouseEvent) => {
     e.stopPropagation();
   };
 
-  const handleClearDraft = (e?: React.MouseEvent) => {
-    e?.stopPropagation();
+  const handleClearDraft = (e: React.MouseEvent) => {
+    e.stopPropagation();
 
     const hasContent = Boolean(
-      (to && to.toString().trim() !== "") ||
-        (subject && subject.toString().trim() !== "") ||
-        (coreMessage && coreMessage.toString().trim() !== "") ||
-        (finalTouch && finalTouch.toString().trim() !== "") ||
-        (signOff && signOff.toString().trim() !== "") ||
-        (from && from.toString().trim() !== ""),
+      (draftData.to && draftData.to.trim() !== "") ||
+        (draftData.subject && draftData.subject.trim() !== "") ||
+        (draftData.coreMessage && draftData.coreMessage.trim() !== "") ||
+        (draftData.finalTouch && draftData.finalTouch.trim() !== "") ||
+        (draftData.signOff && draftData.signOff.trim() !== "") ||
+        (draftData.from && draftData.from.trim() !== ""),
     );
 
     if (hasContent) {
-      // Immediately clear visible fields
+      // Clear all fields instantly
       saveDraft("to", "");
       saveDraft("subject", "");
       saveDraft("coreMessage", "");
       saveDraft("finalTouch", "");
       saveDraft("signOff", "");
       saveDraft("from", "");
-      // Clear persisted storage
-      clearDraft();
+      clearDraft(); // wipe persisted data
       return; // keep card open
     }
 
-    // already empty -> close card
+    // If already empty, close the card
     setShowCard(false);
   };
 
+  const handleGeneratePrompt = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke("prompt-engine-consolidated", {
+        body: {
+          contentType: "appointment_request",
+          formData: {
+            to: draftData.to,
+            subject: draftData.subject,
+            coreMessage: draftData.coreMessage,
+            finalTouch: draftData.finalTouch,
+            signOff: draftData.signOff,
+            from: draftData.from,
+          },
+        },
+      });
+
+      if (error) throw error;
+
+      if (data?.success && data?.prompt) {
+        onPromptGenerated?.(data.prompt);
+        setShowCard(false);
+        clearDraft();
+      }
+    } catch (error) {
+      console.error("Error generating prompt:", error);
+    }
+  };
+
   // Close card when clicking outside
-  useClickOutside(
-    showCard,
-    () => setShowCard(false),
-    "[data-appointment-request-card]",
-    "[data-appointment-request-trigger]",
-  );
+  useClickOutside(showCard, () => setShowCard(false), "[data-appointment-request-card]", "[data-appointment-request-trigger]");
 
   return (
     <div className="relative">
-      {/* Trigger Element — click to open */}
-      <div data-appointment-request-trigger onClick={() => setShowCard(true)}>
+      {/* Trigger Element */}
+      <div
+        data-appointment-request-trigger
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onClick={() => setShowCard(!showCard)}
+      >
         {children}
       </div>
 
-      {/* Card overlay (accepts clicks) */}
+      {/* Full Screen Hover Area + Card */}
       {showCard && (
-        <div className="fixed inset-0 z-[200]">
+        <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-appointment-request-card
             className="absolute left-[910px] top-[200px] w-80 pointer-events-auto"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
           >
             <div className="p-6 bg-pastel-lavender rounded-2xl shadow-lg border border-[#E5D9F2] animate-in fade-in-0 zoom-in-95 duration-200">
@@ -112,7 +147,7 @@ const AppointmentRequestHoverCard = ({ children, onPromptGenerated }: Appointmen
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">To</label>
                     <Textarea
-                      value={to}
+                      value={draftData.to}
                       onChange={(e) => saveDraft("to", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Dear Sir/Madam, HR Manager / Company Name, CA, Honourable Minister, etc..."
@@ -124,7 +159,7 @@ const AppointmentRequestHoverCard = ({ children, onPromptGenerated }: Appointmen
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Subject / Purpose</label>
                     <Textarea
-                      value={subject}
+                      value={draftData.subject}
                       onChange={(e) => saveDraft("subject", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Request for Appointment/Interview etc..."
@@ -136,7 +171,7 @@ const AppointmentRequestHoverCard = ({ children, onPromptGenerated }: Appointmen
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Core Message</label>
                     <Textarea
-                      value={coreMessage}
+                      value={draftData.coreMessage}
                       onChange={(e) => saveDraft("coreMessage", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Write about job interview, partnership, discussion, intervention, deals, consultation, problems, contract discussion, etc..."
@@ -148,7 +183,7 @@ const AppointmentRequestHoverCard = ({ children, onPromptGenerated }: Appointmen
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Final Touch</label>
                     <Textarea
-                      value={finalTouch}
+                      value={draftData.finalTouch}
                       onChange={(e) => saveDraft("finalTouch", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Preferred appointment date and time..."
@@ -160,7 +195,7 @@ const AppointmentRequestHoverCard = ({ children, onPromptGenerated }: Appointmen
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">Sign Off</label>
                     <Textarea
-                      value={signOff}
+                      value={draftData.signOff}
                       onChange={(e) => saveDraft("signOff", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Sincerely yours, Respectfully yours, Yours truly, Best regards, etc..."
@@ -172,7 +207,7 @@ const AppointmentRequestHoverCard = ({ children, onPromptGenerated }: Appointmen
                   <div>
                     <label className="text-sm font-medium text-[#5B34A0] mb-1 block">From</label>
                     <Input
-                      value={from}
+                      value={draftData.from}
                       onChange={(e) => saveDraft("from", e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       placeholder="Your Name"
@@ -183,24 +218,7 @@ const AppointmentRequestHoverCard = ({ children, onPromptGenerated }: Appointmen
 
                   <button
                     className="w-full py-3 bg-[#6C3EB6] text-white font-medium rounded-lg hover:bg-[#5B34A0] transition-colors"
-                    onClick={async () => {
-                      try {
-                        const { data, error } = await supabase.functions.invoke("prompt-engine-consolidated", {
-                          body: {
-                            contentType: "appointment_request",
-                            formData: { to, subject, coreMessage, finalTouch, signOff, from },
-                          },
-                        });
-                        if (error) throw error;
-                        if (data?.success && data?.prompt) {
-                          onPromptGenerated?.(data.prompt);
-                          clearDraft();
-                          setShowCard(false);
-                        }
-                      } catch (error) {
-                        console.error("Error generating prompt:", error);
-                      }
-                    }}
+                    onClick={handleGeneratePrompt}
                   >
                     Request Appointment
                   </button>
