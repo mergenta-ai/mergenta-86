@@ -101,8 +101,6 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children, onPro
   // Close card when clicking outside
   useClickOutside(showCard, () => setShowCard(false), "[data-astro-card]", "[data-astro-trigger]");
 
-  
-
   return (
     <div className="relative">
       {/* Trigger Element */}
@@ -120,7 +118,7 @@ const AstroLensHoverCard: React.FC<AstroLensHoverCardProps> = ({ children, onPro
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-astro-card
-            className="absolute left-[1052px] top-[360px] w-80 pointer-events-auto"
+            className="absolute left-[1044px] top-[360px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}

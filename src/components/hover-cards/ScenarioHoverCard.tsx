@@ -117,8 +117,6 @@ const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children, onPromp
 
   useClickOutside(showCard, () => setShowCard(false), "[data-scenario-card]", "[data-scenario-trigger]");
 
-  
-
   return (
     <div className="relative">
       {/* Trigger Element */}
@@ -136,7 +134,7 @@ const ScenarioHoverCard: React.FC<ScenarioHoverCardProps> = ({ children, onPromp
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-scenario-card
-            className="absolute left-[1050px] top-[150px] w-80 pointer-events-auto"
+            className="absolute left-[1044px] top-[165px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}

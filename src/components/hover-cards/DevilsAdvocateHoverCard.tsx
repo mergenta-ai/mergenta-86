@@ -108,8 +108,6 @@ const DevilsAdvocateHoverCard: React.FC<DevilsAdvocateHoverCardProps> = ({ child
   // Close card when clicking outside
   useClickOutside(showCard, () => setShowCard(false), "[data-devils-advocate-card]", "[data-devils-advocate-trigger]");
 
-  
-
   return (
     <div className="relative">
       {/* Trigger Element */}
@@ -127,7 +125,7 @@ const DevilsAdvocateHoverCard: React.FC<DevilsAdvocateHoverCardProps> = ({ child
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-devils-advocate-card
-            className="absolute left-[1050px] top-[320px] w-80 pointer-events-auto"
+            className="absolute left-[1044px] top-[330px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
