@@ -103,8 +103,6 @@ const LoveLetterHoverCard = ({ children, onPromptGenerated }: LoveLetterHoverCar
 
   useClickOutside(showCard, () => setShowCard(false), "[data-love-letter-card]", "[data-love-letter-trigger]");
 
-  
-
   return (
     <div className="relative">
       {/* Trigger Element */}
@@ -122,7 +120,7 @@ const LoveLetterHoverCard = ({ children, onPromptGenerated }: LoveLetterHoverCar
         <div className="fixed inset-0 z-[200] pointer-events-none">
           <div
             data-love-letter-card
-            className="absolute left-[918px] top-[120px] w-80 pointer-events-auto"
+            className="absolute left-[910px] top-[120px] w-80 pointer-events-auto"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleCardClick}
