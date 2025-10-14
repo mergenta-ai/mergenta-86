@@ -1,61 +1,22 @@
 import React, { useState } from 'react';
-import { Drawer } from 'vaul';
-import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
-import { useIsMobile, useIsTablet, useIsDesktop } from '@/hooks/useDevice';
+import { useIsMobile } from '@/hooks/useDevice';
 
-interface MobileHoverCardWrapperProps {
-  children: React.ReactNode;
-  title: string;
-  content: React.ReactNode;
-}
-
-const MobileHoverCardWrapper: React.FC<MobileHoverCardWrapperProps> = ({
-  children,
-  title,
-  content
-}) => {
-  const [isOpen, setIsOpen] = useState(false);
+export default function MobileHoverCardWrapper({ children, trigger }: { children: React.ReactNode; trigger: React.ReactNode }) {
   const isMobile = useIsMobile();
+  const [open, setOpen] = useState(false);
 
-  if (isMobile) {
-    return (
-      <Drawer.Root open={isOpen} onOpenChange={setIsOpen}>
-        <Drawer.Trigger asChild>
-          <div className="cursor-pointer touch-manipulation">
-            {children}
-          </div>
-        </Drawer.Trigger>
-        <Drawer.Portal>
-          <Drawer.Overlay className="fixed inset-0 bg-black/40" />
-          <Drawer.Content className="bg-white flex flex-col rounded-t-[20px] h-[75%] mt-24 fixed bottom-0 left-0 right-0">
-            <div className="p-4 bg-white rounded-t-[20px] flex-1 overflow-y-auto">
-              <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mb-4" />
-              <h2 className="text-xl font-semibold mb-4 text-center">{title}</h2>
-              <div className="pb-6">
-                {content}
-              </div>
-            </div>
-          </Drawer.Content>
-        </Drawer.Portal>
-      </Drawer.Root>
-    );
-  }
+  if (!isMobile) return <>{children}</>;
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <div className="cursor-pointer">
-          {children}
+    <div className="relative">
+      <div onClick={() => setOpen(v => !v)}>{trigger}</div>
+      {open && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center p-4 bg-black/20" onClick={() => setOpen(false)}>
+          <div className="bg-white rounded-lg shadow-lg p-3 max-w-[95%]" onClick={(e)=>e.stopPropagation()}>
+            {children}
+          </div>
         </div>
-      </DialogTrigger>
-      <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-        <div className="p-2">
-          <h2 className="text-xl font-semibold mb-4">{title}</h2>
-          {content}
-        </div>
-      </DialogContent>
-    </Dialog>
+      )}
+    </div>
   );
-};
-
-export default MobileHoverCardWrapper;
+}
