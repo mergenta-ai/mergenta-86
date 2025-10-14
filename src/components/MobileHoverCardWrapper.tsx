@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Drawer } from 'vaul';
 import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useIsMobile, useIsTablet, useIsDesktop } from '@/hooks/useDevice';
 
 interface MobileHoverCardWrapperProps {
   children: React.ReactNode;

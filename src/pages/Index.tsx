@@ -8,7 +8,7 @@ import MobileNavigation from "@/components/MobileNavigation";
 import ModelDisplay from "@/components/ModelDisplay";
 
 import { useToast } from "@/hooks/use-toast";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useIsMobile, useIsTablet, useIsDesktop } from "@/hooks/useDevice";
 import { useUserPlan } from "@/hooks/useUserPlan";
 import { chatService } from "@/services/chatService";
 import { supabase } from "@/integrations/supabase/client";

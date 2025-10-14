@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useIsMobile, useIsTablet, useIsDesktop } from '@/hooks/useDevice';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 interface MobileResponsiveHoverCardProps {
