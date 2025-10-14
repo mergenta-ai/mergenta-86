@@ -18,11 +18,19 @@ export default {
 			}
 		},
 		extend: {
-			fontFamily: {
-				'inter': ['Inter', 'sans-serif'],
-				'poppins': ['Poppins', 'sans-serif'],
-			},
-			colors: {
+		fontFamily: {
+			'inter': ['Inter', 'sans-serif'],
+			'poppins': ['Poppins', 'sans-serif'],
+		},
+		screens: {
+			'xs': '0px',        // small phones
+			'sm': '480px',      // large phones
+			'md': '640px',      // small tablets
+			'lg': '768px',      // tablets / large phones
+			'xl': '1024px',     // small laptops
+			'2xl': '1280px',    // desktops
+		},
+		colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
