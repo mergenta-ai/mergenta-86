@@ -2,8 +2,10 @@ import * as React from "react"
 import * as HoverCardPrimitive from "@radix-ui/react-hover-card"
 
 import { cn } from "@/lib/utils"
+import { useIsMobile } from "@/hooks/useDevice"
+import MobileHoverCardWrapper from "@/components/MobileHoverCardWrapper"
 
-const HoverCard = HoverCardPrimitive.Root
+const HoverCardRoot = HoverCardPrimitive.Root
 
 const HoverCardTrigger = HoverCardPrimitive.Trigger
 
@@ -24,4 +26,40 @@ const HoverCardContent = React.forwardRef<
 ))
 HoverCardContent.displayName = HoverCardPrimitive.Content.displayName
 
-export { HoverCard, HoverCardTrigger, HoverCardContent }
+// Enhanced HoverCard wrapper with mobile support
+interface HoverCardProps {
+  children: React.ReactNode;
+  trigger: React.ReactNode;
+  content: React.ReactNode;
+}
+
+const HoverCard: React.FC<HoverCardProps> = ({ children, trigger, content }) => {
+  const isMobile = useIsMobile();
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  if (isMobile) {
+    return (
+      <MobileHoverCardWrapper trigger={trigger}>
+        {content}
+      </MobileHoverCardWrapper>
+    );
+  }
+
+  return (
+    <HoverCardRoot open={isOpen} onOpenChange={setIsOpen}>
+      <HoverCardTrigger
+        asChild
+        onPointerEnter={() => setIsOpen(true)}
+        onPointerLeave={() => setIsOpen(false)}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        {trigger}
+      </HoverCardTrigger>
+      <HoverCardContent>
+        {content}
+      </HoverCardContent>
+    </HoverCardRoot>
+  );
+};
+
+export { HoverCard, HoverCardRoot, HoverCardTrigger, HoverCardContent }
