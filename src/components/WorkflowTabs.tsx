@@ -233,11 +233,10 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                 {/* Dropdown */}
                 {activeTab === tab.id && !["power-playbook", "think-hard", "deep-research"].includes(tab.id) && (
                   <div 
-                    <div 
-  className="absolute top-full w-[min(92vw,380px)] sm:w-80 max-h-[60vh] overflow-y-auto overscroll-contain bg-[#F8F5FE] rounded-lg shadow-lg border border-[#E5D9F2] z-[100]"
-  onMouseEnter={handleDropdownEnter}
-  onMouseLeave={handleDropdownLeave}
->
+                    className="absolute top-full w-[min(92vw,380px)] sm:w-80 max-h-[60vh] overflow-y-auto overscroll-contain bg-[#F8F5FE] rounded-lg shadow-lg border border-[#E5D9F2] z-[100]"
+                    onMouseEnter={handleDropdownEnter}
+                    onMouseLeave={handleDropdownLeave}
+                  >
                     {activeTab === "beautiful-writing" && (
                       <div className="py-2">
                         {beautifulWritingItems.map((item, idx) => {
@@ -363,11 +362,10 @@ const WorkflowTabs = ({ onAddToChat, onPromptGenerated }: {
                             </button>
                             {expandedGroups.has(group.title) && (
                               <div 
-                                <div 
-  className={`absolute left-full ${groupIdx >= 2 ? 'bottom-0' : 'top-0'} bg-[#F8F5FE] rounded-lg shadow-lg border border-[#E5D9F2] z-[100] w-[min(92vw,360px)] sm:w-60 max-h-[60vh] overflow-y-auto overscroll-contain`}
-  onMouseEnter={() => handleSubmenuEnter(group.title)}
-  onMouseLeave={handleSubmenuLeave}
->
+                                className={`absolute left-full ${groupIdx >= 2 ? 'bottom-0' : 'top-0'} bg-[#F8F5FE] rounded-lg shadow-lg border border-[#E5D9F2] z-[100] w-[min(92vw,360px)] sm:w-60 max-h-[60vh] overflow-y-auto overscroll-contain`}
+                                onMouseEnter={() => handleSubmenuEnter(group.title)}
+                                onMouseLeave={handleSubmenuLeave}
+                              >
                                 <div className="py-2">
                                    {group.items.map((item, itemIdx) => {
                                       if (item === "Love letter") {
