@@ -263,9 +263,10 @@ const Index = () => {
         />
       </div>
 
+      266:267
       {/* Main Content */}
-<div className="flex-1 flex flex-col w-full">
-  <div className="container mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 lg:ml-20">
+      <div className="flex-1 flex flex-col w-full">
+        <div className="container mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 lg:ml-20">
     {messages.length === 0 ? (
       <>
         {/* Default State - No Messages */}
