@@ -272,4 +272,17 @@ All colors MUST be HSL.
     box-sizing: inherit;
   }
 
+  /* Z-index stacking utilities */
+  .z-overlay {
+    z-index: 40;
+  }
+
+  .z-popover {
+    z-index: 50;
+  }
+
+  .z-modal {
+    z-index: 5000;
+  }
+
 }
