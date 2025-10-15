@@ -54,31 +54,31 @@ All colors MUST be HSL.
     --pastel-lavender-hover: 276 65% 82%; /* #D0B7F0 */
     --pastel-rose-lilac: 318 48% 78%; /* #E6A8D7 */
     --power-playbook-bg: 300 38% 92%; /* #F3E1F3 */
-    
+
     /* Sidebar Text Colors */
     --sidebar-text-dark: 0 0% 27%; /* #444444 */
     --sidebar-text-violet: 257 71% 38%; /* #6F42C1 */
-    
+
     /* Sidebar Icon Colors */
     --sidebar-icon-default: 276 35% 45%; /* Deep violet for good contrast */
     --sidebar-icon-hover: 276 45% 35%; /* Darker for hover state */
     --sidebar-icon-glow: 0 0 6px rgba(122, 85, 199, 0.3);
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, #FF00FF, #FF4DA6, #6A0DAD);
-    --gradient-background: linear-gradient(135deg, #F9F5FF, #FFF0F8, #FFFFFF);
+    --gradient-primary: linear-gradient(135deg, #ff00ff, #ff4da6, #6a0dad);
+    --gradient-background: linear-gradient(135deg, #f9f5ff, #fff0f8, #ffffff);
     --gradient-secondary: linear-gradient(135deg, hsl(0, 0%, 100%), hsl(0, 0%, 98%));
     --gradient-accent: linear-gradient(90deg, hsl(300, 100%, 50%), hsl(320, 100%, 64%));
-    
+
     --mergenta-primary: 280 85% 36%;
     --mergenta-secondary: 300 100% 50%;
     --mergenta-light: 320 100% 64%;
     --mergenta-glow: 300 100% 50%;
-    
+
     --chat-bg: 0 0% 100%;
     --message-user: 280 85% 36%;
     --message-ai: 240 4.8% 95.9%;
-    
+
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --shadow-elegant: 0 4px 20px -4px hsl(var(--mergenta-primary) / 0.15);
     --shadow-glow: 0 0 20px hsl(var(--mergenta-violet) / 0.4);
@@ -89,6 +89,10 @@ All colors MUST be HSL.
     /* Layout helpers (single source of truth) */
     --chat-input-height: 120px; /* Desktop default */
     --header-top-clamp: clamp(2rem, 6vh, 5rem); /* Responsive header spacing */
+
+    /* Safe area */
+    --safe-top: env(safe-area-inset-top);
+    --safe-bottom: env(safe-area-inset-bottom);
 
     --sidebar-background: 0 0% 98%;
 
@@ -152,7 +156,7 @@ All colors MUST be HSL.
   }
 
   html {
-    background: linear-gradient(135deg, #F9F5FF, #FFF0F8, #FFFFFF);
+    background: linear-gradient(135deg, #f9f5ff, #fff0f8, #ffffff);
     background-attachment: fixed;
     min-height: 100vh;
   }
@@ -184,15 +188,15 @@ All colors MUST be HSL.
   .animation-delay-1000 {
     animation-delay: 1s;
   }
-  
+
   .animation-delay-2000 {
     animation-delay: 2s;
   }
-  
+
   .animation-delay-3000 {
     animation-delay: 3s;
   }
-  
+
   /* Line clamp utilities */
   .line-clamp-1 {
     overflow: hidden;
@@ -200,14 +204,14 @@ All colors MUST be HSL.
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
   }
-  
+
   .line-clamp-2 {
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
   }
-  
+
   .line-clamp-3 {
     overflow: hidden;
     display: -webkit-box;
@@ -220,40 +224,40 @@ All colors MUST be HSL.
     scrollbar-width: auto;
     scrollbar-color: hsl(var(--primary) / 0.6) hsl(var(--muted) / 0.5);
   }
-  
+
   .scrollbar-thin::-webkit-scrollbar {
     width: 12px;
     height: 12px;
   }
-  
+
   .scrollbar-thin::-webkit-scrollbar-track {
     background: hsl(var(--muted) / 0.7);
     border-radius: 6px;
     margin: 2px;
   }
-  
+
   .scrollbar-thin::-webkit-scrollbar-thumb {
     background: hsl(var(--primary) / 0.6);
     border-radius: 6px;
     border: 2px solid hsl(var(--background));
   }
-  
+
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--primary) / 0.8);
   }
-  
+
   .scrollbar-thin::-webkit-scrollbar-thumb:active {
     background: hsl(var(--primary));
   }
 
   /* Hide scrollbar while maintaining scroll functionality */
   .scrollbar-hide {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
-  
+
   .scrollbar-hide::-webkit-scrollbar {
-    display: none;  /* Chrome, Safari and Opera */
+    display: none; /* Chrome, Safari and Opera */
   }
 
   /* Responsive override for chat input height */
@@ -264,11 +268,15 @@ All colors MUST be HSL.
   }
 
   /* Responsive foundation - box-sizing inheritance */
-  html, body, #root {
+  html,
+  body,
+  #root {
     box-sizing: border-box;
   }
 
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     box-sizing: inherit;
   }
 
@@ -284,5 +292,4 @@ All colors MUST be HSL.
   .z-modal {
     z-index: 5000;
   }
-
 }
