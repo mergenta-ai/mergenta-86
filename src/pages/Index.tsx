@@ -254,28 +254,37 @@ const Index = () => {
       {/* Desktop Sidebar */}
       <MergentaSidebar />
       
-      {/* Model Display - Fixed Top Right Corner */}
-      <div className="fixed top-4 right-4 z-50 lg:right-6 xl:right-8">
-        <ModelDisplay 
-          selectedModel={selectedModel}
-          onModelSelect={handleModelSelect}
-          userPlan={planType}
-        />
+      {/* Model Display */}
+      <div className="lg:hidden container mx-auto px-4 sm:px-6">
+        <div className="sticky top-3 z-40 flex justify-end">
+          <ModelDisplay selectedModel={selectedModel} onModelSelect={handleModelSelect} userPlan={planType} />
+        </div>
+      </div>
+      <div className="hidden lg:block fixed top-4 right-4 z-50 lg:right-6 xl:right-8">
+        <ModelDisplay selectedModel={selectedModel} onModelSelect={handleModelSelect} userPlan={planType} />
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 lg:ml-20 ml-0 flex flex-col w-full max-w-full overflow-x-hidden">
-        {messages.length === 0 ? (
-          <>
-            {/* Default State - No Messages */}
-            {/* Logo (top-left) - Hidden on mobile */}
-            <div className="p-6 lg:block md:hidden sm:hidden">
-              <img 
-                src="/lovable-uploads/0ef37e7c-4020-4d43-b3cb-e900815b9635.png" 
-                alt="Mergenta Logo" 
-                className="h-26 w-auto md:h-34 lg:h-44 invisible" 
-              />
-            </div>
+<div className="flex-1 flex flex-col w-full">
+  <div className="container mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 lg:ml-20">
+    {messages.length === 0 ? (
+      <>
+        {/* Default State - No Messages */}
+        {/* Logo (top-left) - Hidden on mobile */}
+        <div className="p-6 lg:block md:hidden sm:hidden">
+          <img 
+            src="/lovable-uploads/0ef37e7c-4020-4d43-b3cb-e900815b9635.png" 
+            alt="Mergenta Logo" 
+            className="h-26 w-auto md:h-34 lg:h-44 invisible" 
+          />
+        </div>
+      </>
+    ) : (
+      // else part, if any
+    )}
+  </div>
+</div>
+
 
             {/* Header section */}
             <Header />
