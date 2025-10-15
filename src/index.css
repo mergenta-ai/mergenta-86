@@ -260,6 +260,12 @@ All colors MUST be HSL.
     display: none; /* Chrome, Safari and Opera */
   }
 
+  .pt-safe {
+    padding-top: max(1rem, var(--safe-top));
+  }
+  .pb-safe {
+    padding-bottom: max(1rem, var(--safe-bottom));
+  }
   /* Responsive override for chat input height */
   @media (max-width: 768px) {
     :root {
