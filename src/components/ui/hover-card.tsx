@@ -37,6 +37,20 @@ const HoverCard: React.FC<HoverCardProps> = ({ children, trigger, content }) => 
   const isMobile = useIsMobile();
   const [isOpen, setIsOpen] = React.useState(false);
 
+  // Keyboard support for desktop
+  React.useEffect(() => {
+    if (!isOpen || isMobile) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, isMobile]);
+
   if (isMobile) {
     return (
       <MobileHoverCardWrapper trigger={trigger}>
@@ -52,6 +66,12 @@ const HoverCard: React.FC<HoverCardProps> = ({ children, trigger, content }) => 
         onPointerEnter={() => setIsOpen(true)}
         onPointerLeave={() => setIsOpen(false)}
         onClick={() => setIsOpen(!isOpen)}
+        onKeyDown={(e: React.KeyboardEvent) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setIsOpen(!isOpen);
+          }
+        }}
       >
         {trigger}
       </HoverCardTrigger>

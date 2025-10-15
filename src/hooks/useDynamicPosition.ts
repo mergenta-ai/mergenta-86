@@ -53,28 +53,51 @@ export const useDynamicPosition = (isVisible: boolean, popoverWidth = 320, popov
         top = triggerRect.bottom + gap;
         left = triggerRect.left;
       } else {
-        // Fallback: use right with clamping
+        // Fallback: center on screen with clamping when no ideal position exists
         placement = 'right';
-        left = triggerRect.right + gap;
+        const centerX = window.innerWidth / 2 - popoverWidth / 2;
+        const centerY = window.innerHeight / 2 - popoverHeight / 2;
+        
+        // Try to position near trigger but fallback to center if needed
+        left = spaceRight > spaceLeft ? triggerRect.right + gap : triggerRect.left - popoverWidth - gap;
         top = triggerRect.top;
-        clamped = true;
+        
+        // If still doesn't fit, center it
+        if (left < margin || left + popoverWidth > window.innerWidth - margin) {
+          left = centerX;
+          clamped = true;
+        }
+        if (top < margin || top + popoverHeight > window.innerHeight - margin) {
+          top = centerY;
+          clamped = true;
+        }
       }
 
-      // Clamp horizontal position
+      // Clamp horizontal position with proper bounds checking
       left = Math.max(margin, Math.min(left, window.innerWidth - popoverWidth - margin));
 
-      // Clamp vertical position
+      // Clamp vertical position with proper bounds checking
       top = Math.max(margin, Math.min(top, window.innerHeight - popoverHeight - margin));
+
+      // Mark as clamped if position was adjusted
+      if (left === margin || left === window.innerWidth - popoverWidth - margin) {
+        clamped = true;
+      }
+      if (top === margin || top === window.innerHeight - popoverHeight - margin) {
+        clamped = true;
+      }
 
       setPosition({ top, left, placement, clamped });
     };
 
     updatePosition();
-    window.addEventListener('scroll', updatePosition, true);
-    window.addEventListener('resize', updatePosition);
+    
+    // Use passive listeners for better performance
+    window.addEventListener('scroll', updatePosition, { passive: true, capture: true });
+    window.addEventListener('resize', updatePosition, { passive: true });
 
     return () => {
-      window.removeEventListener('scroll', updatePosition, true);
+      window.removeEventListener('scroll', updatePosition);
       window.removeEventListener('resize', updatePosition);
     };
   }, [isVisible, popoverWidth, popoverHeight]);
