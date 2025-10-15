@@ -1,15 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 
+type Placement = 'right' | 'left' | 'top' | 'bottom';
+
 interface Position {
-  top?: number;
-  left?: number;
-  right?: number;
-  bottom?: number;
+  top: number;
+  left: number;
+  placement: Placement;
+  clamped: boolean;
 }
 
-export const useDynamicPosition = (isVisible: boolean, cardWidth = 320, cardHeight = 400) => {
+export const useDynamicPosition = (isVisible: boolean, popoverWidth = 320, popoverHeight = 400) => {
   const triggerRef = useRef<HTMLDivElement>(null);
-  const [position, setPosition] = useState<Position>({});
+  const [position, setPosition] = useState<Position>({ top: 0, left: 0, placement: 'right', clamped: false });
 
   useEffect(() => {
     if (!isVisible || !triggerRef.current) return;
@@ -19,72 +21,72 @@ export const useDynamicPosition = (isVisible: boolean, cardWidth = 320, cardHeig
       if (!trigger) return;
 
       const triggerRect = trigger.getBoundingClientRect();
-      const viewport = {
-        width: window.innerWidth,
-        height: window.innerHeight,
-      };
+      const gap = 8;
+      const margin = 8;
 
-      let newPosition: Position = {};
+      // Calculate available space in each direction
+      const spaceRight = window.innerWidth - triggerRect.right - gap;
+      const spaceLeft = triggerRect.left - gap;
+      const spaceTop = triggerRect.top - gap;
+      const spaceBottom = window.innerHeight - triggerRect.bottom - gap;
 
-      // Position specifications for card next to dropdown menu:
-      // - Horizontally: Right next to the trigger element
-      // - Vertically: Aligned with top of trigger, but ensure full visibility
-      
-      const horizontalGap = 8; // Small gap between menu and card
-      const minMargin = 20; // Minimum margin from viewport edges
+      let placement: Placement = 'right';
+      let top = 0;
+      let left = 0;
+      let clamped = false;
 
-      // Horizontal positioning: Position cards immediately next to submenu with no gap
-      newPosition.left = 192; // Submenu width (w-48) to position right adjacent to it
-
-      // Vertical positioning: Align with trigger top, but ensure card fits in viewport  
-      const triggerTop = triggerRect.top;
-      const maxTop = viewport.height - cardHeight - minMargin;
-      
-      if (triggerTop + cardHeight + minMargin <= viewport.height) {
-        // Card fits when aligned with trigger top
-        newPosition.top = 0; // Relative to trigger
-      } else if (maxTop - triggerTop >= -triggerRect.height) {
-        // Position to fit within viewport
-        newPosition.top = maxTop - triggerTop;
+      // Prefer right, then left, then top, then bottom
+      if (spaceRight >= popoverWidth) {
+        placement = 'right';
+        left = triggerRect.right + gap;
+        top = triggerRect.top;
+      } else if (spaceLeft >= popoverWidth) {
+        placement = 'left';
+        left = triggerRect.left - popoverWidth - gap;
+        top = triggerRect.top;
+      } else if (spaceTop >= popoverHeight) {
+        placement = 'top';
+        top = triggerRect.top - popoverHeight - gap;
+        left = triggerRect.left;
+      } else if (spaceBottom >= popoverHeight) {
+        placement = 'bottom';
+        top = triggerRect.bottom + gap;
+        left = triggerRect.left;
       } else {
-        // Position at top of viewport with minimum margin
-        newPosition.top = -triggerTop + minMargin;
+        // Fallback: use right with clamping
+        placement = 'right';
+        left = triggerRect.right + gap;
+        top = triggerRect.top;
+        clamped = true;
       }
 
-      setPosition(newPosition);
+      // Clamp horizontal position
+      left = Math.max(margin, Math.min(left, window.innerWidth - popoverWidth - margin));
+
+      // Clamp vertical position
+      top = Math.max(margin, Math.min(top, window.innerHeight - popoverHeight - margin));
+
+      setPosition({ top, left, placement, clamped });
     };
 
     updatePosition();
-    window.addEventListener('scroll', updatePosition);
+    window.addEventListener('scroll', updatePosition, true);
     window.addEventListener('resize', updatePosition);
 
     return () => {
-      window.removeEventListener('scroll', updatePosition);
+      window.removeEventListener('scroll', updatePosition, true);
       window.removeEventListener('resize', updatePosition);
     };
-  }, [isVisible, cardWidth, cardHeight]);
+  }, [isVisible, popoverWidth, popoverHeight]);
 
   const getPositionStyles = (): React.CSSProperties => {
-    const styles: React.CSSProperties = {
-      position: 'absolute', // Changed back to absolute for trigger-relative positioning
+    return {
+      position: 'fixed',
+      top: `${position.top}px`,
+      left: `${position.left}px`,
       zIndex: 50,
     };
-
-    if (position.left !== undefined) {
-      styles.left = typeof position.left === 'number' ? `${position.left}px` : position.left;
-    }
-    if (position.right !== undefined) {
-      styles.right = typeof position.right === 'number' ? `${position.right}px` : position.right;
-    }
-    if (position.top !== undefined) {
-      styles.top = typeof position.top === 'number' ? `${position.top}px` : position.top;
-    }
-    if (position.bottom !== undefined) {
-      styles.bottom = typeof position.bottom === 'number' ? `${position.bottom}px` : position.bottom;
-    }
-
-    return styles;
   };
 
-  return { triggerRef, getPositionStyles };
+  return { triggerRef, getPositionStyles, position };
 };
