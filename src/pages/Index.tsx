@@ -254,14 +254,13 @@ const Index = () => {
       {/* Desktop Sidebar */}
       <MergentaSidebar />
       
-      {/* Model Display */}
-      <div className="lg:hidden container mx-auto px-4 sm:px-6">
-        <div className="sticky top-3 z-40 flex justify-end">
-          <ModelDisplay selectedModel={selectedModel} onModelSelect={handleModelSelect} userPlan={planType} />
-        </div>
-      </div>
-      <div className="hidden lg:block fixed top-4 right-4 z-50 lg:right-6 xl:right-8">
-        <ModelDisplay selectedModel={selectedModel} onModelSelect={handleModelSelect} userPlan={planType} />
+      {/* Model Display - Fixed Top Right Corner */}
+      <div className="fixed top-4 right-4 z-50 lg:right-6 xl:right-8">
+        <ModelDisplay 
+          selectedModel={selectedModel}
+          onModelSelect={handleModelSelect}
+          userPlan={planType}
+        />
       </div>
 
       {/* Main Content */}
@@ -279,9 +278,7 @@ const Index = () => {
           />
         </div>
       </>
-    ) : (
-      // else part, if any
-    )}
+    ) : null}
   </div>
 </div>
 
