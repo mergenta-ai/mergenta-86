@@ -263,75 +263,60 @@ const Index = () => {
         />
       </div>
 
-      266:267
       {/* Main Content */}
       <div className="flex-1 flex flex-col w-full">
         <div className="container mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 lg:ml-20">
-    {messages.length === 0 ? (
-      <>
-        {/* Default State - No Messages */}
-        {/* Logo (top-left) - Hidden on mobile */}
-        <div className="p-6 lg:block md:hidden sm:hidden">
-          <img 
-            src="/lovable-uploads/0ef37e7c-4020-4d43-b3cb-e900815b9635.png" 
-            alt="Mergenta Logo" 
-            className="h-26 w-auto md:h-34 lg:h-44 invisible" 
-          />
-        </div>
-      </>
-    ) : null}
-  </div>
-</div>
+          {messages.length === 0 ? (
+            <>
+              {/* Default State - No Messages */}
+              {/* Header section */}
+              <Header />
 
+              {/* Input bar */}
+              <ChatInput 
+                onSendMessage={handleSendMessage} 
+                isLoading={isLoading} 
+                initialValue={generatedPrompt}
+                lastResponse={messages[messages.length - 1]?.isUser === false ? messages[messages.length - 1]?.text : undefined}
+                onModelSelect={handleModelSelect}
+              />
 
-            {/* Header section */}
-            <Header />
+              {/* Workflow tabs - All devices */}
+              <WorkflowTabs onAddToChat={handleAddToChat} onPromptGenerated={handlePromptGenerated} />
 
-            {/* Input bar */}
-            <ChatInput 
-              onSendMessage={handleSendMessage} 
-              isLoading={isLoading} 
-              initialValue={generatedPrompt}
-              lastResponse={messages[messages.length - 1]?.isUser === false ? messages[messages.length - 1]?.text : undefined}
-              onModelSelect={handleModelSelect}
-            />
+              {/* Chat messages */}
+              <main className="flex-1 flex flex-col">
+                <ChatInterface messages={messages} isLoading={isLoading} turnCount={turnCount} />
+              </main>
+            </>
+          ) : (
+            <>
+              {/* Chat State - Messages Exist */}
+              {/* Chat messages take full space */}
+              <main className="flex-1 flex flex-col">
+                <ChatInterface messages={messages} isLoading={isLoading} turnCount={turnCount} />
+              </main>
 
-            {/* Workflow tabs - All devices */}
-            <WorkflowTabs onAddToChat={handleAddToChat} onPromptGenerated={handlePromptGenerated} />
-
-            {/* Chat messages */}
-            <main className="flex-1 flex flex-col">
-              <ChatInterface messages={messages} isLoading={isLoading} turnCount={turnCount} />
-            </main>
-          </>
-        ) : (
-          <>
-            {/* Chat State - Messages Exist */}
-            {/* Chat messages take full space */}
-            <main className="flex-1 flex flex-col">
-              <ChatInterface messages={messages} isLoading={isLoading} turnCount={turnCount} />
-            </main>
-
-            {/* Fixed bottom search bar */}
-            <div className="fixed bottom-4 left-0 right-0 z-50 flex justify-center px-4 sm:px-6 shadow-lg">
-              <div className="w-full max-w-3xl">
-                <ChatInput 
-                  onSendMessage={handleSendMessage} 
-                  isLoading={isLoading} 
-                  initialValue={generatedPrompt}
-                  lastResponse={messages[messages.length - 1]?.isUser === false ? messages[messages.length - 1]?.text : undefined}
-                  onModelSelect={handleModelSelect}
-                />
-                {/* Disclaimer */}
-                <p className="text-center text-sm text-muted-foreground mt-2">
-                  Mergenta can make mistakes. Verify information.
-                </p>
+              {/* Fixed bottom search bar */}
+              <div className="fixed bottom-4 left-0 right-0 z-50 flex justify-center px-4 sm:px-6 shadow-lg">
+                <div className="w-full max-w-3xl">
+                  <ChatInput 
+                    onSendMessage={handleSendMessage} 
+                    isLoading={isLoading} 
+                    initialValue={generatedPrompt}
+                    lastResponse={messages[messages.length - 1]?.isUser === false ? messages[messages.length - 1]?.text : undefined}
+                    onModelSelect={handleModelSelect}
+                  />
+                  {/* Disclaimer */}
+                  <p className="text-center text-sm text-muted-foreground mt-2">
+                    Mergenta can make mistakes. Verify information.
+                  </p>
+                </div>
               </div>
-            </div>
-          </>
-        )}
+            </>
+          )}
+        </div>
       </div>
-
     </div>
   );
 };
