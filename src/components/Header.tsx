@@ -4,13 +4,13 @@ import { getPlanBadgeColor } from "@/config/modelConfig";
 
 const taglines = [
   "AI reimagined",
-  "Conversation elevated", 
+  "Conversation elevated",
   "Smarter. Simpler. Stronger",
   "Beyond intelligence",
   "Your creative AI",
   "Ideas in motion",
   "New way AI",
-  "Your thinking AI"
+  "Your thinking AI",
 ];
 
 const Header = () => {
@@ -25,10 +25,9 @@ const Header = () => {
   const planDisplay = planType.charAt(0).toUpperCase() + planType.slice(1);
 
   return (
-    <div className="flex flex-col items-center pt-4 sm:pt-6 md:pt-8 px-4 relative">
-      <div className="space-y-2 sm:space-y-3 md:space-y-4">
-        {/* Softer Title */}
-        <h1 className="font-inter text-2xl sm:text-3xl md:text-4xl font-medium text-[#7D55C7] tracking-[-0.01em] text-center">
+    <div className="pt-safe px-4">
+      <div className="container max-w-3xl mx-auto flex flex-col items-center space-y-2 sm:space-y-3 md:space-y-4">
+        <h1 className="font-inter text-3xl sm:text-4xl md:text-5xl font-medium text-[#7D55C7] tracking-[-0.01em] text-center">
           Mergenta
         </h1>
 
