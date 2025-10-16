@@ -13,7 +13,7 @@ export function TrendingPanel({ isVisible, onClose, onOpenRSSReader }: TrendingP
   if (!isVisible) return null;
 
   return (
-    <div className="ml-20 h-full w-[400px] bg-background border-r border-border shadow-lg animate-in slide-in-from-left duration-200 z-30">
+    <div className="ml-20 h-full w-full max-w-sm bg-background border-r border-border shadow-lg animate-in slide-in-from-left duration-200 z-30">
       <div className="flex flex-col h-full">
         {/* Header */}
         <div className="p-6 border-b border-border bg-gradient-to-r from-primary/5 to-accent/5">

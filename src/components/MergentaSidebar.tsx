@@ -295,7 +295,7 @@ const MergentaSidebar = () => {
       {/* Side Panels with Continuous Hover Areas */}
       {showHistory && (
         <div
-          className="fixed left-0 top-0 h-full w-[400px] z-30"
+          className="fixed left-0 top-0 h-full w-full max-w-xs sm:max-w-sm z-30"
           onMouseEnter={() => setShowHistory(true)}
           onMouseLeave={() => setShowHistory(false)}
         >
@@ -305,7 +305,7 @@ const MergentaSidebar = () => {
 
       {showPolicies && (
         <div
-          className="fixed left-0 top-0 h-full w-[400px] z-30"
+          className="fixed left-0 top-0 h-full w-full max-w-xs sm:max-w-sm z-30"
           onMouseEnter={() => setShowPolicies(true)}
           onMouseLeave={() => setShowPolicies(false)}
         >
@@ -315,7 +315,7 @@ const MergentaSidebar = () => {
 
       {showHelp && (
         <div
-          className="fixed left-0 top-0 h-full w-[400px] z-30"
+          className="fixed left-0 top-0 h-full w-full max-w-xs sm:max-w-sm z-30"
           onMouseEnter={() => setShowHelp(true)}
           onMouseLeave={() => setShowHelp(false)}
         >
@@ -325,7 +325,7 @@ const MergentaSidebar = () => {
 
       {showProfile && (
         <div
-          className="fixed left-0 top-0 h-full w-[400px] z-30"
+          className="fixed left-0 top-0 h-full w-full max-w-xs sm:max-w-sm z-30"
           onMouseEnter={() => setShowProfile(true)}
           onMouseLeave={() => setShowProfile(false)}
         >
