@@ -60,10 +60,7 @@ const ModelDisplay = ({ selectedModel, onModelSelect, userPlan }: ModelDisplayPr
       </div>
 
       {isOpen && (
-        <div 
-          className="absolute top-full left-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 z-50 pointer-events-auto w-full max-w-md max-h-[60vh] overflow-auto"
-          onClick={(e) => e.stopPropagation()}
-        >
+        <div className="absolute top-full left-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 z-[9999] w-[90vw] sm:w-[500px] max-h-[70vh] overflow-y-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-0">
             {/* Creativity Column */}
             <div className="border-b sm:border-b-0 sm:border-r border-gray-200 p-4">

@@ -130,10 +130,10 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
 
   const handleScroll = () => {
     if (!scrollContainerRef.current) return;
-
+    
     const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
     const isNearBottom = scrollHeight - scrollTop - clientHeight < 100;
-
+    
     setShowScrollButton(!isNearBottom && messages.length > 0);
   };
 
@@ -145,8 +145,8 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
     const container = scrollContainerRef.current;
     if (!container) return;
 
-    container.addEventListener("scroll", handleScroll);
-    return () => container.removeEventListener("scroll", handleScroll);
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
   }, [messages.length]);
 
   // Select 3-4 random thinking messages when loading starts
@@ -223,16 +223,8 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
   }, [isLoading, turnCount, selectedWarmthMessages]);
 
   return (
-    <div
-      ref={scrollContainerRef}
-      className="flex-1 overflow-y-auto px-3 sm:px-4 md:px-6 relative min-h-0"
-      style={{
-        maxHeight: "calc(100vh - var(--chat-input-height, 120px))",
-        paddingBottom: "calc(var(--chat-input-height, 100px) + 24px)",
-        scrollPaddingBottom: "24px",
-      }}
-    >
-      <div className="max-w-3xl mx-auto py-4 sm:py-6">
+    <div ref={scrollContainerRef} className="flex-1 overflow-y-auto px-3 sm:px-4 md:px-6 relative min-h-0" style={{ maxHeight: 'calc(100vh - var(--chat-input-height, 120px))', paddingBottom: '20px', scrollPaddingBottom: '20px', boxSizing: 'border-box', overflowY: 'auto' }}>
+      <div className={`max-w-3xl mx-auto py-4 sm:py-6 ${messages.length > 0 ? "pb-40 sm:pb-52" : ""}`}>
         {messages.length === 0 ? (
           <div className="text-center py-8">{/* Empty state - clean and minimal */}</div>
         ) : (
@@ -285,12 +277,13 @@ const ChatInterface = ({ messages, isLoading, turnCount }: ChatInterfaceProps) =
         <div ref={messagesEndRef} />
       </div>
 
+
       {/* Scroll to bottom button */}
       {showScrollButton && (
         <Button
           onClick={scrollToBottom}
           size="icon"
-          className="fixed right-4 sm:right-6 md:right-8 z-30 bottom-[calc(88px+var(--safe-bottom,0px))] rounded-full shadow-lg hover:shadow-xl transition-all duration-200 w-10 h-10 bg-background border border-border hover:bg-accent"
+          className="fixed bottom-20 sm:bottom-24 right-4 sm:right-6 md:right-8 z-30 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 w-10 h-10 bg-background border border-border hover:bg-accent"
           aria-label="Scroll to bottom"
         >
           <ArrowDown className="h-5 w-5" />

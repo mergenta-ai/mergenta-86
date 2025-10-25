@@ -1,109 +1,61 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useIsMobile } from '@/hooks/useDevice';
+import React, { useState } from 'react';
+import { Drawer } from 'vaul';
+import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
+import { useIsMobile } from '@/hooks/use-mobile';
 
-export default function MobileHoverCardWrapper({ children, trigger }: { children: React.ReactNode; trigger: React.ReactNode }) {
+interface MobileHoverCardWrapperProps {
+  children: React.ReactNode;
+  title: string;
+  content: React.ReactNode;
+}
+
+const MobileHoverCardWrapper: React.FC<MobileHoverCardWrapperProps> = ({
+  children,
+  title,
+  content
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
   const isMobile = useIsMobile();
-  const [open, setOpen] = useState(false);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const previousFocusRef = useRef<HTMLElement | null>(null);
 
-  // Keyboard support
-  useEffect(() => {
-    if (!open) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setOpen(false);
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [open]);
-
-  // Focus trap
-  useEffect(() => {
-    if (!open || !contentRef.current) return;
-
-    // Store previously focused element
-    previousFocusRef.current = document.activeElement as HTMLElement;
-
-    // Focus the modal content
-    const focusableElements = contentRef.current.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
-    const firstElement = focusableElements[0] as HTMLElement;
-    const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
-
-    if (firstElement) {
-      firstElement.focus();
-    }
-
-    // Trap focus within modal
-    const handleTab = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab') return;
-
-      if (e.shiftKey) {
-        if (document.activeElement === firstElement) {
-          e.preventDefault();
-          lastElement?.focus();
-        }
-      } else {
-        if (document.activeElement === lastElement) {
-          e.preventDefault();
-          firstElement?.focus();
-        }
-      }
-    };
-
-    document.addEventListener('keydown', handleTab);
-
-    // Restore focus on close
-    return () => {
-      document.removeEventListener('keydown', handleTab);
-      if (previousFocusRef.current) {
-        previousFocusRef.current.focus();
-      }
-    };
-  }, [open]);
-
-  if (!isMobile) return <>{children}</>;
-
-  return (
-    <div className="relative">
-      <div 
-        onClick={() => setOpen(v => !v)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            setOpen(v => !v);
-          }
-        }}
-        role="button"
-        tabIndex={0}
-        aria-expanded={open}
-        aria-haspopup="dialog"
-      >
-        {trigger}
-      </div>
-      {open && (
-        <div 
-          className="fixed inset-0 z-overlay flex items-end justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in-0 duration-200" 
-          onClick={() => setOpen(false)}
-          role="presentation"
-        >
-          <div 
-            ref={contentRef}
-            className="z-modal bg-popover text-popover-foreground rounded-lg shadow-lg p-4 max-w-[95%] max-h-[85vh] overflow-y-auto scrollbar-thin animate-in slide-in-from-bottom-4 duration-300" 
-            onClick={(e) => e.stopPropagation()}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="mobile-dialog-title"
-          >
+  if (isMobile) {
+    return (
+      <Drawer.Root open={isOpen} onOpenChange={setIsOpen}>
+        <Drawer.Trigger asChild>
+          <div className="cursor-pointer touch-manipulation">
             {children}
           </div>
+        </Drawer.Trigger>
+        <Drawer.Portal>
+          <Drawer.Overlay className="fixed inset-0 bg-black/40" />
+          <Drawer.Content className="bg-white flex flex-col rounded-t-[20px] h-[75%] mt-24 fixed bottom-0 left-0 right-0">
+            <div className="p-4 bg-white rounded-t-[20px] flex-1 overflow-y-auto">
+              <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mb-4" />
+              <h2 className="text-xl font-semibold mb-4 text-center">{title}</h2>
+              <div className="pb-6">
+                {content}
+              </div>
+            </div>
+          </Drawer.Content>
+        </Drawer.Portal>
+      </Drawer.Root>
+    );
+  }
+
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <div className="cursor-pointer">
+          {children}
         </div>
-      )}
-    </div>
+      </DialogTrigger>
+      <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+        <div className="p-2">
+          <h2 className="text-xl font-semibold mb-4">{title}</h2>
+          {content}
+        </div>
+      </DialogContent>
+    </Dialog>
   );
-}
+};
+
+export default MobileHoverCardWrapper;

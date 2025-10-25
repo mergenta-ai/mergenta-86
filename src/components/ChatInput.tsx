@@ -289,17 +289,8 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
 
                 {/* Model Selection Dropdown */}
                 {showModelDropdown && (
-                  <>
-                    {/* Backdrop */}
-                    <div 
-                      className="fixed inset-0 z-40 bg-black/20"
-                      onClick={() => setShowModelDropdown(false)}
-                    />
-                    <div 
-                      className="fixed sm:absolute bottom-24 sm:bottom-full left-4 right-4 sm:left-auto sm:right-0 mb-2 bg-white rounded-lg shadow-xl border border-gray-200 z-50 pointer-events-auto w-full max-w-md max-h-[60vh] overflow-auto"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-0 divide-y sm:divide-y-0 sm:divide-x divide-gray-200">
+                  <div className="fixed sm:absolute bottom-24 sm:bottom-full left-4 right-4 sm:left-auto sm:right-0 mb-2 bg-white rounded-lg shadow-xl border border-gray-200 z-[9999] sm:w-[500px] max-h-[70vh] overflow-y-auto">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-0 divide-y sm:divide-y-0 sm:divide-x divide-gray-200">
                       {/* Creativity Column */}
                       <div className="p-4">
                         <div className="flex items-center gap-2 mb-3">
@@ -410,7 +401,7 @@ const ChatInput = ({ onSendMessage, isLoading = false, initialValue = "", placeh
                         </div>
                       </div>
                     </div>
-                  </>
+                  </div>
                 )}
               </div>
 
