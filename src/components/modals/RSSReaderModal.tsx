@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { X, Search, Grid, List, RefreshCw, ArrowLeft } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
-import { RSSService, RSSFeedItem } from '@/services/rssService';
-import { ArticleList } from '@/components/rss/ArticleList';
-import { ArticleReader } from '@/components/rss/ArticleReader';
+import React, { useState, useEffect } from "react";
+import { X, Search, Grid, List, RefreshCw, ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { RSSService, RSSFeedItem } from "@/services/rssService";
+import { ArticleList } from "@/components/rss/ArticleList";
+import { ArticleReader } from "@/components/rss/ArticleReader";
 
 interface RSSReaderModalProps {
   isOpen: boolean;
@@ -15,28 +15,28 @@ interface RSSReaderModalProps {
 }
 
 const categories = [
-  { name: 'All News', value: '', icon: '📰' },
-  { name: 'Sports', value: 'sports', icon: '⚽' },
-  { name: 'Finance', value: 'finance', icon: '💰' },
-  { name: 'Travel', value: 'travel', icon: '✈️' },
-  { name: 'Academics', value: 'academics', icon: '🎓' },
-  { name: 'Entertainment', value: 'entertainment', icon: '🎬' },
-  { name: 'Politics', value: 'politics', icon: '🏛️' },
-  { name: 'Wellness', value: 'wellness', icon: '🧘' },
-  { name: 'Technology', value: 'technology', icon: '💻' },
-  { name: 'Local', value: 'local', icon: '📍' }
+  { name: "All News", value: "", icon: "📰" },
+  { name: "Sports", value: "sports", icon: "⚽" },
+  { name: "Finance", value: "finance", icon: "💰" },
+  { name: "Travel", value: "travel", icon: "✈️" },
+  { name: "Academics", value: "academics", icon: "🎓" },
+  { name: "Entertainment", value: "entertainment", icon: "🎬" },
+  { name: "Politics", value: "politics", icon: "🏛️" },
+  { name: "Wellness", value: "wellness", icon: "🧘" },
+  { name: "Technology", value: "technology", icon: "💻" },
+  { name: "Local", value: "local", icon: "📍" },
 ];
 
-export function RSSReaderModal({ isOpen, onClose, initialCategory = '' }: RSSReaderModalProps) {
+export function RSSReaderModal({ isOpen, onClose, initialCategory = "" }: RSSReaderModalProps) {
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [articles, setArticles] = useState<RSSFeedItem[]>([]);
   const [loading, setLoading] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [selectedArticle, setSelectedArticle] = useState<RSSFeedItem | null>(null);
   const [refreshing, setRefreshing] = useState(false);
 
-  const fetchArticles = async (category: string = '', search: string = '') => {
+  const fetchArticles = async (category: string = "", search: string = "") => {
     setLoading(true);
     try {
       let results: RSSFeedItem[] = [];
@@ -47,7 +47,7 @@ export function RSSReaderModal({ isOpen, onClose, initialCategory = '' }: RSSRea
       }
       setArticles(results);
     } catch (error) {
-      console.error('Error fetching articles:', error);
+      console.error("Error fetching articles:", error);
       setArticles([]);
     } finally {
       setLoading(false);
@@ -56,7 +56,7 @@ export function RSSReaderModal({ isOpen, onClose, initialCategory = '' }: RSSRea
 
   const handleCategorySelect = (category: string) => {
     setSelectedCategory(category);
-    setSearchQuery('');
+    setSearchQuery("");
     setSelectedArticle(null);
     fetchArticles(category);
   };
@@ -76,7 +76,7 @@ export function RSSReaderModal({ isOpen, onClose, initialCategory = '' }: RSSRea
       await RSSService.refreshFeeds();
       await fetchArticles(selectedCategory, searchQuery);
     } catch (error) {
-      console.error('Error refreshing feeds:', error);
+      console.error("Error refreshing feeds:", error);
     } finally {
       setRefreshing(false);
     }
@@ -91,9 +91,9 @@ export function RSSReaderModal({ isOpen, onClose, initialCategory = '' }: RSSRea
   };
 
   const handleBackToCategories = () => {
-    setSelectedCategory('');
+    setSelectedCategory("");
     setSelectedArticle(null);
-    setSearchQuery('');
+    setSearchQuery("");
     setArticles([]);
   };
 
@@ -103,8 +103,8 @@ export function RSSReaderModal({ isOpen, onClose, initialCategory = '' }: RSSRea
     }
   }, [isOpen, selectedCategory]);
 
-  const currentCategoryName = categories.find(cat => cat.value === selectedCategory)?.name || 'All News';
-  const currentCategoryIcon = categories.find(cat => cat.value === selectedCategory)?.icon || '📰';
+  const currentCategoryName = categories.find((cat) => cat.value === selectedCategory)?.name || "All News";
+  const currentCategoryIcon = categories.find((cat) => cat.value === selectedCategory)?.icon || "📰";
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -122,17 +122,19 @@ export function RSSReaderModal({ isOpen, onClose, initialCategory = '' }: RSSRea
                     className="flex items-center gap-2"
                   >
                     <ArrowLeft className="h-4 w-4" />
-                    {selectedArticle ? 'Back to Articles' : 'Back to Categories'}
+                    {selectedArticle ? "Back to Articles" : "Back to Categories"}
                   </Button>
                 )}
                 <h1 className="text-2xl font-bold text-primary">
-                  {selectedArticle ? 'Article Reader' : selectedCategory ? currentCategoryName : 'RSS News Reader'}
+                  {selectedArticle
+                    ? "Article Reader"
+                    : selectedCategory
+                      ? currentCategoryName
+                      : "Mergenta Information Feed"}
                 </h1>
-                {selectedCategory && !selectedArticle && (
-                  <span className="text-2xl">{currentCategoryIcon}</span>
-                )}
+                {selectedCategory && !selectedArticle && <span className="text-2xl">{currentCategoryIcon}</span>}
               </div>
-              
+
               <div className="flex items-center gap-2">
                 {!selectedArticle && (
                   <>
@@ -143,32 +145,32 @@ export function RSSReaderModal({ isOpen, onClose, initialCategory = '' }: RSSRea
                       disabled={refreshing}
                       className="flex items-center gap-2"
                     >
-                      <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
+                      <RefreshCw className={`h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />
                       Refresh
                     </Button>
-                    
+
                     {selectedCategory && (
                       <>
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => setViewMode(viewMode === 'grid' ? 'list' : 'grid')}
+                          onClick={() => setViewMode(viewMode === "grid" ? "list" : "grid")}
                           className="flex items-center gap-2"
                         >
-                          {viewMode === 'grid' ? <List className="h-4 w-4" /> : <Grid className="h-4 w-4" />}
-                          {viewMode === 'grid' ? 'List' : 'Grid'}
+                          {viewMode === "grid" ? <List className="h-4 w-4" /> : <Grid className="h-4 w-4" />}
+                          {viewMode === "grid" ? "List" : "Grid"}
                         </Button>
                       </>
                     )}
                   </>
                 )}
-                
+
                 <Button variant="ghost" size="sm" onClick={onClose}>
                   <X className="h-4 w-4" />
                 </Button>
               </div>
             </div>
-            
+
             {/* Search bar for category view */}
             {selectedCategory && !selectedArticle && (
               <div className="px-6 pb-4">
@@ -187,7 +189,7 @@ export function RSSReaderModal({ isOpen, onClose, initialCategory = '' }: RSSRea
 
           {/* Content - Single scrollable container with explicit height */}
           {selectedArticle ? (
-            <div className="overflow-y-scroll scrollbar-thin" style={{ maxHeight: 'calc(98vh - 140px)' }}>
+            <div className="overflow-y-scroll scrollbar-thin" style={{ maxHeight: "calc(98vh - 140px)" }}>
               <ArticleReader article={selectedArticle} onBack={handleBackToList} />
             </div>
           ) : selectedCategory ? (
@@ -202,8 +204,8 @@ export function RSSReaderModal({ isOpen, onClose, initialCategory = '' }: RSSRea
                   </div>
                 </div>
               </div>
-              <div className="overflow-y-scroll scrollbar-thin" style={{ maxHeight: 'calc(98vh - 220px)' }}>
-                <ArticleList 
+              <div className="overflow-y-scroll scrollbar-thin" style={{ maxHeight: "calc(98vh - 220px)" }}>
+                <ArticleList
                   articles={articles}
                   loading={loading}
                   viewMode={viewMode}
@@ -213,7 +215,7 @@ export function RSSReaderModal({ isOpen, onClose, initialCategory = '' }: RSSRea
             </div>
           ) : (
             // Category Selection with explicit height
-            <div className="overflow-y-scroll scrollbar-thin" style={{ maxHeight: 'calc(98vh - 140px)' }}>
+            <div className="overflow-y-scroll scrollbar-thin" style={{ maxHeight: "calc(98vh - 140px)" }}>
               <div className="p-8">
                 <div className="max-w-4xl mx-auto">
                   <div className="text-center mb-8">
@@ -222,7 +224,7 @@ export function RSSReaderModal({ isOpen, onClose, initialCategory = '' }: RSSRea
                       Select a category to browse the latest articles and news
                     </p>
                   </div>
-                  
+
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                     {categories.map((category) => (
                       <button
