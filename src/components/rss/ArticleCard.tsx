@@ -83,7 +83,7 @@ export function ArticleCard({ article, viewMode, onClick }: ArticleCardProps) {
       className="cursor-pointer hover:shadow-lg transition-all duration-200 hover:border-primary/50 hover:-translate-y-1 h-full flex flex-col"
       onClick={() => onClick(article)}
     >
-      <AspectRatio ratio={9/16} className="bg-muted rounded-t-lg overflow-hidden">
+      <AspectRatio ratio={3/4} className="bg-muted rounded-t-lg overflow-hidden">
         {article.image_url && !imageError ? (
           <img
             src={article.image_url}
