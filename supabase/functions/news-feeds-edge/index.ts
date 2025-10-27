@@ -443,6 +443,7 @@ async function searchRSSContent(query: string, category?: string, maxResults: nu
       .from('rss_feeds')
       .select('*')
       .eq('is_active', true)
+      .not('image_url', 'is', null) // Only fetch feeds with images
       .order('published_at', { ascending: false });
 
     if (category) {
@@ -484,7 +485,8 @@ async function getRecentRSSContent(category?: string, maxResults: number = 5): P
       .from('rss_feeds')
       .select('*')
       .eq('is_active', true)
-      .order('published_at', { ascending: false });
+      .not('image_url', 'is', null) // Only fetch feeds with images
+      .order('published_at', { ascending: false});
 
     if (category) {
       query = query.eq('category', category);

@@ -42,6 +42,9 @@ export function ArticleList({ articles, loading, viewMode, onArticleClick }: Art
     );
   }
 
+  // Filter out articles without images as an extra safety measure
+  const articlesWithImages = articles.filter(article => article.image_url);
+
   return (
     <div className="p-6">
       <div className={
@@ -49,7 +52,7 @@ export function ArticleList({ articles, loading, viewMode, onArticleClick }: Art
           ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
           : 'max-w-4xl mx-auto space-y-4'
       }>
-        {articles.map((article) => (
+        {articlesWithImages.map((article) => (
           <ArticleCard
             key={article.id}
             article={article}
