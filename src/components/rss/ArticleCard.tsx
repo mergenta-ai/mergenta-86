@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Calendar, Clock, ExternalLink, Newspaper } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { RSSFeedItem, RSSService } from '@/services/rssService';
 
 interface ArticleCardProps {
@@ -82,8 +83,8 @@ export function ArticleCard({ article, viewMode, onClick }: ArticleCardProps) {
       className="cursor-pointer hover:shadow-lg transition-all duration-200 hover:border-primary/50 hover:-translate-y-1 h-full flex flex-col"
       onClick={() => onClick(article)}
     >
-      {article.image_url && !imageError ? (
-        <div className="w-full h-48 overflow-hidden rounded-t-lg bg-muted">
+      <AspectRatio ratio={9/16} className="bg-muted rounded-t-lg overflow-hidden">
+        {article.image_url && !imageError ? (
           <img
             src={article.image_url}
             alt={article.title}
@@ -91,12 +92,12 @@ export function ArticleCard({ article, viewMode, onClick }: ArticleCardProps) {
             onError={() => setImageError(true)}
             loading="lazy"
           />
-        </div>
-      ) : (
-        <div className="w-full h-48 overflow-hidden rounded-t-lg bg-muted flex items-center justify-center">
-          <Newspaper className="h-12 w-12 text-muted-foreground" />
-        </div>
-      )}
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <Newspaper className="h-12 w-12 text-muted-foreground" />
+          </div>
+        )}
+      </AspectRatio>
       
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between mb-2">
