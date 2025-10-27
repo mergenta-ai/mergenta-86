@@ -224,7 +224,7 @@ async function processFeed(source: any) {
   }
 }
 
-function extractImageFromRSS(itemXml: string, description: string): string | null {
+async function extractImageFromRSS(itemXml: string, description: string, articleUrl: string): Promise<string | null> {
   try {
     // Priority 1: media:thumbnail or media:content (with url attribute)
     const mediaThumbnailMatch = itemXml.match(/<media:thumbnail[^>]*url=["']([^"']+)["']/i);
@@ -272,8 +272,12 @@ function extractImageFromRSS(itemXml: string, description: string): string | nul
 
     const imgMatch = cleanDesc.match(/<img[^>]*src=["']([^"']+)["']/i);
     if (imgMatch) {
-      console.log('Found img in description:', imgMatch[1]);
-      return imgMatch[1];
+      const imgUrl = imgMatch[1];
+      // Filter out tracking pixels and tiny images
+      if (!imgUrl.includes('1x1') && !imgUrl.includes('tracking') && !imgUrl.includes('pixel')) {
+        console.log('Found img in description:', imgUrl);
+        return imgUrl;
+      }
     }
 
     // Priority 5: Check content:encoded for images
@@ -287,8 +291,25 @@ function extractImageFromRSS(itemXml: string, description: string): string | nul
       
       const contentImgMatch = cleanContent.match(/<img[^>]*src=["']([^"']+)["']/i);
       if (contentImgMatch) {
-        console.log('Found img in content:encoded:', contentImgMatch[1]);
-        return contentImgMatch[1];
+        const imgUrl = contentImgMatch[1];
+        // Filter out tracking pixels and tiny images
+        if (!imgUrl.includes('1x1') && !imgUrl.includes('tracking') && !imgUrl.includes('pixel')) {
+          console.log('Found img in content:encoded:', imgUrl);
+          return imgUrl;
+        }
+      }
+    }
+
+    // Priority 6: Fallback to OpenGraph image from article URL
+    if (articleUrl) {
+      try {
+        const ogImage = await fetchOpenGraphImage(articleUrl);
+        if (ogImage) {
+          console.log('Found OpenGraph image:', ogImage);
+          return ogImage;
+        }
+      } catch (ogError) {
+        console.log('OpenGraph fetch failed:', ogError);
       }
     }
 
@@ -297,6 +318,47 @@ function extractImageFromRSS(itemXml: string, description: string): string | nul
   }
 
   return null;
+}
+
+async function fetchOpenGraphImage(url: string): Promise<string | null> {
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 second timeout
+
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; NewsFeedBot/1.0)'
+      },
+      signal: controller.signal
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) return null;
+
+    const html = await response.text();
+    
+    // Look for og:image meta tag
+    const ogImageMatch = html.match(/<meta[^>]*property=["']og:image["'][^>]*content=["']([^"']+)["']/i) ||
+                        html.match(/<meta[^>]*content=["']([^"']+)["'][^>]*property=["']og:image["']/i);
+    
+    if (ogImageMatch) {
+      return ogImageMatch[1];
+    }
+
+    // Fallback to twitter:image
+    const twitterImageMatch = html.match(/<meta[^>]*name=["']twitter:image["'][^>]*content=["']([^"']+)["']/i) ||
+                             html.match(/<meta[^>]*content=["']([^"']+)["'][^>]*name=["']twitter:image["']/i);
+    
+    if (twitterImageMatch) {
+      return twitterImageMatch[1];
+    }
+
+    return null;
+  } catch (error) {
+    console.log('Error fetching OpenGraph image:', error);
+    return null;
+  }
 }
 
 async function parseRSSFeed(xmlText: string, source: any): Promise<any[]> {
@@ -320,8 +382,8 @@ async function parseRSSFeed(xmlText: string, source: any): Promise<any[]> {
                      extractXMLTag(itemXml, 'updated') || '';
 
       if (title && link) {
-        // Extract image
-        const imageUrl = extractImageFromRSS(itemXml, description);
+        // Extract image (now async)
+        const imageUrl = await extractImageFromRSS(itemXml, description, link);
 
         // Clean content
         const cleanContent = description
