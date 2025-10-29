@@ -377,7 +377,7 @@ ${resultTiles[3].results.map(r => `• ${r}`).join('\n')}`;
                 </div>
 
                 {/* Action Buttons Below Search Bar */}
-                <div className="flex justify-center gap-12 mt-8">
+                <div className="flex justify-center gap-12 mt-8 mb-12 lg:mb-16">
                   <Button
                     variant="outline"
                     onClick={() => {
